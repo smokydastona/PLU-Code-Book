@@ -25,8 +25,11 @@ from docx.oxml.ns import qn
 from lxml import etree as ET
 from openpyxl import Workbook, load_workbook
 from openpyxl.drawing.image import Image as ExcelImage
+from openpyxl.drawing.spreadsheet_drawing import AnchorMarker, OneCellAnchor
+from openpyxl.drawing.xdr import XDRPositiveSize2D
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils.cell import range_boundaries, get_column_letter
+from openpyxl.utils.units import pixels_to_EMU
 from openpyxl.worksheet.pagebreak import Break
 from openpyxl.worksheet.page import PageMargins
 from PIL import Image, ImageOps
@@ -62,6 +65,8 @@ BLOCKS = (1, 6, 11)
 LINES = 20
 PAGE_ROWS = LINES + 3
 BULK_SHEETS = ("Bulk", "Bulk (2)", "Bulk (3)", "Bulk (4)")
+STRETCH_SOURCE = Path("sources/binders/Time_To_Stretch.jpg")
+STRETCH_SHEET = "Time To Stretch"
 
 
 def sha(content):
@@ -631,6 +636,49 @@ def set_text(cell, value):
     cell.number_format = "@"
 
 
+def stretch_sheet(content):
+    with Image.open(io.BytesIO(content)) as image:
+        image.verify()
+    with Image.open(io.BytesIO(content)) as image:
+        if image.format != "JPEG" or image.width >= image.height:
+            raise ValueError("Time To Stretch source must be a portrait JPEG")
+        width = min(624, 936 * image.width / image.height)
+        height = width * image.height / image.width
+    workbook = Workbook()
+    sheet = workbook.active
+    sheet.title = STRETCH_SHEET
+    sheet.sheet_view.showGridLines = False
+    sheet.column_dimensions["A"].width = 92
+    sheet.row_dimensions[1].height = 702
+    sheet.print_area = "A1"
+    sheet.page_setup.orientation = "portrait"
+    sheet.page_setup.paperSize = sheet.PAPERSIZE_LETTER
+    sheet.page_setup.fitToWidth = 1
+    sheet.page_setup.fitToHeight = 1
+    sheet.sheet_properties.pageSetUpPr.fitToPage = True
+    sheet.page_margins = PageMargins(left=.25, right=.25, top=.3, bottom=.3, header=.1, footer=.1)
+    picture = ExcelImage(io.BytesIO(content))
+    picture.width, picture.height = width, height
+    picture.anchor = OneCellAnchor(
+        _from=AnchorMarker(col=0, row=0, colOff=pixels_to_EMU(72)),
+        ext=XDRPositiveSize2D(cx=pixels_to_EMU(width), cy=pixels_to_EMU(height)))
+    sheet.add_image(picture)
+    output = io.BytesIO()
+    workbook.save(output)
+    return output.getvalue()
+
+
+def validate_stretch(sheet, content):
+    if len(sheet._images) != 1 or sha(sheet._images[0]._data()) != sha(content):
+        raise ValueError("Time To Stretch image is missing or differs from the uploaded source")
+    picture = sheet._images[0]
+    if (picture.anchor._from.col, picture.anchor._from.row) != (0, 0):
+        raise ValueError("Time To Stretch image anchor changed")
+    if (sheet.page_setup.orientation != "portrait" or str(sheet.page_setup.paperSize) != sheet.PAPERSIZE_LETTER
+            or sheet.page_setup.fitToWidth != 1 or sheet.page_setup.fitToHeight != 1):
+        raise ValueError("Time To Stretch must print on one portrait US Letter page")
+
+
 def quick_sheet(rows, images, with_photos, title="PRODUCE"):
     workbook = Workbook()
     sheet = workbook.active
@@ -787,7 +835,8 @@ def replace_sheet(binder, donor_content, destination, sheet_name):
                 source = resolve_part(source_part, relation.get("Target"))
                 if source not in paths:
                     folder, name = posixpath.split(source)
-                    result = posixpath.join(folder, "till-" + sheet_name.lower() + "-" + name)
+                    sheet_slug = re.sub(r"[^a-z0-9]+", "-", sheet_name.lower()).strip("-")
+                    result = posixpath.join(folder, "till-" + sheet_slug + "-" + name)
                     stem, suffix = posixpath.splitext(result)
                     number = 2
                     while result in original.namelist() or result in additions:
@@ -948,7 +997,7 @@ def validate_package(binder, output, coordinates, images, with_photos, deli_coor
 
 
 def validate_print(output, coordinates, expected_pages, deli_coordinates=None, deli_title=None,
-                   bulk_pages=None):
+                   bulk_pages=None, stretch_size=None):
     from pypdf import PdfReader
 
     if not shutil.which("soffice"):
@@ -969,6 +1018,23 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 raise ValueError("Calc did not open/export the complete binder; check PRINT_ENGINE_LOG.txt "
                                  "and install libreoffice-calc")
             full_pdf = PdfReader(complete)
+            if stretch_size is not None:
+                import pymupdf
+
+                with pymupdf.open(complete) as document:
+                    matches = [(page.number, pymupdf.Rect(image["bbox"]))
+                               for page in document for image in page.get_image_info()
+                               if (image["width"], image["height"]) == stretch_size]
+                    if len(matches) != 1:
+                        raise ValueError(f"{edition}: Time To Stretch must appear on exactly one page")
+                    page = document[matches[0][0]]
+                    if abs(page.rect.width - 612) > 1 or abs(page.rect.height - 792) > 1:
+                        raise ValueError(f"{edition}: Time To Stretch is not portrait US Letter")
+                    displayed = matches[0][1]
+                    if displayed.width < 400 or displayed.height < 600:
+                        raise ValueError(f"{edition}: Time To Stretch image is missing, clipped or too small")
+                    if not page.rect.contains(displayed):
+                        raise ValueError(f"{edition}: Time To Stretch image extends beyond the page")
             if bulk_pages:
                 import pymupdf
 
@@ -1057,6 +1123,7 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 deli_print_records_verified=len(deli_coordinates) if deli_coordinates is not None else 0,
                 bulk_print_pages_verified=len(bulk_pages) if bulk_pages else 0,
                 bulk_print_font_points=11 if bulk_pages else None,
+                stretch_print_page_verified=stretch_size is not None,
                 complete_pdf=complete.name,
                 visual_review="REQUIRED; automated text/geometry checks are not a visual print approval",
             )
@@ -1105,6 +1172,7 @@ def report_text(summary):
         f"Original workbook SHA-256: {summary['original_binder_sha256']}",
         f"Updated Deli source SHA-256: {summary['deli_source_sha256']}; "
         f"entries: {summary['deli_records_included']}",
+        f"Time To Stretch image SHA-256: {summary['stretch_source_sha256']}",
         f"XML records: {summary['total_source_records']}; active: {summary['active_source_records']}; "
         f"hidden/deleted: {summary['hidden_or_deleted_records']}",
         f"Produce included: {summary['produce_records_included']}; "
@@ -1121,7 +1189,7 @@ def report_text(summary):
         f"organic placement review: {summary['placement_review_required']}",
         "",
         "Bulk is one themed sheet with six category-grouped pages at 11 pt, without print scaling.",
-        "Every original package part outside the Produce, Deli and combined Bulk sheets, their relationships,",
+        "Every original package part outside the Produce, Deli, Time To Stretch and combined Bulk sheets, their relationships,",
         "append-only styles, content types and their print names is byte-identical. No original part is removed.",
         "Existing styles and all unrelated workbook-level settings are independently compared.",
         "PLU/description strings, duplicate highlights and embedded image bytes/anchors are verified.",
@@ -1168,6 +1236,11 @@ def generate(root, binder, output, verify_print=False):
     if any(output.iterdir()):
         raise ValueError("output must be empty; the original and previous outputs are never overwritten")
     original_checksum = sha(binder.read_bytes())
+    stretch_source = (root / STRETCH_SOURCE).read_bytes()
+    stretch_checksum = sha(stretch_source)
+    stretch_content = stretch_sheet(stretch_source)
+    with Image.open(io.BytesIO(stretch_source)) as image:
+        stretch_size = image.size
     deli_document = root / "sources/binders/Deli.docx"
     deli_document_checksum = sha(deli_document.read_bytes())
     deli_content, deli_coordinates = read_deli_source(root)
@@ -1179,6 +1252,7 @@ def generate(root, binder, output, verify_print=False):
         deli_workbook.close()
     with zipfile.ZipFile(binder) as original:
         sheet_info(original, "Deli")
+        sheet_info(original, STRETCH_SHEET)
     source_items, digest = read_picklist(root / "sources/plu/PickList.xml")
     assignments = read_assignments(root / "data/picklist_assignments.json")
     reconciliation = output / "reconciliation"
@@ -1217,6 +1291,7 @@ def generate(root, binder, output, verify_print=False):
         with tempfile.TemporaryDirectory(prefix="till-produce-") as temporary:
             combined_binder = Path(temporary) / "Combined.xlsx"
             bulk_binder = Path(temporary) / "Bulk.xlsx"
+            stretch_binder = Path(temporary) / "Stretch.xlsx"
             produce_binder = Path(temporary) / "Produce.xlsx"
             bulk_combined = combine_bulk(binder, combined_binder)
             template = load_workbook(combined_binder)
@@ -1230,10 +1305,16 @@ def generate(root, binder, output, verify_print=False):
                 replace_sheet(combined_binder, bulk_content, bulk_binder, "Bulk")
             else:
                 shutil.copyfile(combined_binder, bulk_binder)
-            replace_produce(bulk_binder, donor, produce_binder)
+            replace_sheet(bulk_binder, stretch_content, stretch_binder, STRETCH_SHEET)
+            replace_produce(stretch_binder, donor, produce_binder)
             replace_sheet(produce_binder, deli_content, path, "Deli")
             validations[edition] = validate_package(
-                bulk_binder, path, coordinates, edition_images, edition == "photos", deli_coordinates)
+                stretch_binder, path, coordinates, edition_images, edition == "photos", deli_coordinates)
+        result = load_workbook(path)
+        try:
+            validate_stretch(result[STRETCH_SHEET], stretch_source)
+        finally:
+            result.close()
         if bulk_coordinates is not None:
             result = load_workbook(path)
             try:
@@ -1243,24 +1324,29 @@ def generate(root, binder, output, verify_print=False):
         validations[edition]["bulk_sheets_combined"] = bulk_combined
         validations[edition]["bulk_records_verified"] = len(bulk_coordinates or [])
         parts = validations[edition].pop("package_parts")
-        if bulk_coordinates is not None:
-            with zipfile.ZipFile(binder) as original, zipfile.ZipFile(path) as generated:
+        with zipfile.ZipFile(binder) as original, zipfile.ZipFile(path) as generated:
+            parts = [part for part in parts if part["part"] in original.namelist()]
+            bulk_parts = set()
+            if bulk_coordinates is not None:
                 bulk_part, _ = sheet_info(original, "Bulk")
-                validations[edition]["output_sheet_names"] = validations[edition]["original_sheet_names"]
-                validations[edition]["original_sheet_names"] = [
-                    sheet.get("name") for sheet in xml(original.read("xl/workbook.xml")).find(f"{{{S}}}sheets")
-                ]
-                for part in parts:
-                    name = part["part"]
-                    before, after = original.read(name), generated.read(name)
-                    part.update(sha256_before=sha(before), sha256_after=sha(after),
-                                byte_identical=before == after)
-                    if name not in {bulk_part, rels_part(bulk_part), "xl/workbook.xml"} and name not in {
-                            sheet_info(original, "Produce")[0], rels_part(sheet_info(original, "Produce")[0]),
-                            sheet_info(original, "Deli")[0], rels_part(sheet_info(original, "Deli")[0]),
-                            "xl/styles.xml", "[Content_Types].xml"} and before != after:
-                        raise ValueError(f"unrelated workbook part changed: {name}")
-            validations[edition]["original_parts_byte_identical"] = sum(row["byte_identical"] for row in parts)
+                bulk_parts = {bulk_part, rels_part(bulk_part)}
+            stretch_part, _ = sheet_info(original, STRETCH_SHEET)
+            validations[edition]["output_sheet_names"] = validations[edition]["original_sheet_names"]
+            validations[edition]["original_sheet_names"] = [
+                sheet.get("name") for sheet in xml(original.read("xl/workbook.xml")).find(f"{{{S}}}sheets")
+            ]
+            for part in parts:
+                name = part["part"]
+                before, after = original.read(name), generated.read(name)
+                part.update(sha256_before=sha(before), sha256_after=sha(after),
+                            byte_identical=before == after)
+                if name not in bulk_parts | {stretch_part, rels_part(stretch_part), "xl/workbook.xml"} and name not in {
+                        sheet_info(original, "Produce")[0], rels_part(sheet_info(original, "Produce")[0]),
+                        sheet_info(original, "Deli")[0], rels_part(sheet_info(original, "Deli")[0]),
+                        "xl/styles.xml", "[Content_Types].xml"} and before != after:
+                    raise ValueError(f"unrelated workbook part changed: {name}")
+        validations[edition]["original_parts_checked"] = len(parts)
+        validations[edition]["original_parts_byte_identical"] = sum(row["byte_identical"] for row in parts)
         csv_output(output / f"PACKAGE_PRESERVATION_{edition.upper()}.csv", parts,
                    ["part", "sha256_before", "sha256_after", "byte_identical"])
     csv_output(output / "PRODUCE_LAYOUT.csv", coordinates,
@@ -1303,6 +1389,7 @@ def generate(root, binder, output, verify_print=False):
         status="REVIEW_ONLY_NOT_RELEASED", production_publication="BLOCKED",
         original_binder=str(binder), original_binder_sha256=original_checksum,
         deli_source=str(root / DELI_SOURCE), deli_source_sha256=deli_checksum,
+        stretch_source=str(root / STRETCH_SOURCE), stretch_source_sha256=stretch_checksum,
         deli_original_document_sha256=deli_document_checksum,
         deli_records_included=len(deli_coordinates),
         picklist_sha256=digest, total_source_records=len(source_items),
@@ -1335,7 +1422,7 @@ def generate(root, binder, output, verify_print=False):
             "Existing and newly supplied identity-linked AI illustrations are visual references at the owner's request; "
             "AI provenance and uncertain visual verdicts are recorded only in the external audit report.",
             "Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.",
-            "Deli is replaced from the owner-supplied two-column source; Bulk sections are combined "
+            "Time To Stretch uses the supplied color guide; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined "
             "with page breaks; all other unrelated operational sheets remain unchanged.",
             "Future unclassified entries are retained for review, not silently discarded or approved.",
         ],
@@ -1351,7 +1438,7 @@ def generate(root, binder, output, verify_print=False):
     if verify_print:
         summary["print_validation"] = validate_print(
             output, coordinates, pages, deli_coordinates=deli_coordinates, deli_title=deli_title,
-            bulk_pages=bulk_print_pages(output / FILENAMES["photos"]))
+            bulk_pages=bulk_print_pages(output / FILENAMES["photos"]), stretch_size=stretch_size)
         if summary["print_validation"]["photos"]["drawn_images"] != len(images):
             raise ValueError("printed reference count differs from the exact image mapping")
         (output / "VALIDATION.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
@@ -1362,6 +1449,8 @@ def generate(root, binder, output, verify_print=False):
     if (sha((root / DELI_SOURCE).read_bytes()) != deli_checksum or
             sha(deli_document.read_bytes()) != deli_document_checksum):
         raise ValueError("deli source changed during generation; discard outputs and retry")
+    if sha((root / STRETCH_SOURCE).read_bytes()) != stretch_checksum:
+        raise ValueError("Time To Stretch source changed during generation; discard outputs and retry")
     command = [sys.executable, str((ROOT / "tools/build_till_binders.py").resolve()),
                "--root", str(root.resolve()), "--binder", str(binder.resolve()),
                "--output", str(output.resolve())]

@@ -5,6 +5,8 @@
   "original_binder_sha256": "6b0aeaa153233c5f4917811a3f7a5b2212f7a946a0abede372a31db556ab0f63",
   "deli_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Updated_Deli_Two_Columns.xlsx",
   "deli_source_sha256": "a26ab6cf98d72d656e5cfd7a5c8928a7938ae1d965934a597c047f8eb37438f3",
+  "stretch_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Time_To_Stretch.jpg",
+  "stretch_source_sha256": "b96e6cbecc167c31e77235b6b02171fc0e94b63aa1f76860fb22258d25f088ed",
   "deli_original_document_sha256": "7875ee3093559572925102b2cab8b83258de9bf4eaeb21c43f4193d127df7926",
   "deli_records_included": 52,
   "picklist_sha256": "462db3121094008cd1dd5ea2c5836ca4b24de077edb8982c0f43149edbaf2cbb",
@@ -352,15 +354,15 @@
       "deli_records_verified": 52,
       "produce_images_verified": 517,
       "original_parts_checked": 104,
-      "original_parts_byte_identical": 95,
+      "original_parts_byte_identical": 93,
       "unrelated_package_parts_byte_identical": true,
       "existing_styles_preserved": true,
       "unrelated_workbook_settings_preserved": true,
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "faebabbac1939667a2e68a015a7bfd0425ce4022e6e0fcfffda517ebe6112c2a",
-      "file_size_bytes": 9497136,
+      "file_sha256": "c6ac40739af4083b2e41f9f83d640b84eca7e4d4122434ead425e763f90d9b25",
+      "file_size_bytes": 10197179,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 400,
       "output_sheet_names": [
@@ -384,13 +386,14 @@
       "pages": 10,
       "landscape_us_letter": true,
       "complete_workbook_opened_and_exported_by_calc": true,
-      "complete_binder_pdf_pages": 37,
+      "complete_binder_pdf_pages": 34,
       "every_page_code_count_verified": true,
       "every_description_found": true,
       "drawn_images": 517,
       "deli_print_records_verified": 52,
       "bulk_print_pages_verified": 6,
       "bulk_print_font_points": 11,
+      "stretch_print_page_verified": true,
       "complete_pdf": "Complete Till Binder - Updated - Photos.pdf",
       "visual_review": "REQUIRED; automated text/geometry checks are not a visual print approval"
     }
@@ -401,7 +404,7 @@
     "Missing, identity-mismatched, checksum-changed and unreadable image associations remain blank.",
     "Existing and newly supplied identity-linked AI illustrations are visual references at the owner's request; AI provenance and uncertain visual verdicts are recorded only in the external audit report.",
     "Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.",
-    "Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.",
+    "Time To Stretch uses the supplied color guide; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.",
     "Future unclassified entries are retained for review, not silently discarded or approved."
   ]
 }

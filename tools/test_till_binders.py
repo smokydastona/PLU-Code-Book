@@ -1,6 +1,8 @@
 import csv
 import io
 import json
+import shutil
+import subprocess
 import tempfile
 import unittest
 import xml.etree.ElementTree as ET
@@ -16,11 +18,11 @@ from openpyxl.drawing.image import Image as ExcelImage
 from openpyxl.styles import Font
 from PIL import Image
 
-from build_till_binders import (BULK_SHEETS, FILENAMES, MAX_GITHUB_FILE_SIZE, VISUALS, bulk_print_pages,
+from build_till_binders import (BULK_SHEETS, FILENAMES, MAX_GITHUB_FILE_SIZE, STRETCH_SOURCE, VISUALS, bulk_print_pages,
                                combine_bulk, comparisons, generate, layout_rows,
                                docx_compatible_image,
                                map_images, produce_catalog, quick_sheet, replace_produce,
-                               sha, validate_package, visual_records, workbook_photo_copy)
+                               sha, stretch_sheet, validate_package, visual_records, workbook_photo_copy)
 from picklist_catalog import read_picklist, read_assignments
 from review_image_references import load_references
 from review_booklets import build_review_booklets, build_working_list_review
@@ -143,6 +145,9 @@ class TillBinderChecks(unittest.TestCase):
         self.root = Path(self.temporary.name)
         for folder in ("sources/plu", "sources/visual", "data"):
             (self.root / folder).mkdir(parents=True)
+        (self.root / "sources/binders").mkdir(parents=True)
+        (self.root / STRETCH_SOURCE).write_bytes(
+            (Path(__file__).resolve().parents[1] / STRETCH_SOURCE).read_bytes())
         self.binder = self.root / "Original.xlsx"
         image = io.BytesIO()
         Image.new("RGB", (600, 500), "green").save(image, format="PNG")
@@ -151,6 +156,9 @@ class TillBinderChecks(unittest.TestCase):
         self.image.write_bytes(self.content)
         original = Workbook()
         first = original.active
+        first.title = "Time To Stretch"
+        first.add_image(ExcelImage(io.BytesIO(self.content)), "A1")
+        first = original.create_sheet("Operational")
         first.title = "Operational"
         first["A1"] = "Do not change"
         first["A1"].font = Font(bold=True, color="FF0055")
@@ -282,7 +290,14 @@ class TillBinderChecks(unittest.TestCase):
             path = self.output / filename
             workbook = load_workbook(path)
             self.addCleanup(workbook.close)
-            self.assertEqual(workbook.sheetnames, ["Operational", "Produce", "Deli", "Hidden operations"])
+            self.assertEqual(workbook.sheetnames, ["Time To Stretch", "Operational", "Produce", "Deli", "Hidden operations"])
+            stretch = workbook["Time To Stretch"]
+            self.assertEqual(len(stretch._images), 1)
+            self.assertEqual(stretch._images[0]._data(), (self.root / STRETCH_SOURCE).read_bytes())
+            self.assertEqual(stretch.page_setup.orientation, "portrait")
+            self.assertEqual(stretch.page_setup.fitToWidth, 1)
+            self.assertEqual(stretch.page_setup.fitToHeight, 1)
+            self.assertEqual(summary["stretch_source_sha256"], sha((self.root / STRETCH_SOURCE).read_bytes()))
             self.assertEqual(workbook["Deli"]["B5"].value, "00012")
             self.assertEqual(workbook["Deli"]["E5"].value, "00013")
             self.assertEqual(summary["validations"][edition]["deli_records_verified"], 2)
@@ -332,6 +347,34 @@ class TillBinderChecks(unittest.TestCase):
         finally:
             result.close()
         self.assertEqual(updated_template.read_bytes(), template_bytes)
+
+    def test_missing_stretch_source_fails_without_falling_back_to_original(self):
+        (self.root / STRETCH_SOURCE).unlink()
+        with self.assertRaises(FileNotFoundError):
+            generate(self.root, self.binder, self.output)
+
+    @unittest.skipUnless(shutil.which("soffice"), "LibreOffice Calc is required")
+    def test_stretch_image_prints_in_full_on_one_portrait_page(self):
+        import pymupdf
+
+        source = (self.root / STRETCH_SOURCE).read_bytes()
+        workbook = self.root / "stretch.xlsx"
+        workbook.write_bytes(stretch_sheet(source))
+        subprocess.run(["soffice", "-env:UserInstallation=" + (self.root / "lo").as_uri(),
+                        "--headless", "--convert-to", "pdf", "--outdir", str(self.root),
+                        str(workbook)], check=True, capture_output=True, timeout=120)
+        with pymupdf.open(self.root / "stretch.pdf") as document:
+            self.assertEqual(len(document), 1)
+            page = document[0]
+            self.assertEqual((round(page.rect.width), round(page.rect.height)), (612, 792))
+            images = page.get_image_info()
+            self.assertEqual(len(images), 1)
+            with Image.open(io.BytesIO(source)) as image:
+                self.assertEqual((images[0]["width"], images[0]["height"]), image.size)
+            bounds = pymupdf.Rect(images[0]["bbox"])
+            self.assertTrue(page.rect.contains(bounds))
+            self.assertGreater(bounds.width, 400)
+            self.assertGreater(bounds.height, 600)
 
     def test_workbook_photo_copies_keep_transparency_and_do_not_change_source_bytes(self):
         opaque = io.BytesIO()
