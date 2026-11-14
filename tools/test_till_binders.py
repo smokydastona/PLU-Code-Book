@@ -16,10 +16,11 @@ from openpyxl.chart import BarChart, Reference
 from openpyxl.comments import Comment
 from openpyxl.drawing.image import Image as ExcelImage
 from openpyxl.styles import Font
+from openpyxl.worksheet.pagebreak import Break
 from PIL import Image
 
 from build_till_binders import (BULK_SHEETS, FILENAMES, MAX_GITHUB_FILE_SIZE, STRETCH_SOURCE, VISUALS, bulk_print_pages,
-                               combine_bulk, comparisons, generate, layout_rows,
+                               combine_bulk, comparisons, fit_misc_sheet, generate, layout_rows, misc_page_matches, misc_print_text,
                                docx_compatible_image,
                                map_images, produce_catalog, quick_sheet, replace_produce,
                                sha, stretch_sheet, validate_package, visual_records, workbook_photo_copy)
@@ -175,6 +176,14 @@ class TillBinderChecks(unittest.TestCase):
         chart = BarChart()
         chart.add_data(Reference(first, min_col=1, min_row=2, max_row=3))
         first.add_chart(chart, "E1")
+        misc = original.create_sheet("Misc Codes")
+        misc["A1"], misc["D1"] = "Miscellaneous items", "Bags and deposits"
+        misc["A2"], misc["D2"] = "00012", "Owner supplied entry"
+        misc["D2"].font = Font(bold=True, color="FF0055")
+        misc.column_dimensions["A"].width = 45
+        misc.column_dimensions["D"].width = 45
+        misc.row_breaks.append(Break(id=1))
+        misc.col_breaks.append(Break(id=2))
         produce = original.create_sheet("Produce")
         produce["A1"], produce["B1"] = 42, "Old Gala"
         produce["D1"], produce["E1"] = "900042", "Organic Apple Gala"
@@ -290,7 +299,16 @@ class TillBinderChecks(unittest.TestCase):
             path = self.output / filename
             workbook = load_workbook(path)
             self.addCleanup(workbook.close)
-            self.assertEqual(workbook.sheetnames, ["Time To Stretch", "Operational", "Produce", "Deli", "Hidden operations"])
+            self.assertEqual(workbook.sheetnames, ["Time To Stretch", "Operational", "Misc Codes", "Produce", "Deli", "Hidden operations"])
+            misc = workbook["Misc Codes"]
+            self.assertEqual(misc["A2"].value, "00012")
+            self.assertEqual(misc["D2"].value, "Owner supplied entry")
+            self.assertTrue(misc["D2"].font.bold)
+            self.assertEqual(misc.column_dimensions["D"].width, 45)
+            self.assertEqual((misc.page_setup.fitToWidth, misc.page_setup.fitToHeight), (1, 1))
+            self.assertTrue(misc.sheet_properties.pageSetUpPr.fitToPage)
+            self.assertFalse(misc.row_breaks.brk)
+            self.assertFalse(misc.col_breaks.brk)
             stretch = workbook["Time To Stretch"]
             self.assertEqual(len(stretch._images), 1)
             self.assertEqual(stretch._images[0]._data(), (self.root / STRETCH_SOURCE).read_bytes())
@@ -332,6 +350,7 @@ class TillBinderChecks(unittest.TestCase):
         updated_template = self.root / "Edited.xlsx"
         edited = load_workbook(self.output / FILENAMES["photos"])
         edited["Operational"]["A1"] = "Owner's updated operational sheet"
+        edited["Misc Codes"]["D2"] = "Owner's updated miscellaneous entry"
         edited["Deli"]["A5"] = "Not the approved deli source"
         edited.save(updated_template)
         edited.close()
@@ -342,11 +361,38 @@ class TillBinderChecks(unittest.TestCase):
         result = load_workbook(second / FILENAMES["photos"])
         try:
             self.assertEqual(result["Operational"]["A1"].value, "Owner's updated operational sheet")
+            self.assertEqual(result["Misc Codes"]["D2"].value, "Owner's updated miscellaneous entry")
+            self.assertEqual((result["Misc Codes"].page_setup.fitToWidth,
+                              result["Misc Codes"].page_setup.fitToHeight), (1, 1))
             self.assertEqual(result["Deli"]["A5"].value, "Updated meal")
             self.assertEqual(len(result["Produce"]._images), 5)
         finally:
             result.close()
         self.assertEqual(updated_template.read_bytes(), template_bytes)
+
+    @unittest.skipUnless(shutil.which("soffice"), "LibreOffice Calc is required")
+    def test_misc_codes_prints_as_one_page_with_all_original_entries(self):
+        from pypdf import PdfReader
+
+        source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
+        combined = self.root / "misc-only.xlsx"
+        fit_misc_sheet(source, combined)
+        expected = misc_print_text(combined)
+        subprocess.run(["soffice", "-env:UserInstallation=" + (self.root / "lo-misc").as_uri(),
+                        "--headless", "--convert-to", "pdf", "--outdir", str(self.root),
+                        str(combined)], check=True, capture_output=True, timeout=120)
+        pdf = PdfReader(self.root / "misc-only.pdf")
+        pages = [page for page in pdf.pages if misc_page_matches(page, expected)]
+        self.assertEqual(len(pages), 1)
+        self.assertEqual((round(float(pages[0].mediabox.width)), round(float(pages[0].mediabox.height))),
+                         (612, 792))
+        original = load_workbook(source)
+        updated = load_workbook(combined)
+        try:
+            self.assertEqual(list(original["Misc Codes"].values), list(updated["Misc Codes"].values))
+        finally:
+            original.close()
+            updated.close()
 
     def test_missing_stretch_source_fails_without_falling_back_to_original(self):
         (self.root / STRETCH_SOURCE).unlink()

@@ -14,6 +14,7 @@ import sys
 import tempfile
 import zipfile
 from collections import Counter, defaultdict
+from decimal import Decimal
 from pathlib import Path
 
 from docx import Document
@@ -67,6 +68,7 @@ PAGE_ROWS = LINES + 3
 BULK_SHEETS = ("Bulk", "Bulk (2)", "Bulk (3)", "Bulk (4)")
 STRETCH_SOURCE = Path("sources/binders/Time_To_Stretch.jpg")
 STRETCH_SHEET = "Time To Stretch"
+MISC_SHEET = "Misc Codes"
 
 
 def sha(content):
@@ -133,6 +135,68 @@ def sheet_info(archive, name="Produce"):
         if sheet.get("name") == name:
             return resolve_part("xl/workbook.xml", relationships[sheet.get(f"{{{R}}}id")]), index
     raise ValueError(f"original binder has no {name!r} sheet")
+
+
+def fit_misc_sheet(binder, destination):
+    with zipfile.ZipFile(binder) as original:
+        path, _ = sheet_info(original, MISC_SHEET)
+        sheet = xml(original.read(path))
+        properties = sheet.find(f"{{{S}}}sheetPr")
+        if properties is None:
+            properties = ET.Element(f"{{{S}}}sheetPr")
+            sheet.insert(0, properties)
+        page_properties = properties.find(f"{{{S}}}pageSetUpPr")
+        if page_properties is None:
+            page_properties = ET.SubElement(properties, f"{{{S}}}pageSetUpPr")
+        page_properties.set("fitToPage", "1")
+        setup = sheet.find(f"{{{S}}}pageSetup")
+        if setup is None:
+            margins = sheet.find(f"{{{S}}}pageMargins")
+            if margins is None:
+                raise ValueError("Misc Codes sheet has no page margins")
+            setup = ET.Element(f"{{{S}}}pageSetup")
+            margins.addnext(setup)
+        setup.set("orientation", "portrait")
+        setup.set("paperSize", "1")
+        setup.set("fitToWidth", "1")
+        setup.set("fitToHeight", "1")
+        setup.attrib.pop("scale", None)
+        for tag in ("rowBreaks", "colBreaks"):
+            breaks = sheet.find(f"{{{S}}}{tag}")
+            if breaks is not None:
+                sheet.remove(breaks)
+        with zipfile.ZipFile(destination, "x", compression=zipfile.ZIP_DEFLATED) as output:
+            output.comment = original.comment
+            for entry in original.infolist():
+                output.writestr(entry, serialize(sheet) if entry.filename == path else original.read(entry.filename))
+
+
+def misc_print_text(path):
+    workbook = load_workbook(path, data_only=True)
+    try:
+        sheet = workbook[MISC_SHEET]
+        if (sheet.page_setup.orientation != "portrait" or str(sheet.page_setup.paperSize) != "1" or
+                sheet.page_setup.fitToWidth != 1 or sheet.page_setup.fitToHeight != 1 or
+                not sheet.sheet_properties.pageSetUpPr.fitToPage or
+                sheet.row_breaks.brk or sheet.col_breaks.brk):
+            raise ValueError("Misc Codes must be configured to fit one portrait US Letter page")
+        text = [" ".join(cell.value.split()) for row in sheet for cell in row
+                if isinstance(cell.value, str) and cell.value.strip()]
+        if not text:
+            raise ValueError("Misc Codes has no text to verify in the printed page")
+        numbers = Counter(Decimal(str(cell.value)) for row in sheet for cell in row
+                          if isinstance(cell.value, (int, float)) and not isinstance(cell.value, bool))
+        return text, numbers
+    finally:
+        workbook.close()
+
+
+def misc_page_matches(page, expected):
+    text, numbers = expected
+    printed = " ".join((page.extract_text() or "").split())
+    found = Counter(Decimal(value.replace(",", "")) for value in
+                    re.findall(r"(?<![\d.])-?\d[\d,]*(?:\.\d+)?(?![\d.])", printed))
+    return all(value in printed for value in text) and not numbers - found
 
 
 def combine_bulk(binder, destination):
@@ -997,7 +1061,7 @@ def validate_package(binder, output, coordinates, images, with_photos, deli_coor
 
 
 def validate_print(output, coordinates, expected_pages, deli_coordinates=None, deli_title=None,
-                   bulk_pages=None, stretch_size=None):
+                   bulk_pages=None, stretch_size=None, misc_text=None):
     from pypdf import PdfReader
 
     if not shutil.which("soffice"):
@@ -1018,6 +1082,13 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 raise ValueError("Calc did not open/export the complete binder; check PRINT_ENGINE_LOG.txt "
                                  "and install libreoffice-calc")
             full_pdf = PdfReader(complete)
+            if misc_text is not None:
+                matches = [page for page in full_pdf.pages if misc_page_matches(page, misc_text)]
+                if len(matches) != 1:
+                    raise ValueError(f"{edition}: Misc Codes content does not print together on exactly one page")
+                if (abs(float(matches[0].mediabox.width) - 612) > 1 or
+                        abs(float(matches[0].mediabox.height) - 792) > 1):
+                    raise ValueError(f"{edition}: Misc Codes is not portrait US Letter")
             if stretch_size is not None:
                 import pymupdf
 
@@ -1124,6 +1195,7 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 bulk_print_pages_verified=len(bulk_pages) if bulk_pages else 0,
                 bulk_print_font_points=11 if bulk_pages else None,
                 stretch_print_page_verified=stretch_size is not None,
+                misc_print_page_verified=misc_text is not None,
                 complete_pdf=complete.name,
                 visual_review="REQUIRED; automated text/geometry checks are not a visual print approval",
             )
@@ -1189,7 +1261,7 @@ def report_text(summary):
         f"organic placement review: {summary['placement_review_required']}",
         "",
         "Bulk is one themed sheet with six category-grouped pages at 11 pt, without print scaling.",
-        "Every original package part outside the Produce, Deli, Time To Stretch and combined Bulk sheets, their relationships,",
+        "Every original package part outside Produce, Deli, Time To Stretch, Misc Codes and Bulk, their relationships,",
         "append-only styles, content types and their print names is byte-identical. No original part is removed.",
         "Existing styles and all unrelated workbook-level settings are independently compared.",
         "PLU/description strings, duplicate highlights and embedded image bytes/anchors are verified.",
@@ -1253,6 +1325,7 @@ def generate(root, binder, output, verify_print=False):
     with zipfile.ZipFile(binder) as original:
         sheet_info(original, "Deli")
         sheet_info(original, STRETCH_SHEET)
+        sheet_info(original, MISC_SHEET)
     source_items, digest = read_picklist(root / "sources/plu/PickList.xml")
     assignments = read_assignments(root / "data/picklist_assignments.json")
     reconciliation = output / "reconciliation"
@@ -1291,6 +1364,7 @@ def generate(root, binder, output, verify_print=False):
         with tempfile.TemporaryDirectory(prefix="till-produce-") as temporary:
             combined_binder = Path(temporary) / "Combined.xlsx"
             bulk_binder = Path(temporary) / "Bulk.xlsx"
+            misc_binder = Path(temporary) / "Misc.xlsx"
             stretch_binder = Path(temporary) / "Stretch.xlsx"
             produce_binder = Path(temporary) / "Produce.xlsx"
             bulk_combined = combine_bulk(binder, combined_binder)
@@ -1305,7 +1379,8 @@ def generate(root, binder, output, verify_print=False):
                 replace_sheet(combined_binder, bulk_content, bulk_binder, "Bulk")
             else:
                 shutil.copyfile(combined_binder, bulk_binder)
-            replace_sheet(bulk_binder, stretch_content, stretch_binder, STRETCH_SHEET)
+            fit_misc_sheet(bulk_binder, misc_binder)
+            replace_sheet(misc_binder, stretch_content, stretch_binder, STRETCH_SHEET)
             replace_produce(stretch_binder, donor, produce_binder)
             replace_sheet(produce_binder, deli_content, path, "Deli")
             validations[edition] = validate_package(
@@ -1323,6 +1398,7 @@ def generate(root, binder, output, verify_print=False):
                 result.close()
         validations[edition]["bulk_sheets_combined"] = bulk_combined
         validations[edition]["bulk_records_verified"] = len(bulk_coordinates or [])
+        misc_text = misc_print_text(path)
         parts = validations[edition].pop("package_parts")
         with zipfile.ZipFile(binder) as original, zipfile.ZipFile(path) as generated:
             parts = [part for part in parts if part["part"] in original.namelist()]
@@ -1331,6 +1407,7 @@ def generate(root, binder, output, verify_print=False):
                 bulk_part, _ = sheet_info(original, "Bulk")
                 bulk_parts = {bulk_part, rels_part(bulk_part)}
             stretch_part, _ = sheet_info(original, STRETCH_SHEET)
+            misc_part, _ = sheet_info(original, MISC_SHEET)
             validations[edition]["output_sheet_names"] = validations[edition]["original_sheet_names"]
             validations[edition]["original_sheet_names"] = [
                 sheet.get("name") for sheet in xml(original.read("xl/workbook.xml")).find(f"{{{S}}}sheets")
@@ -1340,7 +1417,7 @@ def generate(root, binder, output, verify_print=False):
                 before, after = original.read(name), generated.read(name)
                 part.update(sha256_before=sha(before), sha256_after=sha(after),
                             byte_identical=before == after)
-                if name not in bulk_parts | {stretch_part, rels_part(stretch_part), "xl/workbook.xml"} and name not in {
+                if name not in bulk_parts | {misc_part, stretch_part, rels_part(stretch_part), "xl/workbook.xml"} and name not in {
                         sheet_info(original, "Produce")[0], rels_part(sheet_info(original, "Produce")[0]),
                         sheet_info(original, "Deli")[0], rels_part(sheet_info(original, "Deli")[0]),
                         "xl/styles.xml", "[Content_Types].xml"} and before != after:
@@ -1422,7 +1499,8 @@ def generate(root, binder, output, verify_print=False):
             "Existing and newly supplied identity-linked AI illustrations are visual references at the owner's request; "
             "AI provenance and uncertain visual verdicts are recorded only in the external audit report.",
             "Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.",
-            "Time To Stretch uses the supplied color guide; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined "
+            "Time To Stretch uses the supplied color guide; Misc Codes is fitted to one page; "
+            "Deli is replaced from the owner-supplied two-column source; Bulk sections are combined "
             "with page breaks; all other unrelated operational sheets remain unchanged.",
             "Future unclassified entries are retained for review, not silently discarded or approved.",
         ],
@@ -1438,7 +1516,8 @@ def generate(root, binder, output, verify_print=False):
     if verify_print:
         summary["print_validation"] = validate_print(
             output, coordinates, pages, deli_coordinates=deli_coordinates, deli_title=deli_title,
-            bulk_pages=bulk_print_pages(output / FILENAMES["photos"]), stretch_size=stretch_size)
+            bulk_pages=bulk_print_pages(output / FILENAMES["photos"]), stretch_size=stretch_size,
+            misc_text=misc_text)
         if summary["print_validation"]["photos"]["drawn_images"] != len(images):
             raise ValueError("printed reference count differs from the exact image mapping")
         (output / "VALIDATION.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
