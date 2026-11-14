@@ -354,15 +354,15 @@
       "deli_records_verified": 52,
       "produce_images_verified": 517,
       "original_parts_checked": 104,
-      "original_parts_byte_identical": 92,
+      "original_parts_byte_identical": 90,
       "unrelated_package_parts_byte_identical": true,
       "existing_styles_preserved": true,
       "unrelated_workbook_settings_preserved": true,
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "bf27abd856080394eeb1ae7c60f806ed1107d76a5c3f97af7f28c4eeca93ce22",
-      "file_size_bytes": 10197243,
+      "file_sha256": "4fff40c400052b95b556ad0991f56d556909c66f99748068169de74262b01b66",
+      "file_size_bytes": 11739019,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 400,
       "output_sheet_names": [
@@ -386,7 +386,7 @@
       "pages": 10,
       "landscape_us_letter": true,
       "complete_workbook_opened_and_exported_by_calc": true,
-      "complete_binder_pdf_pages": 33,
+      "complete_binder_pdf_pages": 29,
       "every_page_code_count_verified": true,
       "every_description_found": true,
       "drawn_images": 517,
@@ -395,6 +395,7 @@
       "bulk_print_font_points": 11,
       "stretch_print_page_verified": true,
       "misc_print_page_verified": true,
+      "directory_print_pages_verified": 2,
       "complete_pdf": "Complete Till Binder - Updated - Photos.pdf",
       "visual_review": "REQUIRED; automated text/geometry checks are not a visual print approval"
     }
@@ -405,7 +406,7 @@
     "Missing, identity-mismatched, checksum-changed and unreadable image associations remain blank.",
     "Existing and newly supplied identity-linked AI illustrations are visual references at the owner's request; AI provenance and uncertain visual verdicts are recorded only in the external audit report.",
     "Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.",
-    "Time To Stretch uses the supplied color guide; Misc Codes is fitted to one page; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.",
+    "Time To Stretch uses the supplied color guide; Misc Codes is fitted to one page; Store Directory uses the template's two images on separate pages; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.",
     "Future unclassified entries are retained for review, not silently discarded or approved."
   ]
 }

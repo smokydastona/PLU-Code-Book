@@ -33,7 +33,7 @@ from openpyxl.utils.cell import range_boundaries, get_column_letter
 from openpyxl.utils.units import pixels_to_EMU
 from openpyxl.worksheet.pagebreak import Break
 from openpyxl.worksheet.page import PageMargins
-from PIL import Image, ImageOps
+from PIL import Image, ImageChops, ImageOps, ImageStat
 
 from check_image_uniqueness import image_fingerprint
 from organic_watermarks import render_watermark
@@ -69,6 +69,7 @@ BULK_SHEETS = ("Bulk", "Bulk (2)", "Bulk (3)", "Bulk (4)")
 STRETCH_SOURCE = Path("sources/binders/Time_To_Stretch.jpg")
 STRETCH_SHEET = "Time To Stretch"
 MISC_SHEET = "Misc Codes"
+DIRECTORY_SHEET = "Store Directory"
 
 
 def sha(content):
@@ -197,6 +198,95 @@ def misc_page_matches(page, expected):
     found = Counter(Decimal(value.replace(",", "")) for value in
                     re.findall(r"(?<![\d.])-?\d[\d,]*(?:\.\d+)?(?![\d.])", printed))
     return all(value in printed for value in text) and not numbers - found
+
+
+def validate_directory_template(archive):
+    part, _ = sheet_info(archive, DIRECTORY_SHEET)
+    sheet = xml(archive.read(part))
+    allowed = {"sheetPr", "dimension", "sheetViews", "sheetFormatPr", "cols", "sheetData",
+               "pageMargins", "pageSetup", "rowBreaks", "colBreaks", "drawing", "printOptions"}
+    if any(ET.QName(node).localname not in allowed for node in sheet):
+        raise ValueError("Store Directory has unsupported sheet features; review the template")
+    drawings = sheet.findall(f"{{{S}}}drawing")
+    if len(drawings) != 1:
+        raise ValueError("Store Directory must have one image drawing")
+    rels = xml(archive.read(rels_part(part)))
+    if any(item.get("TargetMode") == "External" or
+           not item.get("Type", "").endswith(("/drawing", "/printerSettings")) for item in rels):
+        raise ValueError("Store Directory has unsupported relationships; review the template")
+    relation = [item for item in rels if item.get("Id") == drawings[0].get(f"{{{R}}}id")]
+    if len(relation) != 1 or not relation[0].get("Type", "").endswith("/drawing"):
+        raise ValueError("Store Directory image drawing relationship is invalid")
+    drawing = xml(archive.read(resolve_part(part, relation[0].get("Target"))))
+    xdr = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"
+    drawingml = "http://schemas.openxmlformats.org/drawingml/2006/main"
+    if (len(drawing) != 2 or any(
+            ET.QName(anchor).localname not in {"oneCellAnchor", "twoCellAnchor"} or
+            len(anchor.findall(f"{{{xdr}}}pic")) != 1 or
+            any(ET.QName(node).localname not in {"from", "to", "ext", "pic", "clientData"} for node in anchor)
+            for anchor in drawing)):
+        raise ValueError("Store Directory has unsupported drawing objects; review the template")
+    for crop in drawing.iter(f"{{{drawingml}}}srcRect"):
+        if any(int(value) != 0 for value in crop.attrib.values()):
+            raise ValueError("Store Directory has cropped images; review the template")
+    for transform in drawing.iter(f"{{{drawingml}}}xfrm"):
+        if any(transform.get(name, "0") not in {"0", "false"} for name in ("rot", "flipH", "flipV")):
+            raise ValueError("Store Directory has rotated or mirrored images; review the template")
+    if any(ET.QName(node).localname in {"hlinkClick", "hlinkHover"} for node in drawing.iter()):
+        raise ValueError("Store Directory image hyperlinks require review")
+
+
+def directory_sheet(sheet):
+    if (len(sheet._images) != 2 or sheet._charts or sheet.merged_cells.ranges or
+            any(cell.value is not None and (not isinstance(cell.value, str) or cell.value.strip())
+                for row in sheet for cell in row) or
+            any(cell.comment or cell.hyperlink for row in sheet for cell in row)):
+        raise ValueError("Store Directory must contain exactly two images and no other content; review the template")
+    pictures = sorted(sheet._images, key=lambda image: (image.anchor._from.row, image.anchor._from.col))
+    if pictures[0].anchor._from.row == pictures[1].anchor._from.row:
+        raise ValueError("Store Directory image order is ambiguous")
+    images = [image._data() for image in pictures]
+    workbook = Workbook()
+    result = workbook.active
+    result.title = DIRECTORY_SHEET
+    result.sheet_view.showGridLines = False
+    result.column_dimensions["A"].width = 95
+    result.sheet_format.defaultRowHeight = 15
+    result.page_setup.orientation = "portrait"
+    result.page_setup.paperSize = result.PAPERSIZE_LETTER
+    result.page_setup.scale = 100
+    result.sheet_properties.pageSetUpPr.fitToPage = False
+    result.page_margins = PageMargins(left=.25, right=.25, top=.4, bottom=.4, header=.1, footer=.1)
+    result.row_breaks.append(Break(id=48))
+    result.print_area = "A1:A96"
+    for index, content in enumerate(images):
+        with Image.open(io.BytesIO(content)) as image:
+            if image.width <= 0 or image.height <= 0:
+                raise ValueError("Store Directory image has invalid dimensions")
+            scale = min(700 / image.width, 900 / image.height)
+            width, height = image.width * scale, image.height * scale
+        picture = ExcelImage(io.BytesIO(content))
+        picture.anchor = OneCellAnchor(
+            _from=AnchorMarker(col=0, row=49 * index, colOff=pixels_to_EMU((700 - width) / 2)),
+            ext=XDRPositiveSize2D(cx=pixels_to_EMU(width), cy=pixels_to_EMU(height)))
+        result.add_image(picture)
+    output = io.BytesIO()
+    workbook.save(output)
+    return output.getvalue(), images
+
+
+def directory_image_signature(content):
+    with Image.open(io.BytesIO(content)) as image:
+        return image.convert("RGB").resize((256, 256), Image.Resampling.LANCZOS)
+
+
+def validate_directory(sheet, images):
+    if len(sheet._images) != 2 or [sha(image._data()) for image in sheet._images] != [sha(b) for b in images]:
+        raise ValueError("Store Directory images differ from the original template")
+    if (sheet.page_setup.orientation != "portrait" or str(sheet.page_setup.paperSize) != "1" or
+            sheet.page_setup.scale != 100 or
+            [b.id for b in sheet.row_breaks.brk if b.man] != [48]):
+        raise ValueError("Store Directory must have two portrait US Letter pages")
 
 
 def combine_bulk(binder, destination):
@@ -1061,7 +1151,7 @@ def validate_package(binder, output, coordinates, images, with_photos, deli_coor
 
 
 def validate_print(output, coordinates, expected_pages, deli_coordinates=None, deli_title=None,
-                   bulk_pages=None, stretch_size=None, misc_text=None):
+                   bulk_pages=None, stretch_size=None, misc_text=None, directory_images=None):
     from pypdf import PdfReader
 
     if not shutil.which("soffice"):
@@ -1082,6 +1172,35 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 raise ValueError("Calc did not open/export the complete binder; check PRINT_ENGINE_LOG.txt "
                                  "and install libreoffice-calc")
             full_pdf = PdfReader(complete)
+            if directory_images is not None:
+                import pymupdf
+
+                with pymupdf.open(complete) as document:
+                    expected = []
+                    for content in directory_images:
+                        with Image.open(io.BytesIO(content)) as image:
+                            expected.append((image.size, directory_image_signature(content)))
+                    matches = [[], []]
+                    for page in document:
+                        for image in page.get_image_info(xrefs=True):
+                            size = (image["width"], image["height"])
+                            if size not in [item[0] for item in expected] or not image["xref"]:
+                                continue
+                            actual = directory_image_signature(document.extract_image(image["xref"])["image"])
+                            for index, (expected_size, signature) in enumerate(expected):
+                                difference = sum(ImageStat.Stat(ImageChops.difference(signature, actual)).mean) / 3
+                                if size == expected_size and difference < 3:
+                                    matches[index].append((page.number, pymupdf.Rect(image["bbox"])))
+                    for candidates in matches:
+                        for number, bounds in candidates:
+                            page = document[number]
+                            if (abs(page.rect.width - 612) > 1 or abs(page.rect.height - 792) > 1 or
+                                    not page.rect.contains(bounds) or bounds.width < 250 or bounds.height < 500):
+                                raise ValueError(f"{edition}: Store Directory image is clipped or too small")
+                    pairs = [(first[0], second[0]) for first in matches[0] for second in matches[1]
+                             if second[0] == first[0] + 1]
+                    if len(pairs) != 1 or any(number not in pairs[0] for group in matches for number, _ in group):
+                        raise ValueError(f"{edition}: Store Directory must print exactly two consecutive ordered pages")
             if misc_text is not None:
                 matches = [page for page in full_pdf.pages if misc_page_matches(page, misc_text)]
                 if len(matches) != 1:
@@ -1196,6 +1315,7 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 bulk_print_font_points=11 if bulk_pages else None,
                 stretch_print_page_verified=stretch_size is not None,
                 misc_print_page_verified=misc_text is not None,
+                directory_print_pages_verified=len(directory_images) if directory_images is not None else 0,
                 complete_pdf=complete.name,
                 visual_review="REQUIRED; automated text/geometry checks are not a visual print approval",
             )
@@ -1261,7 +1381,7 @@ def report_text(summary):
         f"organic placement review: {summary['placement_review_required']}",
         "",
         "Bulk is one themed sheet with six category-grouped pages at 11 pt, without print scaling.",
-        "Every original package part outside Produce, Deli, Time To Stretch, Misc Codes and Bulk, their relationships,",
+        "Every original package part outside Produce, Deli, Time To Stretch, Misc Codes, Store Directory and Bulk, their relationships,",
         "append-only styles, content types and their print names is byte-identical. No original part is removed.",
         "Existing styles and all unrelated workbook-level settings are independently compared.",
         "PLU/description strings, duplicate highlights and embedded image bytes/anchors are verified.",
@@ -1326,6 +1446,8 @@ def generate(root, binder, output, verify_print=False):
         sheet_info(original, "Deli")
         sheet_info(original, STRETCH_SHEET)
         sheet_info(original, MISC_SHEET)
+        sheet_info(original, DIRECTORY_SHEET)
+        validate_directory_template(original)
     source_items, digest = read_picklist(root / "sources/plu/PickList.xml")
     assignments = read_assignments(root / "data/picklist_assignments.json")
     reconciliation = output / "reconciliation"
@@ -1365,6 +1487,7 @@ def generate(root, binder, output, verify_print=False):
             combined_binder = Path(temporary) / "Combined.xlsx"
             bulk_binder = Path(temporary) / "Bulk.xlsx"
             misc_binder = Path(temporary) / "Misc.xlsx"
+            directory_binder = Path(temporary) / "Directory.xlsx"
             stretch_binder = Path(temporary) / "Stretch.xlsx"
             produce_binder = Path(temporary) / "Produce.xlsx"
             bulk_combined = combine_bulk(binder, combined_binder)
@@ -1373,6 +1496,7 @@ def generate(root, binder, output, verify_print=False):
                 bulk_coordinates = None
                 if "Bulk" in template:
                     bulk_content, bulk_coordinates = bulk_sheet(read_bulk(template["Bulk"]))
+                directory_content, directory_images = directory_sheet(template[DIRECTORY_SHEET])
             finally:
                 template.close()
             if bulk_coordinates is not None:
@@ -1380,7 +1504,8 @@ def generate(root, binder, output, verify_print=False):
             else:
                 shutil.copyfile(combined_binder, bulk_binder)
             fit_misc_sheet(bulk_binder, misc_binder)
-            replace_sheet(misc_binder, stretch_content, stretch_binder, STRETCH_SHEET)
+            replace_sheet(misc_binder, directory_content, directory_binder, DIRECTORY_SHEET)
+            replace_sheet(directory_binder, stretch_content, stretch_binder, STRETCH_SHEET)
             replace_produce(stretch_binder, donor, produce_binder)
             replace_sheet(produce_binder, deli_content, path, "Deli")
             validations[edition] = validate_package(
@@ -1388,6 +1513,7 @@ def generate(root, binder, output, verify_print=False):
         result = load_workbook(path)
         try:
             validate_stretch(result[STRETCH_SHEET], stretch_source)
+            validate_directory(result[DIRECTORY_SHEET], directory_images)
         finally:
             result.close()
         if bulk_coordinates is not None:
@@ -1408,6 +1534,7 @@ def generate(root, binder, output, verify_print=False):
                 bulk_parts = {bulk_part, rels_part(bulk_part)}
             stretch_part, _ = sheet_info(original, STRETCH_SHEET)
             misc_part, _ = sheet_info(original, MISC_SHEET)
+            directory_part, _ = sheet_info(original, DIRECTORY_SHEET)
             validations[edition]["output_sheet_names"] = validations[edition]["original_sheet_names"]
             validations[edition]["original_sheet_names"] = [
                 sheet.get("name") for sheet in xml(original.read("xl/workbook.xml")).find(f"{{{S}}}sheets")
@@ -1417,7 +1544,8 @@ def generate(root, binder, output, verify_print=False):
                 before, after = original.read(name), generated.read(name)
                 part.update(sha256_before=sha(before), sha256_after=sha(after),
                             byte_identical=before == after)
-                if name not in bulk_parts | {misc_part, stretch_part, rels_part(stretch_part), "xl/workbook.xml"} and name not in {
+                if name not in bulk_parts | {misc_part, stretch_part, rels_part(stretch_part),
+                                             directory_part, rels_part(directory_part), "xl/workbook.xml"} and name not in {
                         sheet_info(original, "Produce")[0], rels_part(sheet_info(original, "Produce")[0]),
                         sheet_info(original, "Deli")[0], rels_part(sheet_info(original, "Deli")[0]),
                         "xl/styles.xml", "[Content_Types].xml"} and before != after:
@@ -1500,6 +1628,7 @@ def generate(root, binder, output, verify_print=False):
             "AI provenance and uncertain visual verdicts are recorded only in the external audit report.",
             "Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.",
             "Time To Stretch uses the supplied color guide; Misc Codes is fitted to one page; "
+            "Store Directory uses the template's two images on separate pages; "
             "Deli is replaced from the owner-supplied two-column source; Bulk sections are combined "
             "with page breaks; all other unrelated operational sheets remain unchanged.",
             "Future unclassified entries are retained for review, not silently discarded or approved.",
@@ -1517,7 +1646,7 @@ def generate(root, binder, output, verify_print=False):
         summary["print_validation"] = validate_print(
             output, coordinates, pages, deli_coordinates=deli_coordinates, deli_title=deli_title,
             bulk_pages=bulk_print_pages(output / FILENAMES["photos"]), stretch_size=stretch_size,
-            misc_text=misc_text)
+            misc_text=misc_text, directory_images=directory_images)
         if summary["print_validation"]["photos"]["drawn_images"] != len(images):
             raise ValueError("printed reference count differs from the exact image mapping")
         (output / "VALIDATION.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")

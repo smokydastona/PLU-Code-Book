@@ -20,7 +20,7 @@ from openpyxl.worksheet.pagebreak import Break
 from PIL import Image
 
 from build_till_binders import (BULK_SHEETS, FILENAMES, MAX_GITHUB_FILE_SIZE, STRETCH_SOURCE, VISUALS, bulk_print_pages,
-                               combine_bulk, comparisons, fit_misc_sheet, generate, layout_rows, misc_page_matches, misc_print_text,
+                               combine_bulk, comparisons, directory_sheet, fit_misc_sheet, generate, layout_rows, misc_page_matches, misc_print_text,
                                docx_compatible_image,
                                map_images, produce_catalog, quick_sheet, replace_produce,
                                sha, stretch_sheet, validate_package, visual_records, workbook_photo_copy)
@@ -128,6 +128,40 @@ class TillBinderChecks(unittest.TestCase):
         self.assertEqual(len(first_pages), 6)
         self.assertEqual(first_pages, second_pages)
 
+    @unittest.skipUnless(shutil.which("soffice"), "LibreOffice Calc is required")
+    def test_store_directory_prints_two_complete_original_images(self):
+        import pymupdf
+
+        source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
+        original = load_workbook(source)
+        try:
+            content, images = directory_sheet(original["Store Directory"])
+        finally:
+            original.close()
+        workbook = self.root / "directory.xlsx"
+        workbook.write_bytes(content)
+        subprocess.run(["soffice", "-env:UserInstallation=" + (self.root / "lo-directory").as_uri(),
+                        "--headless", "--convert-to", "pdf", "--outdir", str(self.root),
+                        str(workbook)], check=True, capture_output=True, timeout=120)
+        with pymupdf.open(self.root / "directory.pdf") as document:
+            self.assertEqual(len(document), 2)
+            for page, data in zip(document, images):
+                drawn = page.get_image_info()
+                self.assertEqual(len(drawn), 1)
+                with Image.open(io.BytesIO(data)) as original_image:
+                    self.assertEqual((drawn[0]["width"], drawn[0]["height"]), original_image.size)
+                self.assertTrue(page.rect.contains(pymupdf.Rect(drawn[0]["bbox"])))
+                self.assertEqual((round(page.rect.width), round(page.rect.height)), (612, 792))
+
+    def test_store_directory_rejects_other_content(self):
+        original = load_workbook(self.binder)
+        try:
+            original["Store Directory"]["A1"] = "Owner data that must not be discarded"
+            with self.assertRaisesRegex(ValueError, "no other content"):
+                directory_sheet(original["Store Directory"])
+        finally:
+            original.close()
+
     def test_supplier_jpeg_is_losslessly_made_docx_compatible(self):
         source = Path(__file__).resolve().parents[1] / "data/review-references/buck-brand/page-02-image-011.jpeg"
         original = source.read_bytes()
@@ -197,6 +231,12 @@ class TillBinderChecks(unittest.TestCase):
         deli = original.create_sheet("Deli")
         deli["A1"] = "Outdated deli"
         deli.print_area = "A1:B2"
+        directory = original.create_sheet("Store Directory")
+        directory.add_image(ExcelImage(io.BytesIO(self.content)), "A1")
+        second_image = io.BytesIO()
+        Image.new("RGB", (400, 600), "blue").save(second_image, format="PNG")
+        self.directory_content = [self.content, second_image.getvalue()]
+        directory.add_image(ExcelImage(io.BytesIO(self.directory_content[1])), "A30")
         last = original.create_sheet("Hidden operations")
         last.sheet_state = "hidden"
         last["A1"] = "=Operational!B2"
@@ -299,7 +339,10 @@ class TillBinderChecks(unittest.TestCase):
             path = self.output / filename
             workbook = load_workbook(path)
             self.addCleanup(workbook.close)
-            self.assertEqual(workbook.sheetnames, ["Time To Stretch", "Operational", "Misc Codes", "Produce", "Deli", "Hidden operations"])
+            self.assertEqual(workbook.sheetnames, ["Time To Stretch", "Operational", "Misc Codes", "Produce", "Deli", "Store Directory", "Hidden operations"])
+            directory = workbook["Store Directory"]
+            self.assertEqual([image._data() for image in directory._images], self.directory_content)
+            self.assertEqual([item.id for item in directory.row_breaks.brk], [48])
             misc = workbook["Misc Codes"]
             self.assertEqual(misc["A2"].value, "00012")
             self.assertEqual(misc["D2"].value, "Owner supplied entry")
@@ -364,6 +407,8 @@ class TillBinderChecks(unittest.TestCase):
             self.assertEqual(result["Misc Codes"]["D2"].value, "Owner's updated miscellaneous entry")
             self.assertEqual((result["Misc Codes"].page_setup.fitToWidth,
                               result["Misc Codes"].page_setup.fitToHeight), (1, 1))
+            self.assertEqual([image._data() for image in result["Store Directory"]._images],
+                             self.directory_content)
             self.assertEqual(result["Deli"]["A5"].value, "Updated meal")
             self.assertEqual(len(result["Produce"]._images), 5)
         finally:
