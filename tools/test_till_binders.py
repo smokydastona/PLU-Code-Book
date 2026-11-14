@@ -17,13 +17,13 @@ from openpyxl.comments import Comment
 from openpyxl.drawing.image import Image as ExcelImage
 from openpyxl.styles import Font
 from openpyxl.worksheet.pagebreak import Break
-from PIL import Image
+from PIL import Image, ImageChops, ImageOps
 
-from build_till_binders import (BULK_SHEETS, FILENAMES, MAX_GITHUB_FILE_SIZE, STRETCH_SOURCE, VISUALS, bulk_print_pages,
+from build_till_binders import (BULK_SHEETS, DIRECTORY_EMERGENCY_HIGHLIGHTS, DIRECTORY_SOURCES, FILENAMES, MAX_GITHUB_FILE_SIZE, PDF_EXPORT_FORMAT, STRETCH_SOURCE, VISUALS, bulk_print_pages,
                                combine_bulk, comparisons, directory_sheet, fit_misc_sheet, generate, layout_rows, misc_page_matches, misc_print_text,
                                docx_compatible_image,
                                map_images, produce_catalog, quick_sheet, replace_produce,
-                               sha, stretch_sheet, validate_package, visual_records, workbook_photo_copy)
+                               sha, stretch_sheet, themed_directory_image, validate_package, visual_records, workbook_photo_copy)
 from picklist_catalog import read_picklist, read_assignments
 from review_image_references import load_references
 from review_booklets import build_review_booklets, build_working_list_review
@@ -141,17 +141,79 @@ class TillBinderChecks(unittest.TestCase):
         workbook = self.root / "directory.xlsx"
         workbook.write_bytes(content)
         subprocess.run(["soffice", "-env:UserInstallation=" + (self.root / "lo-directory").as_uri(),
-                        "--headless", "--convert-to", "pdf", "--outdir", str(self.root),
+                        "--headless", "--convert-to", PDF_EXPORT_FORMAT, "--outdir", str(self.root),
                         str(workbook)], check=True, capture_output=True, timeout=120)
         with pymupdf.open(self.root / "directory.pdf") as document:
             self.assertEqual(len(document), 2)
             for page, data in zip(document, images):
-                drawn = page.get_image_info()
+                drawn = page.get_image_info(xrefs=True)
                 self.assertEqual(len(drawn), 1)
                 with Image.open(io.BytesIO(data)) as original_image:
                     self.assertEqual((drawn[0]["width"], drawn[0]["height"]), original_image.size)
+                    with Image.open(io.BytesIO(document.extract_image(drawn[0]["xref"])["image"])) as printed:
+                        self.assertEqual(printed.convert("RGB").tobytes(), original_image.convert("RGB").tobytes())
                 self.assertTrue(page.rect.contains(pymupdf.Rect(drawn[0]["bbox"])))
-                self.assertEqual((round(page.rect.width), round(page.rect.height)), (612, 792))
+                self.assertEqual((round(page.rect.width), round(page.rect.height)), (792, 612))
+
+    def test_directory_highlights_preserve_every_original_nonwhite_pixel(self):
+        for index, path in enumerate(DIRECTORY_SOURCES):
+            content = (Path(__file__).resolve().parents[1] / path).read_bytes()
+            with Image.open(io.BytesIO(content)) as image:
+                original = image.convert("RGB").transpose(Image.Transpose.ROTATE_270)
+            with Image.open(io.BytesIO(themed_directory_image(content, index))) as image:
+                themed = image.convert("RGB")
+            white = [channel.point(lambda value: 255 if value == 255 else 0)
+                     for channel in original.split()]
+            white_mask = ImageChops.multiply(ImageChops.multiply(white[0], white[1]), white[2])
+            difference = ImageChops.difference(original, themed).convert("L")
+            self.assertIsNone(ImageChops.multiply(difference, ImageOps.invert(white_mask)).getbbox())
+            self.assertIsNotNone(difference.getbbox())
+            self.assertIsNotNone(ImageChops.difference(original.convert("L"), themed.convert("L")).getbbox())
+        with self.assertRaisesRegex(ValueError, "changed"):
+            themed_directory_image(b"changed", 1)
+
+    def test_directory_emergency_highlights_are_red_without_changing_map_ink(self):
+        content = (self.root / DIRECTORY_SOURCES[1]).read_bytes()
+        with Image.open(io.BytesIO(themed_directory_image(content, 1))) as image:
+            self.assertEqual(image.getpixel((980, 1240)), (252, 228, 214))
+            for box in DIRECTORY_EMERGENCY_HIGHLIGHTS:
+                region = image.crop(box)
+                colors = [color for _, color in region.getcolors(region.width * region.height)]
+                self.assertIn((156, 0, 6), colors)
+        workbook = load_workbook(self.binder)
+        try:
+            sheet = workbook["Store Directory"]
+            for index, picture in enumerate(sheet._images):
+                replacement = ExcelImage(io.BytesIO(themed_directory_image(
+                    self.directory_originals[index], index, emergency_highlights=False, parking_labels=False)))
+                replacement.anchor = picture.anchor
+                sheet._images[index] = replacement
+            _, images = directory_sheet(sheet)
+            self.assertEqual(images, self.directory_content)
+        finally:
+            workbook.close()
+
+    def test_directory_owner_parking_labels_use_green_front_and_red_back(self):
+        content = (self.root / DIRECTORY_SOURCES[1]).read_bytes()
+        with Image.open(io.BytesIO(themed_directory_image(content, 1))) as image:
+            front = image.crop((580, 1226, 900, 1270))
+            back = image.crop((1504, 620, 1644, 725))
+            for label, fill in ((front, (220, 230, 218)), (back, (252, 228, 214))):
+                colors = [color for _, color in label.getcolors(label.width * label.height)]
+                self.assertIn(fill, colors)
+                self.assertIn((0, 0, 0), colors)
+        workbook = load_workbook(self.binder)
+        try:
+            sheet = workbook["Store Directory"]
+            for index, picture in enumerate(sheet._images):
+                replacement = ExcelImage(io.BytesIO(themed_directory_image(
+                    self.directory_originals[index], index, parking_labels=False)))
+                replacement.anchor = picture.anchor
+                sheet._images[index] = replacement
+            _, images = directory_sheet(sheet)
+            self.assertEqual(images, self.directory_content)
+        finally:
+            workbook.close()
 
     def test_store_directory_rejects_other_content(self):
         original = load_workbook(self.binder)
@@ -159,6 +221,19 @@ class TillBinderChecks(unittest.TestCase):
             original["Store Directory"]["A1"] = "Owner data that must not be discarded"
             with self.assertRaisesRegex(ValueError, "no other content"):
                 directory_sheet(original["Store Directory"])
+        finally:
+            original.close()
+
+    def test_store_directory_rejects_changed_template_image(self):
+        source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
+        original = load_workbook(source)
+        try:
+            sheet = original["Store Directory"]
+            replacement = ExcelImage(io.BytesIO(self.content))
+            replacement.anchor = sheet._images[1].anchor
+            sheet._images[1] = replacement
+            with self.assertRaisesRegex(ValueError, "page 2 changed"):
+                directory_sheet(sheet)
         finally:
             original.close()
 
@@ -183,6 +258,8 @@ class TillBinderChecks(unittest.TestCase):
         (self.root / "sources/binders").mkdir(parents=True)
         (self.root / STRETCH_SOURCE).write_bytes(
             (Path(__file__).resolve().parents[1] / STRETCH_SOURCE).read_bytes())
+        for path in DIRECTORY_SOURCES:
+            (self.root / path).write_bytes((Path(__file__).resolve().parents[1] / path).read_bytes())
         self.binder = self.root / "Original.xlsx"
         image = io.BytesIO()
         Image.new("RGB", (600, 500), "green").save(image, format="PNG")
@@ -232,11 +309,11 @@ class TillBinderChecks(unittest.TestCase):
         deli["A1"] = "Outdated deli"
         deli.print_area = "A1:B2"
         directory = original.create_sheet("Store Directory")
-        directory.add_image(ExcelImage(io.BytesIO(self.content)), "A1")
-        second_image = io.BytesIO()
-        Image.new("RGB", (400, 600), "blue").save(second_image, format="PNG")
-        self.directory_content = [self.content, second_image.getvalue()]
-        directory.add_image(ExcelImage(io.BytesIO(self.directory_content[1])), "A30")
+        self.directory_originals = [(self.root / path).read_bytes() for path in DIRECTORY_SOURCES]
+        self.directory_content = [themed_directory_image(content, i)
+                                  for i, content in enumerate(self.directory_originals)]
+        directory.add_image(ExcelImage(io.BytesIO(self.directory_originals[0])), "A1")
+        directory.add_image(ExcelImage(io.BytesIO(self.directory_originals[1])), "A30")
         last = original.create_sheet("Hidden operations")
         last.sheet_state = "hidden"
         last["A1"] = "=Operational!B2"
@@ -342,7 +419,7 @@ class TillBinderChecks(unittest.TestCase):
             self.assertEqual(workbook.sheetnames, ["Time To Stretch", "Operational", "Misc Codes", "Produce", "Deli", "Store Directory", "Hidden operations"])
             directory = workbook["Store Directory"]
             self.assertEqual([image._data() for image in directory._images], self.directory_content)
-            self.assertEqual([item.id for item in directory.row_breaks.brk], [48])
+            self.assertEqual([item.id for item in directory.row_breaks.brk], [36])
             misc = workbook["Misc Codes"]
             self.assertEqual(misc["A2"].value, "00012")
             self.assertEqual(misc["D2"].value, "Owner supplied entry")

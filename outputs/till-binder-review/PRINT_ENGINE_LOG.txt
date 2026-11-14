@@ -1,2 +1,2 @@
-convert /root/.copilot/session-state/7f4cb6f36e0c4adfaa2b31c09870ca9d/files/directory-final/Complete Till Binder - Updated - Photos.xlsx as a Calc document -> /tmp/till-print-03w8_cqa/Complete Till Binder - Updated - Photos.pdf using filter : calc_pdf_Export
+convert /root/.copilot/session-state/7f4cb6f36e0c4adfaa2b31c09870ca9d/files/directory-final-review/Complete Till Binder - Updated - Photos.xlsx as a Calc document -> /tmp/till-print-4a61880u/Complete Till Binder - Updated - Photos.pdf using filter : calc_pdf_Export:{"UseLosslessCompression":{"type":"boolean","value":"true"},"ReduceImageResolution":{"type":"boolean","value":"false"}}
 Warning: failed to launch javaldx - java may not function correctly

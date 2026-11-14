@@ -33,7 +33,7 @@ from openpyxl.utils.cell import range_boundaries, get_column_letter
 from openpyxl.utils.units import pixels_to_EMU
 from openpyxl.worksheet.pagebreak import Break
 from openpyxl.worksheet.page import PageMargins
-from PIL import Image, ImageChops, ImageOps, ImageStat
+from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageOps, PngImagePlugin
 
 from check_image_uniqueness import image_fingerprint
 from organic_watermarks import render_watermark
@@ -70,6 +70,27 @@ STRETCH_SOURCE = Path("sources/binders/Time_To_Stretch.jpg")
 STRETCH_SHEET = "Time To Stretch"
 MISC_SHEET = "Misc Codes"
 DIRECTORY_SHEET = "Store Directory"
+DIRECTORY_SOURCE_HASHES = (
+    "c5beab3173c87b3ab5876bcad374bb85e5cefc57ba616edb749791852cc3bc69",
+    "0274edd4cd7893d0f087f73e380295bf562ac80c0e10a4022ae7f69b686418a3",
+)
+DIRECTORY_SOURCES = tuple(Path(f"sources/binders/Store_Directory_Original_{i}.png") for i in (1, 2))
+DIRECTORY_HIGHLIGHTS = (
+    ((75, 58, 460, 181),),
+    (
+    (202, 143, 449, 191), (1136, 135, 1293, 184), (1483, 460, 1563, 510),
+    (4, 773, 151, 858), (520, 1118, 705, 1167), (1099, 1106, 1234, 1154),
+    (1278, 1143, 1394, 1187),
+    *((x - 17, 888, x + 17, 922) for x in (385, 452, 519, 616, 689, 744, 799, 856, 911)),
+    ),
+)
+DIRECTORY_EMERGENCY_HIGHLIGHTS = (
+    (973, 1233, 1633, 1273),
+    (101, 319, 139, 364), (1032, 169, 1071, 213),
+    (1463, 927, 1504, 972), (777, 1100, 815, 1144), (345, 1100, 384, 1144),
+)
+PDF_EXPORT_FORMAT = 'pdf:calc_pdf_Export:{"UseLosslessCompression":{"type":"boolean","value":"true"},' \
+                    '"ReduceImageResolution":{"type":"boolean","value":"false"}}'
 
 
 def sha(content):
@@ -236,7 +257,46 @@ def validate_directory_template(archive):
         raise ValueError("Store Directory image hyperlinks require review")
 
 
-def directory_sheet(sheet):
+def themed_directory_image(content, index, emergency_highlights=True, parking_labels=True):
+    if sha(content) != DIRECTORY_SOURCE_HASHES[index]:
+        raise ValueError(f"Store Directory page {index + 1} changed; review its map highlights before rebuilding")
+    with Image.open(io.BytesIO(content)) as image:
+        original = image.convert("RGB").transpose(Image.Transpose.ROTATE_270)
+    highlights = Image.new("RGB", original.size, "white")
+    shape = ImageDraw.Draw(highlights)
+    regions = Image.new("L", original.size)
+    region_draw = ImageDraw.Draw(regions)
+    for box in DIRECTORY_HIGHLIGHTS[index]:
+        shape.rounded_rectangle(box, radius=8, fill="#DCE6DA", outline="#305040", width=2)
+        region_draw.rounded_rectangle(box, radius=8, fill=255)
+    if index == 1 and emergency_highlights:
+        for box in DIRECTORY_EMERGENCY_HIGHLIGHTS:
+            shape.rounded_rectangle(box, radius=4, fill="#FCE4D6", outline="#9C0006", width=2)
+            region_draw.rounded_rectangle(box, radius=4, fill=255)
+    if index == 1 and parking_labels:
+        font = ImageFont.truetype("DejaVuSans-Bold.ttf", 24)
+        for box, text, fill, outline in (
+            ((580, 1226, 900, 1270), "Front Parking Lot", "#DCE6DA", "#305040"),
+            ((1504, 620, 1644, 725), "Back\nParking\nLot", "#FCE4D6", "#9C0006"),
+        ):
+            shape.rounded_rectangle(box, radius=8, fill=fill, outline=outline, width=2)
+            region_draw.rounded_rectangle(box, radius=8, fill=255)
+            bounds = shape.multiline_textbbox((0, 0), text, font=font, spacing=4, align="center")
+            x = (box[0] + box[2] - bounds[2] - bounds[0]) / 2
+            y = (box[1] + box[3] - bounds[3] - bounds[1]) / 2
+            shape.multiline_text((x, y), text, font=font, spacing=4, align="center", fill="black")
+    white = [channel.point(lambda value: 255 if value == 255 else 0)
+             for channel in original.split()]
+    white_mask = ImageChops.multiply(ImageChops.multiply(white[0], white[1]), white[2])
+    original.paste(highlights, mask=ImageChops.multiply(white_mask, regions))
+    metadata = PngImagePlugin.PngInfo()
+    metadata.add_text("store_directory_source_sha256", DIRECTORY_SOURCE_HASHES[index])
+    output = io.BytesIO()
+    original.save(output, format="PNG", pnginfo=metadata, optimize=True)
+    return output.getvalue()
+
+
+def directory_sheet(sheet, originals=None):
     if (len(sheet._images) != 2 or sheet._charts or sheet.merged_cells.ranges or
             any(cell.value is not None and (not isinstance(cell.value, str) or cell.value.strip())
                 for row in sheet for cell in row) or
@@ -245,29 +305,40 @@ def directory_sheet(sheet):
     pictures = sorted(sheet._images, key=lambda image: (image.anchor._from.row, image.anchor._from.col))
     if pictures[0].anchor._from.row == pictures[1].anchor._from.row:
         raise ValueError("Store Directory image order is ambiguous")
-    images = [image._data() for image in pictures]
+    supplied = [image._data() for image in pictures]
+    if originals is None:
+        originals = [(ROOT / path).read_bytes() for path in DIRECTORY_SOURCES]
+    if len(originals) != 2:
+        raise ValueError("Store Directory needs two original page images")
+    images = [themed_directory_image(content, index) for index, content in enumerate(originals)]
+    for index, content in enumerate(supplied):
+        if content not in (originals[index], images[index],
+                           themed_directory_image(originals[index], index, parking_labels=False),
+                           themed_directory_image(originals[index], index, emergency_highlights=False,
+                                                  parking_labels=False)):
+            raise ValueError(f"Store Directory page {index + 1} changed; review its map highlights before rebuilding")
     workbook = Workbook()
     result = workbook.active
     result.title = DIRECTORY_SHEET
     result.sheet_view.showGridLines = False
-    result.column_dimensions["A"].width = 95
+    result.column_dimensions["A"].width = 135
     result.sheet_format.defaultRowHeight = 15
-    result.page_setup.orientation = "portrait"
+    result.page_setup.orientation = "landscape"
     result.page_setup.paperSize = result.PAPERSIZE_LETTER
     result.page_setup.scale = 100
     result.sheet_properties.pageSetUpPr.fitToPage = False
     result.page_margins = PageMargins(left=.25, right=.25, top=.4, bottom=.4, header=.1, footer=.1)
-    result.row_breaks.append(Break(id=48))
-    result.print_area = "A1:A96"
+    result.row_breaks.append(Break(id=36))
+    result.print_area = "A1:A72"
     for index, content in enumerate(images):
         with Image.open(io.BytesIO(content)) as image:
             if image.width <= 0 or image.height <= 0:
                 raise ValueError("Store Directory image has invalid dimensions")
-            scale = min(700 / image.width, 900 / image.height)
+            scale = min(930 / image.width, 675 / image.height)
             width, height = image.width * scale, image.height * scale
         picture = ExcelImage(io.BytesIO(content))
         picture.anchor = OneCellAnchor(
-            _from=AnchorMarker(col=0, row=49 * index, colOff=pixels_to_EMU((700 - width) / 2)),
+            _from=AnchorMarker(col=0, row=37 * index, colOff=pixels_to_EMU((930 - width) / 2)),
             ext=XDRPositiveSize2D(cx=pixels_to_EMU(width), cy=pixels_to_EMU(height)))
         result.add_image(picture)
     output = io.BytesIO()
@@ -275,18 +346,18 @@ def directory_sheet(sheet):
     return output.getvalue(), images
 
 
-def directory_image_signature(content):
+def directory_image_pixels(content):
     with Image.open(io.BytesIO(content)) as image:
-        return image.convert("RGB").resize((256, 256), Image.Resampling.LANCZOS)
+        return image.convert("RGB").tobytes()
 
 
 def validate_directory(sheet, images):
     if len(sheet._images) != 2 or [sha(image._data()) for image in sheet._images] != [sha(b) for b in images]:
-        raise ValueError("Store Directory images differ from the original template")
-    if (sheet.page_setup.orientation != "portrait" or str(sheet.page_setup.paperSize) != "1" or
+        raise ValueError("Store Directory images differ from the themed derivatives")
+    if (sheet.page_setup.orientation != "landscape" or str(sheet.page_setup.paperSize) != "1" or
             sheet.page_setup.scale != 100 or
-            [b.id for b in sheet.row_breaks.brk if b.man] != [48]):
-        raise ValueError("Store Directory must have two portrait US Letter pages")
+            [b.id for b in sheet.row_breaks.brk if b.man] != [36]):
+        raise ValueError("Store Directory must have two landscape US Letter pages")
 
 
 def combine_bulk(binder, destination):
@@ -1161,7 +1232,7 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
         work = Path(directory)
         command = [
             "soffice", "-env:UserInstallation=" + (work / "profile").as_uri(),
-            "--headless", "--convert-to", "pdf", "--outdir", str(work),
+            "--headless", "--convert-to", PDF_EXPORT_FORMAT, "--outdir", str(work),
             *[str((output / filename).resolve()) for filename in FILENAMES.values()],
         ]
         process = subprocess.run(command, capture_output=True, text=True, timeout=300, check=True)
@@ -1179,23 +1250,22 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                     expected = []
                     for content in directory_images:
                         with Image.open(io.BytesIO(content)) as image:
-                            expected.append((image.size, directory_image_signature(content)))
+                            expected.append((image.size, directory_image_pixels(content)))
                     matches = [[], []]
                     for page in document:
                         for image in page.get_image_info(xrefs=True):
                             size = (image["width"], image["height"])
                             if size not in [item[0] for item in expected] or not image["xref"]:
                                 continue
-                            actual = directory_image_signature(document.extract_image(image["xref"])["image"])
+                            actual = directory_image_pixels(document.extract_image(image["xref"])["image"])
                             for index, (expected_size, signature) in enumerate(expected):
-                                difference = sum(ImageStat.Stat(ImageChops.difference(signature, actual)).mean) / 3
-                                if size == expected_size and difference < 3:
+                                if size == expected_size and signature == actual:
                                     matches[index].append((page.number, pymupdf.Rect(image["bbox"])))
                     for candidates in matches:
                         for number, bounds in candidates:
                             page = document[number]
-                            if (abs(page.rect.width - 612) > 1 or abs(page.rect.height - 792) > 1 or
-                                    not page.rect.contains(bounds) or bounds.width < 250 or bounds.height < 500):
+                            if (abs(page.rect.width - 792) > 1 or abs(page.rect.height - 612) > 1 or
+                                    not page.rect.contains(bounds) or bounds.width < 500 or bounds.height < 300):
                                 raise ValueError(f"{edition}: Store Directory image is clipped or too small")
                     pairs = [(first[0], second[0]) for first in matches[0] for second in matches[1]
                              if second[0] == first[0] + 1]
@@ -1316,6 +1386,7 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 stretch_print_page_verified=stretch_size is not None,
                 misc_print_page_verified=misc_text is not None,
                 directory_print_pages_verified=len(directory_images) if directory_images is not None else 0,
+                directory_print_pixels_losslessly_verified=directory_images is not None,
                 complete_pdf=complete.name,
                 visual_review="REQUIRED; automated text/geometry checks are not a visual print approval",
             )
@@ -1431,6 +1502,7 @@ def generate(root, binder, output, verify_print=False):
     stretch_source = (root / STRETCH_SOURCE).read_bytes()
     stretch_checksum = sha(stretch_source)
     stretch_content = stretch_sheet(stretch_source)
+    directory_originals = [(root / path).read_bytes() for path in DIRECTORY_SOURCES]
     with Image.open(io.BytesIO(stretch_source)) as image:
         stretch_size = image.size
     deli_document = root / "sources/binders/Deli.docx"
@@ -1496,7 +1568,7 @@ def generate(root, binder, output, verify_print=False):
                 bulk_coordinates = None
                 if "Bulk" in template:
                     bulk_content, bulk_coordinates = bulk_sheet(read_bulk(template["Bulk"]))
-                directory_content, directory_images = directory_sheet(template[DIRECTORY_SHEET])
+                directory_content, directory_images = directory_sheet(template[DIRECTORY_SHEET], directory_originals)
             finally:
                 template.close()
             if bulk_coordinates is not None:
@@ -1595,6 +1667,14 @@ def generate(root, binder, output, verify_print=False):
         original_binder=str(binder), original_binder_sha256=original_checksum,
         deli_source=str(root / DELI_SOURCE), deli_source_sha256=deli_checksum,
         stretch_source=str(root / STRETCH_SOURCE), stretch_source_sha256=stretch_checksum,
+        directory_images=[
+            dict(source=str(root / path), source_sha256=sha(original), derivative_sha256=sha(derivative))
+            for path, original, derivative in zip(DIRECTORY_SOURCES, directory_originals, directory_images)
+        ],
+        directory_owner_labels=[
+            dict(text="Front Parking Lot", position="bottom beside muster statement", highlight="green"),
+            dict(text="Back Parking Lot", position="right side", highlight="red"),
+        ],
         deli_original_document_sha256=deli_document_checksum,
         deli_records_included=len(deli_coordinates),
         picklist_sha256=digest, total_source_records=len(source_items),
@@ -1628,7 +1708,7 @@ def generate(root, binder, output, verify_print=False):
             "AI provenance and uncertain visual verdicts are recorded only in the external audit report.",
             "Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.",
             "Time To Stretch uses the supplied color guide; Misc Codes is fitted to one page; "
-            "Store Directory uses the template's two images on separate pages; "
+            "Store Directory uses identity-matched highlights on the template's two images; "
             "Deli is replaced from the owner-supplied two-column source; Bulk sections are combined "
             "with page breaks; all other unrelated operational sheets remain unchanged.",
             "Future unclassified entries are retained for review, not silently discarded or approved.",
@@ -1659,6 +1739,8 @@ def generate(root, binder, output, verify_print=False):
         raise ValueError("deli source changed during generation; discard outputs and retry")
     if sha((root / STRETCH_SOURCE).read_bytes()) != stretch_checksum:
         raise ValueError("Time To Stretch source changed during generation; discard outputs and retry")
+    if any((root / path).read_bytes() != content for path, content in zip(DIRECTORY_SOURCES, directory_originals)):
+        raise ValueError("Store Directory originals changed during generation; discard outputs and retry")
     command = [sys.executable, str((ROOT / "tools/build_till_binders.py").resolve()),
                "--root", str(root.resolve()), "--binder", str(binder.resolve()),
                "--output", str(output.resolve())]

@@ -7,6 +7,30 @@
   "deli_source_sha256": "a26ab6cf98d72d656e5cfd7a5c8928a7938ae1d965934a597c047f8eb37438f3",
   "stretch_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Time_To_Stretch.jpg",
   "stretch_source_sha256": "b96e6cbecc167c31e77235b6b02171fc0e94b63aa1f76860fb22258d25f088ed",
+  "directory_images": [
+    {
+      "source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Store_Directory_Original_1.png",
+      "source_sha256": "c5beab3173c87b3ab5876bcad374bb85e5cefc57ba616edb749791852cc3bc69",
+      "derivative_sha256": "f9eb2adcbe21f449048a324a8235fef3a941982161d7a54730c69ffa901cfa54"
+    },
+    {
+      "source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Store_Directory_Original_2.png",
+      "source_sha256": "0274edd4cd7893d0f087f73e380295bf562ac80c0e10a4022ae7f69b686418a3",
+      "derivative_sha256": "fcce4b14be6dddd9136ece540036526ddc8ba7306a7a9e2090f0ea4c43529310"
+    }
+  ],
+  "directory_owner_labels": [
+    {
+      "text": "Front Parking Lot",
+      "position": "bottom beside muster statement",
+      "highlight": "green"
+    },
+    {
+      "text": "Back Parking Lot",
+      "position": "right side",
+      "highlight": "red"
+    }
+  ],
   "deli_original_document_sha256": "7875ee3093559572925102b2cab8b83258de9bf4eaeb21c43f4193d127df7926",
   "deli_records_included": 52,
   "picklist_sha256": "462db3121094008cd1dd5ea2c5836ca4b24de077edb8982c0f43149edbaf2cbb",
@@ -361,8 +385,8 @@
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "4fff40c400052b95b556ad0991f56d556909c66f99748068169de74262b01b66",
-      "file_size_bytes": 11739019,
+      "file_sha256": "7767e962928ce3a1d20e491f85c6e356a0ceb5fa0a074a1f62de6f2176d853f5",
+      "file_size_bytes": 11790210,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 400,
       "output_sheet_names": [
@@ -396,6 +420,7 @@
       "stretch_print_page_verified": true,
       "misc_print_page_verified": true,
       "directory_print_pages_verified": 2,
+      "directory_print_pixels_losslessly_verified": true,
       "complete_pdf": "Complete Till Binder - Updated - Photos.pdf",
       "visual_review": "REQUIRED; automated text/geometry checks are not a visual print approval"
     }
@@ -406,7 +431,7 @@
     "Missing, identity-mismatched, checksum-changed and unreadable image associations remain blank.",
     "Existing and newly supplied identity-linked AI illustrations are visual references at the owner's request; AI provenance and uncertain visual verdicts are recorded only in the external audit report.",
     "Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.",
-    "Time To Stretch uses the supplied color guide; Misc Codes is fitted to one page; Store Directory uses the template's two images on separate pages; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.",
+    "Time To Stretch uses the supplied color guide; Misc Codes is fitted to one page; Store Directory uses identity-matched highlights on the template's two images; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.",
     "Future unclassified entries are retained for review, not silently discarded or approved."
   ]
 }
