@@ -19,11 +19,11 @@ from openpyxl.styles import Font
 from openpyxl.worksheet.pagebreak import Break
 from PIL import Image, ImageChops, ImageOps
 
-from build_till_binders import (BULK_SHEETS, DIRECTORY_EMERGENCY_HIGHLIGHTS, DIRECTORY_SOURCES, FILENAMES, MAX_GITHUB_FILE_SIZE, PDF_EXPORT_FORMAT, STRETCH_SOURCE, VISUALS, bulk_print_pages,
+from build_till_binders import (BULK_SHEETS, CONVERSIONS_ACCURACY_REVIEW, CONVERSIONS_SOURCE, CONVERSIONS_SOURCE_SHA256, DIRECTORY_EMERGENCY_HIGHLIGHTS, DIRECTORY_SOURCES, FILENAMES, MAX_GITHUB_FILE_SIZE, PDF_EXPORT_FORMAT, STRETCH_SOURCE, VISUALS, bulk_print_pages,
                                combine_bulk, comparisons, directory_sheet, fit_misc_sheet, generate, layout_rows, misc_page_matches, misc_print_text,
                                docx_compatible_image,
-                               map_images, produce_catalog, quick_sheet, replace_produce,
-                               sha, stretch_sheet, themed_directory_image, validate_package, visual_records, workbook_photo_copy)
+                               map_images, produce_catalog, quick_sheet, replace_produce, replace_sheet,
+                               sha, sheet_info, stretch_sheet, theme_conversions_sheet, themed_directory_image, validate_package, visual_records, workbook_photo_copy)
 from picklist_catalog import read_picklist, read_assignments
 from review_image_references import load_references
 from review_booklets import build_review_booklets, build_working_list_review
@@ -260,6 +260,9 @@ class TillBinderChecks(unittest.TestCase):
             (Path(__file__).resolve().parents[1] / STRETCH_SOURCE).read_bytes())
         for path in DIRECTORY_SOURCES:
             (self.root / path).write_bytes((Path(__file__).resolve().parents[1] / path).read_bytes())
+        (self.root / CONVERSIONS_SOURCE).parent.mkdir(parents=True, exist_ok=True)
+        (self.root / CONVERSIONS_SOURCE).write_bytes(
+            (Path(__file__).resolve().parents[1] / CONVERSIONS_SOURCE).read_bytes())
         self.binder = self.root / "Original.xlsx"
         image = io.BytesIO()
         Image.new("RGB", (600, 500), "green").save(image, format="PNG")
@@ -515,6 +518,102 @@ class TillBinderChecks(unittest.TestCase):
         finally:
             original.close()
             updated.close()
+
+    def test_misc_theme_preserves_exact_cells_formats_and_unrelated_parts(self):
+        source = self.root / "misc-source.xlsx"
+        workbook = load_workbook(self.binder)
+        workbook["Misc Codes"]["C3"] = 2.75
+        workbook["Misc Codes"]["C3"].number_format = '"$"#,##0.00'
+        workbook["Misc Codes"]["B4"] = "=C3*2"
+        workbook.save(source)
+        workbook.close()
+        result = self.root / "misc-themed.xlsx"
+        fit_misc_sheet(source, result)
+        with zipfile.ZipFile(source) as before, zipfile.ZipFile(result) as after:
+            part, _ = sheet_info(before, "Misc Codes")
+            for name in before.namelist():
+                if name not in (part, "xl/styles.xml"):
+                    self.assertEqual(before.read(name), after.read(name), name)
+            cells = []
+            for archive in (before, after):
+                nodes = ET.fromstring(archive.read(part)).findall(
+                    ".//{http://schemas.openxmlformats.org/spreadsheetml/2006/main}c")
+                for node in nodes:
+                    node.attrib.pop("s", None)
+                cells.append([ET.tostring(node) for node in nodes])
+            self.assertEqual(*cells)
+        workbook = load_workbook(result)
+        try:
+            sheet = workbook["Misc Codes"]
+            self.assertEqual(sheet["A1"].fill.fgColor.rgb, "00305040")
+            self.assertEqual(sheet["A1"].font.color.rgb, "00FFFFFF")
+            self.assertEqual(sheet["A2"].fill.fgColor.rgb, "00DCE6DA")
+            self.assertEqual(sheet["A2"].value, "00012")
+            self.assertEqual(sheet["C3"].number_format, '"$"#,##0.00')
+            self.assertEqual(sheet["B4"].value, "=C3*2")
+            self.assertFalse(sheet.sheet_view.showGridLines)
+        finally:
+            workbook.close()
+
+    def test_uploaded_conversions_image_replaces_charts_and_is_preserved(self):
+        source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
+        image = (Path(__file__).resolve().parents[1] / CONVERSIONS_SOURCE).read_bytes()
+        self.assertEqual(sha(image), CONVERSIONS_SOURCE_SHA256)
+        self.assertIn("$4.99", CONVERSIONS_ACCURACY_REVIEW)
+        self.assertIn("$11.00/kg", CONVERSIONS_ACCURACY_REVIEW)
+        result = self.root / "conversions-image.xlsx"
+        theme_conversions_sheet(source, result, image)
+        before = load_workbook(source)
+        after = load_workbook(result)
+        try:
+            original, themed = before["Conversions"], after["Conversions"]
+            self.assertEqual(len(themed._images), 1)
+            self.assertEqual(themed._images[0]._data(), image)
+            self.assertEqual(themed.sheet_properties.codeName, "UpdatedConversionsImage")
+            self.assertEqual((themed.page_setup.orientation, str(themed.page_setup.paperSize)), ("portrait", "1"))
+            self.assertTrue(themed.sheet_properties.pageSetUpPr.fitToPage)
+            self.assertFalse(any(cell.value is not None for row in themed for cell in row))
+            self.assertEqual(len(original._images), 3)
+        finally:
+            before.close()
+            after.close()
+        with zipfile.ZipFile(source) as before, zipfile.ZipFile(result) as after:
+            part, _ = sheet_info(before, "Conversions")
+            for name in before.namelist():
+                if name not in (part, "xl/worksheets/_rels/sheet2.xml.rels",
+                                "xl/styles.xml", "xl/workbook.xml", "[Content_Types].xml"):
+                    self.assertEqual(before.read(name), after.read(name), name)
+        again = self.root / "conversions-repeated.xlsx"
+        theme_conversions_sheet(result, again, image)
+        self.assertEqual(sha(result.read_bytes()), sha(again.read_bytes()))
+
+        old_draft = self.root / "old-conversions-draft.xlsx"
+        donor = Workbook()
+        donor.active.title = "Conversions"
+        donor.active.sheet_properties.codeName = "EditableConversions"
+        donor.active["A1"] = "Previous editable draft"
+        donor_bytes = io.BytesIO()
+        donor.save(donor_bytes)
+        donor.close()
+        replace_sheet(source, donor_bytes.getvalue(), old_draft, "Conversions")
+        upgraded = self.root / "upgraded-conversions-draft.xlsx"
+        theme_conversions_sheet(old_draft, upgraded, image)
+        upgraded_workbook = load_workbook(upgraded)
+        try:
+            self.assertEqual(upgraded_workbook["Conversions"]._images[0]._data(), image)
+        finally:
+            upgraded_workbook.close()
+
+    def test_conversions_rejects_unexpected_owner_content(self):
+        source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
+        changed = self.root / "conversions-extra.xlsx"
+        workbook = load_workbook(source)
+        workbook["Conversions"]["A55"] = "Do not discard"
+        workbook.save(changed)
+        workbook.close()
+        image = (Path(__file__).resolve().parents[1] / CONVERSIONS_SOURCE).read_bytes()
+        with self.assertRaisesRegex(ValueError, "additional cell content"):
+            theme_conversions_sheet(changed, self.root / "rejected.xlsx", image)
 
     def test_missing_stretch_source_fails_without_falling_back_to_original(self):
         (self.root / STRETCH_SOURCE).unlink()

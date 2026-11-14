@@ -7,6 +7,15 @@
   "deli_source_sha256": "a26ab6cf98d72d656e5cfd7a5c8928a7938ae1d965934a597c047f8eb37438f3",
   "stretch_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Time_To_Stretch.jpg",
   "stretch_source_sha256": "b96e6cbecc167c31e77235b6b02171fc0e94b63aa1f76860fb22258d25f088ed",
+  "conversions_source": "owner-uploaded image",
+  "conversions_source_image": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Conversions_Updated.jpg",
+  "conversions_source_image_sha256": "e3a51d715ee020604a65041c046dbd4092ebe043c390c82c3f427e98775ae504",
+  "conversions_original_chart_source_sha256": [
+    "61982efebf133df82dff82c7cdd0851cbba7bc15dd40ea7279c1b6f9027b03ec",
+    "6430fafaf191a266ba30d6de7fe66aac4a27ff5d0b0645168d70d9476b9b9fd1",
+    "f9d0fa1844873f90904a105d56ec2b0d514fc0fb263c8557f24b9dfdc6bfe56b"
+  ],
+  "conversions_accuracy_review": "Owner-uploaded image visually checked against all three original chart images: volume values, weight values, kilograms-to-pounds values, price tiers and rounding note match. The $4.99 price converts to $11.00/kg in both the original chart and uploaded image; a prior editable draft's $11.02 value was incorrect and is not used.",
   "directory_images": [
     {
       "source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Store_Directory_Original_1.png",
@@ -378,15 +387,15 @@
       "deli_records_verified": 52,
       "produce_images_verified": 517,
       "original_parts_checked": 104,
-      "original_parts_byte_identical": 90,
+      "original_parts_byte_identical": 88,
       "unrelated_package_parts_byte_identical": true,
       "existing_styles_preserved": true,
       "unrelated_workbook_settings_preserved": true,
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "7767e962928ce3a1d20e491f85c6e356a0ceb5fa0a074a1f62de6f2176d853f5",
-      "file_size_bytes": 11790210,
+      "file_sha256": "ce82421cb69a44bad937c7843ced9dbdc4f9aa97c4a0ecbe68af33cc02a5ca36",
+      "file_size_bytes": 12607529,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 400,
       "output_sheet_names": [
@@ -419,6 +428,7 @@
       "bulk_print_font_points": 11,
       "stretch_print_page_verified": true,
       "misc_print_page_verified": true,
+      "conversions_print_image_verified": true,
       "directory_print_pages_verified": 2,
       "directory_print_pixels_losslessly_verified": true,
       "complete_pdf": "Complete Till Binder - Updated - Photos.pdf",
@@ -431,7 +441,7 @@
     "Missing, identity-mismatched, checksum-changed and unreadable image associations remain blank.",
     "Existing and newly supplied identity-linked AI illustrations are visual references at the owner's request; AI provenance and uncertain visual verdicts are recorded only in the external audit report.",
     "Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.",
-    "Time To Stretch uses the supplied color guide; Misc Codes is fitted to one page; Store Directory uses identity-matched highlights on the template's two images; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.",
+    "Time To Stretch uses the supplied color guide; Misc Codes uses green headings and pale-green entry shading on one page, with original cells and number formats retained; Conversions uses the owner-uploaded, visually checked one-page image; the original source charts remain preserved in the original binder and workbook package; Store Directory uses identity-matched highlights on the template's two images; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.",
     "Future unclassified entries are retained for review, not silently discarded or approved."
   ]
 }

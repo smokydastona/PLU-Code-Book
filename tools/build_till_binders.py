@@ -69,6 +69,20 @@ BULK_SHEETS = ("Bulk", "Bulk (2)", "Bulk (3)", "Bulk (4)")
 STRETCH_SOURCE = Path("sources/binders/Time_To_Stretch.jpg")
 STRETCH_SHEET = "Time To Stretch"
 MISC_SHEET = "Misc Codes"
+CONVERSIONS_SHEET = "Conversions"
+CONVERSIONS_SOURCE = Path("sources/binders/Conversions_Updated.jpg")
+CONVERSIONS_SOURCE_SHA256 = "e3a51d715ee020604a65041c046dbd4092ebe043c390c82c3f427e98775ae504"
+CONVERSIONS_ACCURACY_REVIEW = (
+    "Owner-uploaded image visually checked against all three original chart images: volume values, "
+    "weight values, kilograms-to-pounds values, price tiers and rounding note match. The $4.99 price "
+    "converts to $11.00/kg in both the original chart and uploaded image; a prior editable draft's "
+    "$11.02 value was incorrect and is not used."
+)
+CONVERSION_IMAGE_HASHES = (
+    "61982efebf133df82dff82c7cdd0851cbba7bc15dd40ea7279c1b6f9027b03ec",
+    "6430fafaf191a266ba30d6de7fe66aac4a27ff5d0b0645168d70d9476b9b9fd1",
+    "f9d0fa1844873f90904a105d56ec2b0d514fc0fb263c8557f24b9dfdc6bfe56b",
+)
 DIRECTORY_SHEET = "Store Directory"
 DIRECTORY_SOURCE_HASHES = (
     "c5beab3173c87b3ab5876bcad374bb85e5cefc57ba616edb749791852cc3bc69",
@@ -160,9 +174,46 @@ def sheet_info(archive, name="Produce"):
 
 
 def fit_misc_sheet(binder, destination):
+    workbook = load_workbook(binder)
+    donor = Workbook()
+    themed = donor.active
+    try:
+        source = workbook[MISC_SHEET]
+        for row in source:
+            for cell in row:
+                if cell.value is None:
+                    continue
+                target = themed[cell.coordinate]
+                target.value = cell.value
+                target.border = copy.copy(cell.border)
+                target.alignment = copy.copy(cell.alignment)
+                target.number_format = cell.number_format
+                target.protection = copy.copy(cell.protection)
+                heading = isinstance(cell.value, str) and (
+                    cell.row == 1 or cell.column in (2, 4) and
+                    source.cell(cell.row, cell.column - 1).value is None)
+                font = copy.copy(cell.font)
+                font.color = "FFFFFF" if heading else "000000"
+                if heading:
+                    font.bold = True
+                target.font = font
+                target.fill = PatternFill("solid", fgColor=(
+                    "305040" if heading else "DCE6DA" if cell.row % 2 == 0 else "FFFFFF"))
+        content = io.BytesIO()
+        donor.save(content)
+    finally:
+        workbook.close()
+        donor.close()
     with zipfile.ZipFile(binder) as original:
         path, _ = sheet_info(original, MISC_SHEET)
         sheet = xml(original.read(path))
+        with zipfile.ZipFile(io.BytesIO(content.getvalue())) as styles_source:
+            styles, style_ids = merge_styles(original.read("xl/styles.xml"), styles_source.read("xl/styles.xml"))
+        for cell in sheet.findall(f"{{{S}}}sheetData/{{{S}}}row/{{{S}}}c"):
+            if themed[cell.get("r")].value is not None:
+                cell.set("s", str(style_ids[themed[cell.get("r")].style_id]))
+        for view in sheet.findall(f"{{{S}}}sheetViews/{{{S}}}sheetView"):
+            view.set("showGridLines", "0")
         properties = sheet.find(f"{{{S}}}sheetPr")
         if properties is None:
             properties = ET.Element(f"{{{S}}}sheetPr")
@@ -190,7 +241,70 @@ def fit_misc_sheet(binder, destination):
         with zipfile.ZipFile(destination, "x", compression=zipfile.ZIP_DEFLATED) as output:
             output.comment = original.comment
             for entry in original.infolist():
-                output.writestr(entry, serialize(sheet) if entry.filename == path else original.read(entry.filename))
+                output.writestr(entry, serialize(sheet) if entry.filename == path else
+                                styles if entry.filename == "xl/styles.xml" else original.read(entry.filename))
+
+
+def theme_conversions_sheet(binder, destination, conversion_image):
+    if sha(conversion_image) != CONVERSIONS_SOURCE_SHA256:
+        raise ValueError("Uploaded Conversions source changed; review its accuracy before rebuilding")
+    with Image.open(io.BytesIO(conversion_image)) as image:
+        if image.format != "JPEG" or image.size != (1024, 1536):
+            raise ValueError("Uploaded Conversions image dimensions or format changed; review before rebuilding")
+    workbook = load_workbook(binder)
+    try:
+        source = workbook[CONVERSIONS_SHEET]
+        if (len(source._images) == 1 and
+                sha(source._images[0]._data()) == CONVERSIONS_SOURCE_SHA256):
+            if any(cell.value is not None for row in source for cell in row) or source._charts:
+                raise ValueError("Updated Conversions image sheet has unexpected data; review before rebuilding")
+            shutil.copyfile(binder, destination)
+            return
+        if not source._images and source.sheet_properties.codeName == "UpdatedConversionsImage":
+            raise ValueError("Updated Conversions image is missing; review the template")
+        if not source._images and source.sheet_properties.codeName != "EditableConversions":
+            raise ValueError("Conversions sheet is not a recognized source or generated image sheet")
+        if source._images and (len(source._images) != 3 or
+                               tuple(sha(image._data()) for image in source._images) != CONVERSION_IMAGE_HASHES):
+            raise ValueError("Conversions source charts changed; review their accuracy before replacing")
+        if source._charts or source.merged_cells.ranges:
+            raise ValueError("Conversions source contains unsupported content; review before conversion")
+        if source._images:
+            if any(cell.comment or cell.hyperlink or
+                   (cell.value is not None and not (cell.column in (8, 9) and 22 <= cell.row <= 33))
+                   for row in source for cell in row):
+                raise ValueError("Conversions source contains additional cell content; review before conversion")
+            if (source["I22"].value != "Weight              " or
+                    source["H23"].value != "Kilograms" or source["I23"].value != "Pounds" or
+                    source["H22"].value is not None or
+                    any(source.cell(row, col).value is None for row in range(24, 34) for col in (8, 9))):
+                raise ValueError("Conversions source weight table changed; review before conversion")
+    finally:
+        workbook.close()
+    donor = Workbook()
+    sheet = donor.active
+    sheet.title = CONVERSIONS_SHEET
+    sheet.sheet_properties.codeName = "UpdatedConversionsImage"
+    sheet.sheet_view.showGridLines = False
+    sheet.column_dimensions["A"].width = 100
+    sheet.sheet_format.defaultRowHeight = 15
+    sheet.page_setup.orientation = "portrait"
+    sheet.page_setup.paperSize = sheet.PAPERSIZE_LETTER
+    sheet.page_setup.fitToWidth = sheet.page_setup.fitToHeight = 1
+    sheet.sheet_properties.pageSetUpPr.fitToPage = True
+    sheet.page_margins = PageMargins(left=.25, right=.25, top=.25, bottom=.25, header=.1, footer=.1)
+    sheet.print_options.horizontalCentered = True
+    sheet.print_area = "A1:A52"
+    picture = ExcelImage(io.BytesIO(conversion_image))
+    picture.width, picture.height = 700, 1050
+    picture.anchor = OneCellAnchor(
+        _from=AnchorMarker(col=0, row=0, colOff=pixels_to_EMU(100)),
+        ext=XDRPositiveSize2D(cx=pixels_to_EMU(picture.width), cy=pixels_to_EMU(picture.height)))
+    sheet.add_image(picture)
+    content = io.BytesIO()
+    donor.save(content)
+    donor.close()
+    replace_sheet(binder, content.getvalue(), destination, CONVERSIONS_SHEET)
 
 
 def misc_print_text(path):
@@ -219,6 +333,16 @@ def misc_page_matches(page, expected):
     found = Counter(Decimal(value.replace(",", "")) for value in
                     re.findall(r"(?<![\d.])-?\d[\d,]*(?:\.\d+)?(?![\d.])", printed))
     return all(value in printed for value in text) and not numbers - found
+
+
+def validate_conversions_image(sheet, image):
+    if (len(sheet._images) != 1 or sha(sheet._images[0]._data()) != sha(image) or
+            any(cell.value is not None for row in sheet for cell in row) or sheet._charts or
+            sheet.sheet_properties.codeName != "UpdatedConversionsImage" or
+            sheet.page_setup.orientation != "portrait" or str(sheet.page_setup.paperSize) != "1" or
+            sheet.page_setup.fitToWidth != 1 or sheet.page_setup.fitToHeight != 1 or
+            not sheet.sheet_properties.pageSetUpPr.fitToPage):
+        raise ValueError("Conversions image or one-page print settings differ from the approved source")
 
 
 def validate_directory_template(archive):
@@ -1119,7 +1243,8 @@ def replace_sheet(binder, donor_content, destination, sheet_name):
                 output.writestr(name, content)
 
 
-def validate_package(binder, output, coordinates, images, with_photos, deli_coordinates=None):
+def validate_package(binder, output, coordinates, images, with_photos, deli_coordinates=None,
+                     conversions_image=None):
     file_size = output.stat().st_size
     if with_photos and file_size > MAX_GITHUB_FILE_SIZE:
         raise ValueError(f"{output}: photo workbook exceeds the 100 MiB GitHub file-size limit")
@@ -1133,6 +1258,10 @@ def validate_package(binder, output, coordinates, images, with_photos, deli_coor
             deli_target, deli_index = sheet_info(original, "Deli")
             allowed.update({deli_target, rels_part(deli_target)})
             replaced_indexes.add(deli_index)
+        if conversions_image is not None:
+            conversions_target, conversions_index = sheet_info(original, CONVERSIONS_SHEET)
+            allowed.update({conversions_target, rels_part(conversions_target)})
+            replaced_indexes.add(conversions_index)
         preserved = []
         for name in original.namelist():
             unchanged = original.read(name) == generated.read(name)
@@ -1181,6 +1310,8 @@ def validate_package(binder, output, coordinates, images, with_photos, deli_coor
             raise ValueError("worksheet names or order changed")
         if deli_coordinates is not None:
             validate_deli_sheet(workbook["Deli"], deli_coordinates)
+        if conversions_image is not None:
+            validate_conversions_image(workbook[CONVERSIONS_SHEET], conversions_image)
         sheet = workbook["Produce"]
         for entry in coordinates:
             code, description = sheet[entry["code_cell"]], sheet[entry["description_cell"]]
@@ -1222,7 +1353,8 @@ def validate_package(binder, output, coordinates, images, with_photos, deli_coor
 
 
 def validate_print(output, coordinates, expected_pages, deli_coordinates=None, deli_title=None,
-                   bulk_pages=None, stretch_size=None, misc_text=None, directory_images=None):
+                   bulk_pages=None, stretch_size=None, misc_text=None, directory_images=None,
+                   conversions_image=None, stretch_image=None):
     from pypdf import PdfReader
 
     if not shutil.which("soffice"):
@@ -1278,13 +1410,44 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 if (abs(float(matches[0].mediabox.width) - 612) > 1 or
                         abs(float(matches[0].mediabox.height) - 792) > 1):
                     raise ValueError(f"{edition}: Misc Codes is not portrait US Letter")
+            if conversions_image is not None:
+                import pymupdf
+
+                with pymupdf.open(complete) as document:
+                    with Image.open(io.BytesIO(conversions_image)) as expected_image:
+                        expected_size = expected_image.size
+                        expected_pixels = expected_image.convert("RGB").tobytes()
+                    matches = []
+                    for page in document:
+                        for printed in page.get_image_info(xrefs=True):
+                            if ((printed["width"], printed["height"]) != expected_size or not printed["xref"]):
+                                continue
+                            actual = document.extract_image(printed["xref"])["image"]
+                            with Image.open(io.BytesIO(actual)) as image:
+                                exact = image.convert("RGB").tobytes() == expected_pixels
+                            if exact:
+                                matches.append((page, pymupdf.Rect(printed["bbox"])))
+                    if len(matches) != 1:
+                        raise ValueError(f"{edition}: Uploaded Conversions image is missing or altered in print")
+                    page, bounds = matches[0]
+                    if (abs(page.rect.width - 612) > 1 or abs(page.rect.height - 792) > 1 or
+                            not page.rect.contains(bounds) or bounds.width < 350 or bounds.height < 500):
+                        raise ValueError(f"{edition}: Conversions image is clipped or too small")
             if stretch_size is not None:
                 import pymupdf
 
                 with pymupdf.open(complete) as document:
-                    matches = [(page.number, pymupdf.Rect(image["bbox"]))
-                               for page in document for image in page.get_image_info()
-                               if (image["width"], image["height"]) == stretch_size]
+                    with Image.open(io.BytesIO(stretch_image)) as expected:
+                        expected_pixels = expected.convert("RGB").tobytes()
+                    matches = []
+                    for page in document:
+                        for printed in page.get_image_info(xrefs=True):
+                            if ((printed["width"], printed["height"]) != stretch_size or not printed["xref"]):
+                                continue
+                            extracted = document.extract_image(printed["xref"])["image"]
+                            with Image.open(io.BytesIO(extracted)) as actual:
+                                if actual.convert("RGB").tobytes() == expected_pixels:
+                                    matches.append((page.number, pymupdf.Rect(printed["bbox"])))
                     if len(matches) != 1:
                         raise ValueError(f"{edition}: Time To Stretch must appear on exactly one page")
                     page = document[matches[0][0]]
@@ -1385,6 +1548,7 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 bulk_print_font_points=11 if bulk_pages else None,
                 stretch_print_page_verified=stretch_size is not None,
                 misc_print_page_verified=misc_text is not None,
+                conversions_print_image_verified=conversions_image is not None,
                 directory_print_pages_verified=len(directory_images) if directory_images is not None else 0,
                 directory_print_pixels_losslessly_verified=directory_images is not None,
                 complete_pdf=complete.name,
@@ -1436,6 +1600,8 @@ def report_text(summary):
         f"Updated Deli source SHA-256: {summary['deli_source_sha256']}; "
         f"entries: {summary['deli_records_included']}",
         f"Time To Stretch image SHA-256: {summary['stretch_source_sha256']}",
+        f"Conversions image SHA-256: {summary['conversions_source_image_sha256']}",
+        f"Conversions accuracy review: {summary['conversions_accuracy_review']}",
         f"XML records: {summary['total_source_records']}; active: {summary['active_source_records']}; "
         f"hidden/deleted: {summary['hidden_or_deleted_records']}",
         f"Produce included: {summary['produce_records_included']}; "
@@ -1452,7 +1618,7 @@ def report_text(summary):
         f"organic placement review: {summary['placement_review_required']}",
         "",
         "Bulk is one themed sheet with six category-grouped pages at 11 pt, without print scaling.",
-        "Every original package part outside Produce, Deli, Time To Stretch, Misc Codes, Store Directory and Bulk, their relationships,",
+        "Every original package part outside Produce, Deli, Time To Stretch, Misc Codes, Conversions, Store Directory and Bulk, their relationships,",
         "append-only styles, content types and their print names is byte-identical. No original part is removed.",
         "Existing styles and all unrelated workbook-level settings are independently compared.",
         "PLU/description strings, duplicate highlights and embedded image bytes/anchors are verified.",
@@ -1502,6 +1668,9 @@ def generate(root, binder, output, verify_print=False):
     stretch_source = (root / STRETCH_SOURCE).read_bytes()
     stretch_checksum = sha(stretch_source)
     stretch_content = stretch_sheet(stretch_source)
+    conversions_source_image = (root / CONVERSIONS_SOURCE).read_bytes()
+    if sha(conversions_source_image) != CONVERSIONS_SOURCE_SHA256:
+        raise ValueError("Uploaded Conversions source changed; review its accuracy before rebuilding")
     directory_originals = [(root / path).read_bytes() for path in DIRECTORY_SOURCES]
     with Image.open(io.BytesIO(stretch_source)) as image:
         stretch_size = image.size
@@ -1559,12 +1728,15 @@ def generate(root, binder, output, verify_print=False):
             combined_binder = Path(temporary) / "Combined.xlsx"
             bulk_binder = Path(temporary) / "Bulk.xlsx"
             misc_binder = Path(temporary) / "Misc.xlsx"
+            conversions_binder = Path(temporary) / "Conversions.xlsx"
             directory_binder = Path(temporary) / "Directory.xlsx"
             stretch_binder = Path(temporary) / "Stretch.xlsx"
             produce_binder = Path(temporary) / "Produce.xlsx"
             bulk_combined = combine_bulk(binder, combined_binder)
             template = load_workbook(combined_binder)
             try:
+                conversion_sheet = template[CONVERSIONS_SHEET] if CONVERSIONS_SHEET in template else None
+                conversion_source = ("owner-uploaded image" if conversion_sheet is not None else "not present")
                 bulk_coordinates = None
                 if "Bulk" in template:
                     bulk_content, bulk_coordinates = bulk_sheet(read_bulk(template["Bulk"]))
@@ -1576,12 +1748,20 @@ def generate(root, binder, output, verify_print=False):
             else:
                 shutil.copyfile(combined_binder, bulk_binder)
             fit_misc_sheet(bulk_binder, misc_binder)
-            replace_sheet(misc_binder, directory_content, directory_binder, DIRECTORY_SHEET)
+            with zipfile.ZipFile(misc_binder) as archive:
+                sheet_names = [sheet.get("name") for sheet in
+                               xml(archive.read("xl/workbook.xml")).find(f"{{{S}}}sheets")]
+            if CONVERSIONS_SHEET in sheet_names:
+                theme_conversions_sheet(misc_binder, conversions_binder, conversions_source_image)
+            else:
+                shutil.copyfile(misc_binder, conversions_binder)
+            replace_sheet(conversions_binder, directory_content, directory_binder, DIRECTORY_SHEET)
             replace_sheet(directory_binder, stretch_content, stretch_binder, STRETCH_SHEET)
             replace_produce(stretch_binder, donor, produce_binder)
             replace_sheet(produce_binder, deli_content, path, "Deli")
             validations[edition] = validate_package(
-                stretch_binder, path, coordinates, edition_images, edition == "photos", deli_coordinates)
+                stretch_binder, path, coordinates, edition_images, edition == "photos", deli_coordinates,
+                conversions_source_image if CONVERSIONS_SHEET in sheet_names else None)
         result = load_workbook(path)
         try:
             validate_stretch(result[STRETCH_SHEET], stretch_source)
@@ -1606,6 +1786,10 @@ def generate(root, binder, output, verify_print=False):
                 bulk_parts = {bulk_part, rels_part(bulk_part)}
             stretch_part, _ = sheet_info(original, STRETCH_SHEET)
             misc_part, _ = sheet_info(original, MISC_SHEET)
+            conversions_parts = set()
+            if CONVERSIONS_SHEET in sheet_names:
+                conversions_part, _ = sheet_info(original, CONVERSIONS_SHEET)
+                conversions_parts.update((conversions_part, rels_part(conversions_part)))
             directory_part, _ = sheet_info(original, DIRECTORY_SHEET)
             validations[edition]["output_sheet_names"] = validations[edition]["original_sheet_names"]
             validations[edition]["original_sheet_names"] = [
@@ -1616,7 +1800,7 @@ def generate(root, binder, output, verify_print=False):
                 before, after = original.read(name), generated.read(name)
                 part.update(sha256_before=sha(before), sha256_after=sha(after),
                             byte_identical=before == after)
-                if name not in bulk_parts | {misc_part, stretch_part, rels_part(stretch_part),
+                if name not in bulk_parts | conversions_parts | {misc_part, stretch_part, rels_part(stretch_part),
                                              directory_part, rels_part(directory_part), "xl/workbook.xml"} and name not in {
                         sheet_info(original, "Produce")[0], rels_part(sheet_info(original, "Produce")[0]),
                         sheet_info(original, "Deli")[0], rels_part(sheet_info(original, "Deli")[0]),
@@ -1667,6 +1851,11 @@ def generate(root, binder, output, verify_print=False):
         original_binder=str(binder), original_binder_sha256=original_checksum,
         deli_source=str(root / DELI_SOURCE), deli_source_sha256=deli_checksum,
         stretch_source=str(root / STRETCH_SOURCE), stretch_source_sha256=stretch_checksum,
+        conversions_source=conversion_source,
+        conversions_source_image=str(root / CONVERSIONS_SOURCE),
+        conversions_source_image_sha256=sha(conversions_source_image),
+        conversions_original_chart_source_sha256=list(CONVERSION_IMAGE_HASHES),
+        conversions_accuracy_review=CONVERSIONS_ACCURACY_REVIEW,
         directory_images=[
             dict(source=str(root / path), source_sha256=sha(original), derivative_sha256=sha(derivative))
             for path, original, derivative in zip(DIRECTORY_SOURCES, directory_originals, directory_images)
@@ -1707,7 +1896,10 @@ def generate(root, binder, output, verify_print=False):
             "Existing and newly supplied identity-linked AI illustrations are visual references at the owner's request; "
             "AI provenance and uncertain visual verdicts are recorded only in the external audit report.",
             "Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.",
-            "Time To Stretch uses the supplied color guide; Misc Codes is fitted to one page; "
+            "Time To Stretch uses the supplied color guide; Misc Codes uses green headings and pale-green "
+            "entry shading on one page, with original cells and number formats retained; "
+            "Conversions uses the owner-uploaded, visually checked one-page image; the original source charts "
+            "remain preserved in the original binder and workbook package; "
             "Store Directory uses identity-matched highlights on the template's two images; "
             "Deli is replaced from the owner-supplied two-column source; Bulk sections are combined "
             "with page breaks; all other unrelated operational sheets remain unchanged.",
@@ -1726,7 +1918,9 @@ def generate(root, binder, output, verify_print=False):
         summary["print_validation"] = validate_print(
             output, coordinates, pages, deli_coordinates=deli_coordinates, deli_title=deli_title,
             bulk_pages=bulk_print_pages(output / FILENAMES["photos"]), stretch_size=stretch_size,
-            misc_text=misc_text, directory_images=directory_images)
+            misc_text=misc_text, directory_images=directory_images,
+            conversions_image=conversions_source_image if conversion_source != "not present" else None,
+            stretch_image=stretch_source)
         if summary["print_validation"]["photos"]["drawn_images"] != len(images):
             raise ValueError("printed reference count differs from the exact image mapping")
         (output / "VALIDATION.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
@@ -1739,6 +1933,8 @@ def generate(root, binder, output, verify_print=False):
         raise ValueError("deli source changed during generation; discard outputs and retry")
     if sha((root / STRETCH_SOURCE).read_bytes()) != stretch_checksum:
         raise ValueError("Time To Stretch source changed during generation; discard outputs and retry")
+    if sha((root / CONVERSIONS_SOURCE).read_bytes()) != CONVERSIONS_SOURCE_SHA256:
+        raise ValueError("Conversions source changed during generation; discard outputs and retry")
     if any((root / path).read_bytes() != content for path, content in zip(DIRECTORY_SOURCES, directory_originals)):
         raise ValueError("Store Directory originals changed during generation; discard outputs and retry")
     command = [sys.executable, str((ROOT / "tools/build_till_binders.py").resolve()),
