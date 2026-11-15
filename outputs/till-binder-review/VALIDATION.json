@@ -48,6 +48,9 @@
   "hidden_or_deleted_records": 76,
   "known_non_produce_excluded": 46,
   "produce_records_included": 550,
+  "produce_entries_displayed": 550,
+  "exact_duplicate_entries_suppressed": 0,
+  "produce_sort_review_required": 0,
   "unique_produce_plus": 549,
   "duplicate_produce_codes": 1,
   "duplicate_produce_records": 2,
@@ -63,9 +66,9 @@
     "CODE_NOT_IN_ORIGINAL": 271
   },
   "image_status_counts": {
-    "LEGACY_PREAPPROVED_IMAGE": 500,
+    "LEGACY_PREAPPROVED_IMAGE": 499,
     "MISSING": 33,
-    "APPROVED_WORKINGLIST_IMAGE": 17
+    "APPROVED_WORKINGLIST_IMAGE": 18
   },
   "embedded_references": 517,
   "missing_or_uncertain_images": 33,
@@ -394,8 +397,8 @@
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "ce82421cb69a44bad937c7843ced9dbdc4f9aa97c4a0ecbe68af33cc02a5ca36",
-      "file_size_bytes": 12607529,
+      "file_sha256": "bedb9c1d720886bad068180b7cff504ac2abb3d5df5aad5be433413368348434",
+      "file_size_bytes": 12603179,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 400,
       "output_sheet_names": [

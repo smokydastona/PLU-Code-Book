@@ -720,7 +720,7 @@ class TillBinderChecks(unittest.TestCase):
             layout = list(csv.DictReader(file))
         matching = [row for row in layout if row["plu"] == "00042"]
         self.assertEqual(len(matching), 1)
-        self.assertEqual(matching[0]["product"], "Apple Gala")
+        self.assertEqual(matching[0]["product"], "APPLE GALA")
         with (self.output / "PHOTO_MAPPING.csv").open(
                 encoding="utf-8-sig", newline="") as file:
             photos = list(csv.DictReader(file))
@@ -749,7 +749,7 @@ class TillBinderChecks(unittest.TestCase):
     def test_explicit_working_list_approval_is_embedded_only_for_its_exact_identity(self):
         assignments = read_assignments(self.root / "data/picklist_assignments.json")
         rows, _ = produce_catalog(self.items, assignments)
-        row = next(item for item in rows if item["plu"] == "00042")
+        row = next(item for item in rows if item["name"] == "Apple Gala")
         assignment = assignments[row["source_id"]]
         assignment.update(
             image="data/reference.png", image_sha256=sha(self.content),

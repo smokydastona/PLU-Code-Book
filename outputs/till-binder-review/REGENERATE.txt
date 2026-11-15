@@ -1,3 +1,3 @@
-Run from the repository root with a new, empty output directory:
+Exact generation command (output must be empty; use a new directory when rerunning):
 
-.venv/bin/python tools/build_till_binders.py --binder sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx --output /path/to/empty/till-binder-review --verify-print
+/tmp/produce-plu-venv/bin/python /workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/tools/build_till_binders.py --root /workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book --binder /workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx --output /root/.copilot/session-state/037e320dcd8049eaa4e9cfae74ecadb1/files/produce-az-review2 --verify-print

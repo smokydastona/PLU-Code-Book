@@ -38,6 +38,7 @@ from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageOps, PngImagePlugi
 from check_image_uniqueness import image_fingerprint
 from organic_watermarks import render_watermark
 from picklist_catalog import read_assignments, read_picklist
+from produce_order import display_unique_rows, order_produce
 from review_image_references import load_references
 from sync_picklist import (booklet_order, csv_output, organic, organic_display_section,
                            reconcile)
@@ -685,11 +686,13 @@ def produce_catalog(items, assignments):
         if not row["section"]:
             row["section"] = "Unclassified PickList entries - REVIEW"
         rows.append(row)
-    ordered = sorted(booklet_order(rows, assignments),
-                     key=lambda row: row["display_section"].casefold())
-    counts = Counter(item["plu"] for item in items if item["included"])
+    ordered = order_produce(booklet_order(rows, assignments))
+    descriptions = defaultdict(set)
+    for item in items:
+        if item["included"]:
+            descriptions[item["plu"]].add(item["name"])
     for row in ordered:
-        row["duplicate_count"] = counts[row["plu"]]
+        row["duplicate_count"] = len(descriptions[row["plu"]])
     return ordered, exclusions
 
 
@@ -955,7 +958,7 @@ def comparisons(old, items, rows):
 
 
 def layout_rows(rows):
-    """Fill three familiar top-to-bottom blocks, repeating category labels at breaks."""
+    """Fill three familiar top-to-bottom blocks, repeating headings at breaks."""
     layout, index, block = [], 0, 0
     while index < len(rows):
         line, previous = 0, None
@@ -1090,7 +1093,8 @@ def quick_sheet(rows, images, with_photos, title="PRODUCE"):
         code, description, photo = [sheet.cell(number, base + offset) for offset in (0, 1, 3)]
         sheet.merge_cells(start_row=number, start_column=base + 1, end_row=number, end_column=base + 2)
         set_text(code, row["plu"])
-        set_text(description, row["name"])
+        display_name = row.get("display_name", row["name"])
+        set_text(description, display_name)
         for cell in (code, description, photo):
             cell.font = Font(name="DejaVu Sans", size=9.5, bold=cell is code)
             cell.alignment = Alignment(vertical="center", wrap_text=True)
@@ -1107,7 +1111,7 @@ def quick_sheet(rows, images, with_photos, title="PRODUCE"):
                 picture.height *= factor
                 sheet.add_image(picture, photo.coordinate)
         coordinates.append(dict(
-            source_id=row["source_id"], plu=row["plu"], product=row["name"],
+            source_id=row["source_id"], plu=row["plu"], product=display_name,
             code_cell=code.coordinate, description_cell=description.coordinate,
             image_cell=photo.coordinate, page=entry["block"] // 3 + 1,
             duplicate_count=row["duplicate_count"],
@@ -1352,6 +1356,10 @@ def validate_package(binder, output, coordinates, images, with_photos, deli_coor
         original_book.close()
 
 
+def normalize_printed_produce_text(text):
+    return " ".join(re.sub(r"(?<=-)[ \t]*\n[ \t]*", "", text).split())
+
+
 def validate_print(output, coordinates, expected_pages, deli_coordinates=None, deli_title=None,
                    bulk_pages=None, stretch_size=None, misc_text=None, directory_images=None,
                    conversions_image=None, stretch_image=None):
@@ -1526,7 +1534,7 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 if printed != codes:
                     raise ValueError(f"{edition} page {number}: printed codes missing, duplicated or clipped: "
                                      f"missing {codes - printed}; unexpected {printed - codes}")
-                normalized = " ".join(text.split())
+                normalized = normalize_printed_produce_text(text)
                 missing = [entry["product"] for entry in selected
                            if " ".join(entry["product"].split()) not in normalized]
                 if missing:
@@ -1606,6 +1614,8 @@ def report_text(summary):
         f"hidden/deleted: {summary['hidden_or_deleted_records']}",
         f"Produce included: {summary['produce_records_included']}; "
         f"unique PLUs: {summary['unique_produce_plus']}; duplicate codes: {summary['duplicate_produce_codes']}",
+        f"Cashier entries displayed: {summary['produce_entries_displayed']}; "
+        f"exact duplicates suppressed: {summary['exact_duplicate_entries_suppressed']}",
         f"Known non-produce records excluded from Produce: "
         f"{summary['known_non_produce_excluded']}",
         f"Original Produce entries compared: {summary['original_produce_entries']}",
@@ -1615,13 +1625,14 @@ def report_text(summary):
         f"New owner-supplied AI crops: {summary['new_ai_crops_embedded']}",
         f"AI illustrations omitted (if rejected or invalid association): {summary['ai_illustrations_omitted']}",
         f"Classification review: {summary['classification_review_required']}; "
-        f"organic placement review: {summary['placement_review_required']}",
+        f"organic placement review: {summary['placement_review_required']}; "
+        f"main-item sorting review: {summary['produce_sort_review_required']}",
         "",
         "Bulk is one themed sheet with six category-grouped pages at 11 pt, without print scaling.",
         "Every original package part outside Produce, Deli, Time To Stretch, Misc Codes, Conversions, Store Directory and Bulk, their relationships,",
         "append-only styles, content types and their print names is byte-identical. No original part is removed.",
         "Existing styles and all unrelated workbook-level settings are independently compared.",
-        "PLU/description strings, duplicate highlights and embedded image bytes/anchors are verified.",
+        "Exact PLUs, uppercase display descriptions, duplicate highlights and image bytes/anchors are verified.",
         "Cashier sheets have no image/source/review labels. The organic badge remains.",
         "",
         "Original-sheet comparison outcomes (no uncertain mapping silently resolved):",
@@ -1645,6 +1656,8 @@ def report_text(summary):
         "  MISSING_IMAGES.csv: remaining blank Produce entries",
         "  AI_REFERENCE_REVIEW.csv: exact identities, crop boxes and excluded AI panels",
         "  PRODUCE_LAYOUT.csv: exact record-to-cell and printed-page mapping for both editions",
+        "  PRODUCE_DISPLAY_DUPLICATES.csv: suppressed exact duplicates and their source identities",
+        "  PRODUCE_SORT_REVIEW.csv: unrecognized main items needing sorting review",
         "  PLACEMENT_REVIEW.csv: unresolved classifications/counterparts",
         "  PACKAGE_PRESERVATION_PHOTOS.csv: before/after package hashes",
         "  reconciliation/: full authoritative XML catalogue and existing production-readiness gates",
@@ -1704,7 +1717,14 @@ def generate(root, binder, output, verify_print=False):
         raise ValueError("source contains blank Produce descriptions; refusing an unusable quick guide")
     visuals = visual_records(root)
     images, image_report = map_images(root, rows, assignments, visuals)
-    photo_images = {source_id: workbook_photo_copy(content) for source_id, content in images.items()}
+    displayed, duplicate_display_rows = display_unique_rows(rows)
+    displayed_ids = {row["source_id"] for row in displayed}
+    for record in image_report:
+        if record["source_id"] not in displayed_ids:
+            record["embedded"] = False
+            record["details"] += " Exact duplicate is not displayed; its image was not reused."
+    photo_images = {source_id: workbook_photo_copy(content) for source_id, content in images.items()
+                    if source_id in displayed_ids}
     for record in image_report:
         if record["source_id"] in photo_images:
             record["embedded_sha256"] = sha(photo_images[record["source_id"]])
@@ -1719,7 +1739,7 @@ def generate(root, binder, output, verify_print=False):
     validations, coordinates = {}, None
     for edition, filename in FILENAMES.items():
         edition_images = photo_images if edition == "photos" else images
-        donor, edition_coordinates, pages = quick_sheet(rows, edition_images, edition == "photos")
+        donor, edition_coordinates, pages = quick_sheet(displayed, edition_images, edition == "photos")
         if coordinates is not None and edition_coordinates != coordinates:
             raise ValueError("text and photo editions have different data/layout")
         coordinates = edition_coordinates
@@ -1812,6 +1832,11 @@ def generate(root, binder, output, verify_print=False):
                    ["part", "sha256_before", "sha256_after", "byte_identical"])
     csv_output(output / "PRODUCE_LAYOUT.csv", coordinates,
                ["source_id", "plu", "product", "code_cell", "description_cell", "image_cell", "page", "duplicate_count"])
+    csv_output(output / "PRODUCE_DISPLAY_DUPLICATES.csv", duplicate_display_rows,
+               ["source_id", "source_ids", "plu", "name", "displayed_source_id", "displayed_source_ids"])
+    csv_output(output / "PRODUCE_SORT_REVIEW.csv",
+               [row for row in rows if row["sort_status"] == "MAIN_ITEM_REVIEW_REQUIRED"],
+               ["source_id", "plu", "name", "sort_product", "sort_variety", "sort_status"])
     csv_output(output / "DELI_LAYOUT.csv", deli_coordinates,
                ["category", "product", "plu", "product_cell", "code_cell"])
     if bulk_coordinates is not None:
@@ -1870,18 +1895,22 @@ def generate(root, binder, output, verify_print=False):
         active_source_records=sum(item["included"] for item in source_items),
         hidden_or_deleted_records=sum(not item["included"] for item in source_items),
         known_non_produce_excluded=sum(row["reason"] == "NON_PRODUCE_IN_OTHER_BINDER_SECTIONS" for row in exclusions),
-        produce_records_included=len(rows), unique_produce_plus=len({row["plu"] for row in rows}),
+        produce_records_included=len(rows), produce_entries_displayed=len(displayed),
+        exact_duplicate_entries_suppressed=len(duplicate_display_rows),
+        produce_sort_review_required=sum(row["sort_status"] == "MAIN_ITEM_REVIEW_REQUIRED" for row in rows),
+        unique_produce_plus=len({row["plu"] for row in rows}),
         duplicate_produce_codes=len({row["plu"] for row in duplicates}),
         duplicate_produce_records=len(duplicates), original_produce_entries=len(old),
         original_comparison_counts=dict(Counter(row["status"] for row in changes)),
         updated_record_counts=dict(Counter(row["status"] for row in additions)),
         image_status_counts=dict(Counter(row["image_status"] for row in image_report)),
-        embedded_references=len(images), missing_or_uncertain_images=len(rows) - len(images),
+        embedded_references=len(photo_images), missing_or_uncertain_images=len(displayed) - len(photo_images),
         ai_illustrations_embedded=sum(row["image_source"] == "AI Generated" and row["embedded"]
                                       for row in image_report),
         ai_illustrations_omitted=sum(row["image_source"] == "AI Generated" and not row["embedded"]
                                      for row in image_report),
-        new_ai_crops_embedded=sum(row["image_status"] == "SUPPLIED_AI_CROP_REVIEW" for row in image_report),
+        new_ai_crops_embedded=sum(row["image_status"] == "SUPPLIED_AI_CROP_REVIEW" and row["embedded"]
+                                  for row in image_report),
         classification_review_required=sum(row["classification_status"] != "EXISTING_CLASSIFICATION" for row in rows),
         placement_review_required=sum(row["placement_status"] == "PLACEMENT_REVIEW_REQUIRED" for row in rows),
         planned_produce_print_pages=pages,         source_reconciliation=source_summary,
@@ -1906,7 +1935,8 @@ def generate(root, binder, output, verify_print=False):
             "Future unclassified entries are retained for review, not silently discarded or approved.",
         ],
     )
-    csv_output(output / "MISSING_IMAGES.csv", [row for row in image_report if not row["embedded"]], [
+    csv_output(output / "MISSING_IMAGES.csv", [row for row in image_report
+               if row["source_id"] in displayed_ids and not row["embedded"]], [
         "source_id", "plu", "product", "image_status", "visual_review_note", "details",
     ])
     if sha(binder.read_bytes()) != original_checksum or sha(
