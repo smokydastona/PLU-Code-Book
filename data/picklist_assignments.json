@@ -4704,22 +4704,38 @@
     {
       "book": "Vegetable",
       "section": "Organic Vegetables",
-      "image": "data/images/Vegetable/0509_94889.png",
+      "image": "data/images/approved/86cfa836804585101aa5f475e3288b8e72ab1e1ab7b5e730af377af2b0f65a2b.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "94889",
       "reviewed_product": "Organic Cilantro",
       "visual_approval_status": "APPROVED",
-      "photographic_origin": "NOT_VERIFIED",
-      "rights_verification_status": "NOT_VERIFIED",
-      "provenance": {},
+      "photographic_origin": "VERIFIED_PHOTO",
+      "rights_verification_status": "VERIFIED",
+      "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+      "working_source_ids": [
+        "eff97db07aa13ae0cbcc2d65cc36fa427497a99ae36748c48313cf14463f7f30"
+      ],
+      "working_decision_id": "",
+      "reuse_from_source_id": "60ca8b961bca92e700d048723f1f57038be5e60377d6b96532761abc7048e883",
+      "provenance": {
+        "creator": "Not separately identified; ownership attested by user",
+        "license": "OWNER_CONFIRMED_PERMISSION",
+        "source_reference": "Owner-uploaded Cilantro.jpg used for PLU 4889; reused for PLU 94889 at owner's request (2026-11-15)",
+        "rights_status": "OWNER_CONFIRMED_PERMISSION",
+        "photographic_origin_evidence": "User confirmed the PLU 4889 image is an actual photograph.",
+        "visual_approval_evidence": "Owner requested the PLU 4889 cilantro photograph for organic cilantro 94889 with the organic badge. Owner previously confirmed the image depicts cilantro despite its resemblance to parsley.",
+        "attribution": "Owner-provided photograph; creator not separately identified. No public reuse licence is asserted.",
+        "changes": "Original photograph unchanged; the standard organic badge is applied to display derivatives.",
+        "rights_evidence": "Owner stated \"I also own the cilantro 4889 photo too\" and requested reuse for organic cilantro 94889 (2026-11-15)."
+      },
       "legacy_entry_idx": "509",
-      "migration_note": "Existing visual verdict preserved; original source/rights not verified.",
-      "legacy_organic_original": {
+      "migration_note": "Historical legacy image verdict preserved; its original source/rights were not verified before replacement.",
+      "historical_legacy_organic_original": {
         "source_document": "sources/visual/VEGETABLE_VISUAL_PLU_BOOKLET_CORRECTED.docx",
         "source_member": "word/media/image19.jpg",
         "original_sha256": "76e91e9cbe251d547fa33675b16928bf7f873d46a9f1b52b9f97b12a37b0c425"
       },
-      "image_sha256": "76e91e9cbe251d547fa33675b16928bf7f873d46a9f1b52b9f97b12a37b0c425",
+      "image_sha256": "86cfa836804585101aa5f475e3288b8e72ab1e1ab7b5e730af377af2b0f65a2b",
       "source_id": "eff97db07aa13ae0cbcc2d65cc36fa427497a99ae36748c48313cf14463f7f30"
     },
     {

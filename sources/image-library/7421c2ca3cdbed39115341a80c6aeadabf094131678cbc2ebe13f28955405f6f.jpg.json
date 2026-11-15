@@ -1,0 +1,20 @@
+{
+  "rendering": {
+    "source_sha256": "506eedd614ba5a1d487e2e46720c7e1ad5295096e36903980c3e034a112d9681",
+    "organic": false,
+    "pillow": "13.0.0",
+    "renderer_sha256": "ba6b47ff5700a7f94fa6377a643d115d534893c349f94772fa25d3f084bb2910"
+  },
+  "sha256": "707c03885f1daa30133bc30fb875b6400e17bfe73e16003adfd534a8cbf14a58",
+  "approval_status": "NOT_GRANTED_BY_LIBRARY",
+  "owner_candidate_id": "owner-4901-italian-parsley",
+  "candidate_plu": "4901",
+  "candidate_product": "Italian Parsley",
+  "source_image": "data/review-references/owner-alternates/4901-italian-parsley.jpg",
+  "source_sha256": "506eedd614ba5a1d487e2e46720c7e1ad5295096e36903980c3e034a112d9681",
+  "visual_approval_status": "APPROVED",
+  "photographic_origin_status": "OWNER_CONFIRMED_PHOTO",
+  "rights_status": "OWNER_CONFIRMED_PERMISSION",
+  "preapproval_status": "APPROVED_FOR_EXACT_PLU_PRODUCT",
+  "production_status": "PREAPPROVED_FOR_EXACT_PLU_PRODUCT"
+}

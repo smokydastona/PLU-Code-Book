@@ -1,5 +1,25 @@
 [
   {
+    "candidate_id": "owner-4901-italian-parsley",
+    "plu": "4901",
+    "product": "Italian Parsley",
+    "source_identity_id": "94f87bb8c8d960ab0b40853787eba8e16d26e53ad4946452e2daf2811323ae5e",
+    "source_image": "data/review-references/owner-alternates/4901-italian-parsley.jpg",
+    "source_sha256": "506eedd614ba5a1d487e2e46720c7e1ad5295096e36903980c3e034a112d9681",
+    "original_source_image": "data/review-references/owner-alternates/4901-italian-parsley.jpg",
+    "original_source_sha256": "506eedd614ba5a1d487e2e46720c7e1ad5295096e36903980c3e034a112d9681",
+    "organic": false,
+    "library_image": "sources/image-library/7421c2ca3cdbed39115341a80c6aeadabf094131678cbc2ebe13f28955405f6f.jpg",
+    "library_sha256": "707c03885f1daa30133bc30fb875b6400e17bfe73e16003adfd534a8cbf14a58",
+    "library_source_sha256": "506eedd614ba5a1d487e2e46720c7e1ad5295096e36903980c3e034a112d9681",
+    "visual_approval_status": "APPROVED",
+    "photographic_origin_status": "OWNER_CONFIRMED_PHOTO",
+    "rights_status": "OWNER_CONFIRMED_PERMISSION",
+    "preapproval_status": "APPROVED_FOR_EXACT_PLU_PRODUCT",
+    "library_approval_status": "PREAPPROVED",
+    "production_status": "PREAPPROVED_FOR_EXACT_PLU_PRODUCT"
+  },
+  {
     "candidate_id": "owner-4893-dill",
     "plu": "4893",
     "product": "Dill",

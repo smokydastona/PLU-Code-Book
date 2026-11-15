@@ -105,7 +105,7 @@ The Koelnmesse-hosted strawberries alternate was approved as a photograph for th
 
 The owner-provided basil alternate was horizontally mirrored at the owner's request and approved as a photograph for exact PLU 4885 under separately owner-confirmed permission to use and mirror it. The original, mirrored image, checksums and evidence are retained in `data/review-references/owner-alternates/`; no public reuse licence or independently verified permission is claimed.
 
-The owner-provided cilantro alternate was approved as a photograph for exact PLU 4889 under separately owner-confirmed permission for the public repository and cashier binders. Its checksum and evidence are retained in `data/review-references/owner-alternates/`; no public reuse licence or independently verified permission is claimed.
+The owner-provided cilantro photograph assigned to PLU 4889 is also approved by the owner for its organic counterpart, PLU 94889, with the standard pink badge. The assignment pins the reuse to both WorkingList identities and records ownership, review and the former organic image's provenance separately; no public reuse licence is claimed.
 
 The higher-resolution seedless tangerine alternate was approved as a photograph for exact PLU 4458 under separately owner-confirmed permission for the public repository and cashier binders. Its checksum and evidence are retained in `data/review-references/owner-alternates/`; no public reuse licence or independently verified permission is claimed. The smaller initially reviewed image did not meet the minimum resolution.
 
