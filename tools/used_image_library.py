@@ -220,6 +220,13 @@ def local_inventory(root):
             options.append(dict(row, tier=tier, path=library / row["image"],
                                 provenance=json.loads((library / (row["image"] + ".json")).read_text())))
     working_index = library / "WORKING_LIST_IMAGES.json"
+    owner_index = library / OWNER_CANDIDATES
+    if ((working_index.exists() or owner_index.exists())
+            and (root / "sources/plu/WorkingList.xml").exists()):
+        from working_list import read_working_list
+
+        rows, _ = read_working_list(root)
+        current = {row["source_id"]: row for row in rows}
     if working_index.exists():
         assignments_path = root / "data/picklist_assignments.json"
         assignments = None
@@ -248,17 +255,10 @@ def local_inventory(root):
             if row.get("image_status") in {"REJECTED", "WORKING_IDENTITY_REVIEW_REQUIRED"}:
                 continue
             options.append(dict(row, tier=tier, path=root / row["library_image"], provenance=row))
-    if ((working_index.exists() or owner_index.exists())
-            and (root / "sources/plu/WorkingList.xml").exists()):
-        from working_list import read_working_list
-
-        rows, _ = read_working_list(root)
-        current = {row["source_id"]: row for row in rows}
     legacy_index = library / "LEGACY_BOOKLET_IMAGES.json"
     if legacy_index.exists():
         for row in json.loads(legacy_index.read_text()):
             options.append(dict(row, tier="LEGACY", path=root / row["library_image"], provenance=row))
-    owner_index = library / OWNER_CANDIDATES
     if owner_index.exists() and current is not None:
         for row in json.loads(owner_index.read_text()):
             matches = [

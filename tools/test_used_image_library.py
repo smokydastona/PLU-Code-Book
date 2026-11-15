@@ -151,7 +151,21 @@ class UsedImageLibraryChecks(unittest.TestCase):
             ]
         self.assertEqual(len(pinned), 1)
         self.assertEqual(pinned[0]["source_id"], matching["source_id"])
+        (library / "WORKING_LIST_IMAGES.json").unlink()
+        with patch("working_list.read_working_list", return_value=([matching], "source-hash")):
+            self.assertEqual(local_inventory(self.root)[0]["source_id"], matching["source_id"])
         self.assertEqual(len(check_used_library(self.root)), 1)
+
+    def test_working_identity_checked_before_returning_local_images(self):
+        record_images(self.root, "WORKING_LIST_IMAGES.json", {"old-id": self.content}, [
+            dict(source_id="old-id", plu="4500", product="Baby Eggplant")
+        ])
+        working = self.root / "sources/plu/WorkingList.xml"
+        working.parent.mkdir(parents=True)
+        working.write_text("<WorkingList />")
+        with patch("working_list.read_working_list", return_value=([], "source-hash")):
+            with self.assertRaisesRegex(ValueError, "stale local working image identity"):
+                local_inventory(self.root)
 
     def previous_library(self):
         record_images(self.root, "WORKING_LIST_IMAGES.json", {"identity": self.content}, [

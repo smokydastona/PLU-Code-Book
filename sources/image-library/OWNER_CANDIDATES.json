@@ -37,5 +37,25 @@
     "preapproval_status": "APPROVED_FOR_EXACT_PLU_PRODUCT",
     "library_approval_status": "PREAPPROVED",
     "production_status": "PREAPPROVED_FOR_EXACT_PLU_PRODUCT"
+  },
+  {
+    "candidate_id": "owner-4598-daikon",
+    "plu": "4598",
+    "product": "Daikon Radish",
+    "source_identity_id": "1f65455622a6184d58ffb38dbca7ee0d98d4ceced5d2dcd2137ff0f27b4b9420",
+    "source_image": "data/review-references/owner-alternates/4598-daikon.png",
+    "source_sha256": "7f3058a178ef5478a9c74c63857807cb331b462131caffcd1d112d72d4ec4149",
+    "original_source_image": "data/review-references/owner-alternates/4598-daikon.png",
+    "original_source_sha256": "7f3058a178ef5478a9c74c63857807cb331b462131caffcd1d112d72d4ec4149",
+    "organic": false,
+    "library_image": "sources/image-library/72e6b05411bd72b4407e7adf8203e8600c5100f3059d09a878fcb8a97869bfd4.jpg",
+    "library_sha256": "d467e9d7d250054b4861b50b6a5c3553c93c34b1df869fa4222e9f04c6ce0173",
+    "library_source_sha256": "7f3058a178ef5478a9c74c63857807cb331b462131caffcd1d112d72d4ec4149",
+    "visual_approval_status": "APPROVED",
+    "photographic_origin_status": "OWNER_CONFIRMED_PHOTO",
+    "rights_status": "OWNER_CONFIRMED_PERMISSION",
+    "preapproval_status": "APPROVED_FOR_EXACT_PLU_PRODUCT",
+    "library_approval_status": "PREAPPROVED",
+    "production_status": "PREAPPROVED_FOR_EXACT_PLU_PRODUCT"
   }
 ]
