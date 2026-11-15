@@ -7,7 +7,10 @@ from unittest.mock import patch
 
 from PIL import Image
 
-from used_image_library import absorb_used_library, check_used_library, jpeg_copy, record_images
+from used_image_library import (
+    OWNER_CANDIDATES, absorb_used_library, check_used_library, digest, jpeg_copy,
+    local_inventory, record_images,
+)
 
 
 class UsedImageLibraryChecks(unittest.TestCase):
@@ -76,6 +79,58 @@ class UsedImageLibraryChecks(unittest.TestCase):
         index.write_text(json.dumps(associations))
         with self.assertRaisesRegex(ValueError, "association checksum mismatch"):
             check_used_library(self.root)
+
+    def test_owner_candidate_waits_for_one_exact_included_working_identity(self):
+        source = self.root / "data/review-references/owner-alternates/4500-baby-eggplant.jpg"
+        source.parent.mkdir(parents=True)
+        source.write_bytes(self.content)
+        source_sha = digest(self.content)
+        (source.with_suffix(source.suffix + ".json")).write_text(json.dumps(dict(
+            plu="4500", product="Baby Eggplant", sha256=source_sha,
+        )))
+        path, rendered, _ = jpeg_copy(self.root, self.content)
+        metadata_path = path.with_suffix(".jpg.json")
+        metadata = json.loads(metadata_path.read_text())
+        metadata.update(
+            owner_candidate_id="owner-4500-baby-eggplant",
+            candidate_plu="4500", candidate_product="Baby Eggplant",
+        )
+        metadata_path.write_text(json.dumps(metadata))
+        library = self.root / "sources/image-library"
+        row = dict(
+            candidate_id="owner-4500-baby-eggplant", plu="4500", product="Baby Eggplant",
+            source_image=str(source.relative_to(self.root)), source_sha256=source_sha,
+            library_image=str(path.relative_to(self.root)), library_sha256=digest(rendered),
+            library_source_sha256=source_sha,
+            visual_approval_status="APPROVED", library_approval_status="NOT_APPROVED",
+            production_status="PENDING_WORKINGLIST_IDENTITY",
+        )
+        (library / OWNER_CANDIDATES).write_text(json.dumps([row]))
+        (library / "WORKING_LIST_IMAGES.json").write_text("[]")
+        working_list = self.root / "sources/plu/WorkingList.xml"
+        working_list.parent.mkdir(parents=True)
+        working_list.write_text("<WorkingList />")
+
+        matching = dict(source_id="new-source-id", plu="4500", name="Baby Eggplant", included=True)
+        with patch("working_list.read_working_list", return_value=([matching], "source-hash")):
+            inventory = local_inventory(self.root)
+        candidates = [item for item in inventory if item.get("candidate_id") == row["candidate_id"]]
+        self.assertEqual(len(candidates), 1)
+        self.assertEqual(candidates[0]["source_id"], "new-source-id")
+        self.assertEqual(candidates[0]["tier"], "REVIEWED")
+        self.assertEqual(candidates[0]["library_approval_status"], "NOT_APPROVED")
+
+        different = dict(matching, name="Eggplant Baby")
+        with patch("working_list.read_working_list", return_value=([different], "source-hash")):
+            self.assertFalse(any(
+                item.get("candidate_id") == row["candidate_id"] for item in local_inventory(self.root)
+            ))
+        ambiguous = [matching, dict(matching, source_id="duplicate-source-id")]
+        with patch("working_list.read_working_list", return_value=(ambiguous, "source-hash")):
+            self.assertFalse(any(
+                item.get("candidate_id") == row["candidate_id"] for item in local_inventory(self.root)
+            ))
+        self.assertEqual(len(check_used_library(self.root)), 1)
 
     def previous_library(self):
         record_images(self.root, "WORKING_LIST_IMAGES.json", {"identity": self.content}, [

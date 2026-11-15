@@ -1,0 +1,17 @@
+[
+  {
+    "candidate_id": "owner-4500-baby-eggplant",
+    "plu": "4500",
+    "product": "Baby Eggplant",
+    "source_image": "data/review-references/owner-alternates/4500-baby-eggplant.jpg",
+    "source_sha256": "adcbaa0325509b345dddae06e76322231ca4fb083cb007e62a5abd95f942b96b",
+    "library_image": "sources/image-library/528302f7c395994eda88efe7269ab3f59006062434ca2117143daf1f73a2e904.jpg",
+    "library_sha256": "d0147af92c5005d666e0cea0db761558db9d59a3c8cfdbe0f44a0650d4c2c0a3",
+    "library_source_sha256": "adcbaa0325509b345dddae06e76322231ca4fb083cb007e62a5abd95f942b96b",
+    "visual_approval_status": "APPROVED",
+    "photographic_origin_status": "PENDING_OWNER_CONFIRMATION",
+    "rights_status": "OWNER_CONFIRMED_PERMISSION",
+    "library_approval_status": "NOT_APPROVED",
+    "production_status": "PENDING_PICKLIST_IDENTITY_AND_PHOTOGRAPHIC_ORIGIN"
+  }
+]

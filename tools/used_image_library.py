@@ -15,6 +15,7 @@ from image_display import DISPLAY_SIZE, display_image
 import organic_watermarks
 
 ROOT = Path(__file__).resolve().parents[1]
+OWNER_CANDIDATES = "OWNER_CANDIDATES.json"
 
 
 def digest(content):
@@ -135,7 +136,7 @@ def check_used_library(root, directory=None):
     for path in library.glob("*.jpg.json"):
         if not path.with_suffix("").is_file():
             raise ValueError(f"orphan JPEG library metadata: {path}")
-    for name in ("WORKING_LIST_IMAGES.json", "LEGACY_BOOKLET_IMAGES.json"):
+    for name in ("WORKING_LIST_IMAGES.json", "LEGACY_BOOKLET_IMAGES.json", OWNER_CANDIDATES):
         index = library / name
         if not index.exists():
             continue
@@ -146,6 +147,22 @@ def check_used_library(root, directory=None):
             metadata = json.loads(path.with_suffix(".jpg.json").read_text())
             if metadata["rendering"]["source_sha256"] != row["library_source_sha256"]:
                 raise ValueError(f"used image source association mismatch: {path}")
+            if name == OWNER_CANDIDATES:
+                source = Path(root) / row["source_image"]
+                source_metadata_path = source.with_suffix(source.suffix + ".json")
+                if (source.is_symlink() or not source.is_file()
+                        or digest(source.read_bytes()) != row["source_sha256"]
+                        or source_metadata_path.is_symlink()
+                        or not source_metadata_path.is_file()):
+                    raise ValueError(f"owner candidate source checksum mismatch: {source}")
+                source_metadata = json.loads(source_metadata_path.read_text())
+                if (source_metadata.get("sha256") != row["source_sha256"]
+                        or (source_metadata.get("plu"), source_metadata.get("product")) !=
+                        (row["plu"], row["product"])
+                        or metadata.get("owner_candidate_id") != row["candidate_id"]
+                        or metadata.get("candidate_plu") != row["plu"]
+                        or metadata.get("candidate_product") != row["product"]):
+                    raise ValueError(f"owner candidate identity mismatch: {source}")
     return paths
 
 
@@ -155,6 +172,8 @@ def managed_cache_names(root):
     names = {path.name + suffix for path in paths for suffix in ("", ".json")}
     names.update(name for name in ("WORKING_LIST_IMAGES.json", "LEGACY_BOOKLET_IMAGES.json")
                  if (library / name).exists())
+    if (library / OWNER_CANDIDATES).exists():
+        names.add(OWNER_CANDIDATES)
     return names
 
 
@@ -165,6 +184,7 @@ def local_inventory(root):
         return []
     check_used_library(root)
     options = []
+    current = None
     index = library / "IMAGE_LIBRARY.csv"
     if index.exists():
         from build_image_library import check_library, library_records
@@ -185,12 +205,6 @@ def local_inventory(root):
                 row["source_id"]: row
                 for row in json.loads(assignments_path.read_text())["assignments"]
             }
-        current = None
-        if (root / "sources/plu/WorkingList.xml").exists():
-            from working_list import read_working_list
-
-            rows, _ = read_working_list(root)
-            current = {row["source_id"]: row for row in rows}
         for row in json.loads(working_index.read_text()):
             identity = row["source_id"]
             if current is not None:
@@ -211,10 +225,33 @@ def local_inventory(root):
             if row.get("image_status") in {"REJECTED", "WORKING_IDENTITY_REVIEW_REQUIRED"}:
                 continue
             options.append(dict(row, tier=tier, path=root / row["library_image"], provenance=row))
+    if ((working_index.exists() or owner_index.exists())
+            and (root / "sources/plu/WorkingList.xml").exists()):
+        from working_list import read_working_list
+
+        rows, _ = read_working_list(root)
+        current = {row["source_id"]: row for row in rows}
     legacy_index = library / "LEGACY_BOOKLET_IMAGES.json"
     if legacy_index.exists():
         for row in json.loads(legacy_index.read_text()):
             options.append(dict(row, tier="LEGACY", path=root / row["library_image"], provenance=row))
+    owner_index = library / OWNER_CANDIDATES
+    if owner_index.exists() and current is not None:
+        for row in json.loads(owner_index.read_text()):
+            matches = [
+                item for item in current.values()
+                if item["included"] and item["plu"] == row["plu"] and item["name"] == row["product"]
+            ]
+            if len(matches) != 1:
+                continue
+            path = root / row["library_image"]
+            metadata = json.loads(path.with_suffix(".jpg.json").read_text())
+            options.append(dict(
+                row, source_id=matches[0]["source_id"], tier="REVIEWED",
+                library_approval_status="NOT_APPROVED",
+                image_status="OWNER_SUPPLIED_CANDIDATE",
+                path=path, provenance=metadata,
+            ))
     rank = {"APPROVED": 0, "LEGACY": 1, "REVIEWED": 2}
     options.sort(key=lambda row: (rank[row["tier"]], str(row["path"])))
     return options
@@ -252,7 +289,8 @@ def absorb_used_library(root):
         return
     paths = check_used_library(root, directory=previous)
     managed = {path.name + suffix for path in paths for suffix in ("", ".json")}
-    managed.update(name for name in ("WORKING_LIST_IMAGES.json", "LEGACY_BOOKLET_IMAGES.json")
+    managed.update(name for name in ("WORKING_LIST_IMAGES.json", "LEGACY_BOOKLET_IMAGES.json",
+                                     OWNER_CANDIDATES)
                    if (previous / name).exists())
     if {path.name for path in previous.iterdir()} != managed:
         raise ValueError("previous image library contains unmanaged files; merge refused")
@@ -263,7 +301,8 @@ def absorb_used_library(root):
     assets = {}
     for path in previous.iterdir():
         content = path.read_bytes()
-        if path.name in {"WORKING_LIST_IMAGES.json", "LEGACY_BOOKLET_IMAGES.json"}:
+        if path.name in {"WORKING_LIST_IMAGES.json", "LEGACY_BOOKLET_IMAGES.json",
+                         OWNER_CANDIDATES}:
             records = json.loads(content)
             for row in records:
                 row["library_image"] = str(
