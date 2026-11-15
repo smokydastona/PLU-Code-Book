@@ -1,5 +1,25 @@
 [
   {
+    "candidate_id": "owner-4450-clementine",
+    "plu": "4450",
+    "product": "Clementine",
+    "source_identity_id": "83a2de5980f4289fcbdfe4d226566d86506d50832bc6f90f8b20e8d886865237",
+    "source_image": "data/review-references/owner-alternates/4450-clementine.jpg",
+    "source_sha256": "f9c72f5d71056529000c3551133c2459cb90d5ed5cdf5877a8c5689272e051cb",
+    "original_source_image": "data/review-references/owner-alternates/4450-clementine.jpg",
+    "original_source_sha256": "f9c72f5d71056529000c3551133c2459cb90d5ed5cdf5877a8c5689272e051cb",
+    "organic": false,
+    "library_image": "sources/image-library/fe233965bc9a96a796a8b7740e8c926e092e4446e2729f27f17f575087b6bff5.jpg",
+    "library_sha256": "04ae4032486d75a202966efbe2c8f83165f3a3bbc22d53eecc37ec7a604857af",
+    "library_source_sha256": "f9c72f5d71056529000c3551133c2459cb90d5ed5cdf5877a8c5689272e051cb",
+    "visual_approval_status": "APPROVED",
+    "photographic_origin_status": "OWNER_CONFIRMED_PHOTO",
+    "rights_status": "OWNER_CONFIRMED_PERMISSION",
+    "preapproval_status": "APPROVED_FOR_EXACT_PLU_PRODUCT",
+    "library_approval_status": "PREAPPROVED",
+    "production_status": "PREAPPROVED_FOR_EXACT_PLU_PRODUCT"
+  },
+  {
     "candidate_id": "owner-4050-cantaloupe-large",
     "plu": "4050",
     "product": "Cantaloupe – Large",

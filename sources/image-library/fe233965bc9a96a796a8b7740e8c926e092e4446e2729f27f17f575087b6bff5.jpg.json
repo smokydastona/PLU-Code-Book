@@ -1,0 +1,20 @@
+{
+  "rendering": {
+    "source_sha256": "f9c72f5d71056529000c3551133c2459cb90d5ed5cdf5877a8c5689272e051cb",
+    "organic": false,
+    "pillow": "13.0.0",
+    "renderer_sha256": "ba6b47ff5700a7f94fa6377a643d115d534893c349f94772fa25d3f084bb2910"
+  },
+  "sha256": "04ae4032486d75a202966efbe2c8f83165f3a3bbc22d53eecc37ec7a604857af",
+  "approval_status": "NOT_GRANTED_BY_LIBRARY",
+  "owner_candidate_id": "owner-4450-clementine",
+  "candidate_plu": "4450",
+  "candidate_product": "Clementine",
+  "source_image": "data/review-references/owner-alternates/4450-clementine.jpg",
+  "source_sha256": "f9c72f5d71056529000c3551133c2459cb90d5ed5cdf5877a8c5689272e051cb",
+  "visual_approval_status": "APPROVED",
+  "photographic_origin_status": "OWNER_CONFIRMED_PHOTO",
+  "rights_status": "OWNER_CONFIRMED_PERMISSION",
+  "preapproval_status": "APPROVED_FOR_EXACT_PLU_PRODUCT",
+  "production_status": "PREAPPROVED_FOR_EXACT_PLU_PRODUCT"
+}
