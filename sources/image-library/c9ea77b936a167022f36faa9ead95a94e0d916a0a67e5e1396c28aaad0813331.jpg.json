@@ -1,0 +1,20 @@
+{
+  "rendering": {
+    "source_sha256": "d8e1379c66365ccd314e8cc5b6a6969824bf0be54fc32ddeb0b55e1b8fcf1675",
+    "organic": false,
+    "pillow": "13.0.0",
+    "renderer_sha256": "ba6b47ff5700a7f94fa6377a643d115d534893c349f94772fa25d3f084bb2910"
+  },
+  "sha256": "8fd36b4d6bb94eac5aabecc864e098e8333778b03118cb5750266f4be627e3e1",
+  "approval_status": "NOT_GRANTED_BY_LIBRARY",
+  "owner_candidate_id": "owner-4050-cantaloupe-large",
+  "candidate_plu": "4050",
+  "candidate_product": "Cantaloupe – Large",
+  "source_image": "data/review-references/owner-alternates/4050-cantaloupe-large.jpeg",
+  "source_sha256": "d8e1379c66365ccd314e8cc5b6a6969824bf0be54fc32ddeb0b55e1b8fcf1675",
+  "visual_approval_status": "APPROVED",
+  "photographic_origin_status": "OWNER_CONFIRMED_PHOTO",
+  "rights_status": "OWNER_CONFIRMED_PERMISSION",
+  "preapproval_status": "APPROVED_FOR_EXACT_PLU_PRODUCT",
+  "production_status": "PREAPPROVED_FOR_EXACT_PLU_PRODUCT"
+}
