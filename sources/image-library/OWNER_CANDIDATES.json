@@ -1,5 +1,25 @@
 [
   {
+    "candidate_id": "owner-4893-dill",
+    "plu": "4893",
+    "product": "Dill",
+    "source_identity_id": "1a01a6174f26f5021d1d93a5d81d619c981f9bb783a04e3ad788e53457529f0d",
+    "source_image": "data/review-references/owner-alternates/4893-dill-bunch.png",
+    "source_sha256": "27135eb9996126a52223b12b25e5c0361bd02d8afad83afccdcf70926aac8264",
+    "original_source_image": "data/review-references/owner-alternates/4893-dill-bunch.png",
+    "original_source_sha256": "27135eb9996126a52223b12b25e5c0361bd02d8afad83afccdcf70926aac8264",
+    "organic": false,
+    "library_image": "sources/image-library/1c25272704f686f547f04b445ecb7468f5432c9fecd15ee19142081482bc73b0.jpg",
+    "library_sha256": "1ed3f1522dfee8c42216a8de7005156e7abe55e655215e92bb6898fd6ff55b51",
+    "library_source_sha256": "27135eb9996126a52223b12b25e5c0361bd02d8afad83afccdcf70926aac8264",
+    "visual_approval_status": "APPROVED",
+    "photographic_origin_status": "OWNER_CONFIRMED_PHOTO",
+    "rights_status": "OWNER_CONFIRMED_PERMISSION",
+    "preapproval_status": "APPROVED_FOR_EXACT_PLU_PRODUCT",
+    "library_approval_status": "PREAPPROVED",
+    "production_status": "PREAPPROVED_FOR_EXACT_PLU_PRODUCT"
+  },
+  {
     "candidate_id": "owner-4450-clementine",
     "plu": "4450",
     "product": "Clementine",
