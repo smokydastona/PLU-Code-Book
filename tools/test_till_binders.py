@@ -30,6 +30,8 @@ from review_booklets import build_review_booklets, build_working_list_review
 from organic_watermarks import render_watermark
 from build_deli_sheet import convert
 from build_bulk_sheet import bulk_sheet, read_bulk, validate_bulk
+from build_bakery_sheet import (BAKERY_SOURCE, read_source as read_bakery_source,
+                                validate_sheet as validate_bakery_sheet)
 
 
 class TillBinderChecks(unittest.TestCase):
@@ -256,6 +258,8 @@ class TillBinderChecks(unittest.TestCase):
         for folder in ("sources/plu", "sources/visual", "data"):
             (self.root / folder).mkdir(parents=True)
         (self.root / "sources/binders").mkdir(parents=True)
+        bakery_source = Path(__file__).resolve().parents[1] / BAKERY_SOURCE
+        shutil.copyfile(bakery_source, self.root / BAKERY_SOURCE)
         (self.root / STRETCH_SOURCE).write_bytes(
             (Path(__file__).resolve().parents[1] / STRETCH_SOURCE).read_bytes())
         for path in DIRECTORY_SOURCES:
@@ -298,6 +302,8 @@ class TillBinderChecks(unittest.TestCase):
         misc.column_dimensions["D"].width = 45
         misc.row_breaks.append(Break(id=1))
         misc.col_breaks.append(Break(id=2))
+        bakery = original.create_sheet("Bakery")
+        bakery["A1"], bakery["B1"] = "Old bakery", "Old entry"
         produce = original.create_sheet("Produce")
         produce["A1"], produce["B1"] = 42, "Old Gala"
         produce["D1"], produce["E1"] = "900042", "Organic Apple Gala"
@@ -409,6 +415,7 @@ class TillBinderChecks(unittest.TestCase):
         self.assertEqual(len(list(self.output.glob("*.xlsx"))), 1)
         self.assertFalse((self.output / "booklets").exists())
         self.assertEqual(summary["produce_records_included"], 7)
+        self.assertEqual(summary["bakery_records_included"], 45)
         self.assertEqual(summary["total_source_records"], 10)
         self.assertEqual(summary["hidden_or_deleted_records"], 2)
         self.assertEqual(summary["known_non_produce_excluded"], 1)
@@ -421,7 +428,9 @@ class TillBinderChecks(unittest.TestCase):
             path = self.output / filename
             workbook = load_workbook(path)
             self.addCleanup(workbook.close)
-            self.assertEqual(workbook.sheetnames, ["Time To Stretch", "Operational", "Misc Codes", "Produce", "Deli", "Store Directory", "Hidden operations"])
+            self.assertEqual(workbook.sheetnames, ["Time To Stretch", "Operational", "Misc Codes",
+                                                   "Bakery", "Produce", "Deli", "Store Directory",
+                                                   "Hidden operations"])
             directory = workbook["Store Directory"]
             self.assertEqual([image._data() for image in directory._images], self.directory_content)
             self.assertEqual([item.id for item in directory.row_breaks.brk], [36])
@@ -444,6 +453,9 @@ class TillBinderChecks(unittest.TestCase):
             self.assertEqual(workbook["Deli"]["B5"].value, "00012")
             self.assertEqual(workbook["Deli"]["E5"].value, "00013")
             self.assertEqual(summary["validations"][edition]["deli_records_verified"], 2)
+            _, bakery_coordinates, bakery_products = read_bakery_source(self.root)
+            validate_bakery_sheet(workbook["Bakery"], bakery_products, bakery_coordinates)
+            self.assertEqual(summary["validations"][edition]["bakery_records_verified"], 45)
             self.assertEqual(workbook["Operational"]["B2"].value, "=SUM(A2:A3)")
             self.assertEqual(workbook["Operational"]["B2"].comment.text, "Keep this comment")
             self.assertEqual(str(workbook["Operational"].merged_cells), "A1:C1")
@@ -467,8 +479,33 @@ class TillBinderChecks(unittest.TestCase):
         self.assertEqual((self.root / "sources/plu/PickList.xml").read_bytes(), source_before)
         self.assertEqual(self.image.read_bytes(), self.content)
         self.assertTrue((self.output / "PRODUCE_CHANGE_AND_VALIDATION_REPORT.txt").is_file())
+        self.assertTrue((self.output / "BAKERY_LAYOUT.csv").is_file())
         with self.assertRaisesRegex(ValueError, "empty"):
             generate(self.root, self.binder, self.output)
+
+    def test_bakery_sheet_keeps_all_exact_text_entries_in_one_page_theme(self):
+        content, coordinates, products = read_bakery_source(self.root)
+        self.assertEqual(len(products), 45)
+        self.assertEqual([sum(row["category"] == category for row in products)
+                          for category in ("Bulk Buns", "Bagels", "Muffins")], [11, 16, 18])
+        self.assertEqual([row["plu"] for row in products if row["category"] == "Muffins"], [
+            "76255", "56126", "65873", "92655", "2298", "2349", "66136", "2329",
+            "73798", "65619", "2326", "73799", "2327", "30298", "80228", "40457",
+            "34176", "42103",
+        ])
+        self.assertTrue(all("1X1EA" not in row["product"] for row in products))
+        destination = self.root / "bakery-replaced.xlsx"
+        replace_sheet(self.binder, content, destination, "Bakery")
+        result = load_workbook(destination)
+        original = load_workbook(self.binder)
+        try:
+            validate_bakery_sheet(result["Bakery"], products, coordinates)
+            self.assertEqual(result["Produce"]["B3"].value, original["Produce"]["B3"].value)
+            self.assertEqual(result["Deli"]["A1"].value, original["Deli"]["A1"].value)
+            self.assertEqual(result.sheetnames, original.sheetnames)
+        finally:
+            result.close()
+            original.close()
 
     def test_existing_binder_can_be_updated_without_losing_other_sheet_edits(self):
         generate(self.root, self.binder, self.output)

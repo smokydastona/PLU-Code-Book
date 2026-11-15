@@ -1,4 +1,4 @@
-"""Generate full till-binder review copies with updated Produce and Deli sheets."""
+"""Generate full till-binder review copies with updated Produce, Bakery and Deli sheets."""
 import argparse
 import copy
 import csv
@@ -40,6 +40,9 @@ from organic_watermarks import render_watermark
 from picklist_catalog import read_assignments, read_picklist
 from produce_order import display_unique_rows, order_produce
 from review_image_references import load_references
+from build_bakery_sheet import (BAKERY_SOURCE, TITLE as BAKERY_TITLE,
+                                read_source as read_bakery_source,
+                                validate_sheet as validate_bakery_sheet)
 from sync_picklist import (booklet_order, csv_output, organic, organic_display_section,
                            reconcile)
 from working_list import read_working_list
@@ -1264,7 +1267,7 @@ def replace_sheet(binder, donor_content, destination, sheet_name):
 
 
 def validate_package(binder, output, coordinates, images, with_photos, deli_coordinates=None,
-                     conversions_image=None):
+                     conversions_image=None, bakery_rows=None, bakery_coordinates=None):
     file_size = output.stat().st_size
     if with_photos and file_size > MAX_GITHUB_FILE_SIZE:
         raise ValueError(f"{output}: photo workbook exceeds the 100 MiB GitHub file-size limit")
@@ -1278,6 +1281,10 @@ def validate_package(binder, output, coordinates, images, with_photos, deli_coor
             deli_target, deli_index = sheet_info(original, "Deli")
             allowed.update({deli_target, rels_part(deli_target)})
             replaced_indexes.add(deli_index)
+        if bakery_coordinates is not None:
+            bakery_target, bakery_index = sheet_info(original, "Bakery")
+            allowed.update({bakery_target, rels_part(bakery_target)})
+            replaced_indexes.add(bakery_index)
         if conversions_image is not None:
             conversions_target, conversions_index = sheet_info(original, CONVERSIONS_SHEET)
             allowed.update({conversions_target, rels_part(conversions_target)})
@@ -1330,6 +1337,8 @@ def validate_package(binder, output, coordinates, images, with_photos, deli_coor
             raise ValueError("worksheet names or order changed")
         if deli_coordinates is not None:
             validate_deli_sheet(workbook["Deli"], deli_coordinates)
+        if bakery_coordinates is not None:
+            validate_bakery_sheet(workbook["Bakery"], bakery_rows, bakery_coordinates)
         if conversions_image is not None:
             validate_conversions_image(workbook[CONVERSIONS_SHEET], conversions_image)
         sheet = workbook["Produce"]
@@ -1360,6 +1369,7 @@ def validate_package(binder, output, coordinates, images, with_photos, deli_coor
             status="PASS", original_sheet_names=original_book.sheetnames,
             worksheets_preserved=len(workbook.sheetnames), produce_records_verified=len(coordinates),
             deli_records_verified=len(deli_coordinates) if deli_coordinates is not None else 0,
+            bakery_records_verified=len(bakery_coordinates) if bakery_coordinates is not None else 0,
             produce_images_verified=len(embedded), original_parts_checked=len(preserved),
             original_parts_byte_identical=sum(row["byte_identical"] for row in preserved),
             unrelated_package_parts_byte_identical=True, existing_styles_preserved=True,
@@ -1378,7 +1388,7 @@ def normalize_printed_produce_text(text):
 
 def validate_print(output, coordinates, expected_pages, deli_coordinates=None, deli_title=None,
                    bulk_pages=None, stretch_size=None, misc_text=None, directory_images=None,
-                   conversions_image=None, stretch_image=None):
+                   conversions_image=None, stretch_image=None, bakery_coordinates=None):
     from pypdf import PdfReader
 
     if not shutil.which("soffice"):
@@ -1531,6 +1541,24 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                     raise ValueError(f"{edition}: printed deli PLUs missing or duplicated")
                 if any(" ".join(entry["product"].split()) not in deli_text for entry in deli_coordinates):
                     raise ValueError(f"{edition}: printed deli products missing or clipped")
+            if bakery_coordinates is not None:
+                bakery_pages = [page for page in full_pdf.pages
+                                if BAKERY_TITLE in " ".join((page.extract_text() or "").split())]
+                if len(bakery_pages) != 1:
+                    raise ValueError(f"{edition}: updated Bakery must print on exactly one page")
+                bakery_page = bakery_pages[0]
+                if (abs(float(bakery_page.mediabox.width) - 612) > 1 or
+                        abs(float(bakery_page.mediabox.height) - 792) > 1):
+                    raise ValueError(f"{edition}: Bakery is not portrait US Letter")
+                bakery_text = " ".join((bakery_page.extract_text() or "").split())
+                bakery_codes = Counter(entry["plu"] for entry in bakery_coordinates)
+                printed_bakery_codes = Counter(
+                    word for word in bakery_text.split() if word in bakery_codes)
+                if printed_bakery_codes != bakery_codes:
+                    raise ValueError(f"{edition}: printed Bakery PLUs are missing or duplicated")
+                if any(" ".join(entry["product"].split()) not in bakery_text
+                       for entry in bakery_coordinates):
+                    raise ValueError(f"{edition}: printed Bakery products are missing or clipped")
             shutil.copyfile(complete, output / complete.name)
             produce_pages = [page for page in full_pdf.pages if
                              "PRODUCE PLU QUICK GUIDE" in page.extract_text()]
@@ -1568,6 +1596,9 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 every_page_code_count_verified=True, every_description_found=True,
                 drawn_images=total_drawn,
                 deli_print_records_verified=len(deli_coordinates) if deli_coordinates is not None else 0,
+                bakery_print_records_verified=(len(bakery_coordinates)
+                                               if bakery_coordinates is not None else 0),
+                bakery_print_page_verified=bakery_coordinates is not None,
                 bulk_print_pages_verified=len(bulk_pages) if bulk_pages else 0,
                 bulk_print_font_points=11 if bulk_pages else None,
                 stretch_print_page_verified=stretch_size is not None,
@@ -1623,6 +1654,8 @@ def report_text(summary):
         f"Original workbook SHA-256: {summary['original_binder_sha256']}",
         f"Updated Deli source SHA-256: {summary['deli_source_sha256']}; "
         f"entries: {summary['deli_records_included']}",
+        f"Updated Bakery source SHA-256: {summary['bakery_source_sha256']}; "
+        f"entries: {summary['bakery_records_included']}",
         f"Time To Stretch image SHA-256: {summary['stretch_source_sha256']}",
         f"Conversions image SHA-256: {summary['conversions_source_image_sha256']}",
         f"Conversions accuracy review: {summary['conversions_accuracy_review']}",
@@ -1645,7 +1678,7 @@ def report_text(summary):
         f"main-item sorting review: {summary['produce_sort_review_required']}",
         "",
         "Bulk is one themed sheet with six category-grouped pages at 11 pt, without print scaling.",
-        "Every original package part outside Produce, Deli, Time To Stretch, Misc Codes, Conversions, Store Directory and Bulk, their relationships,",
+        "Every original package part outside Produce, Bakery, Deli, Time To Stretch, Misc Codes, Conversions, Store Directory and Bulk, their relationships,",
         "append-only styles, content types and their print names is byte-identical. No original part is removed.",
         "Existing styles and all unrelated workbook-level settings are independently compared.",
         "Exact PLUs, uppercase display descriptions, duplicate highlights and image bytes/anchors are verified.",
@@ -1662,6 +1695,7 @@ def report_text(summary):
         "Detailed reports:",
         "  VALIDATION.json: checks, hashes, counts and publication blockers",
         "  DELI_LAYOUT.csv: exact owner-supplied deli names, PLUs and two-column cell locations",
+        "  BAKERY_LAYOUT.csv: exact Bakery source names, PLUs and one-page cell locations",
         "  BULK_LAYOUT.csv: original bulk names/PLUs and their six-page cell mapping",
         "  ORIGINAL_PRODUCE_CHANGES.csv: every original entry and current-source candidates",
         "  UPDATED_PRODUCE_RECORDS.csv: every included source record versus the original sheet",
@@ -1707,6 +1741,8 @@ def generate(root, binder, output, verify_print=False):
     deli_document_checksum = sha(deli_document.read_bytes())
     deli_content, deli_coordinates = read_deli_source(root)
     deli_checksum = sha(deli_content)
+    bakery_content, bakery_coordinates, bakery_rows = read_bakery_source(root)
+    bakery_source_checksum = sha((root / BAKERY_SOURCE).read_bytes())
     deli_workbook = load_workbook(io.BytesIO(deli_content), read_only=True)
     try:
         deli_title = deli_workbook["Deli"]["A1"].value
@@ -1714,6 +1750,7 @@ def generate(root, binder, output, verify_print=False):
         deli_workbook.close()
     with zipfile.ZipFile(binder) as original:
         sheet_info(original, "Deli")
+        sheet_info(original, "Bakery")
         sheet_info(original, STRETCH_SHEET)
         sheet_info(original, MISC_SHEET)
         sheet_info(original, DIRECTORY_SHEET)
@@ -1768,6 +1805,7 @@ def generate(root, binder, output, verify_print=False):
             directory_binder = Path(temporary) / "Directory.xlsx"
             stretch_binder = Path(temporary) / "Stretch.xlsx"
             produce_binder = Path(temporary) / "Produce.xlsx"
+            bakery_binder = Path(temporary) / "Bakery.xlsx"
             bulk_combined = combine_bulk(binder, combined_binder)
             template = load_workbook(combined_binder)
             try:
@@ -1794,10 +1832,12 @@ def generate(root, binder, output, verify_print=False):
             replace_sheet(conversions_binder, directory_content, directory_binder, DIRECTORY_SHEET)
             replace_sheet(directory_binder, stretch_content, stretch_binder, STRETCH_SHEET)
             replace_produce(stretch_binder, donor, produce_binder)
-            replace_sheet(produce_binder, deli_content, path, "Deli")
+            replace_sheet(produce_binder, bakery_content, bakery_binder, "Bakery")
+            replace_sheet(bakery_binder, deli_content, path, "Deli")
             validations[edition] = validate_package(
                 stretch_binder, path, coordinates, edition_images, edition == "photos", deli_coordinates,
-                conversions_source_image if CONVERSIONS_SHEET in sheet_names else None)
+                conversions_source_image if CONVERSIONS_SHEET in sheet_names else None,
+                bakery_rows, bakery_coordinates)
         result = load_workbook(path)
         try:
             validate_stretch(result[STRETCH_SHEET], stretch_source)
@@ -1839,6 +1879,7 @@ def generate(root, binder, output, verify_print=False):
                 if name not in bulk_parts | conversions_parts | {misc_part, stretch_part, rels_part(stretch_part),
                                              directory_part, rels_part(directory_part), "xl/workbook.xml"} and name not in {
                         sheet_info(original, "Produce")[0], rels_part(sheet_info(original, "Produce")[0]),
+                        sheet_info(original, "Bakery")[0], rels_part(sheet_info(original, "Bakery")[0]),
                         sheet_info(original, "Deli")[0], rels_part(sheet_info(original, "Deli")[0]),
                         "xl/styles.xml", "[Content_Types].xml"} and before != after:
                     raise ValueError(f"unrelated workbook part changed: {name}")
@@ -1854,6 +1895,8 @@ def generate(root, binder, output, verify_print=False):
                [row for row in rows if row["sort_status"] == "MAIN_ITEM_REVIEW_REQUIRED"],
                ["source_id", "plu", "name", "sort_product", "sort_variety", "sort_status"])
     csv_output(output / "DELI_LAYOUT.csv", deli_coordinates,
+               ["category", "product", "plu", "product_cell", "code_cell"])
+    csv_output(output / "BAKERY_LAYOUT.csv", bakery_coordinates,
                ["category", "product", "plu", "product_cell", "code_cell"])
     if bulk_coordinates is not None:
         csv_output(output / "BULK_LAYOUT.csv", bulk_coordinates,
@@ -1891,6 +1934,8 @@ def generate(root, binder, output, verify_print=False):
         status="REVIEW_ONLY_NOT_RELEASED", production_publication="BLOCKED",
         original_binder=str(binder), original_binder_sha256=original_checksum,
         deli_source=str(root / DELI_SOURCE), deli_source_sha256=deli_checksum,
+        bakery_source=str(root / BAKERY_SOURCE), bakery_source_sha256=bakery_source_checksum,
+        bakery_records_included=len(bakery_coordinates),
         stretch_source=str(root / STRETCH_SOURCE), stretch_source_sha256=stretch_checksum,
         conversions_source=conversion_source,
         conversions_source_image=str(root / CONVERSIONS_SOURCE),
@@ -1946,6 +1991,7 @@ def generate(root, binder, output, verify_print=False):
             "Conversions uses the owner-uploaded, visually checked one-page image; the original source charts "
             "remain preserved in the original binder and workbook package; "
             "Store Directory uses identity-matched highlights on the template's two images; "
+            "Bakery is replaced from the reviewed Bakery product list in a compact one-page theme; "
             "Deli is replaced from the owner-supplied two-column source; Bulk sections are combined "
             "with page breaks; all other unrelated operational sheets remain unchanged.",
             "Future unclassified entries are retained for review, not silently discarded or approved.",
@@ -1966,7 +2012,7 @@ def generate(root, binder, output, verify_print=False):
             bulk_pages=bulk_print_pages(output / FILENAMES["photos"]), stretch_size=stretch_size,
             misc_text=misc_text, directory_images=directory_images,
             conversions_image=conversions_source_image if conversion_source != "not present" else None,
-            stretch_image=stretch_source)
+            stretch_image=stretch_source, bakery_coordinates=bakery_coordinates)
         if summary["print_validation"]["photos"]["drawn_images"] != len(images):
             raise ValueError("printed reference count differs from the exact image mapping")
         (output / "VALIDATION.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
@@ -1977,6 +2023,8 @@ def generate(root, binder, output, verify_print=False):
     if (sha((root / DELI_SOURCE).read_bytes()) != deli_checksum or
             sha(deli_document.read_bytes()) != deli_document_checksum):
         raise ValueError("deli source changed during generation; discard outputs and retry")
+    if sha((root / BAKERY_SOURCE).read_bytes()) != bakery_source_checksum:
+        raise ValueError("Bakery source changed during generation; discard outputs and retry")
     if sha((root / STRETCH_SOURCE).read_bytes()) != stretch_checksum:
         raise ValueError("Time To Stretch source changed during generation; discard outputs and retry")
     if sha((root / CONVERSIONS_SOURCE).read_bytes()) != CONVERSIONS_SOURCE_SHA256:
@@ -2000,7 +2048,7 @@ def main():
     parser.add_argument("--binder", type=Path, required=True, help="Complete binder template (never modified)")
     parser.add_argument("--output", type=Path, required=True, help="Empty directory for the review binder and reports")
     parser.add_argument("--verify-print", action="store_true",
-                        help="Export the complete binder PDF and verify printed Produce and Deli records")
+                        help="Export the binder PDF and verify printed Produce, Bakery and Deli records")
     args = parser.parse_args()
     try:
         summary = generate(args.root, args.binder, args.output, args.verify_print)
@@ -2009,7 +2057,7 @@ def main():
         parser.exit(1, f"ERROR: {exc}\n")
     print(json.dumps({key: summary[key] for key in (
         "status", "produce_records_included", "embedded_references", "missing_or_uncertain_images",
-        "duplicate_produce_codes", "planned_produce_print_pages")}, indent=2))
+        "duplicate_produce_codes", "planned_produce_print_pages", "bakery_records_included")}, indent=2))
 
 
 if __name__ == "__main__":
