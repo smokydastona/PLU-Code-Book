@@ -1,5 +1,25 @@
 [
   {
+    "candidate_id": "owner-4884-arugula",
+    "plu": "4884",
+    "product": "Arugula",
+    "source_identity_id": "dc1f51ba8caacc887d6f6cc5ca1aa95c39336046cca282c6c7fdf72a8827a60b",
+    "source_image": "data/review-references/owner-alternates/4884-arugula.png",
+    "source_sha256": "d5a0de31419776909bc45f6b55e65b24e9a234477192bf02a7a4e3535bf84edc",
+    "original_source_image": "data/review-references/owner-alternates/4884-arugula.png",
+    "original_source_sha256": "d5a0de31419776909bc45f6b55e65b24e9a234477192bf02a7a4e3535bf84edc",
+    "organic": false,
+    "library_image": "sources/image-library/59146c8e9b2ceb6c808900a12707ed1fd6900b61d67e8e2ed6937729d3492859.jpg",
+    "library_sha256": "6356ba66d25ce6ce4e158bdc1c6edc6934369f3aa5d584e8ea3565cb78d0e2cd",
+    "library_source_sha256": "d5a0de31419776909bc45f6b55e65b24e9a234477192bf02a7a4e3535bf84edc",
+    "visual_approval_status": "APPROVED",
+    "photographic_origin_status": "OWNER_CONFIRMED_PHOTO",
+    "rights_status": "OWNER_CONFIRMED_PERMISSION",
+    "preapproval_status": "APPROVED_FOR_EXACT_PLU_PRODUCT",
+    "library_approval_status": "PREAPPROVED",
+    "production_status": "PREAPPROVED_FOR_EXACT_PLU_PRODUCT"
+  },
+  {
     "candidate_id": "owner-4500-baby-eggplant",
     "plu": "4500",
     "product": "Baby Eggplant",

@@ -1,0 +1,20 @@
+{
+  "rendering": {
+    "source_sha256": "d5a0de31419776909bc45f6b55e65b24e9a234477192bf02a7a4e3535bf84edc",
+    "organic": false,
+    "pillow": "13.0.0",
+    "renderer_sha256": "ba6b47ff5700a7f94fa6377a643d115d534893c349f94772fa25d3f084bb2910"
+  },
+  "sha256": "6356ba66d25ce6ce4e158bdc1c6edc6934369f3aa5d584e8ea3565cb78d0e2cd",
+  "approval_status": "NOT_GRANTED_BY_LIBRARY",
+  "owner_candidate_id": "owner-4884-arugula",
+  "candidate_plu": "4884",
+  "candidate_product": "Arugula",
+  "source_image": "data/review-references/owner-alternates/4884-arugula.png",
+  "source_sha256": "d5a0de31419776909bc45f6b55e65b24e9a234477192bf02a7a4e3535bf84edc",
+  "visual_approval_status": "APPROVED",
+  "photographic_origin_status": "OWNER_CONFIRMED_PHOTO",
+  "rights_status": "OWNER_CONFIRMED_PERMISSION",
+  "preapproval_status": "APPROVED_FOR_EXACT_PLU_PRODUCT",
+  "production_status": "PREAPPROVED_FOR_EXACT_PLU_PRODUCT"
+}
