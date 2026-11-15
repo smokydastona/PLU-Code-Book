@@ -3,15 +3,15 @@
   "production_publication": "BLOCKED",
   "original_binder": "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx",
   "original_binder_sha256": "6b0aeaa153233c5f4917811a3f7a5b2212f7a946a0abede372a31db556ab0f63",
-  "deli_source": "sources/binders/Updated_Deli_Two_Columns.xlsx",
+  "deli_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Updated_Deli_Two_Columns.xlsx",
   "deli_source_sha256": "a26ab6cf98d72d656e5cfd7a5c8928a7938ae1d965934a597c047f8eb37438f3",
-  "bakery_source": "sources/binders/Bakery_Products.csv",
+  "bakery_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Bakery_Products.csv",
   "bakery_source_sha256": "b962c6219f70740e280a57dfd14ccba5811ab0223970f88b46944402c401c214",
   "bakery_records_included": 45,
-  "stretch_source": "sources/binders/Time_To_Stretch.jpg",
+  "stretch_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Time_To_Stretch.jpg",
   "stretch_source_sha256": "b96e6cbecc167c31e77235b6b02171fc0e94b63aa1f76860fb22258d25f088ed",
   "conversions_source": "owner-uploaded image",
-  "conversions_source_image": "sources/binders/Conversions_Updated.jpg",
+  "conversions_source_image": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Conversions_Updated.jpg",
   "conversions_source_image_sha256": "e3a51d715ee020604a65041c046dbd4092ebe043c390c82c3f427e98775ae504",
   "conversions_original_chart_source_sha256": [
     "61982efebf133df82dff82c7cdd0851cbba7bc15dd40ea7279c1b6f9027b03ec",
@@ -21,12 +21,12 @@
   "conversions_accuracy_review": "Owner-uploaded image visually checked against all three original chart images: volume values, weight values, kilograms-to-pounds values, price tiers and rounding note match. The $4.99 price converts to $11.00/kg in both the original chart and uploaded image; a prior editable draft's $11.02 value was incorrect and is not used.",
   "directory_images": [
     {
-      "source": "sources/binders/Store_Directory_Original_1.png",
+      "source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Store_Directory_Original_1.png",
       "source_sha256": "c5beab3173c87b3ab5876bcad374bb85e5cefc57ba616edb749791852cc3bc69",
       "derivative_sha256": "f9eb2adcbe21f449048a324a8235fef3a941982161d7a54730c69ffa901cfa54"
     },
     {
-      "source": "sources/binders/Store_Directory_Original_2.png",
+      "source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Store_Directory_Original_2.png",
       "source_sha256": "0274edd4cd7893d0f087f73e380295bf562ac80c0e10a4022ae7f69b686418a3",
       "derivative_sha256": "fcce4b14be6dddd9136ece540036526ddc8ba7306a7a9e2090f0ea4c43529310"
     }
@@ -399,17 +399,18 @@
       "produce_records_verified": 548,
       "deli_records_verified": 52,
       "bakery_records_verified": 45,
+      "delivery_pages_verified": 2,
       "produce_images_verified": 513,
       "original_parts_checked": 104,
-      "original_parts_byte_identical": 86,
+      "original_parts_byte_identical": 84,
       "unrelated_package_parts_byte_identical": true,
       "existing_styles_preserved": true,
       "unrelated_workbook_settings_preserved": true,
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "feba54c6222656a9e3a1957b0903afb8e742d5252b866a9d4e20087e8b64eb6a",
-      "file_size_bytes": 12585159,
+      "file_sha256": "ce788436267c9969e8a0af217e71a530f4456522b90e9d65e2b9ecbd666e66ad",
+      "file_size_bytes": 13380282,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 400,
       "output_sheet_names": [
@@ -447,6 +448,8 @@
       "conversions_print_image_verified": true,
       "directory_print_pages_verified": 2,
       "directory_print_pixels_losslessly_verified": true,
+      "delivery_print_pages_verified": 2,
+      "delivery_page_split_verified": true,
       "complete_pdf": "Complete Till Binder - Updated - Photos.pdf",
       "visual_review": "REQUIRED; automated text/geometry checks are not a visual print approval"
     }
@@ -457,7 +460,7 @@
     "Missing, identity-mismatched, checksum-changed and unreadable image associations remain blank.",
     "Existing and newly supplied identity-linked AI illustrations are visual references at the owner's request; AI provenance and uncertain visual verdicts are recorded only in the external audit report.",
     "Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.",
-    "Time To Stretch uses the supplied color guide; Misc Codes uses green headings and pale-green entry shading on one page, with original cells and number formats retained; Conversions uses the owner-uploaded, visually checked one-page image; the original source charts remain preserved in the original binder and workbook package; Store Directory uses identity-matched highlights on the template's two images; Bakery is replaced from the reviewed Bakery product list in a compact one-page theme; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.",
+    "Time To Stretch uses the supplied color guide; Misc Codes uses green headings and pale-green entry shading on one page, with original cells and number formats retained; Conversions uses the owner-uploaded, visually checked one-page image; the original source charts remain preserved in the original binder and workbook package; Delivery Charges retains its two source pages with green header bands and an explicit page split; Store Directory uses identity-matched highlights on the template's two images; Bakery is replaced from the reviewed Bakery product list in a compact one-page theme; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.",
     "Future unclassified entries are retained for review, not silently discarded or approved."
   ]
 }
