@@ -33,6 +33,8 @@ Owner-provided duplicate PLU classifications and canonical-name recommendations 
 
 `data/picklist_record_baseline.json` records each PickList record's logical identity, source position and SHA-256 fingerprint of its complete semantic XML subtree. PickList has no stable per-record ID beyond its product fields, so repeated logical records receive occurrence-qualified identities; formatting and encoding changes do not affect their fingerprints. Changed, new and removed records are listed in `outputs/reports/PICKLIST_RECORD_CHANGES.csv`, and changed source records block existing decisions and image assignments. Review this report before updating the fingerprint baseline or owner decisions; never refresh the baseline merely to clear a blocker. The reconciliation audit retains the original XML records, including hidden and deleted entries.
 
+**Latest production audit: BLOCKED.** The current audit reports 972 original records and 918 WorkingList entries (594 included; 324 hidden or deleted), with 248 reconciliation-review records, 35 missing image requests, 323 prohibited image-reuse blockers and 90 organic placements needing review. No production publication was made; the last published booklets remain intact. See [PICKLIST_SYNC.json](outputs/reports/PICKLIST_SYNC.json) and [PICKLIST_RECORD_CHANGES.csv](outputs/reports/PICKLIST_RECORD_CHANGES.csv) for the detailed audit.
+
 ## Updating the complete till binder
 
 `tools/build_till_binders.py` creates one photo-inclusive **complete binder**, replacing its Time To Stretch, Produce and Deli sections and combining the four Bulk sheets. The editable workbook is `Complete Till Binder - Updated - Photos.xlsx`; `--verify-print` also supplies a PDF of that same binder, not a second edition.
