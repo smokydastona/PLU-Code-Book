@@ -19,11 +19,12 @@ from openpyxl.styles import Font
 from openpyxl.worksheet.pagebreak import Break
 from PIL import Image, ImageChops, ImageOps
 
-from build_till_binders import (BULK_SHEETS, CONVERSIONS_ACCURACY_REVIEW, CONVERSIONS_SOURCE, CONVERSIONS_SOURCE_SHA256, DIRECTORY_EMERGENCY_HIGHLIGHTS, DIRECTORY_SOURCES, FILENAMES, MAX_GITHUB_FILE_SIZE, PDF_EXPORT_FORMAT, STRETCH_SOURCE, VISUALS, bulk_print_pages,
+from build_till_binders import (BULK_SHEETS, CONVERSIONS_ACCURACY_REVIEW, CONVERSIONS_SOURCE, CONVERSIONS_SOURCE_SHA256, DELIVERY_HEADER_BANDS, DELIVERY_SHEET, DIRECTORY_EMERGENCY_HIGHLIGHTS, DIRECTORY_SOURCES, FILENAMES, MAX_GITHUB_FILE_SIZE, PDF_EXPORT_FORMAT, STRETCH_SOURCE, VISUALS, bulk_print_pages,
                                combine_bulk, comparisons, directory_sheet, fit_misc_sheet, generate, layout_rows, misc_page_matches, misc_print_text,
                                docx_compatible_image,
-                               map_images, produce_catalog, quick_sheet, replace_produce, replace_sheet,
-                               sha, sheet_info, stretch_sheet, theme_conversions_sheet, themed_directory_image, validate_package, visual_records, workbook_photo_copy)
+                               delivery_sheet, map_images, produce_catalog, quick_sheet, replace_produce, replace_sheet,
+                               sha, sheet_info, stretch_sheet, theme_conversions_sheet, themed_directory_image,                                themed_delivery_image, validate_delivery, validate_package, visual_records,
+                               workbook_photo_copy)
 from picklist_catalog import read_picklist, read_assignments, write_record_baseline
 from review_image_references import load_references
 from review_booklets import build_review_booklets, build_working_list_review
@@ -115,6 +116,31 @@ class TillBinderChecks(unittest.TestCase):
             original.close()
             with self.assertRaisesRegex(ValueError, "outside its print area"):
                 combine_bulk(changed, Path(directory) / "result.xlsx")
+
+    def test_delivery_charges_preserves_two_ordered_pages_with_green_headers(self):
+        source = load_workbook(self.binder)
+        try:
+            content, images = delivery_sheet(source[DELIVERY_SHEET])
+        finally:
+            source.close()
+        themed = load_workbook(io.BytesIO(content))
+        try:
+            sheet = themed[DELIVERY_SHEET]
+            validate_delivery(sheet, images)
+            self.assertEqual([item.id for item in sheet.row_breaks.brk], [49])
+            self.assertEqual([image.anchor._from.row for image in sheet._images], [0, 50])
+            for index, (original, result) in enumerate(zip(self.delivery_originals, images)):
+                with Image.open(io.BytesIO(original)) as before, Image.open(io.BytesIO(result)) as after:
+                    before, after = before.convert("RGB"), after.convert("RGB")
+                    band_bottom = (496, 1340)[index]
+                    self.assertIsNone(ImageChops.difference(
+                        before.crop((0, band_bottom, 1700, 2200)),
+                        after.crop((0, band_bottom, 1700, 2200))).getbbox())
+                    self.assertIsNotNone(ImageChops.difference(
+                        before.crop(DELIVERY_HEADER_BANDS[index][0]),
+                        after.crop(DELIVERY_HEADER_BANDS[index][0])).getbbox())
+        finally:
+            themed.close()
 
     def test_complete_build_keeps_six_bulk_pages_with_original_and_updated_templates(self):
         source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
@@ -317,6 +343,19 @@ class TillBinderChecks(unittest.TestCase):
         deli = original.create_sheet("Deli")
         deli["A1"] = "Outdated deli"
         deli.print_area = "A1:B2"
+        delivery = original.create_sheet(DELIVERY_SHEET)
+        source_binder = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
+        source_workbook = load_workbook(source_binder)
+        try:
+            source_sheet = source_workbook[DELIVERY_SHEET]
+            self.delivery_originals = [image._data() for image in sorted(
+                source_sheet._images, key=lambda image: (image.anchor._from.row, image.anchor._from.col))]
+        finally:
+            source_workbook.close()
+        self.delivery_content = [themed_delivery_image(content, index)
+                                 for index, content in enumerate(self.delivery_originals)]
+        for index, content in enumerate(self.delivery_originals):
+            delivery.add_image(ExcelImage(io.BytesIO(content)), f"A{1 + 50 * index}")
         directory = original.create_sheet("Store Directory")
         self.directory_originals = [(self.root / path).read_bytes() for path in DIRECTORY_SOURCES]
         self.directory_content = [themed_directory_image(content, i)
@@ -429,11 +468,14 @@ class TillBinderChecks(unittest.TestCase):
             workbook = load_workbook(path)
             self.addCleanup(workbook.close)
             self.assertEqual(workbook.sheetnames, ["Time To Stretch", "Operational", "Misc Codes",
-                                                   "Bakery", "Produce", "Deli", "Store Directory",
+                                                   "Bakery", "Produce", "Deli", DELIVERY_SHEET, "Store Directory",
                                                    "Hidden operations"])
             directory = workbook["Store Directory"]
             self.assertEqual([image._data() for image in directory._images], self.directory_content)
             self.assertEqual([item.id for item in directory.row_breaks.brk], [36])
+            delivery = workbook[DELIVERY_SHEET]
+            validate_delivery(delivery, self.delivery_content)
+            self.assertEqual(summary["validations"][edition]["delivery_pages_verified"], 2)
             misc = workbook["Misc Codes"]
             self.assertEqual(misc["A2"].value, "00012")
             self.assertEqual(misc["D2"].value, "Owner supplied entry")

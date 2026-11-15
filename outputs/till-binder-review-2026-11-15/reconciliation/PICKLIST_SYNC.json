@@ -1,0 +1,26 @@
+{
+  "source": "sources/plu/PickList.xml",
+  "cashier_source": "sources/plu/WorkingList.xml",
+  "source_sha256": "38732869b0e7b1c8ccb0b6189a8685a1125595ebcc9ded4e9cc48d18d6ea8727",
+  "source_unchanged": true,
+  "total_xml_records": 972,
+  "total_working_records": 918,
+  "included_records": 594,
+  "excluded_records": 324,
+  "status": "BLOCKED",
+  "records_needing_review": 358,
+  "missing_image_requests": 35,
+  "inactive_assignments": 100,
+  "organic_placements_needing_review": 90,
+  "working_list_review_records": 248,
+  "reconciliation_review_records": 248,
+  "reconciliation_review_decisions": 0,
+  "identity_changed_entries": 50,
+  "blocker_counts": {
+    "APPROVED_IMAGE_REQUIRED": 35,
+    "CLASSIFICATION_REQUIRED": 5,
+    "PRODUCT_IMAGE_REVIEW_REQUIRED": 35,
+    "PROHIBITED_IMAGE_REUSE": 323,
+    "SECTION_REQUIRED": 5
+  }
+}

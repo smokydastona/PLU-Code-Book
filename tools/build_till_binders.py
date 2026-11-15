@@ -93,6 +93,19 @@ DIRECTORY_SOURCE_HASHES = (
     "0274edd4cd7893d0f087f73e380295bf562ac80c0e10a4022ae7f69b686418a3",
 )
 DIRECTORY_SOURCES = tuple(Path(f"sources/binders/Store_Directory_Original_{i}.png") for i in (1, 2))
+DELIVERY_SHEET = "Delivery Charges"
+DELIVERY_SOURCE_HASHES = (
+    "f17f10fad1443053096d9de47c49c5e3f031fc47d1e91101b1a989c3b575c77a",
+    "ab85fab3c2cb942b7ab40e9c9effa9f4083113882b52732f5d45510d7cd8207d",
+)
+DELIVERY_THEMED_HASHES = (
+    "4ec5149eb8cb31d40846c21d5f8eb65cbe63b8dcbdde5b628df0a0c8e94e613e",
+    "137a0598e8f1b21c952cfc6a6888b48c83ef818d813adf4cfc88003c737494fc",
+)
+DELIVERY_HEADER_BANDS = (
+    ((320, 438, 1370, 496),),
+    ((320, 530, 1370, 594), (320, 1275, 1370, 1340)),
+)
 DIRECTORY_HIGHLIGHTS = (
     ((75, 58, 460, 181),),
     (
@@ -422,6 +435,93 @@ def themed_directory_image(content, index, emergency_highlights=True, parking_la
     output = io.BytesIO()
     original.save(output, format="PNG", pnginfo=metadata, optimize=True)
     return output.getvalue()
+
+
+def themed_delivery_image(content, index):
+    if not 0 <= index < len(DELIVERY_SOURCE_HASHES):
+        raise ValueError(f"Delivery Charges page index is invalid: {index}")
+    expected_hash = DELIVERY_SOURCE_HASHES[index]
+    if sha(content) != expected_hash:
+        raise ValueError(f"Delivery Charges page {index + 1} changed; review its barcode content")
+    with Image.open(io.BytesIO(content)) as image:
+        if image.format != "PNG" or image.size != (1700, 2200):
+            raise ValueError(f"Delivery Charges page {index + 1} has unexpected dimensions or format")
+        original = image.convert("RGB")
+    pixels = original.load()
+    green = (48, 80, 64)
+    for left, top, right, bottom in DELIVERY_HEADER_BANDS[index]:
+        for y in range(top, bottom):
+            for x in range(left, right):
+                luminance = sum(pixels[x, y]) / 3
+                blend = luminance / 255
+                pixels[x, y] = tuple(round(255 * (1 - blend) + color * blend) for color in green)
+    metadata = PngImagePlugin.PngInfo()
+    metadata.add_text("delivery_charges_source_sha256", expected_hash)
+    output = io.BytesIO()
+    original.save(output, format="PNG", pnginfo=metadata, optimize=True)
+    return output.getvalue()
+
+
+def delivery_sheet(sheet):
+    if (len(sheet._images) != 2 or sheet._charts or sheet.merged_cells.ranges or
+            any(cell.value is not None for row in sheet for cell in row) or
+            any(cell.comment or cell.hyperlink for row in sheet for cell in row)):
+        raise ValueError("Delivery Charges must contain exactly two page images and no cell data")
+    pictures = sorted(sheet._images, key=lambda image: (image.anchor._from.row, image.anchor._from.col))
+    if (pictures[0].anchor._from.row == pictures[1].anchor._from.row or
+            pictures[0].anchor._from.row >= pictures[1].anchor._from.row):
+        raise ValueError("Delivery Charges page order is ambiguous")
+    supplied = [image._data() for image in pictures]
+    images = []
+    for index, content in enumerate(supplied):
+        if sha(content) == DELIVERY_SOURCE_HASHES[index]:
+            themed = themed_delivery_image(content, index)
+            if sha(themed) != DELIVERY_THEMED_HASHES[index]:
+                raise ValueError(f"Delivery Charges theme for page {index + 1} changed; review it before rebuilding")
+            images.append(themed)
+        elif sha(content) == DELIVERY_THEMED_HASHES[index]:
+            images.append(content)
+        else:
+            raise ValueError(f"Delivery Charges page {index + 1} changed; review its barcode content")
+    workbook = Workbook()
+    result = workbook.active
+    result.title = DELIVERY_SHEET
+    result.sheet_view.showGridLines = False
+    result.column_dimensions["A"].width = 105
+    result.sheet_format.defaultRowHeight = 15
+    result.page_setup.orientation = "portrait"
+    result.page_setup.paperSize = result.PAPERSIZE_LETTER
+    result.page_setup.scale = 100
+    result.sheet_properties.pageSetUpPr.fitToPage = False
+    result.page_margins = PageMargins(left=.25, right=.25, top=.25, bottom=.25, header=.1, footer=.1)
+    result.row_breaks.append(Break(id=49))
+    result.print_area = "A1:A100"
+    for index, content in enumerate(images):
+        picture = ExcelImage(io.BytesIO(content))
+        picture.width, picture.height = 728, 942
+        picture.anchor = OneCellAnchor(
+            _from=AnchorMarker(col=0, row=50 * index, colOff=pixels_to_EMU(6)),
+            ext=XDRPositiveSize2D(cx=pixels_to_EMU(picture.width), cy=pixels_to_EMU(picture.height)))
+        result.add_image(picture)
+    output = io.BytesIO()
+    workbook.save(output)
+    workbook.close()
+    return output.getvalue(), images
+
+
+def validate_delivery(sheet, images):
+    if (len(images) != 2 or len(sheet._images) != 2 or
+            [sha(image._data()) for image in sheet._images] != [sha(content) for content in images]):
+        raise ValueError("Delivery Charges page images differ from the reviewed source derivatives")
+    if (sheet.sheet_view.showGridLines or sheet.page_setup.orientation != "portrait" or
+            str(sheet.page_setup.paperSize) != "1" or sheet.page_setup.scale != 100 or
+            sheet.sheet_properties.pageSetUpPr.fitToPage or
+            [item.id for item in sheet.row_breaks.brk if item.man] != [49] or
+            str(sheet.print_area) != "'Delivery Charges'!$A$1:$A$100" or
+            [picture.anchor._from.row for picture in sheet._images] != [0, 50] or
+            any((picture.anchor.ext.cx, picture.anchor.ext.cy) !=
+                (pixels_to_EMU(728), pixels_to_EMU(942)) for picture in sheet._images)):
+        raise ValueError("Delivery Charges must print as two ordered portrait US Letter pages")
 
 
 def directory_sheet(sheet, originals=None):
@@ -1267,7 +1367,8 @@ def replace_sheet(binder, donor_content, destination, sheet_name):
 
 
 def validate_package(binder, output, coordinates, images, with_photos, deli_coordinates=None,
-                     conversions_image=None, bakery_rows=None, bakery_coordinates=None):
+                     conversions_image=None, bakery_rows=None, bakery_coordinates=None,
+                     delivery_images=None):
     file_size = output.stat().st_size
     if with_photos and file_size > MAX_GITHUB_FILE_SIZE:
         raise ValueError(f"{output}: photo workbook exceeds the 100 MiB GitHub file-size limit")
@@ -1289,6 +1390,10 @@ def validate_package(binder, output, coordinates, images, with_photos, deli_coor
             conversions_target, conversions_index = sheet_info(original, CONVERSIONS_SHEET)
             allowed.update({conversions_target, rels_part(conversions_target)})
             replaced_indexes.add(conversions_index)
+        if delivery_images is not None:
+            delivery_target, delivery_index = sheet_info(original, DELIVERY_SHEET)
+            allowed.update({delivery_target, rels_part(delivery_target)})
+            replaced_indexes.add(delivery_index)
         preserved = []
         for name in original.namelist():
             unchanged = original.read(name) == generated.read(name)
@@ -1341,6 +1446,8 @@ def validate_package(binder, output, coordinates, images, with_photos, deli_coor
             validate_bakery_sheet(workbook["Bakery"], bakery_rows, bakery_coordinates)
         if conversions_image is not None:
             validate_conversions_image(workbook[CONVERSIONS_SHEET], conversions_image)
+        if delivery_images is not None:
+            validate_delivery(workbook[DELIVERY_SHEET], delivery_images)
         sheet = workbook["Produce"]
         for entry in coordinates:
             code, description = sheet[entry["code_cell"]], sheet[entry["description_cell"]]
@@ -1370,6 +1477,7 @@ def validate_package(binder, output, coordinates, images, with_photos, deli_coor
             worksheets_preserved=len(workbook.sheetnames), produce_records_verified=len(coordinates),
             deli_records_verified=len(deli_coordinates) if deli_coordinates is not None else 0,
             bakery_records_verified=len(bakery_coordinates) if bakery_coordinates is not None else 0,
+            delivery_pages_verified=len(delivery_images) if delivery_images is not None else 0,
             produce_images_verified=len(embedded), original_parts_checked=len(preserved),
             original_parts_byte_identical=sum(row["byte_identical"] for row in preserved),
             unrelated_package_parts_byte_identical=True, existing_styles_preserved=True,
@@ -1388,7 +1496,8 @@ def normalize_printed_produce_text(text):
 
 def validate_print(output, coordinates, expected_pages, deli_coordinates=None, deli_title=None,
                    bulk_pages=None, stretch_size=None, misc_text=None, directory_images=None,
-                   conversions_image=None, stretch_image=None, bakery_coordinates=None):
+                   conversions_image=None, stretch_image=None, bakery_coordinates=None,
+                   delivery_images=None):
     from pypdf import PdfReader
 
     if not shutil.which("soffice"):
@@ -1437,6 +1546,35 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                              if second[0] == first[0] + 1]
                     if len(pairs) != 1 or any(number not in pairs[0] for group in matches for number, _ in group):
                         raise ValueError(f"{edition}: Store Directory must print exactly two consecutive ordered pages")
+            if delivery_images is not None:
+                import pymupdf
+
+                with pymupdf.open(complete) as document:
+                    expected = []
+                    for content in delivery_images:
+                        with Image.open(io.BytesIO(content)) as image:
+                            expected.append((image.size, image.convert("RGB").tobytes()))
+                    matches = [[], []]
+                    for page in document:
+                        for printed in page.get_image_info(xrefs=True):
+                            size = (printed["width"], printed["height"])
+                            if size not in [item[0] for item in expected] or not printed["xref"]:
+                                continue
+                            actual = directory_image_pixels(
+                                document.extract_image(printed["xref"])["image"])
+                            for index, (expected_size, pixels) in enumerate(expected):
+                                if size == expected_size and pixels == actual:
+                                    matches[index].append((page.number, pymupdf.Rect(printed["bbox"])))
+                    for candidates in matches:
+                        for number, bounds in candidates:
+                            page = document[number]
+                            if (abs(page.rect.width - 612) > 1 or abs(page.rect.height - 792) > 1 or
+                                    not page.rect.contains(bounds) or bounds.width < 400 or bounds.height < 600):
+                                raise ValueError(f"{edition}: Delivery Charges image is clipped or too small")
+                    pairs = [(first[0], second[0]) for first in matches[0] for second in matches[1]
+                             if second[0] == first[0] + 1]
+                    if len(pairs) != 1 or any(number not in pairs[0] for group in matches for number, _ in group):
+                        raise ValueError(f"{edition}: Delivery Charges must print as two consecutive ordered pages")
             if misc_text is not None:
                 matches = [page for page in full_pdf.pages if misc_page_matches(page, misc_text)]
                 if len(matches) != 1:
@@ -1606,6 +1744,8 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 conversions_print_image_verified=conversions_image is not None,
                 directory_print_pages_verified=len(directory_images) if directory_images is not None else 0,
                 directory_print_pixels_losslessly_verified=directory_images is not None,
+                delivery_print_pages_verified=len(delivery_images) if delivery_images is not None else 0,
+                delivery_page_split_verified=delivery_images is not None,
                 complete_pdf=complete.name,
                 visual_review="REQUIRED; automated text/geometry checks are not a visual print approval",
             )
@@ -1754,6 +1894,7 @@ def generate(root, binder, output, verify_print=False):
         sheet_info(original, STRETCH_SHEET)
         sheet_info(original, MISC_SHEET)
         sheet_info(original, DIRECTORY_SHEET)
+        sheet_info(original, DELIVERY_SHEET)
         validate_directory_template(original)
     source_items, digest = read_picklist(root / "sources/plu/PickList.xml")
     assignments = read_assignments(root / "data/picklist_assignments.json")
@@ -1801,6 +1942,7 @@ def generate(root, binder, output, verify_print=False):
             combined_binder = Path(temporary) / "Combined.xlsx"
             bulk_binder = Path(temporary) / "Bulk.xlsx"
             misc_binder = Path(temporary) / "Misc.xlsx"
+            delivery_binder = Path(temporary) / "Delivery.xlsx"
             conversions_binder = Path(temporary) / "Conversions.xlsx"
             directory_binder = Path(temporary) / "Directory.xlsx"
             stretch_binder = Path(temporary) / "Stretch.xlsx"
@@ -1815,6 +1957,7 @@ def generate(root, binder, output, verify_print=False):
                 if "Bulk" in template:
                     bulk_content, bulk_coordinates = bulk_sheet(read_bulk(template["Bulk"]))
                 directory_content, directory_images = directory_sheet(template[DIRECTORY_SHEET], directory_originals)
+                delivery_content, delivery_images = delivery_sheet(template[DELIVERY_SHEET])
             finally:
                 template.close()
             if bulk_coordinates is not None:
@@ -1822,13 +1965,14 @@ def generate(root, binder, output, verify_print=False):
             else:
                 shutil.copyfile(combined_binder, bulk_binder)
             fit_misc_sheet(bulk_binder, misc_binder)
+            replace_sheet(misc_binder, delivery_content, delivery_binder, DELIVERY_SHEET)
             with zipfile.ZipFile(misc_binder) as archive:
                 sheet_names = [sheet.get("name") for sheet in
                                xml(archive.read("xl/workbook.xml")).find(f"{{{S}}}sheets")]
             if CONVERSIONS_SHEET in sheet_names:
-                theme_conversions_sheet(misc_binder, conversions_binder, conversions_source_image)
+                theme_conversions_sheet(delivery_binder, conversions_binder, conversions_source_image)
             else:
-                shutil.copyfile(misc_binder, conversions_binder)
+                shutil.copyfile(delivery_binder, conversions_binder)
             replace_sheet(conversions_binder, directory_content, directory_binder, DIRECTORY_SHEET)
             replace_sheet(directory_binder, stretch_content, stretch_binder, STRETCH_SHEET)
             replace_produce(stretch_binder, donor, produce_binder)
@@ -1837,11 +1981,12 @@ def generate(root, binder, output, verify_print=False):
             validations[edition] = validate_package(
                 stretch_binder, path, coordinates, edition_images, edition == "photos", deli_coordinates,
                 conversions_source_image if CONVERSIONS_SHEET in sheet_names else None,
-                bakery_rows, bakery_coordinates)
+                bakery_rows, bakery_coordinates, delivery_images)
         result = load_workbook(path)
         try:
             validate_stretch(result[STRETCH_SHEET], stretch_source)
             validate_directory(result[DIRECTORY_SHEET], directory_images)
+            validate_delivery(result[DELIVERY_SHEET], delivery_images)
         finally:
             result.close()
         if bulk_coordinates is not None:
@@ -1867,6 +2012,7 @@ def generate(root, binder, output, verify_print=False):
                 conversions_part, _ = sheet_info(original, CONVERSIONS_SHEET)
                 conversions_parts.update((conversions_part, rels_part(conversions_part)))
             directory_part, _ = sheet_info(original, DIRECTORY_SHEET)
+            delivery_part, _ = sheet_info(original, DELIVERY_SHEET)
             validations[edition]["output_sheet_names"] = validations[edition]["original_sheet_names"]
             validations[edition]["original_sheet_names"] = [
                 sheet.get("name") for sheet in xml(original.read("xl/workbook.xml")).find(f"{{{S}}}sheets")
@@ -1877,7 +2023,8 @@ def generate(root, binder, output, verify_print=False):
                 part.update(sha256_before=sha(before), sha256_after=sha(after),
                             byte_identical=before == after)
                 if name not in bulk_parts | conversions_parts | {misc_part, stretch_part, rels_part(stretch_part),
-                                             directory_part, rels_part(directory_part), "xl/workbook.xml"} and name not in {
+                                             directory_part, rels_part(directory_part), delivery_part,
+                                             rels_part(delivery_part), "xl/workbook.xml"} and name not in {
                         sheet_info(original, "Produce")[0], rels_part(sheet_info(original, "Produce")[0]),
                         sheet_info(original, "Bakery")[0], rels_part(sheet_info(original, "Bakery")[0]),
                         sheet_info(original, "Deli")[0], rels_part(sheet_info(original, "Deli")[0]),
@@ -1990,6 +2137,7 @@ def generate(root, binder, output, verify_print=False):
             "entry shading on one page, with original cells and number formats retained; "
             "Conversions uses the owner-uploaded, visually checked one-page image; the original source charts "
             "remain preserved in the original binder and workbook package; "
+            "Delivery Charges retains its two source pages with green header bands and an explicit page split; "
             "Store Directory uses identity-matched highlights on the template's two images; "
             "Bakery is replaced from the reviewed Bakery product list in a compact one-page theme; "
             "Deli is replaced from the owner-supplied two-column source; Bulk sections are combined "
@@ -2012,7 +2160,8 @@ def generate(root, binder, output, verify_print=False):
             bulk_pages=bulk_print_pages(output / FILENAMES["photos"]), stretch_size=stretch_size,
             misc_text=misc_text, directory_images=directory_images,
             conversions_image=conversions_source_image if conversion_source != "not present" else None,
-            stretch_image=stretch_source, bakery_coordinates=bakery_coordinates)
+            stretch_image=stretch_source, bakery_coordinates=bakery_coordinates,
+            delivery_images=delivery_images)
         if summary["print_validation"]["photos"]["drawn_images"] != len(images):
             raise ValueError("printed reference count differs from the exact image mapping")
         (output / "VALIDATION.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
