@@ -17,11 +17,11 @@
   "changes": "Original image unchanged",
   "approval_status": "CANDIDATE",
   "visual_approval_status": "APPROVED",
-  "photographic_origin": "PENDING_OWNER_CONFIRMATION",
+  "photographic_origin": "OWNER_CONFIRMED_PHOTO",
   "rights_verification_status": "OWNER_CONFIRMED_PERMISSION",
   "rights_evidence": "Owner stated: \"I own this image and fully approve it.\" Owner-confirmed, not independently documented.",
-  "photographic_origin_evidence": "Photographic origin has not been separately confirmed.",
-  "visual_approval_evidence": "Owner stated: \"Here i uploaded a version of the baby eggplant image that has a white background... i own this image and fully approve it\" (2026-11-15).",
-  "production_status": "PENDING_PICKLIST_IDENTITY_AND_PHOTOGRAPHIC_ORIGIN",
-  "note": "Staged for the future exact PLU 4500 / Baby Eggplant identity. Not a production assignment, public reuse licence or approval for any other identity."
+  "photographic_origin_evidence": "Owner confirmed this and the Macintosh apple image are photographs and that all details were verified (2026-11-15).",
+  "visual_approval_evidence": "Owner stated: \"Here i uploaded a version of the baby eggplant image that has a white background... i own this image and fully approve it\" and reaffirmed full approval after verifying everything (2026-11-15).",
+  "production_status": "PREAPPROVED_PENDING_PICKLIST_IDENTITY",
+  "note": "Owner pre-approved the exact future PLU 4500 / Baby Eggplant identity. It is not assigned to a WorkingList record, public reuse licence or any other identity."
 }

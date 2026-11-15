@@ -80,13 +80,16 @@ class UsedImageLibraryChecks(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "association checksum mismatch"):
             check_used_library(self.root)
 
-    def test_owner_candidate_waits_for_one_exact_included_working_identity(self):
+    def test_preapproved_owner_candidate_requires_one_exact_included_identity(self):
         source = self.root / "data/review-references/owner-alternates/4500-baby-eggplant.jpg"
         source.parent.mkdir(parents=True)
         source.write_bytes(self.content)
         source_sha = digest(self.content)
         (source.with_suffix(source.suffix + ".json")).write_text(json.dumps(dict(
             plu="4500", product="Baby Eggplant", sha256=source_sha,
+            visual_approval_status="APPROVED",
+            photographic_origin="OWNER_CONFIRMED_PHOTO",
+            rights_status="OWNER_CONFIRMED_PERMISSION",
         )))
         path, rendered, _ = jpeg_copy(self.root, self.content)
         metadata_path = path.with_suffix(".jpg.json")
@@ -94,16 +97,25 @@ class UsedImageLibraryChecks(unittest.TestCase):
         metadata.update(
             owner_candidate_id="owner-4500-baby-eggplant",
             candidate_plu="4500", candidate_product="Baby Eggplant",
+            visual_approval_status="APPROVED",
+            photographic_origin_status="OWNER_CONFIRMED_PHOTO",
+            rights_status="OWNER_CONFIRMED_PERMISSION",
         )
         metadata_path.write_text(json.dumps(metadata))
         library = self.root / "sources/image-library"
         row = dict(
             candidate_id="owner-4500-baby-eggplant", plu="4500", product="Baby Eggplant",
             source_image=str(source.relative_to(self.root)), source_sha256=source_sha,
+            original_source_image=str(source.relative_to(self.root)),
+            original_source_sha256=source_sha, organic=False,
             library_image=str(path.relative_to(self.root)), library_sha256=digest(rendered),
             library_source_sha256=source_sha,
-            visual_approval_status="APPROVED", library_approval_status="NOT_APPROVED",
-            production_status="PENDING_WORKINGLIST_IDENTITY",
+            visual_approval_status="APPROVED",
+            photographic_origin_status="OWNER_CONFIRMED_PHOTO",
+            rights_status="OWNER_CONFIRMED_PERMISSION",
+            preapproval_status="APPROVED_FOR_EXACT_PLU_PRODUCT",
+            library_approval_status="PREAPPROVED",
+            production_status="PREAPPROVED_PENDING_PICKLIST_IDENTITY",
         )
         (library / OWNER_CANDIDATES).write_text(json.dumps([row]))
         (library / "WORKING_LIST_IMAGES.json").write_text("[]")
@@ -117,8 +129,8 @@ class UsedImageLibraryChecks(unittest.TestCase):
         candidates = [item for item in inventory if item.get("candidate_id") == row["candidate_id"]]
         self.assertEqual(len(candidates), 1)
         self.assertEqual(candidates[0]["source_id"], "new-source-id")
-        self.assertEqual(candidates[0]["tier"], "REVIEWED")
-        self.assertEqual(candidates[0]["library_approval_status"], "NOT_APPROVED")
+        self.assertEqual(candidates[0]["tier"], "APPROVED")
+        self.assertEqual(candidates[0]["library_approval_status"], "APPROVED")
 
         different = dict(matching, name="Eggplant Baby")
         with patch("working_list.read_working_list", return_value=([different], "source-hash")):
@@ -130,6 +142,15 @@ class UsedImageLibraryChecks(unittest.TestCase):
             self.assertFalse(any(
                 item.get("candidate_id") == row["candidate_id"] for item in local_inventory(self.root)
             ))
+        row["source_identity_id"] = matching["source_id"]
+        (library / OWNER_CANDIDATES).write_text(json.dumps([row]))
+        with patch("working_list.read_working_list", return_value=(ambiguous, "source-hash")):
+            pinned = [
+                item for item in local_inventory(self.root)
+                if item.get("candidate_id") == row["candidate_id"]
+            ]
+        self.assertEqual(len(pinned), 1)
+        self.assertEqual(pinned[0]["source_id"], matching["source_id"])
         self.assertEqual(len(check_used_library(self.root)), 1)
 
     def previous_library(self):

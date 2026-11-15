@@ -161,8 +161,31 @@ def check_used_library(root, directory=None):
                         (row["plu"], row["product"])
                         or metadata.get("owner_candidate_id") != row["candidate_id"]
                         or metadata.get("candidate_plu") != row["plu"]
-                        or metadata.get("candidate_product") != row["product"]):
+                        or metadata.get("candidate_product") != row["product"]
+                        or metadata["rendering"].get("organic") != row.get("organic", False)):
                     raise ValueError(f"owner candidate identity mismatch: {source}")
+                original = Path(root) / row.get("original_source_image", row["source_image"])
+                original_sha = row.get("original_source_sha256", row["source_sha256"])
+                if original != source:
+                    original_metadata_path = original.with_suffix(original.suffix + ".json")
+                    if (original.is_symlink() or not original.is_file()
+                            or digest(original.read_bytes()) != original_sha
+                            or original_metadata_path.is_symlink()
+                            or not original_metadata_path.is_file()):
+                        raise ValueError(f"owner candidate original checksum mismatch: {original}")
+                    original_metadata = json.loads(original_metadata_path.read_text())
+                    if (original_metadata.get("sha256") != original_sha
+                            or (original_metadata.get("plu"), original_metadata.get("product")) !=
+                            (row["plu"], row["product"])):
+                        raise ValueError(f"owner candidate original identity mismatch: {original}")
+                if row.get("preapproval_status") == "APPROVED_FOR_EXACT_PLU_PRODUCT" and (
+                        row.get("visual_approval_status") != "APPROVED"
+                        or row.get("photographic_origin_status") != "OWNER_CONFIRMED_PHOTO"
+                        or row.get("rights_status") != "OWNER_CONFIRMED_PERMISSION"
+                        or source_metadata.get("visual_approval_status") != "APPROVED"
+                        or source_metadata.get("photographic_origin") != "OWNER_CONFIRMED_PHOTO"
+                        or source_metadata.get("rights_status") != "OWNER_CONFIRMED_PERMISSION"):
+                    raise ValueError(f"incomplete owner preapproval: {row['candidate_id']}")
     return paths
 
 
@@ -241,14 +264,23 @@ def local_inventory(root):
             matches = [
                 item for item in current.values()
                 if item["included"] and item["plu"] == row["plu"] and item["name"] == row["product"]
+                and (not row.get("source_identity_id")
+                     or item["source_id"] == row["source_identity_id"])
             ]
             if len(matches) != 1:
                 continue
             path = root / row["library_image"]
             metadata = json.loads(path.with_suffix(".jpg.json").read_text())
+            preapproved = (
+                row.get("preapproval_status") == "APPROVED_FOR_EXACT_PLU_PRODUCT"
+                and row.get("visual_approval_status") == "APPROVED"
+                and row.get("photographic_origin_status") == "OWNER_CONFIRMED_PHOTO"
+                and row.get("rights_status") == "OWNER_CONFIRMED_PERMISSION"
+            )
             options.append(dict(
-                row, source_id=matches[0]["source_id"], tier="REVIEWED",
-                library_approval_status="NOT_APPROVED",
+                row, source_id=matches[0]["source_id"],
+                tier="APPROVED" if preapproved else "REVIEWED",
+                library_approval_status="APPROVED" if preapproved else "NOT_APPROVED",
                 image_status="OWNER_SUPPLIED_CANDIDATE",
                 path=path, provenance=metadata,
             ))

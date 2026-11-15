@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "plu": "94153",
+  "product": "Organic McIntosh Apples",
+  "working_list_id": "0d248ba7b6d294eb1ef4768a4c3196aa61ba90ab1147c903b1f0a224cda92657",
+  "source_identity_ids": [
+    "0d248ba7b6d294eb1ef4768a4c3196aa61ba90ab1147c903b1f0a224cda92657"
+  ],
+  "source_reference": "Derived from owner-uploaded Organic_Macintosh_Apple.jpg",
+  "creator": "Owner-provided photograph",
+  "source_page_url": "",
+  "original_image_url": "",
+  "width": 1254,
+  "height": 1254,
+  "sha256": "4c3129fbb722775df188a4e03aa5cea007387cf4fabafbeafaa8c1b15eabf833",
+  "original_image_sha256": "91d56ee00d510c6a6157ceb9ef13f09ef3a8f320e46bcdff3c5dc786115813a8",
+  "license": "OWNER_CONFIRMED_PERMISSION",
+  "rights_status": "OWNER_CONFIRMED_PERMISSION",
+  "attribution": "Owner-provided photograph; owner-confirmed permission. No public reuse licence is asserted.",
+  "changes": "Connected near-black background removed to transparency; original image remains unchanged.",
+  "approval_status": "CANDIDATE",
+  "visual_approval_status": "APPROVED",
+  "photographic_origin": "OWNER_CONFIRMED_PHOTO",
+  "rights_verification_status": "OWNER_CONFIRMED_PERMISSION",
+  "rights_evidence": "Owner confirmed they own this image and fully approve its use (2026-11-15). Owner-confirmed, not independently documented.",
+  "photographic_origin_evidence": "Owner confirmed this and the baby eggplant image are photographs and that all details were verified (2026-11-15).",
+  "visual_approval_evidence": "Owner stated: \"fully approve this organic Macintosh Apple image\" and confirmed ownership and verification (2026-11-15).",
+  "preapproval_status": "APPROVED_FOR_EXACT_PLU_PRODUCT",
+  "production_status": "PREAPPROVED_FOR_EXACT_PLU_PRODUCT",
+  "note": "Preapproved for the exact WorkingList identity PLU 94153 / Organic McIntosh Apples only."
+}
