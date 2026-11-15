@@ -24,7 +24,7 @@ from build_till_binders import (BULK_SHEETS, CONVERSIONS_ACCURACY_REVIEW, CONVER
                                docx_compatible_image,
                                map_images, produce_catalog, quick_sheet, replace_produce, replace_sheet,
                                sha, sheet_info, stretch_sheet, theme_conversions_sheet, themed_directory_image, validate_package, visual_records, workbook_photo_copy)
-from picklist_catalog import read_picklist, read_assignments
+from picklist_catalog import read_picklist, read_assignments, write_record_baseline
 from review_image_references import load_references
 from review_booklets import build_review_booklets, build_working_list_review
 from organic_watermarks import render_watermark
@@ -346,6 +346,8 @@ class TillBinderChecks(unittest.TestCase):
             ("00050", "=Unusual Apple", True, False),
         ])
         self.items, self.digest = read_picklist(self.root / "sources/plu/PickList.xml")
+        write_record_baseline(
+            self.root / "data/picklist_record_baseline.json", self.items, self.digest)
         (self.root / "data/working_list_decisions.json").write_text(json.dumps(dict(
             schema_version=1, baseline_source_sha256=self.digest,
             baseline=[dict(source_id=item["source_id"], plu=item["plu"], name=item["name"],

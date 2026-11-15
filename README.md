@@ -31,6 +31,8 @@ The last published booklets remain intact while the updated binder awaits produc
 
 Owner-provided duplicate PLU classifications and canonical-name recommendations are recorded in [the review CSV](outputs/review-booklets/DUPLICATE_PLU_CLASSIFICATIONS.csv) and [the decision summary](outputs/review-booklets/DUPLICATE_PLU_CLASSIFICATION_REVIEW.md), pinned to exact source identities in `data/working_list_decisions.json`. Applied decisions change only `WorkingList.xml` and review booklets. `PickList.xml` is immutable; every original record and its identity are retained in the reconciliation audit.
 
+`data/picklist_record_baseline.json` records each PickList record's logical identity, source position and SHA-256 fingerprint of its complete semantic XML subtree. PickList has no stable per-record ID beyond its product fields, so repeated logical records receive occurrence-qualified identities; formatting and encoding changes do not affect their fingerprints. Changed, new and removed records are listed in `outputs/reports/PICKLIST_RECORD_CHANGES.csv`, and changed source records block existing decisions and image assignments. Review this report before updating the fingerprint baseline or owner decisions; never refresh the baseline merely to clear a blocker. The reconciliation audit retains the original XML records, including hidden and deleted entries.
+
 ## Updating the complete till binder
 
 `tools/build_till_binders.py` creates one photo-inclusive **complete binder**, replacing its Time To Stretch, Produce and Deli sections and combining the four Bulk sheets. The editable workbook is `Complete Till Binder - Updated - Photos.xlsx`; `--verify-print` also supplies a PDF of that same binder, not a second edition.

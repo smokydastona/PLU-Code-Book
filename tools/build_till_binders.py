@@ -707,6 +707,22 @@ def map_images(root, rows, assignments, visuals, update_library=True):
     legacy_records = legacy_entries(root)
     images, report = {}, []
     for row in rows:
+        if row.get("source_record_changed"):
+            report.append(dict(
+                source_id=row["source_id"],
+                source_identity_ids=";".join(row.get("source_ids", [])),
+                plu=row["plu"], product=row["name"],
+                image_status="SOURCE_RECORD_CHANGED_REVIEW", embedded=False,
+                image_source="", source_document="", source_member="",
+                original_sha256="", embedded_sha256="", width=0, height=0,
+                visual_verdict="", visual_review_note="",
+                rights_status="NOT_VERIFIED", photograph_status="NOT_VERIFIED",
+                organic_badge=False, reused_by_entries=0,
+                image_approval_status="NOT_APPROVED", approval_basis="",
+                legacy_entry_idx="", legacy_original_verdict="",
+                details="Source record fingerprint changed; prior image associations are not reused.",
+            ))
+            continue
         assignment = assignments.get(row["source_id"], {})
         legacy_record = legacy_approval(root, row, assignment, legacy_records)
         record = dict(

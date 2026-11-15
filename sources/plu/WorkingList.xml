@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<PickList SourceSHA256="38732869b0e7b1c8ccb0b6189a8685a1125595ebcc9ded4e9cc48d18d6ea8727" DecisionRegistrySHA256="3c8b787ec1a4b23b4dcaaaf34b9052245c2eb4529a17c2d191253d6011b3bac0" WorkingListSchema="1">
+<PickList SourceSHA256="38732869b0e7b1c8ccb0b6189a8685a1125595ebcc9ded4e9cc48d18d6ea8727" DecisionRegistrySHA256="3c8b787ec1a4b23b4dcaaaf34b9052245c2eb4529a17c2d191253d6011b3bac0" RecordBaselineSHA256="b3638bd03e75eaa1651f566fee5c9437f73394b17dd07d02f427178fa3303168" WorkingListSchema="1">
   <Items>
     <Item UPC="4545" WorkingId="1b75ad8f317eac2a906c9ad4976dcb157f7e5f0be8a69142d879716a510ae968" SourceIdentityIds="1b75ad8f317eac2a906c9ad4976dcb157f7e5f0be8a69142d879716a510ae968" DecisionId="" ClassificationSourceId="1b75ad8f317eac2a906c9ad4976dcb157f7e5f0be8a69142d879716a510ae968" WorkingStatus="UNCHANGED_SOURCE_IDENTITY" WorkingDetails="">
       <Pictures>

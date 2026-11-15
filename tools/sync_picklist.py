@@ -110,10 +110,17 @@ def reconcile(root, output):
         if not item["included"]:
             continue
         active_ids.add(item["source_id"])
-        assignment = assignments.get(item["source_id"])
-        legacy_record = legacy_approval(root, item, assignment, legacy_records)
-        classification_assignment = assignments.get(item["classification_source_id"]) or assignment
+        source_assignment = assignments.get(item["source_id"])
+        source_record_changed = item.get("source_record_changed", False)
+        assignment = None if source_record_changed else source_assignment
+        legacy_record = (None if source_record_changed else
+                         legacy_approval(root, item, assignment, legacy_records))
+        classification_assignment = (None if source_record_changed else
+                                     assignments.get(item["classification_source_id"]) or
+                                     source_assignment)
         errors = []
+        if source_record_changed:
+            errors.append("SOURCE_RECORD_CHANGED_REVIEW")
         row = dict(item, book=classification_assignment["book"] if classification_assignment else "",
                    section=classification_assignment.get("section", "") if classification_assignment else "",
                    image=assignment.get("image", "") if assignment else "",
@@ -196,6 +203,7 @@ def reconcile(root, output):
                      reviewed_product=value.get("reviewed_product", ""))
                 for key, value in assignments.items() if key not in active_ids]
     fields = ["source_id", "source_ids", "source_positions", "source_position", "occurrence",
+              "logical_identity", "record_sha256", "source_record_status", "source_record_changed",
               "plu", "name", "department", "visible", "deleted", "included",
               "picture_references", "decision_id", "classification_source_id",
               "identity_changed", "working_list_status", "working_list_details"]

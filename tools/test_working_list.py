@@ -6,7 +6,7 @@ import unittest
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-from picklist_catalog import read_picklist
+from picklist_catalog import read_picklist, write_record_baseline
 from working_list import read_working_list, rebuild_working_list
 
 
@@ -27,6 +27,8 @@ class WorkingListChecks(unittest.TestCase):
             ("00043", "Pear", True),
         ])
         self.items, self.digest = read_picklist(self.source)
+        write_record_baseline(
+            self.root / "data/picklist_record_baseline.json", self.items, self.digest)
         self.write_registry([])
 
     def write_source(self, values):
@@ -145,6 +147,51 @@ class WorkingListChecks(unittest.TestCase):
         self.assertEqual(decision["status"], "APPLIED_WITH_ADDITIONAL_SOURCE_REVIEW")
         new_row = next(row for row in rows if row["name"] == "New Apple")
         self.assertEqual(new_row["working_list_status"], "NEW_OR_AMBIGUOUS_PLU_IDENTITY_REVIEW")
+
+    def test_non_identity_source_field_change_blocks_decision_reuse(self):
+        self.write_registry([self.merge_decision()])
+        root = ET.parse(self.source).getroot()
+        root.find("./Items/Item[2]").set("VendorCode", "changed")
+        self.source.write_bytes(ET.tostring(root, encoding="utf-16"))
+
+        rows, _, summary = rebuild_working_list(self.root, self.audit)
+        decision = next(row for row in summary["decisions"] if row["decision_id"] == "00042")
+        self.assertEqual(decision["status"], "DECISION_SOURCE_RECORD_CHANGED_REVIEW")
+        self.assertEqual([row["name"] for row in rows if row["plu"] == "00042"],
+                         ["Apple Red Prince", "Kiwi Small"])
+        self.assertEqual(summary["source_records_with_changed_fingerprints"], 1)
+        working, _ = read_working_list(self.root)
+        changed = next(row for row in working if row["name"] == "Kiwi Small")
+        self.assertTrue(changed["source_record_changed"])
+        self.assertEqual(changed["source_record_status"], "SOURCE_RECORD_CHANGED_REVIEW")
+
+    def test_removed_baseline_identity_is_reported_as_orphaned(self):
+        self.write_source([
+            ("00042", "Apple Red Prince", True),
+            ("00042", "Kiwi Small", True),
+        ])
+        _, _, summary = rebuild_working_list(self.root, self.audit)
+        self.assertEqual(summary["orphaned_record_baseline_identities"], 1)
+        with (self.audit / "PICKLIST_RECORD_CHANGES.csv").open(
+                encoding="utf-8-sig", newline="") as file:
+            report = list(csv.DictReader(file))
+        removed = [row for row in report if row["status"] == "SOURCE_IDENTITY_REMOVED_REVIEW"]
+        self.assertEqual(len(removed), 1)
+        self.assertEqual(removed[0]["plu"], "00043")
+
+    def test_invalid_selected_source_ids_are_rejected(self):
+        decision = self.merge_decision()
+        decision["selected_source_ids"] = ["f" * 64]
+        self.write_registry([decision])
+        with self.assertRaisesRegex(ValueError, "selected_source_ids must be a unique subset"):
+            rebuild_working_list(self.root, self.audit)
+
+    def test_conflicting_decisions_for_same_plu_are_rejected(self):
+        decision = self.merge_decision()
+        conflict = dict(decision, canonical_name="Different Apple")
+        self.write_registry([decision, conflict])
+        with self.assertRaisesRegex(ValueError, "conflicting duplicate WorkingList decision"):
+            rebuild_working_list(self.root, self.audit)
 
     def test_stale_working_list_is_rejected_after_source_change(self):
         rebuild_working_list(self.root, self.audit)

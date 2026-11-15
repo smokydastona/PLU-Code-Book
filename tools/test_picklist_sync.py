@@ -14,7 +14,7 @@ from docx import Document
 from PIL import Image
 from openpyxl import load_workbook
 
-from picklist_catalog import read_assignments, read_picklist
+from picklist_catalog import read_assignments, read_picklist, write_record_baseline
 from sync_picklist import (BOOKS, build_documents, original_image, reconcile,
                            reviewed_image, safe_asset, booklet_order, verify_pdfs,
                            build_workbooks, verify_workbooks)
@@ -80,6 +80,9 @@ class PickListSyncChecks(unittest.TestCase):
             json.dumps(dict(schema_version=1, assignments=rows)), encoding="utf-8")
 
     def write_registry(self, items, decisions=None):
+        baseline_path = self.root / "data/picklist_record_baseline.json"
+        baseline_path.unlink(missing_ok=True)
+        write_record_baseline(baseline_path, items, self.digest)
         baseline = [dict(source_id=row["source_id"], plu=row["plu"], name=row["name"],
                          department=row["department"], occurrence=row["occurrence"],
                          visible=row["visible"], deleted=row["deleted"]) for row in items]
@@ -109,10 +112,38 @@ class PickListSyncChecks(unittest.TestCase):
 
     def test_reordering_and_encoding_changes_do_not_break_identity(self):
         self.write_source([("1", "Apple", True), ("2", "Pear", True)])
-        before = {item["plu"]: item["source_id"] for item in read_picklist(self.source)[0]}
+        before = {item["plu"]: (item["source_id"], item["record_sha256"])
+                  for item in read_picklist(self.source)[0]}
         self.write_source([("2", "Pear", True), ("1", "Apple", True)], utf16=False)
-        after = {item["plu"]: item["source_id"] for item in read_picklist(self.source)[0]}
+        after = {item["plu"]: (item["source_id"], item["record_sha256"])
+                 for item in read_picklist(self.source)[0]}
         self.assertEqual(before, after)
+
+    def test_formatting_does_not_change_record_fingerprint(self):
+        self.write_source([("00042", "Owner Name", True)])
+        before = read_picklist(self.source)[0][0]
+        formatted = (
+            '<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<PickList>\n  <Items>\n    <Item UPC="00042">\n'
+            '      <Department>001</Department>\n'
+            '      <IsVisible>True</IsVisible>\n'
+            '      <DeleteThisItem>False</DeleteThisItem>\n'
+            '      <Languages><Language LCID="0409"><Description>Owner Name</Description>'
+            '</Language></Languages>\n'
+            '    </Item>\n  </Items>\n</PickList>\n'
+        )
+        self.source.write_text(formatted, encoding="utf-8")
+        after = read_picklist(self.source)[0][0]
+        self.assertEqual(before["source_id"], after["source_id"])
+        self.assertEqual(before["record_sha256"], after["record_sha256"])
+
+    def test_missing_required_source_element_is_rejected(self):
+        self.write_source([("00042", "Apple", True)])
+        root = ET.parse(self.source).getroot()
+        root.find("./Items/Item").remove(root.find("./Items/Item/DeleteThisItem"))
+        self.source.write_bytes(ET.tostring(root, encoding="utf-16"))
+        with self.assertRaisesRegex(ValueError, "missing or ambiguous required source fields"):
+            read_picklist(self.source)
 
     def test_new_and_renamed_products_are_not_automatically_approved(self):
         self.write_source([
@@ -153,6 +184,17 @@ class PickListSyncChecks(unittest.TestCase):
         self.assertEqual(summary["reconciliation_review_records"], 1)
         self.assertEqual(summary["status"], "BLOCKED")
 
+    def test_changed_source_record_does_not_reuse_image_or_classification(self):
+        root = ET.parse(self.source).getroot()
+        root.find("./Items/Item").set("VendorCode", "changed")
+        self.source.write_bytes(ET.tostring(root, encoding="utf-16"))
+        rows, _, _, summary = reconcile(self.root, self.output)
+        self.assertIn("SOURCE_RECORD_CHANGED_REVIEW", rows[0]["blockers"])
+        self.assertIn("APPROVED_IMAGE_REQUIRED", rows[0]["blockers"])
+        self.assertIn("CLASSIFICATION_REQUIRED", rows[0]["blockers"])
+        self.assertEqual(rows[0]["image"], "")
+        self.assertEqual(summary["status"], "BLOCKED")
+
     def test_removed_decision_sources_block_even_without_a_current_matching_record(self):
         self.write_source([
             ("03283", "Honeycrisp Apple", True), ("42", "Pear", True),
@@ -162,6 +204,7 @@ class PickListSyncChecks(unittest.TestCase):
         self.write_registry(items, [dict(
             plu="03283", source_ids=[items[0]["source_id"]],
             canonical_name="Honeycrisp Apple", mode="STANDARDIZE",
+            condition="Test source identity decision",
         )])
         self.write_assignments([self.approved_assignment(items[1])])
         self.write_source([("42", "Pear", True)])
@@ -178,6 +221,7 @@ class PickListSyncChecks(unittest.TestCase):
             ("46", "Deleted", True, True),
         ])
         items, _ = read_picklist(self.source)
+        self.register_current_source(items)
         code_only = self.approved_assignment(items[3])
         code_only.update(book="Non-produce", image="", image_mode="CODE_ONLY",
                          code_only_approved=True)
@@ -244,6 +288,7 @@ class PickListSyncChecks(unittest.TestCase):
     def test_duplicate_photos_across_conventional_entries_block_build(self):
         self.write_source([("03283", "Honeycrisp Apple", True), ("42", "Other Apple", True)])
         items, _ = read_picklist(self.source)
+        self.register_current_source(items)
         self.write_assignments([self.approved_assignment(item) for item in items])
         rows, _, _, summary = reconcile(self.root, self.output)
         self.assertEqual(summary["status"], "BLOCKED")
@@ -348,6 +393,7 @@ class PickListSyncChecks(unittest.TestCase):
             ("00043", "Honeycrisp Apple Small", True),
         ])
         items, _ = read_picklist(self.source)
+        self.register_current_source(items)
         assignments = [self.approved_assignment(item) for item in items]
         assignments[0]["section"] = "Organic Fruit"
         self.write_assignments(assignments)
@@ -829,6 +875,16 @@ class PickListSyncChecks(unittest.TestCase):
         self.write_source([])
         with self.assertRaisesRegex(ValueError, "contains no items"):
             read_picklist(self.source)
+
+    def test_assignment_registry_rejects_missing_identity_and_malformed_fields(self):
+        for assignment, message in (
+                (dict(self.assignment, source_id=""), "missing or invalid source_id"),
+                (dict(self.assignment, image_mode="UNKNOWN"), "unsupported or missing image_mode"),
+                (dict(self.assignment, image=[]), "image must be a string")):
+            with self.subTest(message=message):
+                self.write_assignments([assignment])
+                with self.assertRaisesRegex(ValueError, message):
+                    read_assignments(self.root / "data/picklist_assignments.json")
 
     def test_paths_outside_repository_are_not_accepted(self):
         with self.assertRaisesRegex(ValueError, "out-of-repository"):
