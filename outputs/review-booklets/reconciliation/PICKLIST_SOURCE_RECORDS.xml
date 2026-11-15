@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<PickListSourceAudit SourceSHA256="462db3121094008cd1dd5ea2c5836ca4b24de077edb8982c0f43149edbaf2cbb" DecisionRegistrySHA256="4d44564be1c0a8dcad496b14f482a88d6b6eb54e70b4c6945698426c4b8add6b">
+<PickListSourceAudit SourceSHA256="462db3121094008cd1dd5ea2c5836ca4b24de077edb8982c0f43149edbaf2cbb" DecisionRegistrySHA256="3c8b787ec1a4b23b4dcaaaf34b9052245c2eb4529a17c2d191253d6011b3bac0">
   <Records>
     <SourceRecord SourceIdentityId="1b75ad8f317eac2a906c9ad4976dcb157f7e5f0be8a69142d879716a510ae968" SourcePosition="1" WorkingId="1b75ad8f317eac2a906c9ad4976dcb157f7e5f0be8a69142d879716a510ae968" Disposition="UNCHANGED_ORIGINAL_RECORD" DecisionId="" ReviewStatus="UNCHANGED_SOURCE_IDENTITY">
       <Item UPC="4545">
@@ -8227,7 +8227,7 @@
         </Languages>
       </Item>
     </SourceRecord>
-    <SourceRecord SourceIdentityId="11708d7532a1b588bd7ceed66d1504c9d9e0bcede00bc796db8ced3e28a5fe5a" SourcePosition="97" WorkingId="11708d7532a1b588bd7ceed66d1504c9d9e0bcede00bc796db8ced3e28a5fe5a" Disposition="UNCHANGED_ORIGINAL_RECORD" DecisionId="" ReviewStatus="WORKING_LIST_REVIEW_REQUIRED">
+    <SourceRecord SourceIdentityId="11708d7532a1b588bd7ceed66d1504c9d9e0bcede00bc796db8ced3e28a5fe5a" SourcePosition="97" WorkingId="4fcf219af06c88ca404f2f139bac665f13fc16af8ef3d940d9d9ee6a120f6dad" Disposition="STANDARDIZED_WORKING_ENTRY" DecisionId="94093" ReviewStatus="APPLIED_TO_EXACT_SOURCE_IDENTITIES">
       <Item UPC="94093">
         <Pictures>
           <Picture Resolution="1024" ID="1">10x7_ORGANIC_ONIONSYELLOW.JPG</Picture>
@@ -34144,7 +34144,7 @@
         </Languages>
       </Item>
     </SourceRecord>
-    <SourceRecord SourceIdentityId="b6b19d88a0e68eb9b04628ab578ecb8fb926e18a9ae4c87c6f4488fd6815212f" SourcePosition="402" WorkingId="b6b19d88a0e68eb9b04628ab578ecb8fb926e18a9ae4c87c6f4488fd6815212f" Disposition="UNCHANGED_ORIGINAL_RECORD" DecisionId="" ReviewStatus="WORKING_LIST_REVIEW_REQUIRED">
+    <SourceRecord SourceIdentityId="b6b19d88a0e68eb9b04628ab578ecb8fb926e18a9ae4c87c6f4488fd6815212f" SourcePosition="402" WorkingId="" Disposition="EXCLUDED_DUPLICATE_PLU_REMOVED" DecisionId="94093" ReviewStatus="APPLIED_TO_EXACT_SOURCE_IDENTITIES">
       <Item UPC="94093">
         <Pictures>
           <Picture Resolution="1024" ID="1">10x7_ORGANIC_ONIONSYELLOW.JPG</Picture>
@@ -34229,7 +34229,7 @@
         </Languages>
       </Item>
     </SourceRecord>
-    <SourceRecord SourceIdentityId="b5e39636e13a7c81a65dc15a4145ab93e32a2daa902d2f86a34151dbf20e16d0" SourcePosition="403" WorkingId="b5e39636e13a7c81a65dc15a4145ab93e32a2daa902d2f86a34151dbf20e16d0" Disposition="UNCHANGED_ORIGINAL_RECORD" DecisionId="" ReviewStatus="UNCHANGED_SOURCE_IDENTITY">
+    <SourceRecord SourceIdentityId="b5e39636e13a7c81a65dc15a4145ab93e32a2daa902d2f86a34151dbf20e16d0" SourcePosition="403" WorkingId="" Disposition="EXCLUDED_DUPLICATE_PLU_REMOVED" DecisionId="94093" ReviewStatus="APPLIED_TO_EXACT_SOURCE_IDENTITIES">
       <Item UPC="94665">
         <Pictures>
           <Picture Resolution="1024" ID="1">10x7_ORGANIC_ONIONSYELLOW.JPG</Picture>
@@ -58853,7 +58853,7 @@
         </Languages>
       </Item>
     </SourceRecord>
-    <SourceRecord SourceIdentityId="217496304da3acdf75bbae91f7f83e2948a869565f5920f5e1c3dd4bf868c240" SourcePosition="692" WorkingId="217496304da3acdf75bbae91f7f83e2948a869565f5920f5e1c3dd4bf868c240" Disposition="UNCHANGED_ORIGINAL_RECORD" DecisionId="" ReviewStatus="UNCHANGED_SOURCE_IDENTITY">
+    <SourceRecord SourceIdentityId="217496304da3acdf75bbae91f7f83e2948a869565f5920f5e1c3dd4bf868c240" SourcePosition="692" WorkingId="af5a56b9589179d0a595ab7e7fcf1cf48b25312be36c13fcb027f53b99a278a1" Disposition="STANDARDIZED_WORKING_ENTRY" DecisionId="4093" ReviewStatus="APPLIED_TO_EXACT_SOURCE_IDENTITIES">
       <Item UPC="4093">
         <Pictures>
           <Picture Resolution="1024" ID="1">10x7_ONIONSYELLOW.jpg</Picture>
