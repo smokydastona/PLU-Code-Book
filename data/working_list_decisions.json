@@ -7667,17 +7667,18 @@
     {
       "plu": "94093",
       "classification": "Standardize",
-      "recommendation": "Organic Yellow Spanish Onion",
-      "canonical_name": "Organic Yellow Spanish Onion",
-      "mode": "PENDING",
+      "recommendation": "Organic Yellow (Spanish) Onion",
+      "canonical_name": "Organic Yellow (Spanish) Onion",
+      "mode": "SELECT",
       "source_ids": [
         "11708d7532a1b588bd7ceed66d1504c9d9e0bcede00bc796db8ced3e28a5fe5a",
-        "b6b19d88a0e68eb9b04628ab578ecb8fb926e18a9ae4c87c6f4488fd6815212f"
+        "b6b19d88a0e68eb9b04628ab578ecb8fb926e18a9ae4c87c6f4488fd6815212f",
+        "b5e39636e13a7c81a65dc15a4145ab93e32a2daa902d2f86a34151dbf20e16d0"
       ],
       "selected_source_ids": [
-        "11708d7532a1b588bd7ceed66d1504c9d9e0bcede00bc796db8ced3e28a5fe5a",
-        "b6b19d88a0e68eb9b04628ab578ecb8fb926e18a9ae4c87c6f4488fd6815212f"
+        "11708d7532a1b588bd7ceed66d1504c9d9e0bcede00bc796db8ced3e28a5fe5a"
       ],
+      "excluded_source_disposition": "EXCLUDED_DUPLICATE_PLU_REMOVED",
       "source_records": [
         {
           "source_id": "11708d7532a1b588bd7ceed66d1504c9d9e0bcede00bc796db8ced3e28a5fe5a",
@@ -7690,10 +7691,16 @@
           "name": "Organic Onion Spanish",
           "department": "1",
           "occurrence": 1
+        },
+        {
+          "source_id": "b5e39636e13a7c81a65dc15a4145ab93e32a2daa902d2f86a34151dbf20e16d0",
+          "name": "Organic Onion Yellow",
+          "department": "1",
+          "occurrence": 1
         }
       ],
-      "owner_review_outcome": "",
-      "condition": "Standardization requires supplier confirmation; keep original source records unchanged."
+      "owner_review_outcome": "OWNER_CONFIRMED_PRODUCT",
+      "condition": "Owner removes duplicate 94093 Organic Onion Spanish and 94665 Organic Onion Yellow; keeps 94093 as Organic Yellow (Spanish) Onion"
     },
     {
       "plu": "94153",
@@ -8064,6 +8071,29 @@
       ],
       "owner_review_outcome": "OWNER_CONFIRMED_INTENDED_PRODUCT",
       "condition": "Owner confirms organic white potatoes are intended"
+    },
+    {
+      "plu": "4093",
+      "classification": "Standardize",
+      "recommendation": "Yellow (Spanish) Onion",
+      "canonical_name": "Yellow (Spanish) Onion",
+      "mode": "SELECT",
+      "source_ids": [
+        "217496304da3acdf75bbae91f7f83e2948a869565f5920f5e1c3dd4bf868c240"
+      ],
+      "selected_source_ids": [
+        "217496304da3acdf75bbae91f7f83e2948a869565f5920f5e1c3dd4bf868c240"
+      ],
+      "source_records": [
+        {
+          "source_id": "217496304da3acdf75bbae91f7f83e2948a869565f5920f5e1c3dd4bf868c240",
+          "name": "Onion Yellow",
+          "department": "001",
+          "occurrence": 1
+        }
+      ],
+      "owner_review_outcome": "OWNER_CONFIRMED_PRODUCT",
+      "condition": "Owner renames 4093 Onion Yellow to Yellow (Spanish) Onion"
     }
   ]
 }

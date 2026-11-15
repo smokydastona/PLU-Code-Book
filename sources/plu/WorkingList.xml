@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<PickList SourceSHA256="462db3121094008cd1dd5ea2c5836ca4b24de077edb8982c0f43149edbaf2cbb" DecisionRegistrySHA256="4d44564be1c0a8dcad496b14f482a88d6b6eb54e70b4c6945698426c4b8add6b" WorkingListSchema="1">
+<PickList SourceSHA256="462db3121094008cd1dd5ea2c5836ca4b24de077edb8982c0f43149edbaf2cbb" DecisionRegistrySHA256="3c8b787ec1a4b23b4dcaaaf34b9052245c2eb4529a17c2d191253d6011b3bac0" WorkingListSchema="1">
   <Items>
     <Item UPC="4545" WorkingId="1b75ad8f317eac2a906c9ad4976dcb157f7e5f0be8a69142d879716a510ae968" SourceIdentityIds="1b75ad8f317eac2a906c9ad4976dcb157f7e5f0be8a69142d879716a510ae968" DecisionId="" ClassificationSourceId="1b75ad8f317eac2a906c9ad4976dcb157f7e5f0be8a69142d879716a510ae968" WorkingStatus="UNCHANGED_SOURCE_IDENTITY" WorkingDetails="">
       <Pictures>
@@ -7620,7 +7620,7 @@
         </Language>
       </Languages>
     </Item>
-    <Item UPC="94093" WorkingId="11708d7532a1b588bd7ceed66d1504c9d9e0bcede00bc796db8ced3e28a5fe5a" SourceIdentityIds="11708d7532a1b588bd7ceed66d1504c9d9e0bcede00bc796db8ced3e28a5fe5a" DecisionId="" ClassificationSourceId="11708d7532a1b588bd7ceed66d1504c9d9e0bcede00bc796db8ced3e28a5fe5a" WorkingStatus="WORKING_LIST_REVIEW_REQUIRED" WorkingDetails="Standardization requires supplier confirmation; keep original source records unchanged.">
+    <Item UPC="94093" WorkingId="4fcf219af06c88ca404f2f139bac665f13fc16af8ef3d940d9d9ee6a120f6dad" SourceIdentityIds="11708d7532a1b588bd7ceed66d1504c9d9e0bcede00bc796db8ced3e28a5fe5a" DecisionId="94093" ClassificationSourceId="11708d7532a1b588bd7ceed66d1504c9d9e0bcede00bc796db8ced3e28a5fe5a" WorkingStatus="APPLIED_TO_EXACT_SOURCE_IDENTITIES" WorkingDetails="Owner removes duplicate 94093 Organic Onion Spanish and 94665 Organic Onion Yellow; keeps 94093 as Organic Yellow (Spanish) Onion">
       <Pictures>
         <Picture Resolution="1024" ID="1">10x7_ORGANIC_ONIONSYELLOW.JPG</Picture>
       </Pictures>
@@ -7698,7 +7698,7 @@
         <Language LCID="0409">
           <Categories>8</Categories>
           <SubCategories />
-          <Description>Organic Onions Yellow</Description>
+          <Description>Organic Yellow (Spanish) Onion</Description>
           <SortingString />
         </Language>
       </Languages>
@@ -31103,172 +31103,6 @@
         </Language>
       </Languages>
     </Item>
-    <Item UPC="94093" WorkingId="b6b19d88a0e68eb9b04628ab578ecb8fb926e18a9ae4c87c6f4488fd6815212f" SourceIdentityIds="b6b19d88a0e68eb9b04628ab578ecb8fb926e18a9ae4c87c6f4488fd6815212f" DecisionId="" ClassificationSourceId="b6b19d88a0e68eb9b04628ab578ecb8fb926e18a9ae4c87c6f4488fd6815212f" WorkingStatus="WORKING_LIST_REVIEW_REQUIRED" WorkingDetails="Standardization requires supplier confirmation; keep original source records unchanged.">
-      <Pictures>
-        <Picture Resolution="1024" ID="1">10x7_ORGANIC_ONIONSYELLOW.JPG</Picture>
-      </Pictures>
-      <Department>1</Department>
-      <IsQuantity>False</IsQuantity>
-      <IsQuickPickItem>False</IsQuickPickItem>
-      <IsPopular>False</IsPopular>
-      <IsVisible>True</IsVisible>
-      <DeleteThisItem>False</DeleteThisItem>
-      <IsZeroWeightItem>False</IsZeroWeightItem>
-      <IsTaxable>False</IsTaxable>
-      <IsExtra>False</IsExtra>
-      <Sounds />
-      <Languages>
-        <Language LCID="0413">
-          <Categories />
-          <SubCategories />
-          <Description />
-          <SortingString />
-        </Language>
-        <Language LCID="0C09">
-          <Categories />
-          <SubCategories />
-          <Description />
-          <SortingString />
-        </Language>
-        <Language LCID="1409">
-          <Categories />
-          <SubCategories />
-          <Description />
-          <SortingString />
-        </Language>
-        <Language LCID="0809">
-          <Categories />
-          <SubCategories />
-          <Description />
-          <SortingString />
-        </Language>
-        <Language LCID="040C">
-          <Categories />
-          <SubCategories />
-          <Description />
-          <SortingString />
-        </Language>
-        <Language LCID="0407">
-          <Categories />
-          <SubCategories />
-          <Description />
-          <SortingString />
-        </Language>
-        <Language LCID="0410">
-          <Categories />
-          <SubCategories />
-          <Description />
-          <SortingString />
-        </Language>
-        <Language LCID="080A">
-          <Categories />
-          <SubCategories />
-          <Description />
-          <SortingString />
-        </Language>
-        <Language LCID="0C0A">
-          <Categories />
-          <SubCategories />
-          <Description />
-          <SortingString />
-        </Language>
-        <Language LCID="0409">
-          <Categories>8</Categories>
-          <SubCategories />
-          <Description>Organic Onion Spanish</Description>
-          <SortingString />
-        </Language>
-        <Language LCID="0C0C">
-          <Categories />
-          <SubCategories />
-          <Description>Biologique - Oignon</Description>
-          <SortingString />
-        </Language>
-      </Languages>
-    </Item>
-    <Item UPC="94665" WorkingId="b5e39636e13a7c81a65dc15a4145ab93e32a2daa902d2f86a34151dbf20e16d0" SourceIdentityIds="b5e39636e13a7c81a65dc15a4145ab93e32a2daa902d2f86a34151dbf20e16d0" DecisionId="" ClassificationSourceId="b5e39636e13a7c81a65dc15a4145ab93e32a2daa902d2f86a34151dbf20e16d0" WorkingStatus="UNCHANGED_SOURCE_IDENTITY" WorkingDetails="">
-      <Pictures>
-        <Picture Resolution="1024" ID="1">10x7_ORGANIC_ONIONSYELLOW.JPG</Picture>
-      </Pictures>
-      <Department>1</Department>
-      <IsQuantity>False</IsQuantity>
-      <IsQuickPickItem>False</IsQuickPickItem>
-      <IsPopular>False</IsPopular>
-      <IsVisible>True</IsVisible>
-      <DeleteThisItem>False</DeleteThisItem>
-      <IsZeroWeightItem>False</IsZeroWeightItem>
-      <IsTaxable>False</IsTaxable>
-      <IsExtra>False</IsExtra>
-      <Sounds />
-      <Languages>
-        <Language LCID="0413">
-          <Categories />
-          <SubCategories />
-          <Description />
-          <SortingString />
-        </Language>
-        <Language LCID="0C09">
-          <Categories />
-          <SubCategories />
-          <Description />
-          <SortingString />
-        </Language>
-        <Language LCID="1409">
-          <Categories />
-          <SubCategories />
-          <Description />
-          <SortingString />
-        </Language>
-        <Language LCID="0809">
-          <Categories />
-          <SubCategories />
-          <Description />
-          <SortingString />
-        </Language>
-        <Language LCID="040C">
-          <Categories />
-          <SubCategories />
-          <Description />
-          <SortingString />
-        </Language>
-        <Language LCID="0407">
-          <Categories />
-          <SubCategories />
-          <Description />
-          <SortingString />
-        </Language>
-        <Language LCID="0410">
-          <Categories />
-          <SubCategories />
-          <Description />
-          <SortingString />
-        </Language>
-        <Language LCID="080A">
-          <Categories />
-          <SubCategories />
-          <Description />
-          <SortingString />
-        </Language>
-        <Language LCID="0C0A">
-          <Categories />
-          <SubCategories />
-          <Description />
-          <SortingString />
-        </Language>
-        <Language LCID="0409">
-          <Categories>8</Categories>
-          <SubCategories />
-          <Description>Organic Onion Yellow</Description>
-          <SortingString />
-        </Language>
-        <Language LCID="0C0C">
-          <Categories />
-          <SubCategories />
-          <Description>Biologique - Oignon Jaune</Description>
-          <SortingString />
-        </Language>
-      </Languages>
-    </Item>
     <Item UPC="94666" WorkingId="4d3da4c6dae2ae11d8ad956975ab6a6f519f1c9aea04c22ce00694039d1b74ff" SourceIdentityIds="4d3da4c6dae2ae11d8ad956975ab6a6f519f1c9aea04c22ce00694039d1b74ff" DecisionId="" ClassificationSourceId="4d3da4c6dae2ae11d8ad956975ab6a6f519f1c9aea04c22ce00694039d1b74ff" WorkingStatus="UNCHANGED_SOURCE_IDENTITY" WorkingDetails="">
       <Pictures>
         <Picture Resolution="1024" ID="1">10x7_ONIONSWHITE.jpg</Picture>
@@ -53313,7 +53147,7 @@
         </Language>
       </Languages>
     </Item>
-    <Item UPC="4093" WorkingId="217496304da3acdf75bbae91f7f83e2948a869565f5920f5e1c3dd4bf868c240" SourceIdentityIds="217496304da3acdf75bbae91f7f83e2948a869565f5920f5e1c3dd4bf868c240" DecisionId="" ClassificationSourceId="217496304da3acdf75bbae91f7f83e2948a869565f5920f5e1c3dd4bf868c240" WorkingStatus="UNCHANGED_SOURCE_IDENTITY" WorkingDetails="">
+    <Item UPC="4093" WorkingId="af5a56b9589179d0a595ab7e7fcf1cf48b25312be36c13fcb027f53b99a278a1" SourceIdentityIds="217496304da3acdf75bbae91f7f83e2948a869565f5920f5e1c3dd4bf868c240" DecisionId="4093" ClassificationSourceId="217496304da3acdf75bbae91f7f83e2948a869565f5920f5e1c3dd4bf868c240" WorkingStatus="APPLIED_TO_EXACT_SOURCE_IDENTITIES" WorkingDetails="Owner renames 4093 Onion Yellow to Yellow (Spanish) Onion">
       <Pictures>
         <Picture Resolution="1024" ID="1">10x7_ONIONSYELLOW.jpg</Picture>
       </Pictures>
@@ -53393,7 +53227,7 @@
         <Language LCID="0409">
           <Categories>4</Categories>
           <SubCategories />
-          <Description>Onion Yellow</Description>
+          <Description>Yellow (Spanish) Onion</Description>
           <SortingString>Spanish Onion</SortingString>
         </Language>
       </Languages>

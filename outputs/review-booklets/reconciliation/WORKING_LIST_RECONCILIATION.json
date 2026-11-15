@@ -2,14 +2,14 @@
   "source": "sources/plu/PickList.xml",
   "working_list": "sources/plu/WorkingList.xml",
   "source_sha256": "462db3121094008cd1dd5ea2c5836ca4b24de077edb8982c0f43149edbaf2cbb",
-  "decision_registry_sha256": "4d44564be1c0a8dcad496b14f482a88d6b6eb54e70b4c6945698426c4b8add6b",
+  "decision_registry_sha256": "3c8b787ec1a4b23b4dcaaaf34b9052245c2eb4529a17c2d191253d6011b3bac0",
   "source_records": 724,
-  "working_records": 672,
-  "merged_or_standardized_records": 48,
+  "working_records": 670,
+  "merged_or_standardized_records": 50,
   "excluded_conflicting_source_records": 6,
   "excluded_unconfirmed_equivalence_records": 1,
   "hidden_or_deleted_source_records": 76,
-  "review_required_records": 2,
+  "review_required_records": 0,
   "decisions": [
     {
       "decision_id": "3038",
@@ -193,8 +193,8 @@
     },
     {
       "decision_id": "94093",
-      "status": "PENDING_OWNER_CONDITION",
-      "details": "Standardization requires supplier confirmation; keep original source records unchanged."
+      "status": "APPLIED_TO_EXACT_SOURCE_IDENTITIES",
+      "details": "Owner removes duplicate 94093 Organic Onion Spanish and 94665 Organic Onion Yellow; keeps 94093 as Organic Yellow (Spanish) Onion"
     },
     {
       "decision_id": "94153",
@@ -255,6 +255,11 @@
       "decision_id": "94823",
       "status": "APPLIED_TO_EXACT_SOURCE_IDENTITIES",
       "details": "Owner confirms organic white potatoes are intended"
+    },
+    {
+      "decision_id": "4093",
+      "status": "APPLIED_TO_EXACT_SOURCE_IDENTITIES",
+      "details": "Owner renames 4093 Onion Yellow to Yellow (Spanish) Onion"
     }
   ],
   "source_unchanged": true
