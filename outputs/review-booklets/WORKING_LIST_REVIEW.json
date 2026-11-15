@@ -1,15 +1,15 @@
 {
   "source": "sources/plu/PickList.xml",
   "working_list": "sources/plu/WorkingList.xml",
-  "source_sha256": "462db3121094008cd1dd5ea2c5836ca4b24de077edb8982c0f43149edbaf2cbb",
-  "decision_registry_sha256": "4d44564be1c0a8dcad496b14f482a88d6b6eb54e70b4c6945698426c4b8add6b",
-  "source_records": 724,
-  "working_records": 672,
-  "merged_or_standardized_records": 48,
+  "source_sha256": "38732869b0e7b1c8ccb0b6189a8685a1125595ebcc9ded4e9cc48d18d6ea8727",
+  "decision_registry_sha256": "3c8b787ec1a4b23b4dcaaaf34b9052245c2eb4529a17c2d191253d6011b3bac0",
+  "source_records": 972,
+  "working_records": 918,
+  "merged_or_standardized_records": 50,
   "excluded_conflicting_source_records": 6,
   "excluded_unconfirmed_equivalence_records": 1,
-  "hidden_or_deleted_source_records": 76,
-  "review_required_records": 2,
+  "hidden_or_deleted_source_records": 324,
+  "review_required_records": 248,
   "decisions": [
     {
       "decision_id": "3038",
@@ -193,8 +193,8 @@
     },
     {
       "decision_id": "94093",
-      "status": "PENDING_OWNER_CONDITION",
-      "details": "Standardization requires supplier confirmation; keep original source records unchanged."
+      "status": "APPLIED_TO_EXACT_SOURCE_IDENTITIES",
+      "details": "Owner removes duplicate 94093 Organic Onion Spanish and 94665 Organic Onion Yellow; keeps 94093 as Organic Yellow (Spanish) Onion"
     },
     {
       "decision_id": "94153",
@@ -255,24 +255,26 @@
       "decision_id": "94823",
       "status": "APPLIED_TO_EXACT_SOURCE_IDENTITIES",
       "details": "Owner confirms organic white potatoes are intended"
+    },
+    {
+      "decision_id": "4093",
+      "status": "APPLIED_TO_EXACT_SOURCE_IDENTITIES",
+      "details": "Owner renames 4093 Onion Yellow to Yellow (Spanish) Onion"
     }
   ],
   "source_unchanged": true,
   "status": "REVIEW_ONLY_NOT_RELEASED",
   "production_publication": "BLOCKED",
-  "active_working_records": 596,
-  "produce_records": 550,
+  "active_working_records": 594,
+  "produce_records": 548,
   "non_produce_records": 46,
-  "image_references_embedded": 516,
-  "image_review_required": 34,
-  "missing_or_unapproved_images": 34,
+  "image_references_embedded": 513,
+  "image_review_required": 35,
+  "missing_or_unapproved_images": 35,
   "image_status_counts": {
-    "AI_ILLUSTRATION_REFERENCE_REVIEW": 125,
-    "APPROVED_WORKINGLIST_IMAGE": 24,
-    "MISSING": 34,
-    "SUPPLIED_AI_CROP_REVIEW": 96,
-    "SUPPLIED_REFERENCE_REVIEW": 270,
-    "SUPPLIER_REFERENCE_REVIEW": 1
+    "APPROVED_WORKINGLIST_IMAGE": 18,
+    "LEGACY_PREAPPROVED_IMAGE": 495,
+    "MISSING": 35
   },
   "image_reference_audit_status_counts": {
     "REJECTED": 6,
@@ -285,7 +287,7 @@
   "review_booklets": {
     "Fruit": {
       "records": 269,
-      "images": 254,
+      "images": 253,
       "exact_docx_and_excel_text": true,
       "embedded_image_bytes_and_anchors": true,
       "cashier_image_labels_absent": true,
@@ -293,15 +295,15 @@
       "excel_planned_pages": 5,
       "pdf": {
         "pages": 45,
-        "drawn_images": 254,
+        "drawn_images": 253,
         "exact_printed_codes": true,
         "every_description_on_planned_page": true,
         "landscape_us_letter": true
       }
     },
     "Vegetable": {
-      "records": 281,
-      "images": 262,
+      "records": 279,
+      "images": 260,
       "exact_docx_and_excel_text": true,
       "embedded_image_bytes_and_anchors": true,
       "cashier_image_labels_absent": true,
@@ -309,7 +311,7 @@
       "excel_planned_pages": 6,
       "pdf": {
         "pages": 47,
-        "drawn_images": 262,
+        "drawn_images": 260,
         "exact_printed_codes": true,
         "every_description_on_planned_page": true,
         "landscape_us_letter": true
@@ -340,29 +342,29 @@
   },
   "file_sha256": {
     "AI_REFERENCE_REVIEW.csv": "ea6ce9765d640c6f1591958aee280737212580909f59d921e2c7aff183e4c94d",
-    "BUILD_NOTES.txt": "de499a0ff2fb8df4f4ffc434a5ac465ed68cccc910e153d6323c772bfa5e5e04",
+    "BUILD_NOTES.txt": "b3043411080cd8802a12d6e3ad2515d3492a4448bc7bdef3c39f448f881f97c2",
     "DUPLICATE_PLU_CLASSIFICATIONS.csv": "50bca9a2df687c523330ab6103e79ddb262bde41bcacea00a0ec1442575ca5b4",
-    "DUPLICATE_PLU_CLASSIFICATION_REVIEW.md": "ec2e7afc1804ac968d8b15ec00f43c46140477106387ef6b925461301c54fe6e",
-    "FRUIT_VISUAL_PLU_BOOKLET_REVIEW.docx": "6578bddfa53610a6d9bd44ad081e996a1d9dd1f217879f76f9922c2a53eedb56",
-    "FRUIT_VISUAL_PLU_BOOKLET_REVIEW.pdf": "7446a0135a03136764826e951c5e1c54102e5f7315103ca6488488e59465cdd6",
-    "FRUIT_VISUAL_PLU_BOOKLET_REVIEW.xlsx": "15f4dbbcb6a8194876ee391e60e24057bfec332f96848bc5e03377edd1fd0b8f",
-    "FRUIT_VISUAL_PLU_BOOKLET_REVIEW_LAYOUT.csv": "cffe72ce4d854eb114fef048bc7b33832b622313b3c184ac1485573648f77be8",
-    "MISSING_IMAGES.csv": "e0b8103952ce2711951de0b6628381774a051729fbbcb564c357165c69ed6e04",
-    "NON_PRODUCE_PLU_BOOKLET_REVIEW.docx": "facb585bd98c7b1e0731c1fcc018ad5f58cd7796283c2d37bc3e629b9ce462e7",
-    "NON_PRODUCE_PLU_BOOKLET_REVIEW.pdf": "12ba4f9280b0eff063c487d41cdfe26d854be06d3d6028639e6306661cfc8d16",
-    "NON_PRODUCE_PLU_BOOKLET_REVIEW.xlsx": "f06a8e8f0752d535131e23d085799dc51d382c2d96bc7ee04bc8c2abd2778f53",
+    "DUPLICATE_PLU_CLASSIFICATION_REVIEW.md": "446da92d6fbc0f472ef3207432a361ffef830a6926a7129fcbc08560dedb16d4",
+    "FRUIT_VISUAL_PLU_BOOKLET_REVIEW.docx": "101c14c278a0d974775c1a2c2ca360f8bf1d4f070bd707f5e1ea15df9d8fb555",
+    "FRUIT_VISUAL_PLU_BOOKLET_REVIEW.pdf": "8b6b1409582ac09b069ef2a34e99b88be2206292e3dd3cad926fcb3ceb7190fe",
+    "FRUIT_VISUAL_PLU_BOOKLET_REVIEW.xlsx": "73323eb32b1e5193301e62664f7c68b2a72b659b0b3dc971773b596b2988c441",
+    "FRUIT_VISUAL_PLU_BOOKLET_REVIEW_LAYOUT.csv": "f50fb056cd0774221046c4319867a95628697d15f7f44d3fbd672657c87e7c05",
+    "MISSING_IMAGES.csv": "de454ac0acee2e85ebe987e8c211c78414227f7389d680abde01c9f8c43acffe",
+    "NON_PRODUCE_PLU_BOOKLET_REVIEW.docx": "e485aa011960827ea237231e39cd735a2f790d8eb9008be2b3e4ad6dcc87ba05",
+    "NON_PRODUCE_PLU_BOOKLET_REVIEW.pdf": "796d57852a9cc350f226ab2d9aad94a74dad2fbefd079c072f415a77d2f7af95",
+    "NON_PRODUCE_PLU_BOOKLET_REVIEW.xlsx": "2797ab16ee74660fed7a94015f7991f07b6c237e9268b9b0545c45a215ab84ea",
     "NON_PRODUCE_PLU_BOOKLET_REVIEW_LAYOUT.csv": "feba0a48388b7fb6ced9c2686e8db8c5e438d303d72d0d30dbdb1480c3734885",
-    "PHOTO_MAPPING.csv": "749500ca28cb5b63b3ae2d3053273d84aff7c2fe96817dcd153c38deb6caea88",
-    "PLACEMENT_REVIEW.csv": "cb2f85b98cb7f23aecc964ffe0acce28aadf8c22a0ee6937b14a25ee73b539e0",
-    "PRINT_ENGINE_LOG.txt": "30f22c93df4b316e5a37c85f71a9b7b8377bef72266d18362bfa336907ce249d",
-    "REVIEW_VALIDATION.json": "0313bf89ae2e4aa5c3e0316d00ad635ade82ad862e97cd5e601114ef40204877",
-    "VEGETABLE_VISUAL_PLU_BOOKLET_REVIEW.docx": "72396802c1d7a4fe83912cb6a2f76a7ae2af71dd57825da627b9f4aae857222c",
-    "VEGETABLE_VISUAL_PLU_BOOKLET_REVIEW.pdf": "302291fbdbb1c90dbca7b97a8366fe7a88951213266dbd76ed133ff986858bfe",
-    "VEGETABLE_VISUAL_PLU_BOOKLET_REVIEW.xlsx": "29dbc38781e2ccecb93c28701d20314bf0ceb406fe717e20619013cb6e44189a",
-    "VEGETABLE_VISUAL_PLU_BOOKLET_REVIEW_LAYOUT.csv": "2dce72289fcb1233325a7663f75f5b5d8e7d79cf7810ba2a6fab13a6676d8c60",
-    "reconciliation/PICKLIST_SOURCE_RECORDS.xml": "54be70af19b31ff54213dcfda275e1392e19bf5c882c8af438af56bb328d9fd0",
-    "reconciliation/WORKING_LIST_ENTRIES.csv": "a8bf8b3e741b13378bbb1772dfdff1d6f187a4decff871fedacc6aa59f308aea",
-    "reconciliation/WORKING_LIST_RECONCILIATION.csv": "15517e5bea0e9127df04ce7b97b8ccd2c4517aee35d5b4b70d4a452088e0ba09",
-    "reconciliation/WORKING_LIST_RECONCILIATION.json": "c1d9c1673fe212058b71f1f75c0517e1c7a890bb6819ff29439bc6f60a1dd723"
+    "PHOTO_MAPPING.csv": "0856e85705b7724e415eb9b931c412c6a0a9e80f63671fb7d6d9565de9b59feb",
+    "PLACEMENT_REVIEW.csv": "b6f36a9fe3e3c096a9707700c0e131ff85947920b2a8dbf0f938dcf3a7f1d09e",
+    "PRINT_ENGINE_LOG.txt": "6d0e68820a30022fa1e3f6adf6cb257fa661821c7ef852043e1eb4d5c403fca1",
+    "REVIEW_VALIDATION.json": "5b3ab895728e521e977fd56ddebeaf80ba04b23fd1c89b0e8ca5412f3b4c2a9c",
+    "VEGETABLE_VISUAL_PLU_BOOKLET_REVIEW.docx": "d57645a4f5952e6cc35022a6eb293038d8fc71e4259c14d2a98657d76f776f0c",
+    "VEGETABLE_VISUAL_PLU_BOOKLET_REVIEW.pdf": "488f2531fbfdb3df37c4c598123fbcc4fb8b6c3ef1907aefa2c7939cab5e3a85",
+    "VEGETABLE_VISUAL_PLU_BOOKLET_REVIEW.xlsx": "9702ce8681159cab5d6bdc47e25a0ea60d5d7de15b2f9571db4bf32a20d34724",
+    "VEGETABLE_VISUAL_PLU_BOOKLET_REVIEW_LAYOUT.csv": "6c79271ae61bfd0d7a52ffc7d799f4e914c7cb8e255163b06760e19aa7050c99",
+    "reconciliation/PICKLIST_SOURCE_RECORDS.xml": "c2729b9b1540add796558ecd36303f9476cd043bc5b3011a802ff1e74cf0dcbc",
+    "reconciliation/WORKING_LIST_ENTRIES.csv": "58acdc951b6f2db7fcbd939bc60d17adb2eaff90ed7a738f62ead27bd94e210d",
+    "reconciliation/WORKING_LIST_RECONCILIATION.csv": "80bdf5bd941d0c207733a0420d8bf1b18caf951fff38fffc10be992cea198e47",
+    "reconciliation/WORKING_LIST_RECONCILIATION.json": "1fb872fc0339150a77757673d3d4bf234cf9c7b7af3e651c2feeef0a97dd29d2"
   }
 }

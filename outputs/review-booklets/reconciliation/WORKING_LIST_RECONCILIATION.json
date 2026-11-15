@@ -1,15 +1,15 @@
 {
   "source": "sources/plu/PickList.xml",
   "working_list": "sources/plu/WorkingList.xml",
-  "source_sha256": "462db3121094008cd1dd5ea2c5836ca4b24de077edb8982c0f43149edbaf2cbb",
+  "source_sha256": "38732869b0e7b1c8ccb0b6189a8685a1125595ebcc9ded4e9cc48d18d6ea8727",
   "decision_registry_sha256": "3c8b787ec1a4b23b4dcaaaf34b9052245c2eb4529a17c2d191253d6011b3bac0",
-  "source_records": 724,
-  "working_records": 670,
+  "source_records": 972,
+  "working_records": 918,
   "merged_or_standardized_records": 50,
   "excluded_conflicting_source_records": 6,
   "excluded_unconfirmed_equivalence_records": 1,
-  "hidden_or_deleted_source_records": 76,
-  "review_required_records": 0,
+  "hidden_or_deleted_source_records": 324,
+  "review_required_records": 248,
   "decisions": [
     {
       "decision_id": "3038",

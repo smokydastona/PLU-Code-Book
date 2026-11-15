@@ -1,22 +1,22 @@
 PRODUCE TILL BINDER - CHANGE AND VALIDATION REPORT
 REVIEW COPY ONLY - NOT RELEASED FOR OPERATIONAL TILL USE
 
-Source XML SHA-256: 462db3121094008cd1dd5ea2c5836ca4b24de077edb8982c0f43149edbaf2cbb
+Source XML SHA-256: 38732869b0e7b1c8ccb0b6189a8685a1125595ebcc9ded4e9cc48d18d6ea8727
 Original workbook SHA-256: 6b0aeaa153233c5f4917811a3f7a5b2212f7a946a0abede372a31db556ab0f63
 Updated Deli source SHA-256: a26ab6cf98d72d656e5cfd7a5c8928a7938ae1d965934a597c047f8eb37438f3; entries: 52
 Time To Stretch image SHA-256: b96e6cbecc167c31e77235b6b02171fc0e94b63aa1f76860fb22258d25f088ed
 Conversions image SHA-256: e3a51d715ee020604a65041c046dbd4092ebe043c390c82c3f427e98775ae504
 Conversions accuracy review: Owner-uploaded image visually checked against all three original chart images: volume values, weight values, kilograms-to-pounds values, price tiers and rounding note match. The $4.99 price converts to $11.00/kg in both the original chart and uploaded image; a prior editable draft's $11.02 value was incorrect and is not used.
-XML records: 724; active: 648; hidden/deleted: 76
-Produce included: 550; unique PLUs: 549; duplicate codes: 1
-Cashier entries displayed: 550; exact duplicates suppressed: 0
+XML records: 972; active: 648; hidden/deleted: 324
+Produce included: 548; unique PLUs: 548; duplicate codes: 0
+Cashier entries displayed: 548; exact duplicates suppressed: 0
 Known non-produce records excluded from Produce: 46
 Original Produce entries compared: 579
-Embedded supplied references: 517; missing/uncertain images left blank: 33
+Embedded supplied references: 513; missing/uncertain images left blank: 35
 AI illustrations included as visual references: 131
 New owner-supplied AI crops: 0
 AI illustrations omitted (if rejected or invalid association): 0
-Classification review: 5; organic placement review: 95; main-item sorting review: 0
+Classification review: 5; organic placement review: 94; main-item sorting review: 0
 
 Bulk is one themed sheet with six category-grouped pages at 11 pt, without print scaling.
 Every original package part outside Produce, Deli, Time To Stretch, Misc Codes, Conversions, Store Directory and Bulk, their relationships,
@@ -27,16 +27,16 @@ Cashier sheets have no image/source/review labels. The organic badge remains.
 
 Original-sheet comparison outcomes (no uncertain mapping silently resolved):
   CODE_ACTIVE_DESCRIPTION_DIFFERS_REVIEW: 299
-  NOT_IN_CURRENT_SOURCE_UNRESOLVED: 254
-  CODE_ONLY_HIDDEN_OR_DELETED: 24
+  CODE_ONLY_HIDDEN_OR_DELETED: 277
   ORIGINAL_DESCRIPTION_WITHOUT_CODE: 2
+  NOT_IN_CURRENT_SOURCE_UNRESOLVED: 1
 
 Image outcomes:
-  LEGACY_PREAPPROVED_IMAGE: 499
-  MISSING: 33
+  LEGACY_PREAPPROVED_IMAGE: 495
+  MISSING: 35
   APPROVED_WORKINGLIST_IMAGE: 18
 
-Print validation: {"photos": {"status": "PASS", "pages": 10, "landscape_us_letter": true, "complete_workbook_opened_and_exported_by_calc": true, "complete_binder_pdf_pages": 29, "every_page_code_count_verified": true, "every_description_found": true, "drawn_images": 517, "deli_print_records_verified": 52, "bulk_print_pages_verified": 6, "bulk_print_font_points": 11, "stretch_print_page_verified": true, "misc_print_page_verified": true, "conversions_print_image_verified": true, "directory_print_pages_verified": 2, "directory_print_pixels_losslessly_verified": true, "complete_pdf": "Complete Till Binder - Updated - Photos.pdf", "visual_review": "REQUIRED; automated text/geometry checks are not a visual print approval"}}
+Print validation: {"photos": {"status": "PASS", "pages": 10, "landscape_us_letter": true, "complete_workbook_opened_and_exported_by_calc": true, "complete_binder_pdf_pages": 29, "every_page_code_count_verified": true, "every_description_found": true, "drawn_images": 513, "deli_print_records_verified": 52, "bulk_print_pages_verified": 6, "bulk_print_font_points": 11, "stretch_print_page_verified": true, "misc_print_page_verified": true, "conversions_print_image_verified": true, "directory_print_pages_verified": 2, "directory_print_pixels_losslessly_verified": true, "complete_pdf": "Complete Till Binder - Updated - Photos.pdf", "visual_review": "REQUIRED; automated text/geometry checks are not a visual print approval"}}
 
 Detailed reports:
   VALIDATION.json: checks, hashes, counts and publication blockers
