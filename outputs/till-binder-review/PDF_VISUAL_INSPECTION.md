@@ -1,5 +1,7 @@
 # PDF Page-by-Page Visual Inspection
 
+Produce transparency (2026-11-16): all 513 embedded Produce images have alpha transparency in binder-only PNG copies. The first Produce page was rendered and inspected; green rows show through removed white backgrounds, and organic badges remain visible. A PDF regression check verifies that a transparent image background renders as the underlying pale-green row. Original photos and JPEG library assets are unchanged.
+
 Soil white rows and sheet order (2026-11-16): Misc Codes now prints on page 4, immediately before Soil on page 5. All Soil product rows are white, without alternating green bands; the green headings and numbered column remain. The rendered Soil page was inspected, and barcode print checks passed.
 
 Soil product 7 correction (2026-11-16): excess background around the Premium Organic All Purpose Potting Soil 20L package is trimmed in its display derivative before fitting the same photo box. The package is enlarged without distortion or cutting off its edges. The updated Soil page was inspected and barcode print checks passed; the source photo is unchanged.

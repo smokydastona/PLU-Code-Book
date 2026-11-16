@@ -1,2 +1,3 @@
-convert /tmp/binder-white-soil-final-20261116/Complete Till Binder - Updated - Photos.xlsx as a Calc document -> /tmp/till-print-x_klmudw/Complete Till Binder - Updated - Photos.pdf using filter : calc_pdf_Export:{"UseLosslessCompression":{"type":"boolean","value":"true"},"ReduceImageResolution":{"type":"boolean","value":"false"}}
+convert /tmp/binder-transparent-produce-20261116/Complete Till Binder - Updated - Photos.xlsx as a Calc document -> /tmp/till-print-roy0woow/Complete Till Binder - Updated - Photos.pdf using filter : calc_pdf_Export:{"UseLosslessCompression":{"type":"boolean","value":"true"},"ReduceImageResolution":{"type":"boolean","value":"false"}}
 Warning: failed to launch javaldx - java may not function correctly
+libpng warning: iCCP: known incorrect sRGB profile

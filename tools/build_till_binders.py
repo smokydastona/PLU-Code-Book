@@ -175,21 +175,34 @@ def docx_compatible_image(content):
 
 def workbook_photo_copy(content):
     with Image.open(io.BytesIO(content)) as source:
-        image = ImageOps.exif_transpose(source)
+        image = ImageOps.exif_transpose(source).convert("RGBA")
         image.thumbnail(MAX_WORKBOOK_IMAGE_SIZE, Image.Resampling.LANCZOS)
-        if "A" in image.getbands() or "transparency" in image.info:
-            has_transparency = image.convert("RGBA").getchannel("A").getextrema()[0] < 255
-        else:
-            has_transparency = False
+        pixels = list(image.get_flattened_data())
+        background = Image.new("L", (image.width + 2, image.height + 2), 0)
+        candidates = Image.new("L", image.size)
+        candidates.putdata([0 if alpha == 0 or (min(red, green, blue) >= 235 and
+                                               max(red, green, blue) - min(red, green, blue) <= 20)
+                            else 255 for red, green, blue, alpha in pixels])
+        background.paste(candidates, (1, 1))
+        ImageDraw.floodfill(background, (0, 0), 128)
+        connected = background.crop((1, 1, image.width + 1, image.height + 1))
+        result = []
+        for (red, green, blue, alpha), selected in zip(pixels, connected.get_flattened_data()):
+            if selected == 128:
+                coverage = min(255, (255 - min(red, green, blue)) * 255 // 20)
+                if alpha == 0 or coverage == 0:
+                    result.append((0, 0, 0, 0))
+                else:
+                    result.append(tuple(max(0, 255 - (255 - value) * 255 // coverage)
+                                        for value in (red, green, blue)) + (min(alpha, coverage),))
+            else:
+                result.append((red, green, blue, alpha))
+        image.putdata(result)
         profile = {}
         if image.info.get("icc_profile"):
             profile["icc_profile"] = image.info["icc_profile"]
         output = io.BytesIO()
-        if has_transparency:
-            image.save(output, format="PNG", optimize=True, **profile)
-        else:
-            image.convert("RGB").save(
-                output, format="JPEG", quality=90, optimize=True, progressive=True, **profile)
+        image.save(output, format="PNG", optimize=True, **profile)
         return output.getvalue()
 
 

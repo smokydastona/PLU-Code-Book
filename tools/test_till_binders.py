@@ -590,7 +590,7 @@ class TillBinderChecks(unittest.TestCase):
                 for picture in workbook["Produce"]._images:
                     with Image.open(io.BytesIO(picture._data())) as image:
                         formats.add(image.format)
-                self.assertEqual(formats, {"JPEG"})
+                self.assertEqual(formats, {"PNG"})
             self.assertTrue(all(cell.data_type != "f" for row in workbook["Produce"] for cell in row))
             with zipfile.ZipFile(path) as archive:
                 self.assertEqual(archive.read("customXml/untouched.xml"), b"<custom>unchanged opaque object</custom>")
@@ -1113,7 +1113,7 @@ class TillBinderChecks(unittest.TestCase):
         opaque_bytes = opaque.getvalue()
         opaque_copy = workbook_photo_copy(opaque_bytes)
         with Image.open(io.BytesIO(opaque_copy)) as image:
-            self.assertEqual(image.format, "JPEG")
+            self.assertEqual(image.format, "PNG")
             self.assertEqual(image.size, (40, 30))
 
         enlarged = io.BytesIO()
@@ -1121,7 +1121,7 @@ class TillBinderChecks(unittest.TestCase):
         enlarged_bytes = enlarged.getvalue()
         resized_copy = workbook_photo_copy(enlarged_bytes)
         with Image.open(io.BytesIO(resized_copy)) as image:
-            self.assertEqual(image.format, "JPEG")
+            self.assertEqual(image.format, "PNG")
             self.assertEqual(image.size, (192, 96))
         self.assertEqual(enlarged.getvalue(), enlarged_bytes)
 
@@ -1135,6 +1135,52 @@ class TillBinderChecks(unittest.TestCase):
             self.assertEqual(image.getchannel("A").getextrema(), (0, 0))
         self.assertEqual(opaque.getvalue(), opaque_bytes)
         self.assertEqual(transparent.getvalue(), transparent_bytes)
+
+    def test_binder_photos_remove_only_border_connected_white_and_preserve_badges(self):
+        image = Image.new("RGBA", (40, 30), "white")
+        for x in range(8, 32):
+            for y in range(5, 25):
+                image.putpixel((x, y), (30, 140, 50, 255))
+        image.putpixel((20, 15), (255, 255, 255, 255))
+        image.putpixel((7, 10), (245, 245, 245, 255))
+        image.putpixel((0, 0), (235, 70, 150, 255))
+        source = io.BytesIO()
+        image.save(source, format="PNG")
+        with Image.open(io.BytesIO(workbook_photo_copy(source.getvalue()))) as result:
+            self.assertEqual(result.getpixel((39, 29))[3], 0)
+            self.assertEqual(result.getpixel((20, 15)), (255, 255, 255, 255))
+            self.assertEqual(result.getpixel((10, 10)), (30, 140, 50, 255))
+            self.assertEqual(result.getpixel((0, 0)), (235, 70, 150, 255))
+            self.assertGreater(result.getpixel((7, 10))[3], 0)
+            self.assertLess(result.getpixel((7, 10))[3], 255)
+
+    @unittest.skipUnless(shutil.which("soffice"), "LibreOffice Calc is required")
+    def test_transparent_produce_background_prints_as_the_green_row(self):
+        import pymupdf
+
+        image = Image.new("RGB", (40, 30), "white")
+        for x in range(10, 30):
+            for y in range(8, 22):
+                image.putpixel((x, y), (190, 20, 20))
+        source = io.BytesIO()
+        image.save(source, format="PNG")
+        rows = [dict(source_id=str(i), plu=str(i), name=f"APPLES {i}", duplicate_count=1,
+                     display_section="A", display_group="Apples") for i in range(2)]
+        content, _, _ = quick_sheet(rows, {"1": workbook_photo_copy(source.getvalue())}, True)
+        path = self.root / "transparent-row.xlsx"
+        path.write_bytes(content)
+        subprocess.run(["soffice", "-env:UserInstallation=" + (self.root / "lo-alpha").as_uri(),
+                        "--headless", "--convert-to", "pdf", "--outdir", str(self.root), str(path)],
+                       check=True, capture_output=True, timeout=120)
+        with pymupdf.open(path.with_suffix(".pdf")) as document:
+            page = document[0]
+            bounds = pymupdf.Rect(page.get_image_info()[0]["bbox"])
+            pixmap = page.get_pixmap(matrix=pymupdf.Matrix(3, 3), colorspace=pymupdf.csRGB, alpha=False)
+            background = pixmap.pixel(round((bounds.x0 + bounds.width * .1) * 3),
+                                      round((bounds.y0 + bounds.height * .1) * 3))
+            expected = tuple(int(PALE_GREEN[index:index + 2], 16) for index in (0, 2, 4))
+            self.assertTrue(all(abs(a - b) <= 2 for a, b in zip(background, expected)),
+                            (background, expected))
 
     def test_layout_has_only_exact_product_text_codes_categories_and_no_image_labels(self):
         generate(self.root, self.binder, self.output)
