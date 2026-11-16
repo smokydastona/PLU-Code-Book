@@ -38,7 +38,7 @@ from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageOps, PngImagePlugi
 from check_image_uniqueness import image_fingerprint
 from organic_watermarks import render_watermark
 from picklist_catalog import read_assignments, read_picklist
-from produce_order import display_unique_rows, order_produce
+from produce_order import ASIAN_SECTION, display_unique_rows, order_produce
 from review_image_references import load_references
 from build_bakery_sheet import (BAKERY_SOURCE, TITLE as BAKERY_TITLE,
                                 read_source as read_bakery_source,
@@ -50,6 +50,7 @@ from build_deli_sheet import DELI_SOURCE, read_source as read_deli_source, valid
 from build_bulk_sheet import TITLE as BULK_TITLE, bulk_sheet, read_bulk, validate_bulk
 import build_weighed_sheet as weighed_guide
 from binder_theme import DARK_GREEN, PALE_GREEN, row_fill
+from text_fit import text_points
 
 ROOT = Path(__file__).resolve().parents[1]
 S = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
@@ -1428,9 +1429,15 @@ def layout_rows(rows):
             section, group = row["display_section"], row.get("display_group", "")
             headings = []
             if section != previous[0]:
-                headings.append(dict(level=1, text=section))
+                headings.append(dict(
+                    level=1, text=section,
+                    continued=(section == ASIAN_SECTION and index > 0 and
+                               rows[index - 1]["display_section"] == section)))
             if group and (section != previous[0] or group != previous[1]):
-                headings.append(dict(level=2, text=group))
+                headings.append(dict(
+                    level=2, text=group,
+                    continued=(index > 0 and rows[index - 1]["display_section"] == section and
+                               rows[index - 1].get("display_group", "") == group)))
             if line + len(headings) >= LINES and headings:
                 break
             for heading in headings:
@@ -1495,6 +1502,83 @@ def validate_stretch(sheet, content):
         raise ValueError("Time To Stretch must print on one portrait US Letter page")
 
 
+def add_continuation_labels(content, labels):
+    """Overlay native text beside centered titles without shifting their cell text."""
+    if not labels:
+        return content
+    xdr = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"
+    drawingml = "http://schemas.openxmlformats.org/drawingml/2006/main"
+    changes = {}
+    with zipfile.ZipFile(io.BytesIO(content)) as archive:
+        part, _ = sheet_info(archive, "Produce")
+        sheet = xml(archive.read(part))
+        relationships_path = rels_part(part)
+        relationships = (xml(archive.read(relationships_path)) if relationships_path in archive.namelist()
+                         else ET.Element(f"{{{P}}}Relationships", nsmap={None: P}))
+        drawing_tag = sheet.find(f"{{{S}}}drawing")
+        if drawing_tag is not None:
+            target = next(rel.get("Target") for rel in relationships
+                          if rel.get("Id") == drawing_tag.get(f"{{{R}}}id"))
+            drawing_path = resolve_part(part, target)
+            drawing = xml(archive.read(drawing_path))
+        else:
+            drawing_path = "xl/drawings/produce-continuations.xml"
+            drawing = ET.Element(f"{{{xdr}}}wsDr", nsmap={"xdr": xdr, "a": drawingml})
+            relation_id = "rIdProduceContinuations"
+            ET.SubElement(relationships, f"{{{P}}}Relationship", Id=relation_id,
+                          Type=R + "/drawing", Target="../drawings/produce-continuations.xml")
+            ET.SubElement(sheet, f"{{{S}}}drawing", {f"{{{R}}}id": relation_id})
+            changes[part] = serialize(sheet)
+            changes[relationships_path] = serialize(relationships)
+            types = xml(archive.read("[Content_Types].xml"))
+            ET.SubElement(types, f"{{{CT}}}Override", PartName="/" + drawing_path,
+                          ContentType="application/vnd.openxmlformats-officedocument.drawing+xml")
+            changes["[Content_Types].xml"] = serialize(types)
+        shape_id = max((int(node.get("id")) for node in drawing.iter(f"{{{xdr}}}cNvPr")), default=0)
+        for label in labels:
+            shape_id += 1
+            width = round((text_points("(continued)", label["size"]) + 1) * 12700)
+            height = round(PRODUCE_ROW_HEIGHT * 12700)
+            anchor = ET.SubElement(drawing, f"{{{xdr}}}oneCellAnchor")
+            marker = ET.SubElement(anchor, f"{{{xdr}}}from")
+            for tag, value in (("col", label["column"]), ("colOff", round(label["offset"] * 12700)),
+                               ("row", label["row"]), ("rowOff", 0)):
+                ET.SubElement(marker, f"{{{xdr}}}{tag}").text = str(value)
+            ET.SubElement(anchor, f"{{{xdr}}}ext", cx=str(width), cy=str(height))
+            shape = ET.SubElement(anchor, f"{{{xdr}}}sp")
+            properties = ET.SubElement(shape, f"{{{xdr}}}nvSpPr")
+            ET.SubElement(properties, f"{{{xdr}}}cNvPr", id=str(shape_id),
+                          name=f"Produce continuation {shape_id}", descr=label["title"] + " (continued)")
+            ET.SubElement(properties, f"{{{xdr}}}cNvSpPr", txBox="1")
+            properties = ET.SubElement(shape, f"{{{xdr}}}spPr")
+            geometry = ET.SubElement(properties, f"{{{drawingml}}}prstGeom", prst="rect")
+            ET.SubElement(geometry, f"{{{drawingml}}}avLst")
+            ET.SubElement(properties, f"{{{drawingml}}}noFill")
+            line = ET.SubElement(properties, f"{{{drawingml}}}ln")
+            ET.SubElement(line, f"{{{drawingml}}}noFill")
+            body = ET.SubElement(shape, f"{{{xdr}}}txBody")
+            ET.SubElement(body, f"{{{drawingml}}}bodyPr", wrap="none", anchor="ctr",
+                          lIns="0", rIns="0", tIns="0", bIns="0")
+            ET.SubElement(body, f"{{{drawingml}}}lstStyle")
+            paragraph = ET.SubElement(body, f"{{{drawingml}}}p")
+            ET.SubElement(paragraph, f"{{{drawingml}}}pPr", algn="l")
+            run = ET.SubElement(paragraph, f"{{{drawingml}}}r")
+            properties = ET.SubElement(run, f"{{{drawingml}}}rPr", sz=str(round(label["size"] * 100)), b="0")
+            fill = ET.SubElement(properties, f"{{{drawingml}}}solidFill")
+            ET.SubElement(fill, f"{{{drawingml}}}srgbClr", val=label["color"])
+            ET.SubElement(properties, f"{{{drawingml}}}latin", typeface="DejaVu Sans")
+            ET.SubElement(run, f"{{{drawingml}}}t").text = "(continued)"
+            ET.SubElement(anchor, f"{{{xdr}}}clientData")
+        changes[drawing_path] = serialize(drawing)
+        result = io.BytesIO()
+        with zipfile.ZipFile(result, "w", compression=zipfile.ZIP_DEFLATED) as output:
+            for name in archive.namelist():
+                output.writestr(name, changes.pop(name, None) or archive.read(name))
+            for name, value in changes.items():
+                output.writestr(name, value)
+    return result.getvalue()
+
+
 def quick_sheet(rows, images, with_photos, title="PRODUCE"):
     workbook = Workbook()
     sheet = workbook.active
@@ -1541,24 +1625,34 @@ def quick_sheet(rows, images, with_photos, title="PRODUCE"):
                 cell.fill = PatternFill("solid", fgColor=DARK_GREEN)
         if page:
             sheet.row_breaks.append(Break(id=start - 1))
-    coordinates = []
+    coordinates, continuation_labels = [], []
     product_indices = defaultdict(int)
     for entry in layout:
         base = BLOCKS[entry["block"] % 3]
         number = (entry["block"] // 3) * PAGE_ROWS + 4 + entry["line"]
         if entry["kind"] == "heading":
+            continued = entry["continued"]
             sheet.merge_cells(start_row=number, start_column=base, end_row=number, end_column=base + 3)
             cell = sheet.cell(number, base)
             set_text(cell, entry["text"])
             if entry["level"] == 1:
                 cell.font = Font(name="DejaVu Sans", size=15, bold=True, color="FFFFFF")
-                cell.fill = PatternFill("solid", fgColor=DARK_GREEN)
+                color = DARK_GREEN
             else:
                 cell.font = Font(name="DejaVu Sans", size=11, bold=True, color=DARK_GREEN)
-                cell.fill = PatternFill("solid", fgColor="C9DCC5")
-            cell.border = Border(bottom=Side(style="medium", color=DARK_GREEN))
-            cell.alignment = Alignment(vertical="center", wrap_text=True,
-                                       indent=1 if entry["level"] == 2 else 0)
+                color = "C9DCC5"
+            for column in range(base, base + 4):
+                heading_cell = sheet.cell(number, column)
+                heading_cell.fill = PatternFill("solid", fgColor=color)
+                heading_cell.border = Border(bottom=Side(style="medium", color=DARK_GREEN))
+            cell.alignment = Alignment(vertical="center", wrap_text=True, horizontal="center")
+            if continued:
+                # The boundary between the two equal middle columns is the title's center.
+                continuation_labels.append(dict(
+                    row=number - 1, column=base + 1, title=entry["text"],
+                    offset=(text_points(entry["text"], cell.font.sz, bold=True) / 2 +
+                            text_points(" ", cell.font.sz, bold=True)),
+                    size=cell.font.sz / 2, color=cell.font.color.rgb[-6:]))
             continue
         row = entry["record"]
         code, description, photo = [sheet.cell(number, base + offset) for offset in (0, 1, 3)]
@@ -1594,7 +1688,7 @@ def quick_sheet(rows, images, with_photos, title="PRODUCE"):
     sheet.print_area = f"A1:N{pages * PAGE_ROWS}"
     buffer = io.BytesIO()
     workbook.save(buffer)
-    return buffer.getvalue(), coordinates, pages
+    return add_continuation_labels(buffer.getvalue(), continuation_labels), coordinates, pages
 
 
 def theme_product_table(content, sheet_name, coordinates):
