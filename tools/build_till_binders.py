@@ -74,6 +74,8 @@ BULK_SHEETS = ("Bulk", "Bulk (2)", "Bulk (3)", "Bulk (4)")
 STRETCH_SOURCE = Path("sources/binders/Time_To_Stretch.jpg")
 STRETCH_SHEET = "Time To Stretch"
 MISC_SHEET = "Misc Codes"
+MISC_TITLE = "MISC CODES"
+MISC_HEADER = '&C&"DejaVu Sans,Bold"&14&K305040' + MISC_TITLE
 SOIL_SHEET = "Soil"
 WEIGHED_SHEET = "Weighed more $100"
 CONVERSIONS_SHEET = "Conversions"
@@ -300,32 +302,222 @@ def theme_operational_sheets(binder, destination):
                 output.writestr(entry, changes.get(entry.filename, original.read(entry.filename)))
 
 
-def fit_misc_sheet(binder, destination):
+def move_floral_codes(binder, destination):
     workbook = load_workbook(binder)
     donor = Workbook()
     themed = donor.active
     try:
-        source = workbook[MISC_SHEET]
-        for row in source:
-            for cell in row:
-                if cell.value is None:
+        misc = workbook[MISC_SHEET]
+        headings = [cell for row in misc for cell in row if cell.value == "Floral Codes"]
+        soil = workbook[SOIL_SHEET] if SOIL_SHEET in workbook else None
+        if not headings:
+            if soil is None:
+                shutil.copyfile(binder, destination)
+                return []
+            if (soil["L1"].value != "Floral Codes" or
+                    str(soil.print_area) != "'Soil'!$B$1:$M$66" or
+                    "L1:M1" not in {str(item) for item in soil.merged_cells.ranges} or
+                    soil.page_setup.scale != 70 or soil.page_setup.fitToWidth is not None or
+                    soil.page_setup.fitToHeight is not None):
+                raise ValueError("Floral Codes section is missing or ambiguous; review the template")
+            entries = []
+            for number in range(3, 67):
+                code, name = soil[f"L{number}"], soil[f"M{number}"]
+                if code.value is None and name.value is None:
                     continue
-                target = themed[cell.coordinate]
-                target.value = cell.value
-                target.border = copy.copy(cell.border)
-                target.alignment = copy.copy(cell.alignment)
-                target.number_format = cell.number_format
-                target.protection = copy.copy(cell.protection)
-                heading = isinstance(cell.value, str) and (
-                    cell.row == 1 or cell.column in (2, 4) and
-                    source.cell(cell.row, cell.column - 1).value is None)
-                font = copy.copy(cell.font)
-                font.color = "FFFFFF" if heading else "000000"
+                if (number != len(entries) + 3 or code.value is None or
+                        not isinstance(name.value, str) or name.data_type == "f" or code.data_type == "f" or
+                        code.comment or name.comment or code.hyperlink or name.hyperlink):
+                    raise ValueError("Existing Soil Floral Codes entries are incomplete or ambiguous")
+                if code.data_type == "n" and code.number_format != "General" and not re.fullmatch(
+                        r"0+", code.number_format):
+                    raise ValueError("Existing Soil Floral Codes has an unsupported numeric format")
+                entries.append(dict(code=code.value, name=name.value, code_type=code.data_type,
+                                    number_format=code.number_format, soil_code=code.coordinate,
+                                    soil_name=name.coordinate))
+            if not entries:
+                raise ValueError("Existing Soil Floral Codes section has no entries")
+            names = [entry["name"] for entry in entries]
+            if len(set(names)) != len(names) or any(cell.value in names for row in misc for cell in row
+                                                   if isinstance(cell.value, str)):
+                raise ValueError("Floral Codes entries are duplicated or remain in Misc Codes")
+            shutil.copyfile(binder, destination)
+            return entries
+        if len(headings) != 1 or headings[0].column != 2 or soil is None:
+            raise ValueError("Floral Codes section or Soil sheet is ambiguous; review the template")
+        heading = headings[0]
+        if any(misc.cell(heading.row, col).value is not None for col in (1, 3, 4)):
+            raise ValueError("Floral Codes heading shares a row with other data; review the template")
+        entries = []
+        for base in (1, 3):
+            number = heading.row + 1
+            while misc.cell(number, base).value is not None or misc.cell(number, base + 1).value is not None:
+                code, name = misc.cell(number, base), misc.cell(number, base + 1)
+                if (code.value is None or not isinstance(name.value, str) or name.data_type == "f" or
+                        code.data_type == "f" or code.comment or name.comment or code.hyperlink or name.hyperlink):
+                    raise ValueError("Floral Codes has incomplete or unsupported entries; review the template")
+                if code.data_type == "n" and code.number_format != "General" and not re.fullmatch(
+                        r"0+", code.number_format):
+                    raise ValueError("Floral Codes has an unsupported numeric format; review the template")
+                entries.append((code, name))
+                number += 1
+        if not entries or len(entries) > 60:
+            raise ValueError("Floral Codes cannot fit beside Soil; review the template")
+        last_row = max(name.row for _, name in entries)
+        if any(cell.value is not None or cell.comment or cell.hyperlink
+               for row in misc.iter_rows(min_row=last_row + 1) for cell in row):
+            raise ValueError("Unexpected content after Floral Codes; review the template")
+        if (len({name.value for _, name in entries}) != len(entries) or
+                any(cell.value is not None or cell.comment or cell.hyperlink
+                    for row in misc.iter_rows(min_row=heading.row, max_row=last_row, min_col=5)
+                    for cell in row)):
+            raise ValueError("Floral Codes section contains additional or duplicate data")
+        if any(cell.comment or cell.hyperlink for row in misc.iter_rows(
+                min_row=heading.row, max_row=last_row, max_col=4) for cell in row):
+            raise ValueError("Floral Codes section contains comments or hyperlinks")
+        if heading.comment or heading.hyperlink or misc.merged_cells.ranges:
+            raise ValueError("Floral Codes contains unsupported metadata or merged cells; review the template")
+        for sheet in workbook:
+            for row in sheet:
+                for cell in row:
+                    if cell.data_type == "f" and (sheet == misc or "misc codes" in cell.value.lower()):
+                        raise ValueError("Misc Codes formulas require review before moving Floral Codes")
+        if any("misc codes" in (definition.attr_text or "").lower()
+               for definition in workbook.defined_names.values()):
+            raise ValueError("Misc Codes defined names require review before moving Floral Codes")
+        if any(cell.value is not None or cell.comment or cell.hyperlink or cell.has_style
+               for row in soil.iter_rows(min_col=11, max_col=13, min_row=1, max_row=66) for cell in row):
+            raise ValueError("Soil floral destination contains data; review the template")
+        if any(r.max_col >= 11 and r.min_row <= 66 for r in soil.merged_cells.ranges):
+            raise ValueError("Soil floral destination contains merged cells; review the template")
+        if any(p.anchor._from.col >= 10 or
+               (getattr(p.anchor, "to", None) is not None and p.anchor.to.col >= 10)
+               for p in soil._images):
+            raise ValueError("Soil images overlap the floral destination; review the template")
+        if any(dim.min is not None and dim.min <= 13 and (dim.max or dim.min) >= 11
+               for dim in soil.column_dimensions.values()):
+            raise ValueError("Soil floral destination has custom columns; review the template")
+        if (str(soil.print_area) != "'Soil'!$B$1:$J$66" or soil.page_setup.scale != 70 or
+                soil.page_setup.fitToWidth is not None or soil.page_setup.fitToHeight is not None):
+            raise ValueError("Soil print layout changed; review it before moving Floral Codes")
+        themed["L1"].font = Font(name="DejaVu Sans", size=13, bold=True, color="FFFFFF")
+        themed["L1"].alignment = Alignment(horizontal="center", vertical="center")
+        themed["L1"].fill = PatternFill("solid", fgColor=DARK_GREEN)
+        themed["M1"].fill = PatternFill("solid", fgColor=DARK_GREEN)
+        for index, (code, name) in enumerate(entries):
+            for col, original in ((12, code), (13, name)):
+                cell = themed.cell(index + 3, col)
+                cell.font = Font(name="DejaVu Sans", size=12, bold=col == 12)
+                cell.alignment = Alignment(vertical="center", horizontal="center" if col == 12 else "left")
+                cell.number_format = original.number_format
+                cell.protection = copy.copy(original.protection)
+                cell.fill = row_fill(index)
+        content = io.BytesIO()
+        donor.save(content)
+        source_coordinates = [(code.coordinate, name.coordinate) for code, name in entries]
+        records = [dict(code=code.value, name=name.value, code_type=code.data_type,
+                        number_format=code.number_format, source_code=code.coordinate,
+                        source_name=name.coordinate, soil_code=f"L{index + 3}", soil_name=f"M{index + 3}")
+                   for index, (code, name) in enumerate(entries)]
+        heading_coordinate = heading.coordinate
+    finally:
+        workbook.close()
+        donor.close()
+    with zipfile.ZipFile(binder) as original, zipfile.ZipFile(io.BytesIO(content.getvalue())) as style_source:
+        soil_path, soil_index = sheet_info(original, SOIL_SHEET)
+        misc_path, _ = sheet_info(original, MISC_SHEET)
+        soil_xml, misc_xml = xml(original.read(soil_path)), xml(original.read(misc_path))
+        styles, style_ids = merge_styles(original.read("xl/styles.xml"), style_source.read("xl/styles.xml"))
+        misc_data, soil_data = misc_xml.find(f"{{{S}}}sheetData"), soil_xml.find(f"{{{S}}}sheetData")
+
+        def move_cell(source_coordinate, target_coordinate):
+            source_row = misc_data.find(f"{{{S}}}row[@r='{range_boundaries(source_coordinate)[1]}']")
+            node = source_row.find(f"{{{S}}}c[@r='{source_coordinate}']")
+            if node is None:
+                raise ValueError(f"Missing Floral Codes XML cell {source_coordinate}")
+            source_row.remove(node)
+            node.set("r", target_coordinate)
+            node.set("s", str(style_ids[themed[target_coordinate].style_id]))
+            target_row = soil_data.find(f"{{{S}}}row[@r='{range_boundaries(target_coordinate)[1]}']")
+            if target_row is None:
+                raise ValueError(f"Soil row for {target_coordinate} is missing; review the template")
+            target_row.append(node)
+
+        move_cell(heading_coordinate, "L1")
+        for index, (code, name) in enumerate(source_coordinates):
+            move_cell(code, f"L{index + 3}")
+            move_cell(name, f"M{index + 3}")
+        merges = soil_xml.find(f"{{{S}}}mergeCells")
+        if merges is None:
+            raise ValueError("Soil heading merge is missing")
+        ET.SubElement(merges, f"{{{S}}}mergeCell", ref="L1:M1")
+        merges.set("count", str(len(merges)))
+        column_widths = soil_xml.find(f"{{{S}}}cols")
+        if column_widths is None:
+            column_widths = ET.Element(f"{{{S}}}cols")
+            soil_data.addprevious(column_widths)
+        for index, width in ((11, 2), (12, 10), (13, 30)):
+            ET.SubElement(column_widths, f"{{{S}}}col", min=str(index), max=str(index),
+                          width=str(width), customWidth="1")
+        soil_xml.find(f"{{{S}}}dimension").set("ref", "B1:M66")
+        book = xml(original.read("xl/workbook.xml"))
+        names = book.find(f"{{{S}}}definedNames")
+        areas = [node for node in names if node.get("name") == "_xlnm.Print_Area" and
+                 node.get("localSheetId") == str(soil_index)]
+        if len(areas) != 1:
+            raise ValueError("Soil print area is missing or ambiguous")
+        areas[0].text = "'Soil'!$B$1:$M$66"
+        changes = {soil_path: serialize(soil_xml), misc_path: serialize(misc_xml),
+                   "xl/styles.xml": styles, "xl/workbook.xml": serialize(book)}
+        with zipfile.ZipFile(destination, "x", compression=zipfile.ZIP_DEFLATED) as output:
+            output.comment = original.comment
+            for entry in original.infolist():
+                output.writestr(entry, changes.get(entry.filename, original.read(entry.filename)))
+    return records
+
+
+def fit_misc_sheet(binder, destination):
+    workbook = load_workbook(binder)
+    donor = Workbook()
+    themed = donor.active
+    styled = {}
+    try:
+        source = workbook[MISC_SHEET]
+        indices = {1: 0, 3: 0}
+        for row in source.iter_rows():
+            number = row[0].row
+            for base in (1, 3):
+                left, right = source.cell(number, base), source.cell(number, base + 1)
+                heading = ((number == 1 and
+                            (isinstance(left.value, str) or isinstance(right.value, str))) or
+                           (isinstance(right.value, str) and right.data_type != "f" and left.value is None))
+                active = left.value is not None or right.value is not None
+                if (base == 3 and not active and isinstance(source.cell(number, 2).value, str) and
+                        source.cell(number, 1).value is None and
+                        any(source.cell(number + 1, col).value is not None for col in (3, 4))):
+                    heading = True
                 if heading:
-                    font.bold = True
-                target.font = font
-                target.fill = PatternFill("solid", fgColor=(
-                    DARK_GREEN if heading else PALE_GREEN if cell.row % 2 == 0 else "FFFFFF"))
+                    indices[base] = 0
+                fill = (PatternFill("solid", fgColor=DARK_GREEN) if heading else
+                        row_fill(indices[base]) if active else PatternFill())
+                if active and not heading:
+                    indices[base] += 1
+                for cell in (left, right):
+                    target = themed[cell.coordinate]
+                    target.value = cell.value
+                    target.alignment = copy.copy(cell.alignment)
+                    target.number_format = cell.number_format
+                    target.protection = copy.copy(cell.protection)
+                    font = copy.copy(cell.font)
+                    font.name = "DejaVu Sans"
+                    font.sz = 10
+                    font.color = "FFFFFF" if heading else "000000"
+                    font.bold = heading or cell.column == base or bool(font.bold)
+                    target.font = font
+                    target.fill = fill
+                    target.border = (Border(bottom=Side(style="hair", color="D0D0D0"))
+                                     if active and not heading else Border())
+                    styled[cell.coordinate] = target
         content = io.BytesIO()
         donor.save(content)
     finally:
@@ -336,9 +528,22 @@ def fit_misc_sheet(binder, destination):
         sheet = xml(original.read(path))
         with zipfile.ZipFile(io.BytesIO(content.getvalue())) as styles_source:
             styles, style_ids = merge_styles(original.read("xl/styles.xml"), styles_source.read("xl/styles.xml"))
-        for cell in sheet.findall(f"{{{S}}}sheetData/{{{S}}}row/{{{S}}}c"):
-            if themed[cell.get("r")].value is not None:
-                cell.set("s", str(style_ids[themed[cell.get("r")].style_id]))
+        for row in sheet.findall(f"{{{S}}}sheetData/{{{S}}}row"):
+            number = int(row.get("r"))
+            for column in range(1, 5):
+                coordinate = f"{get_column_letter(column)}{number}"
+                if coordinate not in styled:
+                    continue
+                cell = row.find(f"{{{S}}}c[@r='{coordinate}']")
+                if cell is None:
+                    cell = ET.Element(f"{{{S}}}c", r=coordinate)
+                    following = next((node for node in row.findall(f"{{{S}}}c")
+                                      if range_boundaries(node.get("r"))[0] > column), None)
+                    if following is None:
+                        row.append(cell)
+                    else:
+                        following.addprevious(cell)
+                cell.set("s", str(style_ids[styled[coordinate].style_id]))
         for view in sheet.findall(f"{{{S}}}sheetViews/{{{S}}}sheetView"):
             view.set("showGridLines", "0")
         properties = sheet.find(f"{{{S}}}sheetPr")
@@ -361,6 +566,18 @@ def fit_misc_sheet(binder, destination):
         setup.set("fitToWidth", "1")
         setup.set("fitToHeight", "1")
         setup.attrib.pop("scale", None)
+        header_footer = sheet.find(f"{{{S}}}headerFooter")
+        if header_footer is None:
+            header_footer = ET.Element(f"{{{S}}}headerFooter")
+            setup.addnext(header_footer)
+        if any(header_footer.get(name) in ("1", "true") for name in ("differentFirst", "differentOddEven")):
+            raise ValueError("Misc Codes has alternate print headers; review them before theming")
+        header = header_footer.find(f"{{{S}}}oddHeader")
+        if header is None:
+            header = ET.SubElement(header_footer, f"{{{S}}}oddHeader")
+        if header.text not in (None, "", MISC_HEADER, MISC_HEADER.replace("&14&K", "&14 &K")):
+            raise ValueError("Misc Codes has an existing print header; review it before theming")
+        header.text = MISC_HEADER
         for tag in ("rowBreaks", "colBreaks"):
             breaks = sheet.find(f"{{{S}}}{tag}")
             if breaks is not None:
@@ -1655,7 +1872,7 @@ def normalize_printed_produce_text(text):
 def validate_print(output, coordinates, expected_pages, deli_coordinates=None, deli_title=None,
                    bulk_pages=None, stretch_size=None, misc_text=None, directory_images=None,
                    conversions_image=None, stretch_image=None, bakery_coordinates=None,
-                   delivery_images=None, soil_images=None, weighed_text=None):
+                   delivery_images=None, soil_images=None, weighed_text=None, floral_entries=None):
     from pypdf import PdfReader
 
     if not shutil.which("soffice"):
@@ -1694,6 +1911,26 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                         actual[sha(directory_image_pixels(document.extract_image(image["xref"])["image"]))] += 1
                     if actual != expected:
                         raise ValueError(f"{edition}: printed Soil images differ from the source")
+                    if floral_entries:
+                        text = " ".join(page.get_text().split())
+                        words = Counter(word[4] for word in page.get_text("words"))
+                        if text.count("Floral Codes") != 1:
+                            raise ValueError(f"{edition}: Floral Codes heading is missing or duplicated on Soil")
+                        for entry in floral_entries:
+                            value = str(entry["code"])
+                            if entry["code_type"] == "n" and re.fullmatch(r"0+", entry["number_format"]):
+                                value = value.zfill(len(entry["number_format"]))
+                            if words[value] != 1 or text.count(" ".join(entry["name"].split())) != 1:
+                                raise ValueError(f"{edition}: Floral Codes entry {value} is missing, clipped or duplicated")
+                            regions = page.search_for(entry["name"])
+                            if len(regions) != 1 or not page.rect.contains(regions[0]) or any(
+                                    regions[0].intersects(pymupdf.Rect(image["bbox"]))
+                                    for image in page.get_image_info()):
+                                raise ValueError(f"{edition}: Floral Codes overlaps Soil images or is clipped")
+                        other_pages = [other.get_text() for other in document if other.number != page.number]
+                        if any("Floral Codes" in other or any(entry["name"] in other for entry in floral_entries)
+                               for other in other_pages):
+                            raise ValueError(f"{edition}: Floral Codes also appear outside Soil")
             if weighed_text is not None:
                 pages = [page for page in full_pdf.pages if "WEIGHED ITEMS OVER $100" in
                          (page.extract_text() or "")]
@@ -1762,6 +1999,8 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 matches = [page for page in full_pdf.pages if misc_page_matches(page, misc_text)]
                 if len(matches) != 1:
                     raise ValueError(f"{edition}: Misc Codes content does not print together on exactly one page")
+                if MISC_TITLE not in (matches[0].extract_text() or ""):
+                    raise ValueError(f"{edition}: Misc Codes title is missing from the printed page")
                 if (abs(float(matches[0].mediabox.width) - 612) > 1 or
                         abs(float(matches[0].mediabox.height) - 792) > 1):
                     raise ValueError(f"{edition}: Misc Codes is not portrait US Letter")
@@ -2002,7 +2241,8 @@ def report_text(summary):
         f"organic placement review: {summary['placement_review_required']}; "
         f"main-item sorting review: {summary['produce_sort_review_required']}",
         "",
-        "Produce, Bakery, Deli, Bulk and Misc Codes use alternating white and pale-green product rows.",
+        "Produce, Bakery, Deli, Bulk, Misc Codes and the Soil floral column use alternating white and pale-green rows.",
+        "Floral Codes are moved from Misc Codes beside the Soil barcodes on the same page.",
         "Store Directory uses alternating green stripes on the list, preserving original nonwhite pixels.",
         "Bulk is one themed sheet with six category-grouped pages at 11 pt, without print scaling.",
         "Every original package part outside Produce, Bakery, Deli, Time To Stretch, Soil, Weighed more $100,",
@@ -2132,6 +2372,7 @@ def generate(root, binder, output, verify_print=False):
             combined_binder = Path(temporary) / "Combined.xlsx"
             bulk_binder = Path(temporary) / "Bulk.xlsx"
             operational_binder = Path(temporary) / "Operational.xlsx"
+            floral_binder = Path(temporary) / "Floral.xlsx"
             misc_binder = Path(temporary) / "Misc.xlsx"
             delivery_binder = Path(temporary) / "Delivery.xlsx"
             conversions_binder = Path(temporary) / "Conversions.xlsx"
@@ -2156,7 +2397,8 @@ def generate(root, binder, output, verify_print=False):
             else:
                 shutil.copyfile(combined_binder, bulk_binder)
             theme_operational_sheets(bulk_binder, operational_binder)
-            fit_misc_sheet(operational_binder, misc_binder)
+            floral_entries = move_floral_codes(operational_binder, floral_binder)
+            fit_misc_sheet(floral_binder, misc_binder)
             replace_sheet(misc_binder, delivery_content, delivery_binder, DELIVERY_SHEET)
             with zipfile.ZipFile(misc_binder) as archive:
                 sheet_names = [sheet.get("name") for sheet in
@@ -2178,6 +2420,14 @@ def generate(root, binder, output, verify_print=False):
         try:
             validate_stretch(result[STRETCH_SHEET], stretch_source)
             validate_directory(result[DIRECTORY_SHEET], directory_images)
+            if floral_entries:
+                soil, misc = result[SOIL_SHEET], result[MISC_SHEET]
+                for entry in floral_entries:
+                    code, name = soil[entry["soil_code"]], soil[entry["soil_name"]]
+                    if ((code.value, code.data_type, code.number_format, name.value) !=
+                            (entry["code"], entry["code_type"], entry["number_format"], entry["name"]) or
+                            any(cell.value == entry["name"] for row in misc for cell in row)):
+                        raise ValueError("Floral Codes move failed workbook validation")
             validate_delivery(result[DELIVERY_SHEET], delivery_images)
             soil_images = ([image._data() for image in result[SOIL_SHEET]._images]
                            if SOIL_SHEET in result else None)
@@ -2333,7 +2583,7 @@ def generate(root, binder, output, verify_print=False):
             "AI provenance and uncertain visual verdicts are recorded only in the external audit report.",
             "Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.",
             "Time To Stretch uses the supplied color guide; Soil retains its original barcode images under "
-            "a green heading; Weighed more $100 uses green headings with original instructions; "
+            "a green heading, with Floral Codes beside them; Weighed more $100 uses green headings with original instructions; "
             "Misc Codes uses green headings and pale-green "
             "entry shading on one page, with original cells and number formats retained; "
             "Conversions uses the owner-uploaded, visually checked one-page image; the original source charts "
@@ -2362,7 +2612,8 @@ def generate(root, binder, output, verify_print=False):
             misc_text=misc_text, directory_images=directory_images,
             conversions_image=conversions_source_image if conversion_source != "not present" else None,
             stretch_image=stretch_source, bakery_coordinates=bakery_coordinates,
-            delivery_images=delivery_images, soil_images=soil_images, weighed_text=weighed_text)
+            delivery_images=delivery_images, soil_images=soil_images, weighed_text=weighed_text,
+            floral_entries=floral_entries)
         if summary["print_validation"]["photos"]["drawn_images"] != len(images):
             raise ValueError("printed reference count differs from the exact image mapping")
         (output / "VALIDATION.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")

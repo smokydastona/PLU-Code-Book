@@ -1,2 +1,2 @@
-convert /tmp/plu-cohesive-final/Complete Till Binder - Updated - Photos.xlsx as a Calc document -> /tmp/till-print-buixvc44/Complete Till Binder - Updated - Photos.pdf using filter : calc_pdf_Export:{"UseLosslessCompression":{"type":"boolean","value":"true"},"ReduceImageResolution":{"type":"boolean","value":"false"}}
+convert /tmp/plu-floral-review-final-2026/Complete Till Binder - Updated - Photos.xlsx as a Calc document -> /tmp/till-print-m5564evp/Complete Till Binder - Updated - Photos.pdf using filter : calc_pdf_Export:{"UseLosslessCompression":{"type":"boolean","value":"true"},"ReduceImageResolution":{"type":"boolean","value":"false"}}
 Warning: failed to launch javaldx - java may not function correctly

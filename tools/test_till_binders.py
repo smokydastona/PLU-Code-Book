@@ -20,7 +20,7 @@ from openpyxl.worksheet.pagebreak import Break
 from PIL import Image, ImageChops, ImageOps
 
 from build_till_binders import (BULK_SHEETS, CONVERSIONS_ACCURACY_REVIEW, CONVERSIONS_SOURCE, CONVERSIONS_SOURCE_SHA256, DELIVERY_HEADER_BANDS, DELIVERY_SHEET, DIRECTORY_EMERGENCY_HIGHLIGHTS, DIRECTORY_SOURCES, FILENAMES, MAX_GITHUB_FILE_SIZE, PDF_EXPORT_FORMAT, STRETCH_SOURCE, VISUALS, bulk_print_pages,
-                               combine_bulk, comparisons, directory_sheet, fit_misc_sheet, generate, layout_rows, misc_page_matches, misc_print_text,
+                               MISC_TITLE, combine_bulk, comparisons, directory_sheet, fit_misc_sheet, generate, layout_rows, misc_page_matches, misc_print_text, move_floral_codes,
                                docx_compatible_image,
                                delivery_sheet, map_images, produce_catalog, quick_sheet, replace_produce, replace_sheet,
                                sha, sheet_info, stretch_sheet, theme_conversions_sheet, theme_operational_sheets,
@@ -34,7 +34,7 @@ from organic_watermarks import render_watermark
 from build_deli_sheet import convert
 from build_bulk_sheet import bulk_sheet, read_bulk, validate_bulk
 from build_bakery_sheet import (BAKERY_SOURCE, read_source as read_bakery_source,
-                                validate_sheet as validate_bakery_sheet)
+                                validate_sheet as validate_bakery_sheet, workbook_bytes as bakery_workbook_bytes)
 from binder_theme import PALE_GREEN
 
 
@@ -477,7 +477,7 @@ class TillBinderChecks(unittest.TestCase):
         self.assertEqual(len(list(self.output.glob("*.xlsx"))), 1)
         self.assertFalse((self.output / "booklets").exists())
         self.assertEqual(summary["produce_records_included"], 7)
-        self.assertEqual(summary["bakery_records_included"], 45)
+        self.assertEqual(summary["bakery_records_included"], 37)
         self.assertEqual(summary["total_source_records"], 10)
         self.assertEqual(summary["hidden_or_deleted_records"], 2)
         self.assertEqual(summary["known_non_produce_excluded"], 1)
@@ -520,7 +520,7 @@ class TillBinderChecks(unittest.TestCase):
             self.assertEqual(summary["validations"][edition]["deli_records_verified"], 2)
             _, bakery_coordinates, bakery_products = read_bakery_source(self.root)
             validate_bakery_sheet(workbook["Bakery"], bakery_products, bakery_coordinates)
-            self.assertEqual(summary["validations"][edition]["bakery_records_verified"], 45)
+            self.assertEqual(summary["validations"][edition]["bakery_records_verified"], 37)
             self.assertEqual(workbook["Operational"]["B2"].value, "=SUM(A2:A3)")
             self.assertEqual(workbook["Operational"]["B2"].comment.text, "Keep this comment")
             self.assertEqual(str(workbook["Operational"].merged_cells), "A1:C1")
@@ -550,9 +550,11 @@ class TillBinderChecks(unittest.TestCase):
 
     def test_bakery_sheet_keeps_all_exact_text_entries_in_one_page_theme(self):
         content, coordinates, products = read_bakery_source(self.root)
-        self.assertEqual(len(products), 45)
+        self.assertEqual(len(products), 37)
         self.assertEqual([sum(row["category"] == category for row in products)
-                          for category in ("Bulk Buns", "Bagels", "Muffins")], [11, 16, 18])
+                          for category in ("Bulk Buns", "Bagels", "Muffins")], [11, 8, 18])
+        removed = {"55854", "47898", "55935", "55865", "68342", "68343", "55756", "55861"}
+        self.assertTrue(removed.isdisjoint(row["plu"] for row in products))
         self.assertEqual([row["plu"] for row in products if row["category"] == "Muffins"], [
             "76255", "56126", "65873", "92655", "2298", "2349", "66136", "2329",
             "73798", "65619", "2326", "73799", "2327", "30298", "80228", "40457",
@@ -565,12 +567,27 @@ class TillBinderChecks(unittest.TestCase):
         original = load_workbook(self.binder)
         try:
             validate_bakery_sheet(result["Bakery"], products, coordinates)
+            headings = [cell.value for row in result["Bakery"] for cell in row
+                        if cell.value in ("Bulk Buns", "Bagels", "Muffins")]
+            self.assertCountEqual(headings, ["Bulk Buns", "Bagels", "Muffins"])
             self.assertEqual(result["Produce"]["B3"].value, original["Produce"]["B3"].value)
             self.assertEqual(result["Deli"]["A1"].value, original["Deli"]["A1"].value)
             self.assertEqual(result.sheetnames, original.sheetnames)
         finally:
             result.close()
             original.close()
+
+    def test_bakery_groups_are_not_split_when_source_count_changes(self):
+        _, _, products = read_bakery_source(self.root)
+        content, coordinates = bakery_workbook_bytes(products[:-1])
+        workbook = load_workbook(io.BytesIO(content))
+        try:
+            headings = [cell.value for row in workbook["Bakery"] for cell in row
+                        if cell.value in ("Bulk Buns", "Bagels", "Muffins")]
+            self.assertCountEqual(headings, ["Bulk Buns", "Bagels", "Muffins"])
+            validate_bakery_sheet(workbook["Bakery"], products[:-1], coordinates)
+        finally:
+            workbook.close()
 
     def test_existing_binder_can_be_updated_without_losing_other_sheet_edits(self):
         generate(self.root, self.binder, self.output)
@@ -613,12 +630,15 @@ class TillBinderChecks(unittest.TestCase):
         pdf = PdfReader(self.root / "misc-only.pdf")
         pages = [page for page in pdf.pages if misc_page_matches(page, expected)]
         self.assertEqual(len(pages), 1)
+        self.assertIn(MISC_TITLE, pages[0].extract_text())
         self.assertEqual((round(float(pages[0].mediabox.width)), round(float(pages[0].mediabox.height))),
                          (612, 792))
         original = load_workbook(source)
         updated = load_workbook(combined)
         try:
             self.assertEqual(list(original["Misc Codes"].values), list(updated["Misc Codes"].values))
+            self.assertEqual([updated["Misc Codes"].cell(27, col).fill.fgColor.rgb
+                              for col in range(1, 5)], ["00305040"] * 4)
         finally:
             original.close()
             updated.close()
@@ -644,20 +664,37 @@ class TillBinderChecks(unittest.TestCase):
                     ".//{http://schemas.openxmlformats.org/spreadsheetml/2006/main}c")
                 for node in nodes:
                     node.attrib.pop("s", None)
-                cells.append([ET.tostring(node) for node in nodes])
-            self.assertEqual(*cells)
+                cells.append({node.get("r"): ET.tostring(node) for node in nodes})
+            for coordinate, cell in cells[0].items():
+                self.assertEqual(cell, cells[1][coordinate])
         workbook = load_workbook(result)
         try:
             sheet = workbook["Misc Codes"]
             self.assertEqual(sheet["A1"].fill.fgColor.rgb, "00305040")
             self.assertEqual(sheet["A1"].font.color.rgb, "00FFFFFF")
-            self.assertEqual(sheet["A2"].fill.fgColor.rgb, "00" + PALE_GREEN)
+            self.assertEqual(sheet["A2"].fill.fgColor.rgb, "00FFFFFF")
+            self.assertEqual(sheet["A4"].fill.fgColor.rgb, "00" + PALE_GREEN)
+            self.assertEqual(sheet["A1"].fill.fgColor.rgb, sheet["B1"].fill.fgColor.rgb)
+            self.assertEqual(sheet["C1"].fill.fgColor.rgb, sheet["D1"].fill.fgColor.rgb)
+            self.assertEqual(sheet["A2"].border.bottom.style, "hair")
+            self.assertIsNone(sheet["A2"].border.left)
+            self.assertEqual(sheet["A2"].font.name, "DejaVu Sans")
             self.assertEqual(sheet["A2"].value, "00012")
             self.assertEqual(sheet["C3"].number_format, '"$"#,##0.00')
             self.assertEqual(sheet["B4"].value, "=C3*2")
             self.assertFalse(sheet.sheet_view.showGridLines)
+            self.assertEqual(sheet.oddHeader.center.text, MISC_TITLE)
         finally:
             workbook.close()
+
+    def test_misc_theme_refuses_to_replace_owner_header(self):
+        source = self.root / "misc-header.xlsx"
+        workbook = load_workbook(self.binder)
+        workbook["Misc Codes"].oddHeader.center.text = "Owner instructions"
+        workbook.save(source)
+        workbook.close()
+        with self.assertRaisesRegex(ValueError, "existing print header"):
+            fit_misc_sheet(source, self.root / "rejected-header.xlsx")
 
     def test_soil_and_weighed_theme_preserves_barcode_images_and_instructions(self):
         source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
@@ -704,6 +741,73 @@ class TillBinderChecks(unittest.TestCase):
         workbook.close()
         with self.assertRaisesRegex(ValueError, "additional data"):
             theme_operational_sheets(source, self.root / "rejected-soil.xlsx")
+
+    def test_move_floral_codes_preserves_source_values_and_soil_images_and_is_idempotent(self):
+        source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
+        themed, moved, again = (self.root / name for name in ("themed.xlsx", "moved.xlsx", "again.xlsx"))
+        theme_operational_sheets(source, themed)
+        entries = move_floral_codes(themed, moved)
+        self.assertEqual(len(entries), 8)
+        original, result = load_workbook(themed), load_workbook(moved)
+        try:
+            for entry in entries:
+                for source_key, destination_key in (("source_code", "soil_code"), ("source_name", "soil_name")):
+                    old = original["Misc Codes"][entry[source_key]]
+                    new = result["Soil"][entry[destination_key]]
+                    self.assertEqual((new.value, new.data_type, new.number_format),
+                                     (old.value, old.data_type, old.number_format))
+                    self.assertIsNone(result["Misc Codes"][entry[source_key]].value)
+            self.assertIsNone(result["Misc Codes"]["B27"].value)
+            self.assertEqual(result["Soil"]["L1"].value, "Floral Codes")
+            self.assertEqual(str(result["Soil"].print_area), "'Soil'!$B$1:$M$66")
+            self.assertEqual(result["Soil"].page_setup.scale, 70)
+            self.assertEqual([sha(image._data()) for image in original["Soil"]._images],
+                             [sha(image._data()) for image in result["Soil"]._images])
+        finally:
+            original.close()
+            result.close()
+        with zipfile.ZipFile(themed) as before, zipfile.ZipFile(moved) as after:
+            changed = {"xl/workbook.xml", "xl/styles.xml", sheet_info(before, "Soil")[0],
+                       sheet_info(before, "Misc Codes")[0]}
+            for name in before.namelist():
+                if name not in changed:
+                    self.assertEqual(before.read(name), after.read(name), name)
+        move_floral_codes(moved, again)
+        self.assertEqual(moved.read_bytes(), again.read_bytes())
+
+    def test_move_floral_codes_preserves_leading_zero_text(self):
+        source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
+        edited, themed, moved = (self.root / name for name in ("edited.xlsx", "themed.xlsx", "moved.xlsx"))
+        workbook = load_workbook(source)
+        workbook["Misc Codes"]["A28"] = "00012"
+        workbook.save(edited)
+        workbook.close()
+        theme_operational_sheets(edited, themed)
+        move_floral_codes(themed, moved)
+        workbook = load_workbook(moved)
+        try:
+            self.assertEqual(workbook["Soil"]["L3"].value, "00012")
+            self.assertEqual(workbook["Soil"]["L3"].data_type, "s")
+        finally:
+            workbook.close()
+
+    def test_move_floral_codes_rejects_conflicts_and_incomplete_source(self):
+        source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
+        for sheet, coordinate, value in (("Soil", "L3", "Owner data"),
+                                         ("Misc Codes", "B28", None),
+                                         ("Misc Codes", "A33", "Unreviewed data")):
+            with self.subTest(sheet=sheet, coordinate=coordinate):
+                edited = self.root / "edited.xlsx"
+                themed = self.root / "themed.xlsx"
+                workbook = load_workbook(source)
+                workbook[sheet][coordinate] = value
+                workbook.save(edited)
+                workbook.close()
+                if themed.exists():
+                    themed.unlink()
+                theme_operational_sheets(edited, themed)
+                with self.assertRaises(ValueError):
+                    move_floral_codes(themed, self.root / "rejected.xlsx")
 
     def test_uploaded_conversions_image_replaces_charts_and_is_preserved(self):
         source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"

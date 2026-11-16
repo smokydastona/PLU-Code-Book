@@ -106,7 +106,11 @@ def workbook_bytes(rows):
     for column, width in (("A", 31), ("B", 9), ("C", 3), ("D", 31), ("E", 9)):
         sheet.column_dimensions[column].width = width
 
-    midpoint = (len(rows) + 1) // 2
+    boundaries = [index for index in range(1, len(rows))
+                  if rows[index - 1]["category"] != rows[index]["category"]]
+    if not boundaries:
+        raise ValueError("Bakery needs at least two product groups")
+    midpoint = min(boundaries, key=lambda index: abs(len(rows) - 2 * index))
     coordinates = []
     _group_panel(rows[:midpoint], 1, sheet, coordinates)
     _group_panel(rows[midpoint:], 4, sheet, coordinates)

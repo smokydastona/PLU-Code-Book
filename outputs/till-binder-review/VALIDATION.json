@@ -6,8 +6,8 @@
   "deli_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Updated_Deli_Two_Columns.xlsx",
   "deli_source_sha256": "a26ab6cf98d72d656e5cfd7a5c8928a7938ae1d965934a597c047f8eb37438f3",
   "bakery_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Bakery_Products.csv",
-  "bakery_source_sha256": "b962c6219f70740e280a57dfd14ccba5811ab0223970f88b46944402c401c214",
-  "bakery_records_included": 45,
+  "bakery_source_sha256": "c9ee6248b2f1ecec772bdb38a0be9ae580a07e9c4ed7b9dcfd5da40737e125a6",
+  "bakery_records_included": 37,
   "stretch_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Time_To_Stretch.jpg",
   "stretch_source_sha256": "b96e6cbecc167c31e77235b6b02171fc0e94b63aa1f76860fb22258d25f088ed",
   "conversions_source": "owner-uploaded image",
@@ -398,7 +398,7 @@
       "worksheets_preserved": 11,
       "produce_records_verified": 548,
       "deli_records_verified": 52,
-      "bakery_records_verified": 45,
+      "bakery_records_verified": 37,
       "delivery_pages_verified": 2,
       "produce_images_verified": 513,
       "original_parts_checked": 104,
@@ -409,8 +409,8 @@
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "81fc9150f466a39e8738a994310bca95a1644254e2b3f6116228f16bde9f31fd",
-      "file_size_bytes": 13428585,
+      "file_sha256": "da3818a93708eea62ff0a4e4354b43a1d1fa43ed2de31cbba6ca47b7566bd733",
+      "file_size_bytes": 13428771,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 400,
       "output_sheet_names": [
@@ -439,7 +439,7 @@
       "every_description_found": true,
       "drawn_images": 513,
       "deli_print_records_verified": 52,
-      "bakery_print_records_verified": 45,
+      "bakery_print_records_verified": 37,
       "bakery_print_page_verified": true,
       "bulk_print_pages_verified": 6,
       "bulk_print_font_points": 11,
@@ -462,7 +462,7 @@
     "Missing, identity-mismatched, checksum-changed and unreadable image associations remain blank.",
     "Existing and newly supplied identity-linked AI illustrations are visual references at the owner's request; AI provenance and uncertain visual verdicts are recorded only in the external audit report.",
     "Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.",
-    "Time To Stretch uses the supplied color guide; Soil retains its original barcode images under a green heading; Weighed more $100 uses green headings with original instructions; Misc Codes uses green headings and pale-green entry shading on one page, with original cells and number formats retained; Conversions uses the owner-uploaded, visually checked one-page image; the original source charts remain preserved in the original binder and workbook package; Delivery Charges retains its two source pages with green header bands and an explicit page split; Store Directory uses identity-matched list stripes and highlights on the template's two images; Bakery is replaced from the reviewed Bakery product list in a compact one-page theme; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.",
+    "Time To Stretch uses the supplied color guide; Soil retains its original barcode images under a green heading, with Floral Codes beside them; Weighed more $100 uses green headings with original instructions; Misc Codes uses green headings and pale-green entry shading on one page, with original cells and number formats retained; Conversions uses the owner-uploaded, visually checked one-page image; the original source charts remain preserved in the original binder and workbook package; Delivery Charges retains its two source pages with green header bands and an explicit page split; Store Directory uses identity-matched list stripes and highlights on the template's two images; Bakery is replaced from the reviewed Bakery product list in a compact one-page theme; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.",
     "Future unclassified entries are retained for review, not silently discarded or approved."
   ]
 }

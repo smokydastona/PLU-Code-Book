@@ -4,7 +4,7 @@ REVIEW COPY ONLY - NOT RELEASED FOR OPERATIONAL TILL USE
 Source XML SHA-256: 38732869b0e7b1c8ccb0b6189a8685a1125595ebcc9ded4e9cc48d18d6ea8727
 Original workbook SHA-256: 6b0aeaa153233c5f4917811a3f7a5b2212f7a946a0abede372a31db556ab0f63
 Updated Deli source SHA-256: a26ab6cf98d72d656e5cfd7a5c8928a7938ae1d965934a597c047f8eb37438f3; entries: 52
-Updated Bakery source SHA-256: b962c6219f70740e280a57dfd14ccba5811ab0223970f88b46944402c401c214; entries: 45
+Updated Bakery source SHA-256: c9ee6248b2f1ecec772bdb38a0be9ae580a07e9c4ed7b9dcfd5da40737e125a6; entries: 37
 Time To Stretch image SHA-256: b96e6cbecc167c31e77235b6b02171fc0e94b63aa1f76860fb22258d25f088ed
 Conversions image SHA-256: e3a51d715ee020604a65041c046dbd4092ebe043c390c82c3f427e98775ae504
 Conversions accuracy review: Owner-uploaded image visually checked against all three original chart images: volume values, weight values, kilograms-to-pounds values, price tiers and rounding note match. The $4.99 price converts to $11.00/kg in both the original chart and uploaded image; a prior editable draft's $11.02 value was incorrect and is not used.
@@ -19,7 +19,8 @@ New owner-supplied AI crops: 0
 AI illustrations omitted (if rejected or invalid association): 0
 Classification review: 5; organic placement review: 94; main-item sorting review: 0
 
-Produce, Bakery, Deli, Bulk and Misc Codes use alternating white and pale-green product rows.
+Produce, Bakery, Deli, Bulk, Misc Codes and the Soil floral column use alternating white and pale-green rows.
+Floral Codes are moved from Misc Codes beside the Soil barcodes on the same page.
 Store Directory uses alternating green stripes on the list, preserving original nonwhite pixels.
 Bulk is one themed sheet with six category-grouped pages at 11 pt, without print scaling.
 Every original package part outside Produce, Bakery, Deli, Time To Stretch, Soil, Weighed more $100,
@@ -40,7 +41,7 @@ Image outcomes:
   MISSING: 35
   APPROVED_WORKINGLIST_IMAGE: 18
 
-Print validation: {"photos": {"status": "PASS", "pages": 10, "landscape_us_letter": true, "complete_workbook_opened_and_exported_by_calc": true, "complete_binder_pdf_pages": 27, "every_page_code_count_verified": true, "every_description_found": true, "drawn_images": 513, "deli_print_records_verified": 52, "bakery_print_records_verified": 45, "bakery_print_page_verified": true, "bulk_print_pages_verified": 6, "bulk_print_font_points": 11, "stretch_print_page_verified": true, "misc_print_page_verified": true, "conversions_print_image_verified": true, "directory_print_pages_verified": 2, "directory_print_pixels_losslessly_verified": true, "delivery_print_pages_verified": 2, "delivery_page_split_verified": true, "soil_print_images_verified": 24, "weighed_print_text_verified": true, "complete_pdf": "Complete Till Binder - Updated - Photos.pdf", "visual_review": "REQUIRED; automated text/geometry checks are not a visual print approval"}}
+Print validation: {"photos": {"status": "PASS", "pages": 10, "landscape_us_letter": true, "complete_workbook_opened_and_exported_by_calc": true, "complete_binder_pdf_pages": 27, "every_page_code_count_verified": true, "every_description_found": true, "drawn_images": 513, "deli_print_records_verified": 52, "bakery_print_records_verified": 37, "bakery_print_page_verified": true, "bulk_print_pages_verified": 6, "bulk_print_font_points": 11, "stretch_print_page_verified": true, "misc_print_page_verified": true, "conversions_print_image_verified": true, "directory_print_pages_verified": 2, "directory_print_pixels_losslessly_verified": true, "delivery_print_pages_verified": 2, "delivery_page_split_verified": true, "soil_print_images_verified": 24, "weighed_print_text_verified": true, "complete_pdf": "Complete Till Binder - Updated - Photos.pdf", "visual_review": "REQUIRED; automated text/geometry checks are not a visual print approval"}}
 
 Detailed reports:
   VALIDATION.json: checks, hashes, counts and publication blockers
@@ -69,7 +70,7 @@ Unresolved issues / limits:
   Missing, identity-mismatched, checksum-changed and unreadable image associations remain blank.
   Existing and newly supplied identity-linked AI illustrations are visual references at the owner's request; AI provenance and uncertain visual verdicts are recorded only in the external audit report.
   Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.
-  Time To Stretch uses the supplied color guide; Soil retains its original barcode images under a green heading; Weighed more $100 uses green headings with original instructions; Misc Codes uses green headings and pale-green entry shading on one page, with original cells and number formats retained; Conversions uses the owner-uploaded, visually checked one-page image; the original source charts remain preserved in the original binder and workbook package; Delivery Charges retains its two source pages with green header bands and an explicit page split; Store Directory uses identity-matched list stripes and highlights on the template's two images; Bakery is replaced from the reviewed Bakery product list in a compact one-page theme; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.
+  Time To Stretch uses the supplied color guide; Soil retains its original barcode images under a green heading, with Floral Codes beside them; Weighed more $100 uses green headings with original instructions; Misc Codes uses green headings and pale-green entry shading on one page, with original cells and number formats retained; Conversions uses the owner-uploaded, visually checked one-page image; the original source charts remain preserved in the original binder and workbook package; Delivery Charges retains its two source pages with green header bands and an explicit page split; Store Directory uses identity-matched list stripes and highlights on the template's two images; Bakery is replaced from the reviewed Bakery product list in a compact one-page theme; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.
   Future unclassified entries are retained for review, not silently discarded or approved.
 
 No original file, authoritative XML, assignment approval or published booklet was changed.
