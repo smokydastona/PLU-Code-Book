@@ -31,6 +31,23 @@ class ProduceOrderTests(unittest.TestCase):
         self.assertEqual(ordered[0]["display_name"], "APPLES AMBROSIA")
         self.assertEqual(rows[0]["name"], "Organic Royal Gala Apples")
 
+    def test_subgroups_by_type_with_asian_produce_last(self):
+        rows = [row("1", "1", "Bok Choy"), row("2", "2", "Herbs Basil"),
+                row("3", "3", "Eggplant Italian"), row("4", "4", "Apples Fuji"),
+                row("5", "5", "Mint"), row("6", "6", "Apples Gala"),
+                row("7", "7", "Zucchini"), row("8", "8", "Napa Cabbage")]
+        ordered = order_produce(rows)
+        self.assertEqual([(r["display_section"], r["display_group"], r["name"]) for r in ordered], [
+            ("A", "Apples", "Apples Fuji"), ("A", "Apples", "Apples Gala"),
+            ("E", "Eggplant", "Eggplant Italian"), ("H", "Herbs", "Herbs Basil"),
+            ("H", "Herbs", "Mint"), ("Z", "Zucchini", "Zucchini"),
+            ("ASIAN PRODUCE", "", "Bok Choy"), ("ASIAN PRODUCE", "", "Napa Cabbage")])
+
+    def test_organic_follows_its_conventional_variety_within_subgroup(self):
+        rows = [row("1", "94131", "Organic Apples Fuji", "3"), row("2", "4133", "Apples Gala"),
+                row("3", "4131", "Apples Fuji"), row("4", "94133", "Organic Apples Gala", "2")]
+        self.assertEqual([r["source_id"] for r in order_produce(rows)], ["3", "1", "2", "4"])
+
     def test_specific_names_and_reviewed_pairing(self):
         self.assertEqual(product_key("Melon Cantaloupe Large")[0], "CANTALOUPE")
         self.assertEqual(product_key("Organic Oranges Mango")[0], "ORANGE")
@@ -62,6 +79,7 @@ class ProduceOrderTests(unittest.TestCase):
         self.addCleanup(workbook.close)
         sheet = workbook["Produce"]
         self.assertEqual(sheet["A4"].value, "A")
+        self.assertEqual(sheet["A5"].value, "Apples")
         self.assertEqual([(sheet[e["code_cell"]].value, sheet[e["description_cell"]].value)
                           for e in coordinates],
                          [("42", "APPLE GALA"), ("00042", "ORGANIC APPLE GALA"),

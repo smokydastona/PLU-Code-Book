@@ -6,23 +6,26 @@
 5,Misc Codes,612,792,portrait,128,21.32,421,none
 6,Bakery,612,792,portrait,180,28.71,421,none
 7,Deli,612,792,portrait,233,38.23,421,none
-8,Produce,792,612,landscape,254,46.34,421,none
-9,Produce,792,612,landscape,220,45.83,421,none
-10,Produce,792,612,landscape,206,46.51,421,none
-11,Produce,792,612,landscape,230,47.68,421,none
-12,Produce,792,612,landscape,216,47.0,421,none
-13,Produce,792,612,landscape,246,45.86,421,none
-14,Produce,792,612,landscape,244,44.26,421,none
-15,Produce,792,612,landscape,228,45.36,421,none
-16,Produce,792,612,landscape,237,46.6,421,none
-17,Produce,792,612,landscape,218,46.76,421,none
-18,Bulk,792,612,landscape,269,35.51,421,none
-19,Bulk,792,612,landscape,309,41.42,421,none
-20,Bulk,792,612,landscape,335,44.27,421,none
-21,Bulk,792,612,landscape,313,45.05,421,none
-22,Bulk,792,612,landscape,180,27.57,421,none
-23,Bulk,792,612,landscape,290,39.0,421,none
-24,Delivery Charges,612,792,portrait,0,7.33,421,none
-25,Delivery Charges,612,792,portrait,0,7.98,421,none
-26,Store Directory,792,612,landscape,0,24.81,421,none
-27,Store Directory,792,612,landscape,0,17.85,421,none
+8,Produce,792,612,landscape,237,41.64,421,none
+9,Produce,792,612,landscape,182,37.07,421,none
+10,Produce,792,612,landscape,179,35.45,421,none
+11,Produce,792,612,landscape,185,38.48,421,none
+12,Produce,792,612,landscape,188,39.4,421,none
+13,Produce,792,612,landscape,208,40.63,421,none
+14,Produce,792,612,landscape,223,41.44,421,none
+15,Produce,792,612,landscape,221,39.99,421,none
+16,Produce,792,612,landscape,227,42.05,421,none
+17,Produce,792,612,landscape,180,36.62,421,none
+18,Produce,792,612,landscape,226,42.59,421,none
+19,Produce,792,612,landscape,195,38.87,421,none
+20,Produce,792,612,landscape,77,13.63,421,none
+21,Bulk,792,612,landscape,269,35.51,421,none
+22,Bulk,792,612,landscape,309,41.42,421,none
+23,Bulk,792,612,landscape,335,44.27,421,none
+24,Bulk,792,612,landscape,313,45.05,421,none
+25,Bulk,792,612,landscape,180,27.57,421,none
+26,Bulk,792,612,landscape,290,39.0,421,none
+27,Delivery Charges,612,792,portrait,0,7.33,421,none
+28,Delivery Charges,612,792,portrait,0,7.98,421,none
+29,Store Directory,792,612,landscape,0,24.81,421,none
+30,Store Directory,792,612,landscape,0,17.85,421,none

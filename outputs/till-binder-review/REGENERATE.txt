@@ -1,7 +1,3 @@
 Exact generation command (output must be empty; use a new directory when rerunning):
 
-/tmp/venv/bin/python /workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/refactored-broccoli/tools/build_till_binders.py --root /workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/refactored-broccoli --binder /workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/refactored-broccoli/sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx --output outputs/till-binder-review --verify-print
-
-After building, audit the output (writes AUDIT_REPORT.json, PRINT_LAYOUT_REPORT.csv, PRODUCTION_BLOCKERS.csv):
-
-python tools/audit_till_binder.py --binder sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx --output <same output directory>
+/tmp/venv/bin/python /workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/reimagined-system/tools/build_till_binders.py --root /workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/reimagined-system --binder /workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/reimagined-system/sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx --output /tmp/tbr --verify-print

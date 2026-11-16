@@ -1421,18 +1421,21 @@ def layout_rows(rows):
     """Fill three familiar top-to-bottom blocks, repeating headings at breaks."""
     layout, index, block = [], 0, 0
     while index < len(rows):
-        line, previous = 0, None
+        line, previous = 0, (None, None)
         while line < LINES and index < len(rows):
             row = rows[index]
-            category = row["display_section"]
-            if category != previous:
-                if line == LINES - 1:
-                    break
-                layout.append(dict(kind="heading", block=block, line=line, text=category))
-                line += 1
-                previous = category
-            if line == LINES:
+            section, group = row["display_section"], row.get("display_group", "")
+            headings = []
+            if section != previous[0]:
+                headings.append(dict(level=1, text=section))
+            if group and (section != previous[0] or group != previous[1]):
+                headings.append(dict(level=2, text=group))
+            if line + len(headings) >= LINES and headings:
                 break
+            for heading in headings:
+                layout.append(dict(kind="heading", block=block, line=line, **heading))
+                line += 1
+            previous = (section, group)
             layout.append(dict(kind="product", block=block, line=line, record=row))
             line += 1
             index += 1
@@ -1547,8 +1550,9 @@ def quick_sheet(rows, images, with_photos, title="PRODUCE"):
             cell = sheet.cell(number, base)
             set_text(cell, entry["text"])
             cell.font = Font(name="DejaVu Sans", size=9, bold=True)
-            cell.fill = PatternFill("solid", fgColor="DCE6DA")
-            cell.alignment = Alignment(vertical="center", wrap_text=True)
+            cell.fill = PatternFill("solid", fgColor="DCE6DA" if entry["level"] == 1 else "EEF3EC")
+            cell.alignment = Alignment(vertical="center", wrap_text=True,
+                                       indent=1 if entry["level"] == 2 else 0)
             continue
         row = entry["record"]
         code, description, photo = [sheet.cell(number, base + offset) for offset in (0, 1, 3)]
@@ -2141,8 +2145,10 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                     raise ValueError(f"{edition} page {number}: printed codes missing, duplicated or clipped: "
                                      f"missing {codes - printed}; unexpected {printed - codes}")
                 normalized = normalize_printed_produce_text(text)
+                joined = normalized.replace("- ", "-")
                 missing = [entry["product"] for entry in selected
-                           if " ".join(entry["product"].split()) not in normalized]
+                           if " ".join(entry["product"].split()) not in normalized
+                           and " ".join(entry["product"].split()).replace("- ", "-") not in joined]
                 if missing:
                     raise ValueError(f"{edition} page {number}: missing/clipped descriptions: {missing}")
                 resources = page["/Resources"]["/XObject"] if "/XObject" in page["/Resources"] else {}

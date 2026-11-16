@@ -132,6 +132,23 @@ PRODUCTS = (
     ("ZUCCHINI", r"zucchini"),
 )
 
+ASIAN_PRODUCTS = {"BOK CHOY", "GAI CHOY", "GAI LAN", "ON CHOY", "YU CHOY", "SHER LI HON",
+                  "SING QUA", "DAIKON", "BEAN SPROUTS", "WATER CHESTNUTS"}
+ASIAN_SECTION = "ASIAN PRODUCE"
+HERBS = {"BASIL", "CHIVES", "CILANTRO", "DILL", "MINT", "PARSLEY", "ROSEMARY", "LEMON GRASS"}
+MELONS = {"WATERMELON", "CANTALOUPE", "HONEYDEW"}
+GROUP_NAMES = {
+    "APPLE": "Apples", "APRICOT": "Apricots", "ARTICHOKE": "Artichokes", "AVOCADO": "Avocados",
+    "BANANA": "Bananas", "CUCUMBER": "Cucumbers", "DATES": "Dates", "FIGS": "Figs",
+    "GRAPES": "Grapes", "LEEKS": "Leeks", "LEMON": "Lemons", "LIME": "Limes",
+    "MANDARIN": "Mandarins", "MANGO": "Mangoes", "MUSHROOM": "Mushrooms", "NECTARINE": "Nectarines",
+    "ONION": "Onions", "ORANGE": "Oranges", "PEACH": "Peaches", "PEAR": "Pears",
+    "PEPPER": "Peppers", "PERSIMMON": "Persimmons", "PLUM": "Plums", "POTATO": "Potatoes",
+    "PUMPKIN": "Pumpkins", "RADISH": "Radishes", "SWEET POTATO": "Sweet Potatoes",
+    "TANGELO": "Tangelos", "TANGERINE": "Tangerines", "TOMATILLO": "Tomatillos",
+    "TOMATO": "Tomatoes", "TURNIP": "Turnips", "YAM": "Yams",
+}
+
 MODIFIERS = re.compile(
     r"\b(?:organic|bc|local|bulk|case|pint|quart|flat|cut|small|medium|large|"
     r"sm|sml|lrg|xl|baby|mini|jumbo|bunch|half|by|the|pounds?|lbs?)\b|\b\d+\b",
@@ -173,6 +190,19 @@ def product_key(name):
     return product, variety, True
 
 
+def display_group(name, product):
+    """Return (letter or special section, cashier-facing subgroup) for a main item."""
+    if product in ASIAN_PRODUCTS or re.search(r"\bnapa\b", name, re.I):
+        return ASIAN_SECTION, ""
+    if product in HERBS:
+        group = "Herbs"
+    elif product in MELONS:
+        group = "Melons"
+    else:
+        group = GROUP_NAMES.get(product, product.title())
+    return group[0].upper(), group
+
+
 def order_produce(rows):
     """Sort display copies; report unrecognized main items for review."""
     result = []
@@ -181,7 +211,8 @@ def order_produce(rows):
         product, variety, recognized = product_key(item["name"])
         if not product or not product[0].isalpha():
             raise ValueError(f"{item['source_id']}: cannot determine produce letter")
-        item.update(display_section=product[0], display_name=item["name"].upper(),
+        section, group = display_group(item["name"], product)
+        item.update(display_section=section, display_group=group, display_name=item["name"].upper(),
                     sort_product=product, sort_variety=variety,
                     sort_status="RECOGNIZED" if recognized else "MAIN_ITEM_REVIEW_REQUIRED")
         result.append(item)
@@ -193,7 +224,9 @@ def order_produce(rows):
             row["sort_product"] = counterpart["sort_product"]
             row["sort_variety"] = counterpart["sort_variety"]
             row["display_section"] = counterpart["display_section"]
+            row["display_group"] = counterpart["display_group"]
     return sorted(result, key=lambda row: (
+        row["display_section"] == ASIAN_SECTION, row["display_section"], row["display_group"],
         row["sort_product"], row["sort_variety"], row["organic"],
         bool(MODIFIERS.search(row["name"])),
         row["name"].upper(), row["plu"], row["source_id"]))

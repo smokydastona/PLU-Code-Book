@@ -74,8 +74,8 @@
     ]
   },
   "print_layout": {
-    "pages": 27,
-    "expected_pages": 27,
+    "pages": 30,
+    "expected_pages": 30,
     "sections": {
       "Time To Stretch": 1,
       "Conversions": 1,
@@ -84,7 +84,7 @@
       "Misc Codes": 1,
       "Bakery": 1,
       "Deli": 1,
-      "Produce": 10,
+      "Produce": 13,
       "Bulk": 6,
       "Delivery Charges": 2,
       "Store Directory": 2
@@ -103,8 +103,8 @@
     "sources": {
       "Code Booklet": 334,
       "AI Generated": 131,
-      "": 17,
       "Produce Sheets": 2,
+      "": 17,
       "Produce Guide": 28,
       "https://www.fsproduce.com/wp-content/uploads/2015/05/BUCK-BRAND-SPECIALTY-CITRUS-INFOGRAPHIC-1.pdf": 1
     },
