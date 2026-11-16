@@ -21,7 +21,7 @@ AI illustrations omitted (if rejected or invalid association): 0
 Classification review: 5; organic placement review: 94; main-item sorting review: 0
 
 Produce, Bakery, Deli, Bulk and Misc Codes use alternating white and pale-green rows.
-Floral Codes appear on Misc Codes; Soil retains its original print area and product artwork.
+Floral Codes appear on Misc Codes; Soil keeps its product artwork in an enlarged, numbered guide.
 Eight Soil Code 128 barcodes are regenerated uniformly from independently decoded original values.
 Print verification decodes each rendered barcode at 150 and 300 dpi; physically scan before use.
 Store Directory uses alternating green stripes on the list, preserving original nonwhite pixels.
@@ -73,7 +73,7 @@ Unresolved issues / limits:
   Missing, identity-mismatched, checksum-changed and unreadable image associations remain blank.
   Existing and newly supplied identity-linked AI illustrations are visual references at the owner's request; AI provenance and uncertain visual verdicts are recorded only in the external audit report.
   Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.
-  Time To Stretch uses the supplied color guide; Soil uses uniformly regenerated Code 128 barcodes under a green heading, preserving exact source values; scan the printed page before use. Floral Codes appear on Misc Codes; Weighed more $100 uses the visually compared owner upload with muted green colors, unchanged instructions and label values on one portrait page; Misc Codes uses green headings and pale-green entry shading on one page, with original cells and number formats retained; Conversions uses the owner-uploaded, visually checked one-page image; the original source charts remain preserved in the original binder and workbook package; Delivery Charges retains its two source pages with green header bands and an explicit page split; Store Directory uses identity-matched list stripes and highlights on the template's two images; Bakery is replaced from the reviewed Bakery product list in a compact one-page theme; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.
+  Time To Stretch uses the supplied color guide; Soil uses a numbered, enlarged green-themed guide with uniformly regenerated Code 128 barcodes preserving exact source values; scan the printed page before use. Floral Codes appear on Misc Codes; Weighed more $100 uses the visually compared owner upload with muted green colors, unchanged instructions and label values on one portrait page; Misc Codes uses green headings and pale-green entry shading on one page, with original cells and number formats retained; Conversions uses the owner-uploaded, visually checked one-page image; the original source charts remain preserved in the original binder and workbook package; Delivery Charges retains its two source pages with green header bands and an explicit page split; Store Directory uses identity-matched list stripes and highlights on the template's two images; Bakery is replaced from the reviewed Bakery product list in a compact one-page theme; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.
   Future unclassified entries are retained for review, not silently discarded or approved.
 
 No original file, authoritative XML, assignment approval or published booklet was changed.

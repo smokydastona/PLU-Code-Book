@@ -20,7 +20,7 @@ from openpyxl.worksheet.pagebreak import Break
 from PIL import Image, ImageChops, ImageOps
 
 from build_till_binders import (BULK_SHEETS, CONVERSIONS_ACCURACY_REVIEW, CONVERSIONS_SOURCE, CONVERSIONS_SOURCE_SHA256, DELIVERY_HEADER_BANDS, DELIVERY_SHEET, DIRECTORY_EMERGENCY_HIGHLIGHTS, DIRECTORY_SOURCES, FILENAMES, MAX_GITHUB_FILE_SIZE, PDF_EXPORT_FORMAT, STRETCH_SOURCE, VISUALS, bulk_print_pages,
-                               MISC_TITLE, SOIL_BARCODE_SOURCES, SOIL_BARCODE_WIDTH, SOIL_BARCODE_HEIGHT, add_continuation_labels, combine_bulk, comparisons, decoded_soil_barcode, directory_sheet, fit_misc_sheet, generate, layout_rows, misc_page_matches, misc_print_text, normalize_soil_barcodes, restore_floral_codes,
+                               MISC_TITLE, SOIL_BARCODE_SOURCES, SOIL_BARCODE_WIDTH, SOIL_BARCODE_HEIGHT, add_continuation_labels, combine_bulk, comparisons, decoded_soil_barcode, directory_sheet, fit_misc_sheet, generate, layout_rows, misc_page_matches, misc_print_text, normalize_soil_barcodes, restore_floral_codes, style_soil_guide,
                                docx_compatible_image,
                                delivery_sheet, map_images, produce_catalog, quick_sheet, replace_produce, replace_sheet,
                                sha, sheet_info, stretch_sheet, theme_conversions_sheet, theme_operational_sheets,
@@ -797,6 +797,46 @@ class TillBinderChecks(unittest.TestCase):
         workbook.close()
         with self.assertRaisesRegex(ValueError, "additional data"):
             theme_operational_sheets(source, self.root / "rejected-soil.xlsx")
+
+    def test_soil_guide_styling_preserves_images_and_barcode_positions(self):
+        source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
+        themed, styled, repeated = (self.root / name for name in
+                                    ("soil-theme.xlsx", "soil-guide.xlsx", "soil-guide-again.xlsx"))
+        theme_operational_sheets(source, themed)
+        style_soil_guide(themed, styled)
+        original, result = load_workbook(themed), load_workbook(styled)
+        try:
+            soil = result["Soil"]
+            self.assertEqual(str(soil.print_area), "'Soil'!$A$1:$J$66")
+            self.assertEqual(soil.page_setup.scale, 77)
+            self.assertEqual((soil.page_margins.top, soil.page_margins.bottom), (.22, .22))
+            self.assertEqual([soil[cell].value for cell in ("A2", "B2", "E2", "I2")],
+                             ["#", "Product", "Barcode", "Product Image"])
+            self.assertEqual([soil[f"A{row}"].value for row in range(3, 67, 8)], list(range(1, 9)))
+            self.assertEqual(soil["A3"].fill.fgColor.rgb, "00305040")
+            self.assertEqual(soil["B3"].fill.fgColor.rgb, "00FFFFFF")
+            self.assertEqual(soil["B11"].fill.fgColor.rgb, "00" + PALE_GREEN)
+            self.assertEqual([sha(image._data()) for image in original["Soil"]._images],
+                             [sha(image._data()) for image in soil._images])
+        finally:
+            original.close()
+            result.close()
+        style_soil_guide(styled, repeated)
+        result = load_workbook(repeated)
+        try:
+            self.assertEqual([result["Soil"][f"A{row}"].value for row in range(3, 67, 8)], list(range(1, 9)))
+        finally:
+            result.close()
+
+    def test_soil_guide_refuses_existing_number_column_data(self):
+        source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
+        workbook = load_workbook(source)
+        workbook["Soil"]["A5"] = "Owner data"
+        edited = self.root / "soil-owner-data.xlsx"
+        workbook.save(edited)
+        workbook.close()
+        with self.assertRaisesRegex(ValueError, "contains owner data"):
+            style_soil_guide(edited, self.root / "rejected-soil-guide.xlsx")
 
     def test_soil_barcodes_preserve_codes_and_have_uniform_dimensions(self):
         source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"

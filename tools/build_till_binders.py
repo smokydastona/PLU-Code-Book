@@ -598,6 +598,131 @@ def restore_floral_codes(binder, destination):
     return entries
 
 
+def style_soil_guide(binder, destination):
+    workbook = load_workbook(binder)
+    donor = Workbook()
+    themed = donor.active
+    headers = {"A2": "#", "B2": "Product", "E2": "Barcode", "I2": "Product Image"}
+    merges = ["B2:D2", "E2:H2", "I2:J2"] + [f"A{row}:A{row + 7}" for row in range(3, 67, 8)]
+    try:
+        soil = workbook[SOIL_SHEET]
+        existing_merges = {str(item) for item in soil.merged_cells.ranges}
+        if str(soil.print_area) not in ("'Soil'!$B$1:$J$66", "'Soil'!$A$1:$J$66"):
+            raise ValueError("Soil print area changed; review before restyling")
+        for row in soil.iter_rows(min_row=1, max_row=66, min_col=1, max_col=10):
+            for cell in row:
+                expected = headers.get(cell.coordinate)
+                if cell.column == 1 and cell.row >= 3 and (cell.row - 3) % 8 == 0:
+                    expected = (cell.row - 3) // 8 + 1
+                protected_area = cell.column == 1 or cell.row == 2
+                if protected_area and (cell.value not in (None, expected) or cell.comment or cell.hyperlink):
+                    raise ValueError(f"Soil guide destination {cell.coordinate} contains owner data")
+        for merged in soil.merged_cells.ranges:
+            if (merged.min_col == 1 or merged.min_row == 2) and str(merged) not in merges:
+                raise ValueError("Soil guide heading or number column has an unexpected merge")
+        for row in range(1, 67):
+            for col in range(1, 11):
+                source, target = soil.cell(row, col), themed.cell(row, col)
+                target.font = copy.copy(source.font)
+                target.fill = copy.copy(source.fill)
+                target.border = copy.copy(source.border)
+                target.alignment = copy.copy(source.alignment)
+                target.number_format = source.number_format
+                target.protection = copy.copy(source.protection)
+                if row == 1 and col == 1:
+                    target.fill = PatternFill("solid", fgColor=DARK_GREEN)
+                elif row == 2:
+                    target.fill = PatternFill("solid", fgColor="DCE6DA")
+                    target.font = Font(name="DejaVu Sans", size=11, bold=True, color=DARK_GREEN)
+                    target.alignment = Alignment(horizontal="center", vertical="center")
+                elif row >= 3:
+                    if col == 1:
+                        target.fill = PatternFill("solid", fgColor=DARK_GREEN)
+                        target.font = Font(name="DejaVu Sans", size=20, bold=True, color="FFFFFF")
+                        target.alignment = Alignment(horizontal="center", vertical="center")
+                    else:
+                        target.fill = row_fill((row - 3) // 8)
+        content = io.BytesIO()
+        donor.save(content)
+    finally:
+        workbook.close()
+        donor.close()
+    with zipfile.ZipFile(binder) as original, zipfile.ZipFile(io.BytesIO(content.getvalue())) as style_source:
+        path, index = sheet_info(original, SOIL_SHEET)
+        sheet = xml(original.read(path))
+        styles, style_ids = merge_styles(original.read("xl/styles.xml"), style_source.read("xl/styles.xml"))
+        data = sheet.find(f"{{{S}}}sheetData")
+        for number in range(1, 67):
+            row = data.find(f"{{{S}}}row[@r='{number}']")
+            if row is None:
+                raise ValueError(f"Soil row {number} is missing")
+            if number == 2:
+                row.set("ht", "20")
+                row.set("customHeight", "1")
+            for column in range(1, 11):
+                coord = f"{get_column_letter(column)}{number}"
+                cell = row.find(f"{{{S}}}c[@r='{coord}']")
+                if cell is None:
+                    cell = ET.Element(f"{{{S}}}c", r=coord)
+                    following = next((node for node in row.findall(f"{{{S}}}c")
+                                      if range_boundaries(node.get("r"))[0] > column), None)
+                    if following is None:
+                        row.append(cell)
+                    else:
+                        following.addprevious(cell)
+                cell.set("s", str(style_ids[themed[coord].style_id]))
+                value = headers.get(coord)
+                if column == 1 and number >= 3 and (number - 3) % 8 == 0:
+                    value = (number - 3) // 8 + 1
+                if value is not None:
+                    for child in list(cell):
+                        cell.remove(child)
+                    if isinstance(value, int):
+                        cell.set("t", "n")
+                        ET.SubElement(cell, f"{{{S}}}v").text = str(value)
+                    else:
+                        cell.set("t", "inlineStr")
+                        ET.SubElement(ET.SubElement(cell, f"{{{S}}}is"), f"{{{S}}}t").text = value
+        columns = sheet.find(f"{{{S}}}cols")
+        if columns is None:
+            columns = ET.Element(f"{{{S}}}cols")
+            data.addprevious(columns)
+        matching = [node for node in columns if int(node.get("min")) <= 1 <= int(node.get("max"))]
+        if matching and not (len(matching) == 1 and matching[0].get("min") == matching[0].get("max") == "1"):
+            raise ValueError("Soil number column has an unexpected column definition")
+        if not matching:
+            column = ET.Element(f"{{{S}}}col", min="1", max="1", width="6", customWidth="1")
+            columns.insert(0, column)
+        elif matching[0].get("width") != "6":
+            raise ValueError("Soil number column width changed; review the template")
+        merge_nodes = sheet.find(f"{{{S}}}mergeCells")
+        if merge_nodes is None:
+            raise ValueError("Soil title merge is missing")
+        for area in merges:
+            if area not in existing_merges:
+                ET.SubElement(merge_nodes, f"{{{S}}}mergeCell", ref=area)
+        merge_nodes.set("count", str(len(merge_nodes)))
+        sheet.find(f"{{{S}}}dimension").set("ref", "A1:J66")
+        margins = sheet.find(f"{{{S}}}pageMargins")
+        setup = sheet.find(f"{{{S}}}pageSetup")
+        if margins is None or setup is None:
+            raise ValueError("Soil print settings are missing")
+        margins.set("top", "0.22")
+        margins.set("bottom", "0.22")
+        setup.set("scale", "77")
+        book = xml(original.read("xl/workbook.xml"))
+        areas = [node for node in book.find(f"{{{S}}}definedNames") if node.get("name") == "_xlnm.Print_Area"
+                 and node.get("localSheetId") == str(index)]
+        if len(areas) != 1:
+            raise ValueError("Soil print area is missing or ambiguous")
+        areas[0].text = "'Soil'!$A$1:$J$66"
+        changes = {path: serialize(sheet), "xl/styles.xml": styles, "xl/workbook.xml": serialize(book)}
+        with zipfile.ZipFile(destination, "x", compression=zipfile.ZIP_DEFLATED) as output:
+            output.comment = original.comment
+            for entry in original.infolist():
+                output.writestr(entry, changes.get(entry.filename, original.read(entry.filename)))
+
+
 def fit_misc_sheet(binder, destination):
     workbook = load_workbook(binder)
     donor = Workbook()
@@ -2139,6 +2264,11 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                     page = pages[0]
                     if abs(page.rect.width - 612) > 1 or abs(page.rect.height - 792) > 1:
                         raise ValueError(f"{edition}: Soil is not portrait US Letter")
+                    words = page.get_text("words")
+                    for label in ("Product", "Barcode", "Product Image"):
+                        matches = page.search_for(label)
+                        if not matches or not all(page.rect.contains(match) for match in matches):
+                            raise ValueError(f"{edition}: Soil column heading {label!r} is missing or clipped")
                     expected = Counter(sha(directory_image_pixels(content)) for content in soil_images)
                     actual = Counter()
                     for image in page.get_image_info(xrefs=True):
@@ -2147,6 +2277,11 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                         actual[sha(directory_image_pixels(document.extract_image(image["xref"])["image"]))] += 1
                     if actual != expected:
                         raise ValueError(f"{edition}: printed Soil images differ from the source")
+                    title = page.search_for("SOIL BARCODES")
+                    image_bounds = [pymupdf.Rect(image["bbox"]) for image in page.get_image_info()]
+                    if (len(title) != 1 or not image_bounds or
+                            max(bounds.y1 for bounds in image_bounds) - title[0].y0 < page.rect.height * .9):
+                        raise ValueError(f"{edition}: Soil guide does not fill the page vertically")
                     barcodes = {sha(directory_image_pixels(soil_barcode_image(code))): code
                                 for code, _ in SOIL_BARCODE_SOURCES.values()}
                     printed_barcodes = []
@@ -2159,10 +2294,13 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                     if [code for _, code in printed_barcodes] != [
                             value[0] for _, value in sorted(SOIL_BARCODE_SOURCES.items())]:
                         raise ValueError(f"{edition}: printed Soil barcodes are missing or in the wrong rows")
-                    for bounds, code in printed_barcodes:
+                    for row_number, (bounds, code) in enumerate(printed_barcodes, 1):
                         if (abs(bounds.width - printed_barcodes[0][0].width) > .5 or
                                 abs(bounds.height - printed_barcodes[0][0].height) > .5 or bounds.width < 140):
                             raise ValueError(f"{edition}: Soil barcodes are not uniformly sized")
+                        if not any(word[4] == str(row_number) and word[2] < bounds.x0 and
+                                   bounds.y0 <= (word[1] + word[3]) / 2 <= bounds.y1 for word in words):
+                            raise ValueError(f"{edition}: Soil row number {row_number} is missing or misplaced")
                         for dpi in (150, 300):
                             pixels = page.get_pixmap(dpi=dpi, clip=bounds, colorspace=pymupdf.csRGB, alpha=False)
                             rendered = Image.frombytes("RGB", (pixels.width, pixels.height), pixels.samples)
@@ -2511,7 +2649,7 @@ def report_text(summary):
         f"main-item sorting review: {summary['produce_sort_review_required']}",
         "",
         "Produce, Bakery, Deli, Bulk and Misc Codes use alternating white and pale-green rows.",
-        "Floral Codes appear on Misc Codes; Soil retains its original print area and product artwork.",
+        "Floral Codes appear on Misc Codes; Soil keeps its product artwork in an enlarged, numbered guide.",
         "Eight Soil Code 128 barcodes are regenerated uniformly from independently decoded original values.",
         "Print verification decodes each rendered barcode at 150 and 300 dpi; physically scan before use.",
         "Store Directory uses alternating green stripes on the list, preserving original nonwhite pixels.",
@@ -2651,6 +2789,7 @@ def generate(root, binder, output, verify_print=False):
             soil_binder = Path(temporary) / "Soil.xlsx"
             weighed_binder = Path(temporary) / "Weighed.xlsx"
             floral_binder = Path(temporary) / "Floral.xlsx"
+            soil_guide_binder = Path(temporary) / "SoilGuide.xlsx"
             misc_binder = Path(temporary) / "Misc.xlsx"
             delivery_binder = Path(temporary) / "Delivery.xlsx"
             conversions_binder = Path(temporary) / "Conversions.xlsx"
@@ -2690,7 +2829,11 @@ def generate(root, binder, output, verify_print=False):
             else:
                 shutil.copyfile(soil_binder, weighed_binder)
             floral_entries = restore_floral_codes(weighed_binder, floral_binder)
-            fit_misc_sheet(floral_binder, misc_binder)
+            if has_soil:
+                style_soil_guide(floral_binder, soil_guide_binder)
+            else:
+                shutil.copyfile(floral_binder, soil_guide_binder)
+            fit_misc_sheet(soil_guide_binder, misc_binder)
             replace_sheet(misc_binder, delivery_content, delivery_binder, DELIVERY_SHEET)
             with zipfile.ZipFile(misc_binder) as archive:
                 sheet_names = [sheet.get("name") for sheet in
@@ -2889,8 +3032,8 @@ def generate(root, binder, output, verify_print=False):
             "Existing and newly supplied identity-linked AI illustrations are visual references at the owner's request; "
             "AI provenance and uncertain visual verdicts are recorded only in the external audit report.",
             "Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.",
-            "Time To Stretch uses the supplied color guide; Soil uses uniformly regenerated Code 128 barcodes "
-            "under a green heading, preserving exact source values; scan the printed page before use. "
+            "Time To Stretch uses the supplied color guide; Soil uses a numbered, enlarged green-themed guide "
+            "with uniformly regenerated Code 128 barcodes preserving exact source values; scan the printed page before use. "
             "Floral Codes appear on Misc Codes; Weighed more $100 uses the visually compared owner upload "
             "with muted green colors, unchanged instructions and label values on one portrait page; "
             "Misc Codes uses green headings and pale-green "
