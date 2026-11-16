@@ -23,7 +23,9 @@ from build_till_binders import (BULK_SHEETS, CONVERSIONS_ACCURACY_REVIEW, CONVER
                                combine_bulk, comparisons, directory_sheet, fit_misc_sheet, generate, layout_rows, misc_page_matches, misc_print_text,
                                docx_compatible_image,
                                delivery_sheet, map_images, produce_catalog, quick_sheet, replace_produce, replace_sheet,
-                               sha, sheet_info, stretch_sheet, theme_conversions_sheet, themed_directory_image,                                themed_delivery_image, validate_delivery, validate_package, visual_records,
+                               sha, sheet_info, stretch_sheet, theme_conversions_sheet, theme_operational_sheets,
+                               theme_product_table,
+                               themed_directory_image, themed_delivery_image, validate_delivery, validate_package, visual_records,
                                workbook_photo_copy)
 from picklist_catalog import read_picklist, read_assignments, write_record_baseline
 from review_image_references import load_references
@@ -33,6 +35,7 @@ from build_deli_sheet import convert
 from build_bulk_sheet import bulk_sheet, read_bulk, validate_bulk
 from build_bakery_sheet import (BAKERY_SOURCE, read_source as read_bakery_source,
                                 validate_sheet as validate_bakery_sheet)
+from binder_theme import PALE_GREEN
 
 
 class TillBinderChecks(unittest.TestCase):
@@ -199,6 +202,26 @@ class TillBinderChecks(unittest.TestCase):
             self.assertIsNotNone(ImageChops.difference(original.convert("L"), themed.convert("L")).getbbox())
         with self.assertRaisesRegex(ValueError, "changed"):
             themed_directory_image(b"changed", 1)
+
+    def test_directory_list_stripes_preserve_map_and_accept_previous_theme(self):
+        source = (self.root / DIRECTORY_SOURCES[0]).read_bytes()
+        with Image.open(io.BytesIO(themed_directory_image(source, 0))) as image:
+            self.assertEqual(image.getpixel((90, 200)), (255, 255, 255))
+            self.assertEqual(image.getpixel((90, 230)), tuple(bytes.fromhex(PALE_GREEN)))
+            self.assertEqual(image.getpixel((600, 85)), (255, 255, 255))
+            self.assertEqual(image.getpixel((600, 115)), tuple(bytes.fromhex(PALE_GREEN)))
+        workbook = load_workbook(self.binder)
+        try:
+            sheet = workbook["Store Directory"]
+            for index, picture in enumerate(sheet._images):
+                old = themed_directory_image(self.directory_originals[index], index, row_stripes=False)
+                replacement = ExcelImage(io.BytesIO(old))
+                replacement.anchor = picture.anchor
+                sheet._images[index] = replacement
+            _, images = directory_sheet(sheet)
+            self.assertEqual(images, self.directory_content)
+        finally:
+            workbook.close()
 
     def test_directory_emergency_highlights_are_red_without_changing_map_ink(self):
         content = (self.root / DIRECTORY_SOURCES[1]).read_bytes()
@@ -628,13 +651,59 @@ class TillBinderChecks(unittest.TestCase):
             sheet = workbook["Misc Codes"]
             self.assertEqual(sheet["A1"].fill.fgColor.rgb, "00305040")
             self.assertEqual(sheet["A1"].font.color.rgb, "00FFFFFF")
-            self.assertEqual(sheet["A2"].fill.fgColor.rgb, "00DCE6DA")
+            self.assertEqual(sheet["A2"].fill.fgColor.rgb, "00" + PALE_GREEN)
             self.assertEqual(sheet["A2"].value, "00012")
             self.assertEqual(sheet["C3"].number_format, '"$"#,##0.00')
             self.assertEqual(sheet["B4"].value, "=C3*2")
             self.assertFalse(sheet.sheet_view.showGridLines)
         finally:
             workbook.close()
+
+    def test_soil_and_weighed_theme_preserves_barcode_images_and_instructions(self):
+        source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
+        result = self.root / "operational-themed.xlsx"
+        theme_operational_sheets(source, result)
+        with zipfile.ZipFile(source) as before, zipfile.ZipFile(result) as after:
+            parts = {sheet_info(before, name)[0] for name in ("Soil", "Weighed more $100")}
+            for name in before.namelist():
+                if name not in parts | {"xl/styles.xml"}:
+                    self.assertEqual(before.read(name), after.read(name), name)
+        original, themed = load_workbook(source), load_workbook(result)
+        try:
+            soil, updated = original["Soil"], themed["Soil"]
+            self.assertEqual(updated["B1"].value, soil["E1"].value)
+            self.assertEqual(updated["B1"].fill.fgColor.rgb, "00305040")
+            self.assertEqual(updated["B1"].font.color.rgb, "00FFFFFF")
+            self.assertIn("B1:J1", str(updated.merged_cells))
+            self.assertTrue(updated.print_options.horizontalCentered)
+            self.assertEqual(updated.print_area, soil.print_area)
+            self.assertEqual([sha(image._data()) for image in updated._images],
+                             [sha(image._data()) for image in soil._images])
+            self.assertEqual(list(themed["Weighed more $100"].values),
+                             list(original["Weighed more $100"].values))
+            self.assertEqual(themed["Weighed more $100"]["A3"].font.color.rgb, "00305040")
+        finally:
+            original.close()
+            themed.close()
+        again = self.root / "operational-again.xlsx"
+        theme_operational_sheets(result, again)
+        workbook = load_workbook(again)
+        try:
+            self.assertEqual(len(workbook["Soil"]._images), 24)
+            self.assertEqual(str(workbook["Soil"].merged_cells), "B1:J1")
+        finally:
+            workbook.close()
+
+    def test_soil_theme_rejects_content_in_heading_area(self):
+        source = self.root / "soil-changed.xlsx"
+        workbook = Workbook()
+        workbook.active.title = "Soil"
+        workbook.active["E1"] = "SOIL BARCODES"
+        workbook.active["F1"] = "Owner data"
+        workbook.save(source)
+        workbook.close()
+        with self.assertRaisesRegex(ValueError, "additional data"):
+            theme_operational_sheets(source, self.root / "rejected-soil.xlsx")
 
     def test_uploaded_conversions_image_replaces_charts_and_is_preserved(self):
         source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
@@ -926,6 +995,50 @@ class TillBinderChecks(unittest.TestCase):
                 self.assertEqual(layout[index + 1]["kind"], "product")
                 self.assertEqual(layout[index + 1]["block"], entry["block"])
         self.assertTrue(any(entry["block"] >= 3 for entry in layout))
+
+    def test_produce_stripes_cover_merged_names_and_keep_duplicate_warnings(self):
+        rows = [dict(display_section="A", source_id=str(i), plu=f"{i:05}",
+                     name=f"Apple {i}", duplicate_count=2 if i == 1 else 1)
+                for i in range(25)]
+        content, coordinates, _ = quick_sheet(rows, {}, False)
+        workbook = load_workbook(io.BytesIO(content))
+        try:
+            sheet = workbook["Produce"]
+            for index in (0, 1, 2, 19, 20):
+                entry = coordinates[index]
+                product = sheet[entry["description_cell"]]
+                expected = "00" + (PALE_GREEN if index in (1, 20) else "FFFFFF")
+                self.assertEqual(product.fill.fgColor.rgb, expected)
+                self.assertEqual(sheet[entry["image_cell"]].fill.fgColor.rgb, expected)
+            self.assertEqual(sheet[coordinates[1]["code_cell"]].fill.fgColor.rgb, "00FFC7CE")
+            with zipfile.ZipFile(io.BytesIO(content)) as archive:
+                tree = ET.fromstring(archive.read("xl/worksheets/sheet1.xml"))
+                cells = {cell.get("r"): int(cell.get("s", 0)) for cell in
+                         tree.findall(".//{http://schemas.openxmlformats.org/spreadsheetml/2006/main}c")}
+                for entry in coordinates:
+                    product = entry["description_cell"]
+                    next_column = chr(ord(product[0]) + 1) + product[1:]
+                    self.assertEqual(workbook._cell_styles[cells[product]].fillId,
+                                     workbook._cell_styles[cells[next_column]].fillId)
+        finally:
+            workbook.close()
+
+    def test_binder_tables_use_matching_alternating_rows(self):
+        root = Path(__file__).resolve().parents[1]
+        bakery, bakery_coordinates, _ = read_bakery_source(root)
+        from build_deli_sheet import read_source as read_deli_source
+        deli, deli_coordinates = read_deli_source(root)
+        for name, content, coordinates in (("Bakery", bakery, bakery_coordinates),
+                                            ("Deli", deli, deli_coordinates)):
+            workbook = load_workbook(io.BytesIO(theme_product_table(content, name, coordinates)))
+            try:
+                sheet = workbook[name]
+                for row, color in ((5, "00FFFFFF"), (6, "00" + PALE_GREEN)):
+                    self.assertEqual(sheet.cell(row, 1).fill.fgColor.rgb, color)
+                    self.assertEqual(sheet.cell(row, 2).fill.fgColor.rgb, color)
+                self.assertEqual(sheet["A3"].fill.fgColor.rgb, "00305040")
+            finally:
+                workbook.close()
 
     def test_validation_detects_unrelated_package_changes(self):
         assignments = read_assignments(self.root / "data/picklist_assignments.json")

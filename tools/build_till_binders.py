@@ -48,6 +48,7 @@ from sync_picklist import (booklet_order, csv_output, organic, organic_display_s
 from working_list import read_working_list
 from build_deli_sheet import DELI_SOURCE, read_source as read_deli_source, validate_sheet as validate_deli_sheet
 from build_bulk_sheet import TITLE as BULK_TITLE, bulk_sheet, read_bulk, validate_bulk
+from binder_theme import DARK_GREEN, PALE_GREEN, row_fill
 
 ROOT = Path(__file__).resolve().parents[1]
 S = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
@@ -73,6 +74,8 @@ BULK_SHEETS = ("Bulk", "Bulk (2)", "Bulk (3)", "Bulk (4)")
 STRETCH_SOURCE = Path("sources/binders/Time_To_Stretch.jpg")
 STRETCH_SHEET = "Time To Stretch"
 MISC_SHEET = "Misc Codes"
+SOIL_SHEET = "Soil"
+WEIGHED_SHEET = "Weighed more $100"
 CONVERSIONS_SHEET = "Conversions"
 CONVERSIONS_SOURCE = Path("sources/binders/Conversions_Updated.jpg")
 CONVERSIONS_SOURCE_SHA256 = "e3a51d715ee020604a65041c046dbd4092ebe043c390c82c3f427e98775ae504"
@@ -190,6 +193,113 @@ def sheet_info(archive, name="Produce"):
     raise ValueError(f"original binder has no {name!r} sheet")
 
 
+def theme_operational_sheets(binder, destination):
+    workbook = load_workbook(binder)
+    donor = Workbook()
+    edits = {}
+    try:
+        if SOIL_SHEET in workbook:
+            styles_sheet = donor.active
+            soil = workbook[SOIL_SHEET]
+            heading_coordinate = next((coordinate for coordinate in ("B1", "E1")
+                                       if soil[coordinate].value == "SOIL BARCODES"), None)
+            if heading_coordinate is None:
+                raise ValueError("Soil heading changed; review its layout before applying the theme")
+            if any((cell.value is not None and cell.coordinate != heading_coordinate) or
+                   cell.comment or cell.hyperlink for cell in (soil.cell(1, col) for col in range(2, 11))):
+                raise ValueError("Soil heading area contains additional data; review before applying the theme")
+            for merged in soil.merged_cells.ranges:
+                if merged.min_row <= 1 <= merged.max_row and merged.min_col <= 10 and merged.max_col >= 2:
+                    if str(merged) != "B1:J1":
+                        raise ValueError("Soil heading area has an unexpected merge")
+            for col in range(2, 11):
+                cell = styles_sheet.cell(1, col)
+                cell.fill = PatternFill("solid", fgColor="305040")
+                if col == 2:
+                    cell.font = Font(name="DejaVu Sans", size=13, bold=True, color="FFFFFF")
+                    cell.alignment = Alignment(horizontal="center", vertical="center")
+            edits[SOIL_SHEET] = {styles_sheet.cell(1, col).coordinate: styles_sheet.cell(1, col)
+                                 for col in range(2, 11)}
+        if WEIGHED_SHEET in workbook:
+            styles_sheet = donor.create_sheet()
+            edits[WEIGHED_SHEET] = {}
+            for row in workbook[WEIGHED_SHEET]:
+                for source in row:
+                    if not isinstance(source.value, str):
+                        continue
+                    if source.row != 1 and not source.value.startswith(("STEP ", "IMPORTANT ")):
+                        continue
+                    target = styles_sheet[source.coordinate]
+                    target.font = Font(name="DejaVu Sans", size=18, bold=True, color="305040")
+                    target.alignment = copy.copy(source.alignment)
+                    target.number_format = source.number_format
+                    target.fill = copy.copy(source.fill)
+                    target.border = copy.copy(source.border)
+                    target.protection = copy.copy(source.protection)
+                    edits[WEIGHED_SHEET][source.coordinate] = target
+        content = io.BytesIO()
+        donor.save(content)
+    finally:
+        workbook.close()
+        donor.close()
+    with zipfile.ZipFile(binder) as original, zipfile.ZipFile(io.BytesIO(content.getvalue())) as style_source:
+        styles, style_ids = merge_styles(original.read("xl/styles.xml"), style_source.read("xl/styles.xml"))
+        changes = {"xl/styles.xml": styles}
+        for name, cells in edits.items():
+            path, _ = sheet_info(original, name)
+            sheet = xml(original.read(path))
+            for view in sheet.findall(f"{{{S}}}sheetViews/{{{S}}}sheetView"):
+                view.set("showGridLines", "0")
+            if name == SOIL_SHEET and heading_coordinate == "E1":
+                row = sheet.find(f"{{{S}}}sheetData/{{{S}}}row[@r='1']")
+                heading = row.find(f"{{{S}}}c[@r='E1']")
+                existing = row.find(f"{{{S}}}c[@r='B1']")
+                if existing is not None:
+                    row.remove(existing)
+                heading.set("r", "B1")
+                row.remove(heading)
+                row.insert(0, heading)
+            for coordinate, styled in cells.items():
+                row_number = styled.row
+                row = sheet.find(f"{{{S}}}sheetData/{{{S}}}row[@r='{row_number}']")
+                cell = row.find(f"{{{S}}}c[@r='{coordinate}']")
+                if cell is None:
+                    cell = ET.Element(f"{{{S}}}c", r=coordinate)
+                    following = next((existing for existing in row.findall(f"{{{S}}}c")
+                                      if range_boundaries(existing.get("r"))[0] > styled.column), None)
+                    if following is None:
+                        row.append(cell)
+                    else:
+                        following.addprevious(cell)
+                cell.set("s", str(style_ids[styled.style_id]))
+            if name == SOIL_SHEET:
+                merges = sheet.find(f"{{{S}}}mergeCells")
+                if merges is None:
+                    merges = ET.Element(f"{{{S}}}mergeCells")
+                    preceding = {"sheetPr", "dimension", "sheetViews", "sheetFormatPr", "cols", "sheetData",
+                                 "sheetCalcPr", "sheetProtection", "protectedRanges", "scenarios", "autoFilter",
+                                 "sortState", "dataConsolidate", "customSheetViews"}
+                    index = next((i for i, child in enumerate(sheet)
+                                  if ET.QName(child).localname not in preceding), len(sheet))
+                    sheet.insert(index, merges)
+                if not any(node.get("ref") == "B1:J1" for node in merges):
+                    ET.SubElement(merges, f"{{{S}}}mergeCell", ref="B1:J1")
+                merges.set("count", str(len(merges)))
+                print_options = sheet.find(f"{{{S}}}printOptions")
+                if print_options is None:
+                    print_options = ET.Element(f"{{{S}}}printOptions")
+                    margins = sheet.find(f"{{{S}}}pageMargins")
+                    if margins is None:
+                        raise ValueError("Soil sheet has no page margins")
+                    margins.addprevious(print_options)
+                print_options.set("horizontalCentered", "1")
+            changes[path] = serialize(sheet)
+        with zipfile.ZipFile(destination, "x", compression=zipfile.ZIP_DEFLATED) as output:
+            output.comment = original.comment
+            for entry in original.infolist():
+                output.writestr(entry, changes.get(entry.filename, original.read(entry.filename)))
+
+
 def fit_misc_sheet(binder, destination):
     workbook = load_workbook(binder)
     donor = Workbook()
@@ -215,7 +325,7 @@ def fit_misc_sheet(binder, destination):
                     font.bold = True
                 target.font = font
                 target.fill = PatternFill("solid", fgColor=(
-                    "305040" if heading else "DCE6DA" if cell.row % 2 == 0 else "FFFFFF"))
+                    DARK_GREEN if heading else PALE_GREEN if cell.row % 2 == 0 else "FFFFFF"))
         content = io.BytesIO()
         donor.save(content)
     finally:
@@ -398,7 +508,7 @@ def validate_directory_template(archive):
         raise ValueError("Store Directory image hyperlinks require review")
 
 
-def themed_directory_image(content, index, emergency_highlights=True, parking_labels=True):
+def themed_directory_image(content, index, emergency_highlights=True, parking_labels=True, row_stripes=True):
     if sha(content) != DIRECTORY_SOURCE_HASHES[index]:
         raise ValueError(f"Store Directory page {index + 1} changed; review its map highlights before rebuilding")
     with Image.open(io.BytesIO(content)) as image:
@@ -407,6 +517,14 @@ def themed_directory_image(content, index, emergency_highlights=True, parking_la
     shape = ImageDraw.Draw(highlights)
     regions = Image.new("L", original.size)
     region_draw = ImageDraw.Draw(regions)
+    if index == 0 and row_stripes:
+        for left, right, top, count in ((80, 560, 190, 35), (575, 1060, 72, 39),
+                                         (1080, 1555, 71, 39), (1570, 2050, 72, 36)):
+            for row in range(1, count, 2):
+                y = round(top + row * 30.1)
+                box = (left, y, right, y + 28)
+                shape.rectangle(box, fill="#" + PALE_GREEN)
+                region_draw.rectangle(box, fill=255)
     for box in DIRECTORY_HIGHLIGHTS[index]:
         shape.rounded_rectangle(box, radius=8, fill="#DCE6DA", outline="#305040", width=2)
         region_draw.rounded_rectangle(box, radius=8, fill=255)
@@ -543,7 +661,11 @@ def directory_sheet(sheet, originals=None):
         if content not in (originals[index], images[index],
                            themed_directory_image(originals[index], index, parking_labels=False),
                            themed_directory_image(originals[index], index, emergency_highlights=False,
-                                                  parking_labels=False)):
+                                                  parking_labels=False),
+                           themed_directory_image(originals[index], index, row_stripes=False),
+                           themed_directory_image(originals[index], index, parking_labels=False, row_stripes=False),
+                           themed_directory_image(originals[index], index, emergency_highlights=False,
+                                                  parking_labels=False, row_stripes=False)):
             raise ValueError(f"Store Directory page {index + 1} changed; review its map highlights before rebuilding")
     workbook = Workbook()
     result = workbook.active
@@ -1182,7 +1304,7 @@ def quick_sheet(rows, images, with_photos, title="PRODUCE"):
         sheet.merge_cells(start_row=start, start_column=1, end_row=start, end_column=14)
         set_text(sheet.cell(start, 1), title + " PLU QUICK GUIDE - " +
                  ("VISUAL REFERENCES" if with_photos else "TEXT ONLY"))
-        sheet.cell(start, 1).font = Font(name="DejaVu Sans", size=13, bold=True)
+        sheet.cell(start, 1).font = Font(name="DejaVu Sans", size=13, bold=True, color=DARK_GREEN)
         sheet.merge_cells(start_row=start + 1, start_column=1, end_row=start + 1, end_column=14)
         set_text(sheet.cell(start + 1, 1), "Red PLU = shared code: confirm the product before entry")
         sheet.cell(start + 1, 1).font = Font(name="DejaVu Sans", size=8, bold=True, color="9C0006")
@@ -1193,10 +1315,11 @@ def quick_sheet(rows, images, with_photos, title="PRODUCE"):
                 cell = sheet.cell(start + 2, column)
                 set_text(cell, value)
                 cell.font = Font(name="DejaVu Sans", size=9, bold=True, color="FFFFFF")
-                cell.fill = PatternFill("solid", fgColor="305040")
+                cell.fill = PatternFill("solid", fgColor=DARK_GREEN)
         if page:
             sheet.row_breaks.append(Break(id=start - 1))
     coordinates = []
+    product_indices = defaultdict(int)
     for entry in layout:
         base = BLOCKS[entry["block"] % 3]
         number = (entry["block"] // 3) * PAGE_ROWS + 4 + entry["line"]
@@ -1211,6 +1334,10 @@ def quick_sheet(rows, images, with_photos, title="PRODUCE"):
         row = entry["record"]
         code, description, photo = [sheet.cell(number, base + offset) for offset in (0, 1, 3)]
         sheet.merge_cells(start_row=number, start_column=base + 1, end_row=number, end_column=base + 2)
+        fill = row_fill(product_indices[entry["block"]])
+        product_indices[entry["block"]] += 1
+        for column in range(base, base + 4):
+            sheet.cell(number, column).fill = fill
         set_text(code, row["plu"])
         display_name = row.get("display_name", row["name"])
         set_text(description, display_name)
@@ -1239,6 +1366,37 @@ def quick_sheet(rows, images, with_photos, title="PRODUCE"):
     buffer = io.BytesIO()
     workbook.save(buffer)
     return buffer.getvalue(), coordinates, pages
+
+
+def theme_product_table(content, sheet_name, coordinates):
+    workbook = load_workbook(io.BytesIO(content))
+    try:
+        sheet = workbook[sheet_name]
+        title_font = copy.copy(sheet["A1"].font)
+        title_font.name = "DejaVu Sans"
+        title_font.color = DARK_GREEN
+        sheet["A1"].font = title_font
+        for merged in sheet.merged_cells.ranges:
+            if merged.min_row == 1:
+                continue
+            heading = sheet.cell(merged.min_row, merged.min_col)
+            font = copy.copy(heading.font)
+            font.color = "FFFFFF"
+            heading.font = font
+            heading.fill = PatternFill("solid", fgColor=DARK_GREEN)
+            for col in range(merged.min_col + 1, merged.max_col + 1):
+                sheet.cell(merged.min_row, col).fill = PatternFill("solid", fgColor=DARK_GREEN)
+        indices = defaultdict(int)
+        for entry in coordinates:
+            product, code = sheet[entry["product_cell"]], sheet[entry["code_cell"]]
+            fill = row_fill(indices[product.column])
+            indices[product.column] += 1
+            product.fill = code.fill = fill
+        output = io.BytesIO()
+        workbook.save(output)
+        return output.getvalue()
+    finally:
+        workbook.close()
 
 
 def merge_styles(original_content, donor_content):
@@ -1497,7 +1655,7 @@ def normalize_printed_produce_text(text):
 def validate_print(output, coordinates, expected_pages, deli_coordinates=None, deli_title=None,
                    bulk_pages=None, stretch_size=None, misc_text=None, directory_images=None,
                    conversions_image=None, stretch_image=None, bakery_coordinates=None,
-                   delivery_images=None):
+                   delivery_images=None, soil_images=None, weighed_text=None):
     from pypdf import PdfReader
 
     if not shutil.which("soffice"):
@@ -1518,6 +1676,31 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 raise ValueError("Calc did not open/export the complete binder; check PRINT_ENGINE_LOG.txt "
                                  "and install libreoffice-calc")
             full_pdf = PdfReader(complete)
+            if soil_images is not None:
+                import pymupdf
+
+                with pymupdf.open(complete) as document:
+                    pages = [page for page in document if "SOIL BARCODES" in page.get_text()]
+                    if len(pages) != 1:
+                        raise ValueError(f"{edition}: Soil must print on exactly one page")
+                    page = pages[0]
+                    if abs(page.rect.width - 612) > 1 or abs(page.rect.height - 792) > 1:
+                        raise ValueError(f"{edition}: Soil is not portrait US Letter")
+                    expected = Counter(sha(directory_image_pixels(content)) for content in soil_images)
+                    actual = Counter()
+                    for image in page.get_image_info(xrefs=True):
+                        if not image["xref"] or not page.rect.contains(pymupdf.Rect(image["bbox"])):
+                            raise ValueError(f"{edition}: Soil barcode image is missing or clipped")
+                        actual[sha(directory_image_pixels(document.extract_image(image["xref"])["image"]))] += 1
+                    if actual != expected:
+                        raise ValueError(f"{edition}: printed Soil images differ from the source")
+            if weighed_text is not None:
+                pages = [page for page in full_pdf.pages if "WEIGHED ITEMS OVER $100" in
+                         (page.extract_text() or "")]
+                if len(pages) != 1 or any(" ".join(text.split()) not in
+                                          " ".join((pages[0].extract_text() or "").split())
+                                          for text in weighed_text):
+                    raise ValueError(f"{edition}: Weighed guide text is missing or split across pages")
             if directory_images is not None:
                 import pymupdf
 
@@ -1746,6 +1929,8 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 directory_print_pixels_losslessly_verified=directory_images is not None,
                 delivery_print_pages_verified=len(delivery_images) if delivery_images is not None else 0,
                 delivery_page_split_verified=delivery_images is not None,
+                soil_print_images_verified=len(soil_images) if soil_images is not None else 0,
+                weighed_print_text_verified=weighed_text is not None,
                 complete_pdf=complete.name,
                 visual_review="REQUIRED; automated text/geometry checks are not a visual print approval",
             )
@@ -1817,8 +2002,11 @@ def report_text(summary):
         f"organic placement review: {summary['placement_review_required']}; "
         f"main-item sorting review: {summary['produce_sort_review_required']}",
         "",
+        "Produce, Bakery, Deli, Bulk and Misc Codes use alternating white and pale-green product rows.",
+        "Store Directory uses alternating green stripes on the list, preserving original nonwhite pixels.",
         "Bulk is one themed sheet with six category-grouped pages at 11 pt, without print scaling.",
-        "Every original package part outside Produce, Bakery, Deli, Time To Stretch, Misc Codes, Conversions, Store Directory and Bulk, their relationships,",
+        "Every original package part outside Produce, Bakery, Deli, Time To Stretch, Soil, Weighed more $100,",
+        "Misc Codes, Conversions, Store Directory, Delivery Charges and Bulk, their relationships,",
         "append-only styles, content types and their print names is byte-identical. No original part is removed.",
         "Existing styles and all unrelated workbook-level settings are independently compared.",
         "Exact PLUs, uppercase display descriptions, duplicate highlights and image bytes/anchors are verified.",
@@ -1882,6 +2070,8 @@ def generate(root, binder, output, verify_print=False):
     deli_content, deli_coordinates = read_deli_source(root)
     deli_checksum = sha(deli_content)
     bakery_content, bakery_coordinates, bakery_rows = read_bakery_source(root)
+    deli_content = theme_product_table(deli_content, "Deli", deli_coordinates)
+    bakery_content = theme_product_table(bakery_content, "Bakery", bakery_coordinates)
     bakery_source_checksum = sha((root / BAKERY_SOURCE).read_bytes())
     deli_workbook = load_workbook(io.BytesIO(deli_content), read_only=True)
     try:
@@ -1941,6 +2131,7 @@ def generate(root, binder, output, verify_print=False):
         with tempfile.TemporaryDirectory(prefix="till-produce-") as temporary:
             combined_binder = Path(temporary) / "Combined.xlsx"
             bulk_binder = Path(temporary) / "Bulk.xlsx"
+            operational_binder = Path(temporary) / "Operational.xlsx"
             misc_binder = Path(temporary) / "Misc.xlsx"
             delivery_binder = Path(temporary) / "Delivery.xlsx"
             conversions_binder = Path(temporary) / "Conversions.xlsx"
@@ -1964,7 +2155,8 @@ def generate(root, binder, output, verify_print=False):
                 replace_sheet(combined_binder, bulk_content, bulk_binder, "Bulk")
             else:
                 shutil.copyfile(combined_binder, bulk_binder)
-            fit_misc_sheet(bulk_binder, misc_binder)
+            theme_operational_sheets(bulk_binder, operational_binder)
+            fit_misc_sheet(operational_binder, misc_binder)
             replace_sheet(misc_binder, delivery_content, delivery_binder, DELIVERY_SHEET)
             with zipfile.ZipFile(misc_binder) as archive:
                 sheet_names = [sheet.get("name") for sheet in
@@ -1987,6 +2179,11 @@ def generate(root, binder, output, verify_print=False):
             validate_stretch(result[STRETCH_SHEET], stretch_source)
             validate_directory(result[DIRECTORY_SHEET], directory_images)
             validate_delivery(result[DELIVERY_SHEET], delivery_images)
+            soil_images = ([image._data() for image in result[SOIL_SHEET]._images]
+                           if SOIL_SHEET in result else None)
+            weighed_text = ([cell.value for row in result[WEIGHED_SHEET] for cell in row
+                             if isinstance(cell.value, str)]
+                            if WEIGHED_SHEET in result else None)
         finally:
             result.close()
         if bulk_coordinates is not None:
@@ -2013,6 +2210,8 @@ def generate(root, binder, output, verify_print=False):
                 conversions_parts.update((conversions_part, rels_part(conversions_part)))
             directory_part, _ = sheet_info(original, DIRECTORY_SHEET)
             delivery_part, _ = sheet_info(original, DELIVERY_SHEET)
+            operational_parts = {sheet_info(original, name)[0] for name in (SOIL_SHEET, WEIGHED_SHEET)
+                                 if name in sheet_names}
             validations[edition]["output_sheet_names"] = validations[edition]["original_sheet_names"]
             validations[edition]["original_sheet_names"] = [
                 sheet.get("name") for sheet in xml(original.read("xl/workbook.xml")).find(f"{{{S}}}sheets")
@@ -2022,7 +2221,7 @@ def generate(root, binder, output, verify_print=False):
                 before, after = original.read(name), generated.read(name)
                 part.update(sha256_before=sha(before), sha256_after=sha(after),
                             byte_identical=before == after)
-                if name not in bulk_parts | conversions_parts | {misc_part, stretch_part, rels_part(stretch_part),
+                if name not in bulk_parts | conversions_parts | operational_parts | {misc_part, stretch_part, rels_part(stretch_part),
                                              directory_part, rels_part(directory_part), delivery_part,
                                              rels_part(delivery_part), "xl/workbook.xml"} and name not in {
                         sheet_info(original, "Produce")[0], rels_part(sheet_info(original, "Produce")[0]),
@@ -2133,12 +2332,14 @@ def generate(root, binder, output, verify_print=False):
             "Existing and newly supplied identity-linked AI illustrations are visual references at the owner's request; "
             "AI provenance and uncertain visual verdicts are recorded only in the external audit report.",
             "Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.",
-            "Time To Stretch uses the supplied color guide; Misc Codes uses green headings and pale-green "
+            "Time To Stretch uses the supplied color guide; Soil retains its original barcode images under "
+            "a green heading; Weighed more $100 uses green headings with original instructions; "
+            "Misc Codes uses green headings and pale-green "
             "entry shading on one page, with original cells and number formats retained; "
             "Conversions uses the owner-uploaded, visually checked one-page image; the original source charts "
             "remain preserved in the original binder and workbook package; "
             "Delivery Charges retains its two source pages with green header bands and an explicit page split; "
-            "Store Directory uses identity-matched highlights on the template's two images; "
+            "Store Directory uses identity-matched list stripes and highlights on the template's two images; "
             "Bakery is replaced from the reviewed Bakery product list in a compact one-page theme; "
             "Deli is replaced from the owner-supplied two-column source; Bulk sections are combined "
             "with page breaks; all other unrelated operational sheets remain unchanged.",
@@ -2161,7 +2362,7 @@ def generate(root, binder, output, verify_print=False):
             misc_text=misc_text, directory_images=directory_images,
             conversions_image=conversions_source_image if conversion_source != "not present" else None,
             stretch_image=stretch_source, bakery_coordinates=bakery_coordinates,
-            delivery_images=delivery_images)
+            delivery_images=delivery_images, soil_images=soil_images, weighed_text=weighed_text)
         if summary["print_validation"]["photos"]["drawn_images"] != len(images):
             raise ValueError("printed reference count differs from the exact image mapping")
         (output / "VALIDATION.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")

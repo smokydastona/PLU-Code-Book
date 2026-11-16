@@ -8,6 +8,8 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.worksheet.page import PageMargins
 from openpyxl.worksheet.pagebreak import Break
 
+from binder_theme import DARK_GREEN, row_fill
+
 TITLE = "BULK PLU QUICK GUIDE"
 PAGE_CATEGORIES = (
     ("Candy",),
@@ -115,7 +117,7 @@ def bulk_sheet(entries):
         if page > 1:
             sheet.row_breaks.append(Break(id=start - 1))
         sheet.merge_cells(start_row=start, start_column=1, end_row=start, end_column=8)
-        sheet.cell(start, 1, TITLE).font = Font(name="DejaVu Sans", size=14, bold=True)
+        sheet.cell(start, 1, TITLE).font = Font(name="DejaVu Sans", size=14, bold=True, color=DARK_GREEN)
         sheet.row_dimensions[start].height = 24
         sheet.merge_cells(start_row=start + 1, start_column=1, end_row=start + 1, end_column=8)
         sheet.cell(start + 1, 1, " / ".join(categories)).font = Font(name="DejaVu Sans", size=10)
@@ -124,10 +126,11 @@ def bulk_sheet(entries):
             for offset, text in enumerate(("PRODUCT", "PLU")):
                 cell = sheet.cell(start + 2, base + offset, text)
                 cell.font = Font(name="DejaVu Sans", size=10, bold=True, color="FFFFFF")
-                cell.fill = PatternFill("solid", fgColor="305040")
+                cell.fill = PatternFill("solid", fgColor=DARK_GREEN)
         sheet.row_dimensions[start + 2].height = 20
         for base, lines in zip(BASES, columns):
             row = start + 3
+            product_index = 0
             for category, entry, height in lines:
                 units = height // 16
                 for number in range(row, row + units):
@@ -144,6 +147,8 @@ def bulk_sheet(entries):
                     if units > 1:
                         sheet.merge_cells(start_row=row, start_column=column,
                                           end_row=row + units - 1, end_column=column)
+                    for line in range(row, row + units):
+                        sheet.cell(line, column).fill = row_fill(product_index)
                     cell = sheet.cell(row, column, value)
                     cell.data_type = "s"
                     cell.number_format = "@"
@@ -153,6 +158,7 @@ def bulk_sheet(entries):
                     cell.border = Border(bottom=Side(style="hair", color="D0D0D0"))
                 coordinates.append(dict(entry, product_cell=sheet.cell(row, base).coordinate,
                                         code_cell=sheet.cell(row, base + 1).coordinate, page=page))
+                product_index += 1
                 row += units
         page_end = start + 2 + max(sum(line[2] // 16 for line in column) for column in columns)
         height = sum(sheet.row_dimensions[row].height for row in range(start, page_end + 1))

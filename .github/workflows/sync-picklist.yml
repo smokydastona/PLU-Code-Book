@@ -18,6 +18,10 @@ on:
       - tools/sync_picklist.py
       - tools/review_booklets.py
       - tools/build_till_binders.py
+      - tools/binder_theme.py
+      - tools/build_bulk_sheet.py
+      - tools/build_bakery_sheet.py
+      - tools/build_deli_sheet.py
       - tools/build_image_library.py
       - tools/audit_production.py
       - tools/legacy_approval.py
@@ -52,6 +56,10 @@ on:
       - tools/sync_picklist.py
       - tools/review_booklets.py
       - tools/build_till_binders.py
+      - tools/binder_theme.py
+      - tools/build_bulk_sheet.py
+      - tools/build_bakery_sheet.py
+      - tools/build_deli_sheet.py
       - tools/build_image_library.py
       - tools/audit_production.py
       - tools/legacy_approval.py
