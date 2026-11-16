@@ -1,0 +1,43 @@
+# Complete Till Binder — Audit Report
+
+Status: **REVIEW ONLY — NOT APPROVED FOR OPERATIONAL USE.** Technical checks pass; production blockers remain open (`PRODUCTION_BLOCKERS.csv`).
+Machine-readable results: `AUDIT_REPORT.json`, `VALIDATION.json`, `PRINT_LAYOUT_REPORT.csv`.
+
+## 1. Baseline (regenerated against the current repository, not copied from old reports)
+
+* `PickList.xml` SHA-256 `38732869…8727` unchanged; original binder SHA-256 `6b0aeaa1…0f63` unchanged.
+* 223 existing tests pass; the committed binder regenerates in about 60 s and reproduces its previous 27-page structure.
+* Original workbook: 14 sheets, 104 package parts, 37 media parts.
+
+## 2. Confirmed defects and fixes
+
+| # | Area | Defect (confirmed visually in the old 27-page PDF) | Fix |
+|---|------|------------------------------------------------------|-----|
+| 1 | Bulk p.20 | "Coconut Shredded Unsweetened" and "Trail Mix Mountain Man Unsalted" were clipped (two wrapped lines in a one-line row). Cause: `ceil(len/29)` character estimate. | New `tools/text_fit.py` measures DejaVu Sans widths against the column as rendered; Bulk row heights now come from the measurement. |
+| 2 | Bakery p.6 | Uneven row heights, broken pale-green striping, tiny effective text (about 7 pt after fit-to-page), mixed fonts. Cause: row heights shared between the two panels and sized by a 20-character estimate. | Uniform 24 pt rows, DejaVu Sans 12 pt, widths calibrated so no name wraps, one-page portrait Letter retained. |
+| 3 | Produce p.8-17 | About 25 % of each landscape page was blank and photos were small. | Row height 25→31 pt and photo box 48×30→54×38 px (no upscaling beyond the source). Page count still 10. |
+| 4 | Pipeline | No automated package, per-page PDF or blocker audit. | New `tools/audit_till_binder.py` plus tests (`test_text_fit.py`, `test_audit_till_binder.py`); CI workflow runs it after the build. |
+
+## 3. Findings recorded but not changed
+
+* Deli (p.7): a few rows are slightly taller than neighbours (owner-supplied Deli source). Content, 52 entries and 10 headings are exact; left as is.
+* Pages 1-5, 24-27 are owner artwork or original scans, preserved byte-for-byte. Heading colours on the Weighed Items page are original.
+* 154 embedded produce photos have an edge below 200 px (smallest 114 px). They come from approved legacy/booklet sources and are **not** upscaled.
+* 70 image hashes are shared by more than one PLU (conventional/organic pairs and legacy reuse). Organic reuse of a matching conventional photo is allowed; the remaining reuse is in the open `PROHIBITED_IMAGE_REUSE` blocker.
+* `Bulk (2)`-`Bulk (4)` are intentionally merged into one six-page Bulk sheet (400 entries verified by the build).
+* The code-quality hotspots (2.6 k-line `build_till_binders.py`, duplicated theme/XML helpers) are documented only; refactoring the OOXML-preserving writer was deliberately avoided to protect package fidelity.
+
+## 4. Data and package integrity
+
+* 548 Produce records, 37 Bakery, 52 Deli (10 headings), 400 Bulk entries, exact PLU text preserved (checked by the build validators and printed-text comparison).
+* Package: 0 parts removed, all 37 original media parts byte-identical (barcode artwork intact), 3 original Bulk sheets merged by design, workbook zip integrity OK. Changed parts are the themed sheets, styles, workbook and content types.
+* Conversions: owner chart preserved; $4.99/lb = $11.00/kg (the $11.02 draft value is absent).
+* Determinism: two consecutive builds produced identical image mappings and identical package contents (only zip timestamps differ).
+
+## 5. Print validation
+
+27 pages: Stretch 1, Conversions 1, Weighed 1, Soil/Floral 1, Misc 1, Bakery 1, Deli 1, Produce 10, Bulk 6, Delivery 2, Directory 2. Portrait Letter 612×792 for pages 1-7 and 24-25; landscape 792×612 for 8-23 and 26-27. No blank pages, no text in the margin guard. See `PRINT_LAYOUT_REPORT.csv` and `PDF_VISUAL_INSPECTION.md`.
+
+## 6. Remaining blockers
+
+See `PRODUCTION_BLOCKERS.csv`: 35 missing images, 35 image reviews after identity change, 323 prohibited-reuse flags, 5 classifications, 5 section placements, 248 WorkingList reconciliation records (0 decisions recorded), 90 organic placements. No owner decisions were invented, and the separate produce-booklet publication gate is unchanged.

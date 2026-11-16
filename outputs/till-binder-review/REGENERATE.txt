@@ -1,3 +1,7 @@
-Command for a fresh review build (output must be empty; do not create a second binder under outputs/):
+Exact generation command (output must be empty; use a new directory when rerunning):
 
-/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/.venv/bin/python /workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/tools/build_till_binders.py --root /workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book --binder /workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx --output /tmp/new-till-binder-review --verify-print
+/tmp/venv/bin/python /workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/refactored-broccoli/tools/build_till_binders.py --root /workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/refactored-broccoli --binder /workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/refactored-broccoli/sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx --output outputs/till-binder-review --verify-print
+
+After building, audit the output (writes AUDIT_REPORT.json, PRINT_LAYOUT_REPORT.csv, PRODUCTION_BLOCKERS.csv):
+
+python tools/audit_till_binder.py --binder sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx --output <same output directory>

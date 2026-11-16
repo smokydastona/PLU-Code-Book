@@ -1,0 +1,125 @@
+{
+  "technical_checks": "PASS",
+  "failures": [],
+  "operational_status": "REVIEW ONLY — NOT APPROVED FOR OPERATIONAL USE",
+  "original_binder_sha256": "6b0aeaa153233c5f4917811a3f7a5b2212f7a946a0abede372a31db556ab0f63",
+  "package": {
+    "zip_integrity": true,
+    "original_parts": 104,
+    "built_parts": 633,
+    "unchanged_parts": 82,
+    "changed_parts": [
+      "[Content_Types].xml",
+      "xl/styles.xml",
+      "xl/workbook.xml",
+      "xl/worksheets/_rels/sheet1.xml.rels",
+      "xl/worksheets/_rels/sheet13.xml.rels",
+      "xl/worksheets/_rels/sheet14.xml.rels",
+      "xl/worksheets/_rels/sheet2.xml.rels",
+      "xl/worksheets/_rels/sheet6.xml.rels",
+      "xl/worksheets/_rels/sheet7.xml.rels",
+      "xl/worksheets/_rels/sheet8.xml.rels",
+      "xl/worksheets/_rels/sheet9.xml.rels",
+      "xl/worksheets/sheet1.xml",
+      "xl/worksheets/sheet13.xml",
+      "xl/worksheets/sheet14.xml",
+      "xl/worksheets/sheet2.xml",
+      "xl/worksheets/sheet3.xml",
+      "xl/worksheets/sheet4.xml",
+      "xl/worksheets/sheet5.xml",
+      "xl/worksheets/sheet6.xml",
+      "xl/worksheets/sheet7.xml",
+      "xl/worksheets/sheet8.xml",
+      "xl/worksheets/sheet9.xml"
+    ],
+    "removed_parts": [],
+    "added_part_count": 529,
+    "original_media_parts": 37,
+    "original_media_byte_identical": 37,
+    "original_media_removed": [],
+    "original_media_changed": [],
+    "sheets_original": [
+      "Time To Stretch",
+      "Conversions",
+      "Weighed more $100",
+      "Soil",
+      "Misc Codes",
+      "Bakery",
+      "Deli",
+      "Produce",
+      "Bulk",
+      "Bulk (2)",
+      "Bulk (3)",
+      "Bulk (4)",
+      "Delivery Charges",
+      "Store Directory"
+    ],
+    "sheets_built": [
+      "Time To Stretch",
+      "Conversions",
+      "Weighed more $100",
+      "Soil",
+      "Misc Codes",
+      "Bakery",
+      "Deli",
+      "Produce",
+      "Bulk",
+      "Delivery Charges",
+      "Store Directory"
+    ],
+    "sheets_removed": [
+      "Bulk (2)",
+      "Bulk (3)",
+      "Bulk (4)"
+    ]
+  },
+  "print_layout": {
+    "pages": 27,
+    "expected_pages": 27,
+    "sections": {
+      "Time To Stretch": 1,
+      "Conversions": 1,
+      "Weighed Items Over $100": 1,
+      "Soil and Floral Codes": 1,
+      "Misc Codes": 1,
+      "Bakery": 1,
+      "Deli": 1,
+      "Produce": 10,
+      "Bulk": 6,
+      "Delivery Charges": 2,
+      "Store Directory": 2
+    },
+    "findings": []
+  },
+  "images": {
+    "records": 548,
+    "embedded": 513,
+    "missing_or_uncertain": 35,
+    "status_counts": {
+      "LEGACY_PREAPPROVED_IMAGE": 495,
+      "MISSING": 35,
+      "APPROVED_WORKINGLIST_IMAGE": 18
+    },
+    "sources": {
+      "Code Booklet": 334,
+      "AI Generated": 131,
+      "": 17,
+      "Produce Sheets": 2,
+      "Produce Guide": 28,
+      "https://www.fsproduce.com/wp-content/uploads/2015/05/BUCK-BRAND-SPECIALTY-CITRUS-INFOGRAPHIC-1.pdf": 1
+    },
+    "organic_badge_embedded": 173,
+    "images_shared_by_multiple_plus": 70,
+    "embedded_below_200px": 154,
+    "smallest_edge": 114
+  },
+  "open_blockers": {
+    "APPROVED_IMAGE_REQUIRED": 35,
+    "CLASSIFICATION_REQUIRED": 5,
+    "PRODUCT_IMAGE_REVIEW_REQUIRED": 35,
+    "PROHIBITED_IMAGE_REUSE": 323,
+    "SECTION_REQUIRED": 5,
+    "WORKING_LIST_RECONCILIATION": 248,
+    "ORGANIC_PLACEMENT": 90
+  }
+}

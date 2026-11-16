@@ -1,6 +1,5 @@
 """Lay out the original binder's Bulk records as six themed print pages."""
 import io
-import math
 from collections import Counter
 
 from openpyxl import Workbook
@@ -9,6 +8,7 @@ from openpyxl.worksheet.page import PageMargins
 from openpyxl.worksheet.pagebreak import Break
 
 from binder_theme import DARK_GREEN, row_fill
+from text_fit import line_count
 
 TITLE = "BULK PLU QUICK GUIDE"
 PAGE_CATEGORIES = (
@@ -98,7 +98,7 @@ def bulk_sheet(entries):
                 if entry["category"] != category:
                     category = entry["category"]
                     lines.append((category, None, 16))
-                height = 16 * max(1, math.ceil(len(entry["product"]) / 29))
+                height = 16 * line_count(entry["product"], 11, 26)
                 lines.append((None, entry, height))
             return lines
 
