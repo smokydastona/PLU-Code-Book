@@ -1,2 +1,2 @@
-convert /tmp/tbr/Complete Till Binder - Updated - Photos.xlsx as a Calc document -> /tmp/till-print-60zp1_6w/Complete Till Binder - Updated - Photos.pdf using filter : calc_pdf_Export:{"UseLosslessCompression":{"type":"boolean","value":"true"},"ReduceImageResolution":{"type":"boolean","value":"false"}}
+convert /tmp/tbr/Complete Till Binder - Updated - Photos.xlsx as a Calc document -> /tmp/till-print-cjp45vz6/Complete Till Binder - Updated - Photos.pdf using filter : calc_pdf_Export:{"UseLosslessCompression":{"type":"boolean","value":"true"},"ReduceImageResolution":{"type":"boolean","value":"false"}}
 Warning: failed to launch javaldx - java may not function correctly
