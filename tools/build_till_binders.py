@@ -1548,6 +1548,12 @@ def layout_rows(rows):
         while line < LINES and index < len(rows):
             row = rows[index]
             section, group = row["display_section"], row.get("display_group", "")
+            if section == ASIAN_SECTION and (index == 0 or rows[index - 1]["display_section"] != section):
+                section_count = sum(item["display_section"] == ASIAN_SECTION for item in rows[index:])
+                remaining = max(0, LINES - line - 1) + (2 - block % 3) * (LINES - 1)
+                if remaining < section_count <= 3 * (LINES - 1):
+                    block += 3 - block % 3
+                    line, previous = 0, (None, None)
             headings = []
             if section != previous[0]:
                 headings.append(dict(

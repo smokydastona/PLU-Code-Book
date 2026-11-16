@@ -1,5 +1,7 @@
 # PDF Page-by-Page Visual Inspection
 
+Asian Produce pagination (2026-11-16): all 15 entries, starting with Bean Sprouts, appear together on PDF page 20 (Produce page 13). The rendered page was inspected; no Asian Produce heading or Bean Sprouts entry remains on the preceding page. Product identities, codes and ordering are unchanged.
+
 Soil barcode update (2026-11-16): the Soil page was rendered and inspected. All eight recreated Code 128 barcodes have matching dimensions, retain their original decoded values and display their digits. PDF renderings independently decoded at 150 and 300 dpi; test the physical print with the cashier's scanner before use.
 
 Floral relocation (2026-11-16, before the barcode update): the Soil and Misc Codes pages were rendered and inspected. Soil's then-existing barcode artwork remained on one portrait page, while all eight floral codes and names appeared on the single Misc Codes page.

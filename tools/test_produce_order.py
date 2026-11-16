@@ -195,6 +195,25 @@ class ProduceOrderTests(unittest.TestCase):
         headings = [entry for entry in layout_rows(rows) if entry["kind"] == "heading"]
         self.assertEqual([entry["continued"] for entry in headings], [False, True, True])
 
+    def test_asian_produce_stays_on_one_page_when_it_fits(self):
+        for preceding, asian_count, expected_page in ((56, 15, 1), (20, 15, 0), (56, 45, 1)):
+            with self.subTest(preceding=preceding, asian_count=asian_count):
+                rows = ([dict(display_section="Z", display_group="") for _ in range(preceding)] +
+                        [dict(display_section=ASIAN_SECTION, display_group="") for _ in range(asian_count)])
+                layout = layout_rows(rows)
+                asian = [entry for entry in layout if
+                         (entry["kind"] == "product" and
+                          entry["record"]["display_section"] == ASIAN_SECTION)]
+                self.assertEqual(len(asian), asian_count)
+                self.assertEqual({entry["block"] // 3 for entry in asian}, {expected_page})
+                self.assertEqual(sum(entry["kind"] == "product" for entry in layout), len(rows))
+
+    def test_oversized_asian_produce_section_still_paginates(self):
+        rows = [dict(display_section=ASIAN_SECTION, display_group="") for _ in range(60)]
+        products = [entry for entry in layout_rows(rows) if entry["kind"] == "product"]
+        self.assertEqual(len(products), 60)
+        self.assertEqual({entry["block"] // 3 for entry in products}, {0, 1})
+
 
 if __name__ == "__main__":
     unittest.main()
