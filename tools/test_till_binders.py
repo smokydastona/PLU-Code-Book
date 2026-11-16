@@ -1514,6 +1514,62 @@ class TillBinderChecks(unittest.TestCase):
         self.assertNotEqual(images[source_id], render_watermark(content))
         self.assertEqual(Image.open(io.BytesIO(images[source_id])).size, (60, 50))
 
+    def test_supplied_image_does_not_infer_ai_origin_or_production_approval(self):
+        path = self.write_ai_manifest([self.ai_panel(3), self.ai_panel(8)])
+        manifest = json.loads(path.read_text())
+        manifest.update(image_kind="UNVERIFIED_IMAGE", origin="Owner-supplied image; origin unknown")
+        path.write_text(json.dumps(manifest))
+        before = (self.root / "data/picklist_assignments.json").read_bytes()
+        summary = generate(self.root, self.binder, self.output)
+        self.assertEqual(summary["production_publication"], "BLOCKED")
+        self.assertEqual(summary["new_ai_crops_embedded"], 0)
+        self.assertEqual((self.root / "data/picklist_assignments.json").read_bytes(), before)
+        with (self.output / "PHOTO_MAPPING.csv").open(encoding="utf-8-sig", newline="") as file:
+            audit = list(csv.DictReader(file))
+        for plu in ("00044", "00049"):
+            record = next(row for row in audit if row["plu"] == plu)
+            self.assertEqual(record["image_status"], "SUPPLIED_IMAGE_REVIEW")
+            self.assertEqual(record["image_source"], "Owner Supplied")
+            self.assertEqual(record["photograph_status"], "NOT_VERIFIED")
+            self.assertEqual(record["rights_status"], "NOT_VERIFIED")
+            self.assertNotIn("AI illustration", record["details"])
+            self.assertNotIn("below 500", record["details"])
+        organic = next(row for row in audit if row["plu"] == "00049")
+        self.assertEqual(organic["organic_badge"], "True")
+        self.assertNotEqual(organic["embedded_sha256"], organic["original_sha256"])
+        manifest["image_kind"] = "APPROVED"
+        path.write_text(json.dumps(manifest))
+        with self.assertRaisesRegex(ValueError, "unsupported review-reference image kind"):
+            load_references(self.root, self.items)
+
+    def test_fresh_working_reference_requires_exact_snapshot_and_original_identities(self):
+        original = self.items[3]
+        changed = dict(original, name="Reviewed canonical name", source_id="working-id",
+                       source_ids=[original["source_id"]], record_sha256="reviewed-record",
+                       identity_changed=True)
+        snapshot = {key: changed[key] for key in ("source_id", "source_ids", "record_sha256")}
+        panel = self.ai_panel(3, working_identity=snapshot)
+        panel["product"] = changed["name"]
+        path = self.write_ai_manifest([panel])
+        references, _ = load_references(self.root, [changed])
+        self.assertEqual(set(references), {changed["source_id"]})
+        for values in (dict(name="Changed again"), dict(source_id="new-working-id"),
+                       dict(source_ids=["other-source"]), dict(record_sha256="new-record"),
+                       dict(source_record_changed=True)):
+            with self.subTest(values=values):
+                references, audit = load_references(self.root, [dict(changed, **values)])
+                self.assertEqual(references, {})
+                self.assertEqual(audit[0]["status"], "WORKING_IDENTITY_REVIEW_REQUIRED")
+        references, audit = load_references(self.root, [changed, dict(changed)])
+        self.assertEqual(references, {})
+        self.assertEqual(audit[0]["status"], "AMBIGUOUS_DUPLICATE_IDENTITY")
+        manifest = json.loads(path.read_text())
+        manifest["panels"][0]["decision"] = "REJECTED"
+        path.write_text(json.dumps(manifest))
+        references, audit = load_references(self.root, [changed])
+        self.assertEqual(references, {})
+        self.assertEqual(audit[0]["status"], "REJECTED")
+
     def test_ai_crop_checksums_bounds_and_exact_text_are_enforced(self):
         path = self.write_ai_manifest([self.ai_panel(3)])
         original = json.loads(path.read_text())

@@ -6,7 +6,7 @@
   "package": {
     "zip_integrity": true,
     "original_parts": 104,
-    "built_parts": 653,
+    "built_parts": 688,
     "unchanged_parts": 79,
     "changed_parts": [
       "[Content_Types].xml",
@@ -36,7 +36,7 @@
       "xl/worksheets/sheet9.xml"
     ],
     "removed_parts": [],
-    "added_part_count": 549,
+    "added_part_count": 584,
     "original_media_parts": 37,
     "original_media_byte_identical": 37,
     "original_media_removed": [],
@@ -96,25 +96,27 @@
   },
   "images": {
     "records": 548,
-    "embedded": 513,
-    "missing_or_uncertain": 35,
+    "embedded": 548,
+    "missing_or_uncertain": 0,
     "status_counts": {
       "LEGACY_PREAPPROVED_IMAGE": 495,
-      "MISSING": 35,
-      "APPROVED_WORKINGLIST_IMAGE": 18
+      "SUPPLIED_AI_CROP_REVIEW": 33,
+      "APPROVED_WORKINGLIST_IMAGE": 18,
+      "SUPPLIED_IMAGE_REVIEW": 2
     },
     "sources": {
       "Code Booklet": 334,
-      "AI Generated": 131,
+      "AI Generated": 164,
       "Produce Sheets": 2,
       "": 17,
       "Produce Guide": 28,
+      "Owner Supplied": 2,
       "https://www.fsproduce.com/wp-content/uploads/2015/05/BUCK-BRAND-SPECIALTY-CITRUS-INFOGRAPHIC-1.pdf": 1
     },
-    "organic_badge_embedded": 173,
+    "organic_badge_embedded": 191,
     "images_shared_by_multiple_plus": 70,
-    "embedded_below_200px": 154,
-    "smallest_edge": 114
+    "embedded_below_200px": 187,
+    "smallest_edge": 109
   },
   "open_blockers": {
     "APPROVED_IMAGE_REQUIRED": 35,

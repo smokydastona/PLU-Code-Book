@@ -1,5 +1,9 @@
 # PDF Page-by-Page Visual Inspection
 
+Onion references (2026-11-16): the supplied Yellow (Spanish) Onion image now fills PLUs 4093 and 94093. Both actual embedded derivatives and rendered PDF page 14 were inspected; the organic version has the pink upper-left badge, and white backgrounds are transparent in binder copies. All 546 earlier embedded images are unchanged. All 548 Produce entries now have images, with no missing entries. Original upload preserved; ownership, photographic origin and production approval remain unverified.
+
+Missing Produce references (2026-11-16): the 33 new binder crops and the rendered first Produce page were inspected. Crops exclude printed labels, transparent backgrounds blend into green rows, and organic entries retain the pink badge. All 513 earlier embedded images are unchanged. The regenerated workbook and PDF contain 546 Produce images; PLUs 4093 and 94093 remain blank. These supplied illustrations remain review references, not production approvals; cultivar and appearance concerns are retained separately in the crop manifest.
+
 Produce transparency (2026-11-16): all 513 embedded Produce images have alpha transparency in binder-only PNG copies. The first Produce page was rendered and inspected; green rows show through removed white backgrounds, and organic badges remain visible. A PDF regression check verifies that a transparent image background renders as the underlying pale-green row. Original photos and JPEG library assets are unchanged.
 
 Soil white rows and sheet order (2026-11-16): Misc Codes now prints on page 4, immediately before Soil on page 5. All Soil product rows are white, without alternating green bands; the green headings and numbered column remain. The rendered Soil page was inspected, and barcode print checks passed.

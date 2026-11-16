@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "source": "data/review-references/yellow-spanish-onion.png",
+  "source_sha256": "3a3b5a83a1492a6a47b944bab48e7e8d909c1e921b0781a7669891fe37e7df02",
+  "source_size": [1080, 1080],
+  "image_kind": "UNVERIFIED_IMAGE",
+  "origin": "Owner uploaded Yellow (Spanish) Onion.png on 2026-11-16 for the remaining missing binder images. Original retained unchanged; ownership and photographic origin were not stated.",
+  "review_note": "Review reference only, pinned to exact WorkingList identities, original source IDs and record fingerprints. Reuse only for the matching organic onion with the standard pink upper-left badge. Binder-only copies remove the white background; the JPEG library retains white backgrounds. Rights, photographic origin and production approval remain unverified. No production assignment or approval is granted.",
+  "panels": [
+    {
+      "plu": "4093",
+      "product": "Yellow (Spanish) Onion",
+      "box": [0, 0, 1080, 1080],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "af5a56b9589179d0a595ab7e7fcf1cf48b25312be36c13fcb027f53b99a278a1",
+        "source_ids": ["217496304da3acdf75bbae91f7f83e2948a869565f5920f5e1c3dd4bf868c240"],
+        "record_sha256": "9a8c8aa5bb700111b7623400fd9ac0cb77cfac7dd6d3143a5ab6cd56cd52d8b6"
+      }
+    },
+    {
+      "plu": "94093",
+      "product": "Organic Yellow (Spanish) Onion",
+      "box": [0, 0, 1080, 1080],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "4fcf219af06c88ca404f2f139bac665f13fc16af8ef3d940d9d9ee6a120f6dad",
+        "source_ids": ["11708d7532a1b588bd7ceed66d1504c9d9e0bcede00bc796db8ced3e28a5fe5a"],
+        "record_sha256": "8935e10e78bc38e969e9a65bc3a49dc4a2c749c3817542f8e87dd3922dc1401d"
+      },
+      "note": "Matching conventional onion reference reused with the standard pink ORGANIC badge; not evidence of organic certification."
+    }
+  ]
+}

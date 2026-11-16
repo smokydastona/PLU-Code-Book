@@ -13,6 +13,8 @@ MANIFESTS = (
     "data/review-references/additional-36-ai.json",
     "data/review-references/missing-ai.json",
     "data/review-references/corrected-five-ai.json",
+    "data/review-references/working-missing-33.json",
+    "data/review-references/yellow-spanish-onion.json",
 )
 
 
@@ -119,9 +121,12 @@ def load_manifest(root, rows, path, source_items):
     manifest = json.loads(path.read_text(encoding="utf-8"))
     if manifest["schema_version"] != 1:
         raise ValueError("unsupported review-reference schema")
+    image_kind = manifest.get("image_kind", "AI_ILLUSTRATION")
+    if image_kind not in {"AI_ILLUSTRATION", "UNVERIFIED_IMAGE"}:
+        raise ValueError("unsupported review-reference image kind")
     source = safe_asset(root, manifest["source"]).read_bytes()
     if hashlib.sha256(source).hexdigest() != manifest["source_sha256"]:
-        raise ValueError("AI contact-sheet checksum changed; fresh crop review required")
+        raise ValueError("review-reference source checksum changed; fresh image review required")
     by_identity = defaultdict(list)
     for row in rows:
         by_identity[(row["plu"], row["name"])].append(row)
@@ -129,7 +134,7 @@ def load_manifest(root, rows, path, source_items):
     with Image.open(io.BytesIO(source)) as image:
         image.load()
         if list(image.size) != manifest["source_size"]:
-            raise ValueError("AI contact-sheet dimensions changed")
+            raise ValueError("review-reference source dimensions changed")
         for panel in manifest["panels"]:
             identity = (panel["plu"], panel["product"])
             if not all(isinstance(value, str) and value for value in identity) or identity in seen:
@@ -143,17 +148,41 @@ def load_manifest(root, rows, path, source_items):
                 raise ValueError(f"{identity}: invalid reviewed crop box")
             if panel["decision"] not in {"REVIEW_REFERENCE", "REJECTED"}:
                 raise ValueError(f"{identity}: invalid review-reference decision")
-            matches, identity_status, source_ids = _working_matches(
-                rows, source_items, *identity, panel.get("source_id", ""))
-            if not source_ids and not panel.get("source_id"):
-                matches = by_identity[identity]
+            working_identity = panel.get("working_identity")
+            if working_identity is not None:
+                if (not isinstance(working_identity, dict) or
+                        not isinstance(working_identity.get("source_id"), str) or
+                        not working_identity["source_id"] or
+                        not isinstance(working_identity.get("source_ids"), list) or
+                        not working_identity["source_ids"] or
+                        not all(isinstance(value, str) and value for value in working_identity["source_ids"]) or
+                        not isinstance(working_identity.get("record_sha256"), str) or
+                        not working_identity["record_sha256"]):
+                    raise ValueError("reviewed WorkingList references require a complete identity snapshot")
+                source_ids = working_identity["source_ids"]
+                active_ids = {item["source_id"] for item in source_items}
+                matches = [row for row in by_identity[identity]
+                           if row["source_id"] == working_identity["source_id"] and
+                           sorted(row.get("source_ids", [row["source_id"]])) == sorted(source_ids) and
+                           row.get("record_sha256") == working_identity["record_sha256"] and
+                           not row.get("source_record_changed") and set(source_ids) <= active_ids]
+                identity_status = "WORKING_IDENTITY_REVIEW_REQUIRED"
+            else:
+                matches, identity_status, source_ids = _working_matches(
+                    rows, source_items, *identity, panel.get("source_id", ""))
+                if not source_ids and not panel.get("source_id"):
+                    matches = by_identity[identity]
             changed_identity = len(matches) == 1 and (
-                matches[0].get("identity_changed") or matches[0]["name"] != panel["product"])
+                (matches[0].get("identity_changed") and working_identity is None) or
+                matches[0]["name"] != panel["product"])
             record = dict(
                 source_id=matches[0]["source_id"] if len(matches) == 1 else "",
                 source_identity_ids=";".join(source_ids),
                 plu=panel["plu"], product=panel["product"], decision=panel["decision"],
                 status=panel["decision"], source_document=manifest["source"],
+                image_source="AI Generated" if image_kind == "AI_ILLUSTRATION" else "Owner Supplied",
+                photograph_status="AI_ILLUSTRATION_NOT_PHOTOGRAPH"
+                                  if image_kind == "AI_ILLUSTRATION" else "NOT_VERIFIED",
                 source_sha256=manifest["source_sha256"], crop_box=json.dumps(box),
                 crop_sha256="", width=box[2] - box[0], height=box[3] - box[1],
                 details=" ".join(filter(None, [
