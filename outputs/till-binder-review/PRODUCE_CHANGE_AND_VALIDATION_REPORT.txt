@@ -20,8 +20,10 @@ New owner-supplied AI crops: 0
 AI illustrations omitted (if rejected or invalid association): 0
 Classification review: 5; organic placement review: 94; main-item sorting review: 0
 
-Produce, Bakery, Deli, Bulk, Misc Codes and the Soil floral column use alternating white and pale-green rows.
-Floral Codes are moved from Misc Codes beside the Soil barcodes on the same page.
+Produce, Bakery, Deli, Bulk and Misc Codes use alternating white and pale-green rows.
+Floral Codes appear on Misc Codes; Soil retains its original print area and product artwork.
+Eight Soil Code 128 barcodes are regenerated uniformly from independently decoded original values.
+Print verification decodes each rendered barcode at 150 and 300 dpi; physically scan before use.
 Store Directory uses alternating green stripes on the list, preserving original nonwhite pixels.
 Bulk is one themed sheet with six category-grouped pages at 11 pt, without print scaling.
 Every original package part outside Produce, Bakery, Deli, Time To Stretch, Soil, Weighed more $100,
@@ -42,7 +44,7 @@ Image outcomes:
   MISSING: 35
   APPROVED_WORKINGLIST_IMAGE: 18
 
-Print validation: {"photos": {"status": "PASS", "pages": 13, "landscape_us_letter": true, "complete_workbook_opened_and_exported_by_calc": true, "complete_binder_pdf_pages": 30, "every_page_code_count_verified": true, "every_description_found": true, "drawn_images": 513, "deli_print_records_verified": 52, "bakery_print_records_verified": 37, "bakery_print_page_verified": true, "bulk_print_pages_verified": 6, "bulk_print_font_points": 11, "stretch_print_page_verified": true, "misc_print_page_verified": true, "conversions_print_image_verified": true, "directory_print_pages_verified": 2, "directory_print_pixels_losslessly_verified": true, "delivery_print_pages_verified": 2, "delivery_page_split_verified": true, "soil_print_images_verified": 24, "weighed_print_text_verified": false, "weighed_print_image_verified": true, "complete_pdf": "Complete Till Binder - Updated - Photos.pdf", "visual_review": "REQUIRED; automated text/geometry checks are not a visual print approval"}}
+Print validation: {"photos": {"status": "PASS", "pages": 13, "landscape_us_letter": true, "complete_workbook_opened_and_exported_by_calc": true, "complete_binder_pdf_pages": 30, "every_page_code_count_verified": true, "every_description_found": true, "drawn_images": 513, "deli_print_records_verified": 52, "bakery_print_records_verified": 37, "bakery_print_page_verified": true, "bulk_print_pages_verified": 6, "bulk_print_font_points": 11, "stretch_print_page_verified": true, "misc_print_page_verified": true, "conversions_print_image_verified": true, "directory_print_pages_verified": 2, "directory_print_pixels_losslessly_verified": true, "delivery_print_pages_verified": 2, "delivery_page_split_verified": true, "soil_print_images_verified": 24, "soil_barcodes_decoded_at_dpi": [150, 300], "weighed_print_text_verified": false, "weighed_print_image_verified": true, "complete_pdf": "Complete Till Binder - Updated - Photos.pdf", "visual_review": "REQUIRED; automated text/geometry checks are not a visual print approval"}}
 
 Detailed reports:
   VALIDATION.json: checks, hashes, counts and publication blockers
@@ -71,7 +73,7 @@ Unresolved issues / limits:
   Missing, identity-mismatched, checksum-changed and unreadable image associations remain blank.
   Existing and newly supplied identity-linked AI illustrations are visual references at the owner's request; AI provenance and uncertain visual verdicts are recorded only in the external audit report.
   Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.
-  Time To Stretch uses the supplied color guide; Soil retains its original barcode images under a green heading, with Floral Codes beside them; Weighed more $100 uses the visually compared owner upload with muted green colors, unchanged instructions and label values on one portrait page; Misc Codes uses green headings and pale-green entry shading on one page, with original cells and number formats retained; Conversions uses the owner-uploaded, visually checked one-page image; the original source charts remain preserved in the original binder and workbook package; Delivery Charges retains its two source pages with green header bands and an explicit page split; Store Directory uses identity-matched list stripes and highlights on the template's two images; Bakery is replaced from the reviewed Bakery product list in a compact one-page theme; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.
+  Time To Stretch uses the supplied color guide; Soil uses uniformly regenerated Code 128 barcodes under a green heading, preserving exact source values; scan the printed page before use. Floral Codes appear on Misc Codes; Weighed more $100 uses the visually compared owner upload with muted green colors, unchanged instructions and label values on one portrait page; Misc Codes uses green headings and pale-green entry shading on one page, with original cells and number formats retained; Conversions uses the owner-uploaded, visually checked one-page image; the original source charts remain preserved in the original binder and workbook package; Delivery Charges retains its two source pages with green header bands and an explicit page split; Store Directory uses identity-matched list stripes and highlights on the template's two images; Bakery is replaced from the reviewed Bakery product list in a compact one-page theme; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.
   Future unclassified entries are retained for review, not silently discarded or approved.
 
 No original file, authoritative XML, assignment approval or published booklet was changed.

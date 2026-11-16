@@ -20,7 +20,7 @@ from openpyxl.worksheet.pagebreak import Break
 from PIL import Image, ImageChops, ImageOps
 
 from build_till_binders import (BULK_SHEETS, CONVERSIONS_ACCURACY_REVIEW, CONVERSIONS_SOURCE, CONVERSIONS_SOURCE_SHA256, DELIVERY_HEADER_BANDS, DELIVERY_SHEET, DIRECTORY_EMERGENCY_HIGHLIGHTS, DIRECTORY_SOURCES, FILENAMES, MAX_GITHUB_FILE_SIZE, PDF_EXPORT_FORMAT, STRETCH_SOURCE, VISUALS, bulk_print_pages,
-                               MISC_TITLE, add_continuation_labels, combine_bulk, comparisons, directory_sheet, fit_misc_sheet, generate, layout_rows, misc_page_matches, misc_print_text, move_floral_codes,
+                               MISC_TITLE, SOIL_BARCODE_SOURCES, SOIL_BARCODE_WIDTH, SOIL_BARCODE_HEIGHT, add_continuation_labels, combine_bulk, comparisons, decoded_soil_barcode, directory_sheet, fit_misc_sheet, generate, layout_rows, misc_page_matches, misc_print_text, normalize_soil_barcodes, restore_floral_codes,
                                docx_compatible_image,
                                delivery_sheet, map_images, produce_catalog, quick_sheet, replace_produce, replace_sheet,
                                sha, sheet_info, stretch_sheet, theme_conversions_sheet, theme_operational_sheets,
@@ -798,72 +798,132 @@ class TillBinderChecks(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "additional data"):
             theme_operational_sheets(source, self.root / "rejected-soil.xlsx")
 
-    def test_move_floral_codes_preserves_source_values_and_soil_images_and_is_idempotent(self):
+    def test_soil_barcodes_preserve_codes_and_have_uniform_dimensions(self):
         source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
-        themed, moved, again = (self.root / name for name in ("themed.xlsx", "moved.xlsx", "again.xlsx"))
-        theme_operational_sheets(source, themed)
-        entries = move_floral_codes(themed, moved)
-        self.assertEqual(len(entries), 8)
-        original, result = load_workbook(themed), load_workbook(moved)
-        try:
-            for entry in entries:
-                for source_key, destination_key in (("source_code", "soil_code"), ("source_name", "soil_name")):
-                    old = original["Misc Codes"][entry[source_key]]
-                    new = result["Soil"][entry[destination_key]]
-                    self.assertEqual((new.value, new.data_type, new.number_format),
-                                     (old.value, old.data_type, old.number_format))
-                    self.assertIsNone(result["Misc Codes"][entry[source_key]].value)
-            self.assertIsNone(result["Misc Codes"]["B27"].value)
-            self.assertEqual(result["Soil"]["L1"].value, "Floral Codes")
-            self.assertEqual(str(result["Soil"].print_area), "'Soil'!$B$1:$M$66")
-            self.assertEqual(result["Soil"].page_setup.scale, 70)
-            self.assertEqual([sha(image._data()) for image in original["Soil"]._images],
-                             [sha(image._data()) for image in result["Soil"]._images])
-        finally:
-            original.close()
-            result.close()
-        with zipfile.ZipFile(themed) as before, zipfile.ZipFile(moved) as after:
-            changed = {"xl/workbook.xml", "xl/styles.xml", sheet_info(before, "Soil")[0],
-                       sheet_info(before, "Misc Codes")[0]}
+        result = self.root / "soil-barcodes.xlsx"
+        drawing_parts = set(normalize_soil_barcodes(source, result))
+        with zipfile.ZipFile(source) as before, zipfile.ZipFile(result) as after:
             for name in before.namelist():
-                if name not in changed:
+                if name not in drawing_parts:
                     self.assertEqual(before.read(name), after.read(name), name)
-        move_floral_codes(moved, again)
-        self.assertEqual(moved.read_bytes(), again.read_bytes())
+        old, new = load_workbook(source), load_workbook(result)
+        try:
+            old_other = {(image.anchor._from.col, image.anchor._from.row): sha(image._data()) for image in old["Soil"]._images
+                         if image.anchor._from.col != 4}
+            new_other = {(image.anchor._from.col, image.anchor._from.row): sha(image._data()) for image in new["Soil"]._images
+                         if image.anchor._from.col != 4}
+            self.assertEqual(old_other, new_other)
+            found = {}
+            for image in new["Soil"]._images:
+                marker = image.anchor._from
+                if marker.col != 4:
+                    continue
+                self.assertEqual((image.anchor.ext.cx, image.anchor.ext.cy),
+                                 (SOIL_BARCODE_WIDTH * 9525, SOIL_BARCODE_HEIGHT * 9525))
+                found[marker.row] = decoded_soil_barcode(Image.open(io.BytesIO(image._data())))
+            self.assertEqual(found, {row: value[0] for row, value in SOIL_BARCODE_SOURCES.items()})
+        finally:
+            old.close()
+            new.close()
+        repeated = self.root / "soil-barcodes-again.xlsx"
+        normalize_soil_barcodes(result, repeated)
+        with zipfile.ZipFile(repeated) as archive:
+            self.assertIsNone(archive.testzip())
 
-    def test_move_floral_codes_preserves_leading_zero_text(self):
+    def test_soil_barcodes_reject_changed_source_or_row(self):
         source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
-        edited, themed, moved = (self.root / name for name in ("edited.xlsx", "themed.xlsx", "moved.xlsx"))
+        edited = self.root / "soil-altered.xlsx"
         workbook = load_workbook(source)
-        workbook["Misc Codes"]["A28"] = "00012"
+        next(image for image in workbook["Soil"]._images if image.anchor._from.col == 4).anchor._from.row += 1
         workbook.save(edited)
         workbook.close()
-        theme_operational_sheets(edited, themed)
-        move_floral_codes(themed, moved)
-        workbook = load_workbook(moved)
-        try:
-            self.assertEqual(workbook["Soil"]["L3"].value, "00012")
-            self.assertEqual(workbook["Soil"]["L3"].data_type, "s")
-        finally:
-            workbook.close()
+        with self.assertRaisesRegex(ValueError, "anchors changed"):
+            normalize_soil_barcodes(edited, self.root / "soil-rejected.xlsx")
+        generated = self.root / "soil-normalized.xlsx"
+        normalize_soil_barcodes(source, generated)
+        changed = self.root / "soil-changed-image.xlsx"
+        with zipfile.ZipFile(generated) as before, zipfile.ZipFile(changed, "w") as after:
+            for item in before.infolist():
+                content = before.read(item.filename)
+                if item.filename == "xl/media/soil-code128-3.png":
+                    image = Image.open(io.BytesIO(content)).convert("RGB")
+                    image.putpixel((0, 0), (0, 0, 0))
+                    buffer = io.BytesIO()
+                    image.save(buffer, format="PNG")
+                    content = buffer.getvalue()
+                after.writestr(item, content)
+        with self.assertRaisesRegex(ValueError, "source changed"):
+            normalize_soil_barcodes(changed, self.root / "soil-rejected-image.xlsx")
+        workbook = load_workbook(source)
+        next(image for image in workbook["Soil"]._images if image.anchor._from.col == 1).anchor._from.row += 1
+        edited_label = self.root / "soil-altered-label.xlsx"
+        workbook.save(edited_label)
+        workbook.close()
+        with self.assertRaisesRegex(ValueError, "barcode associations need review"):
+            normalize_soil_barcodes(edited_label, self.root / "soil-rejected-label.xlsx")
 
-    def test_move_floral_codes_rejects_conflicts_and_incomplete_source(self):
+    def test_floral_codes_remain_on_misc_and_restore_legacy_soil_layout(self):
         source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
-        for sheet, coordinate, value in (("Soil", "L3", "Owner data"),
-                                         ("Misc Codes", "B28", None),
-                                         ("Misc Codes", "A33", "Unreviewed data")):
-            with self.subTest(sheet=sheet, coordinate=coordinate):
-                edited = self.root / "edited.xlsx"
-                themed = self.root / "themed.xlsx"
-                workbook = load_workbook(source)
-                workbook[sheet][coordinate] = value
-                workbook.save(edited)
-                workbook.close()
-                if themed.exists():
-                    themed.unlink()
-                theme_operational_sheets(edited, themed)
-                with self.assertRaises(ValueError):
-                    move_floral_codes(themed, self.root / "rejected.xlsx")
+        original = load_workbook(source)
+        try:
+            original["Misc Codes"]["A28"] = "00012"
+            original_path = self.root / "original-floral.xlsx"
+            original.save(original_path)
+            expected = [(original["Misc Codes"][f"{col}{row}"].value,
+                         original["Misc Codes"][f"{chr(ord(col) + 1)}{row}"].value)
+                        for col in ("A", "C") for row in range(28, 32)]
+            original.close()
+            original = load_workbook(original_path)
+            soil = original["Soil"]
+            soil["L1"] = "Floral Codes"
+            soil.merge_cells("L1:M1")
+            for index, (code, name) in enumerate(expected, 3):
+                soil[f"L{index}"], soil[f"M{index}"] = code, name
+            for col, width in (("K", 2), ("L", 10), ("M", 30)):
+                soil.column_dimensions[col].width = width
+            soil.print_area = "B1:M66"
+            misc = original["Misc Codes"]
+            misc["B27"] = None
+            for col in ("A", "B", "C", "D"):
+                for row in range(28, 32):
+                    misc[f"{col}{row}"] = None
+            legacy = self.root / "legacy-floral.xlsx"
+            original.save(legacy)
+        finally:
+            original.close()
+        for path in (original_path, legacy):
+            with self.subTest(path=path):
+                restored = self.root / (path.stem + "-restored.xlsx")
+                entries = restore_floral_codes(path, restored)
+                self.assertEqual([(entry["code"], entry["name"]) for entry in entries], expected)
+                before, after = load_workbook(path), load_workbook(restored)
+                try:
+                    self.assertEqual(after["Misc Codes"]["B27"].value, "Floral Codes")
+                    self.assertEqual(after["Misc Codes"]["A28"].value, "00012")
+                    self.assertEqual(after["Misc Codes"]["A28"].data_type, "s")
+                    self.assertEqual(str(after["Soil"].print_area), "'Soil'!$B$1:$J$66")
+                    self.assertIsNone(after["Soil"]["L1"].value)
+                    self.assertEqual([sha(image._data()) for image in before["Soil"]._images],
+                                     [sha(image._data()) for image in after["Soil"]._images])
+                    for entry in entries:
+                        self.assertEqual(after["Misc Codes"][entry["misc_code"]].value, entry["code"])
+                        self.assertEqual(after["Misc Codes"][entry["misc_name"]].value, entry["name"])
+                finally:
+                    before.close()
+                    after.close()
+                again = self.root / (path.stem + "-again.xlsx")
+                restore_floral_codes(restored, again)
+                self.assertEqual(restored.read_bytes(), again.read_bytes())
+
+    def test_floral_codes_refuse_conflicting_locations(self):
+        source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
+        workbook = load_workbook(source)
+        workbook["Soil"]["L1"] = "Floral Codes"
+        edited = self.root / "conflicting-floral.xlsx"
+        workbook.save(edited)
+        workbook.close()
+        with self.assertRaisesRegex(ValueError, "both"):
+            restore_floral_codes(edited, self.root / "rejected-floral.xlsx")
 
     def test_uploaded_conversions_image_replaces_charts_and_is_preserved(self):
         source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"

@@ -3,6 +3,57 @@
   "production_publication": "BLOCKED",
   "original_binder": "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx",
   "original_binder_sha256": "6b0aeaa153233c5f4917811a3f7a5b2212f7a946a0abede372a31db556ab0f63",
+  "soil_barcodes": [
+    {
+      "source_row": 3,
+      "code": "057078008209",
+      "original_image_sha256": "3de7c89c432c52dd05d353271c54cd356d3502206a0c65d368066293a4866085",
+      "generated_image_sha256": "b87605243db548c768df086fde295e0737019df80a9bc98a4c439624bf1df90b"
+    },
+    {
+      "source_row": 11,
+      "code": "057078406203",
+      "original_image_sha256": "3c58dc076ed6a6853d1d2b8e12a20a5e5599e9958dc3fc6efe30c2d5b9df4cd9",
+      "generated_image_sha256": "5e099a53d0fd0144e1412e28e74fa5c45d39ff3633a604ca6849d881d77912dd"
+    },
+    {
+      "source_row": 19,
+      "code": "057078402090",
+      "original_image_sha256": "55c8b25394dd9b6297daffed08f854188618237ac4433f46d408e307f21f8ca3",
+      "generated_image_sha256": "dcb2bfe05c03f692a977971d9b7460b76a0640bf03ed5eff15dc291570532577"
+    },
+    {
+      "source_row": 27,
+      "code": "057078403097",
+      "original_image_sha256": "9594e0e91c774f87362f72b03366b3693f1dbe1e5c4b9291b4d5459dc80f5bdc",
+      "generated_image_sha256": "f3133e3b61e0e925bd82d6956f6a78d814c14d2632438273d658bd1f09283321"
+    },
+    {
+      "source_row": 35,
+      "code": "057078205240",
+      "original_image_sha256": "7550576eb986eb4c9750d3b1d78ceff7682abff252d70b80281061c7c0cadd85",
+      "generated_image_sha256": "fc3363b244e3d4ea7327e7a0b45efa371f3e338410af1105256b4b0fa16b3fd8"
+    },
+    {
+      "source_row": 43,
+      "code": "057078405404",
+      "original_image_sha256": "4f8a8884549c639ed005c910d5af0b70cd2cef6e15dd9d5364b651061bdb3c70",
+      "generated_image_sha256": "bf1a07b0174f0830a6cb955aac537d464ef62f267ef903ec0a53ecda1e817295"
+    },
+    {
+      "source_row": 51,
+      "code": "057078770014",
+      "original_image_sha256": "f35cd1646db2bc1ff1109e259bfd457f0a25ffad164f9e4c061b08c862a1609e",
+      "generated_image_sha256": "e8212e6c4db83e304df7d23c3c821297ceaf11c8f494cd6d10f12561920e1ea5"
+    },
+    {
+      "source_row": 59,
+      "code": "775795112800",
+      "original_image_sha256": "e53006ecf1f05444f0adaa3ef02c4d80357f36cb01903993c16b4d8dcaeed1df",
+      "generated_image_sha256": "f94594cf1c3e1af89bcc0c7613ed9daff4fb994d34df5bd9ed8c666d796750e9"
+    }
+  ],
+  "soil_product_identities_sha256": "ed99f2abc048a372dab740bc7049b657e33584c2cd9bc10fa55585772a632bab",
   "deli_source": "/workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/reimagined-system/sources/binders/Updated_Deli_Two_Columns.xlsx",
   "deli_source_sha256": "a26ab6cf98d72d656e5cfd7a5c8928a7938ae1d965934a597c047f8eb37438f3",
   "bakery_source": "/workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/reimagined-system/sources/binders/Bakery_Products.csv",
@@ -410,15 +461,15 @@
       "delivery_pages_verified": 2,
       "produce_images_verified": 513,
       "original_parts_checked": 104,
-      "original_parts_byte_identical": 81,
+      "original_parts_byte_identical": 79,
       "unrelated_package_parts_byte_identical": true,
       "existing_styles_preserved": true,
       "unrelated_workbook_settings_preserved": true,
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "1643788d13e001536584dd00b1a289bc2110a023bc887c1669be64dac6acbb70",
-      "file_size_bytes": 14494419,
+      "file_sha256": "0bf340c676cdd75632a9794ce330604785861e7d7b8657db1750af5416a83951",
+      "file_size_bytes": 14523281,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 400,
       "output_sheet_names": [
@@ -459,6 +510,10 @@
       "delivery_print_pages_verified": 2,
       "delivery_page_split_verified": true,
       "soil_print_images_verified": 24,
+      "soil_barcodes_decoded_at_dpi": [
+        150,
+        300
+      ],
       "weighed_print_text_verified": false,
       "weighed_print_image_verified": true,
       "complete_pdf": "Complete Till Binder - Updated - Photos.pdf",
@@ -471,7 +526,7 @@
     "Missing, identity-mismatched, checksum-changed and unreadable image associations remain blank.",
     "Existing and newly supplied identity-linked AI illustrations are visual references at the owner's request; AI provenance and uncertain visual verdicts are recorded only in the external audit report.",
     "Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.",
-    "Time To Stretch uses the supplied color guide; Soil retains its original barcode images under a green heading, with Floral Codes beside them; Weighed more $100 uses the visually compared owner upload with muted green colors, unchanged instructions and label values on one portrait page; Misc Codes uses green headings and pale-green entry shading on one page, with original cells and number formats retained; Conversions uses the owner-uploaded, visually checked one-page image; the original source charts remain preserved in the original binder and workbook package; Delivery Charges retains its two source pages with green header bands and an explicit page split; Store Directory uses identity-matched list stripes and highlights on the template's two images; Bakery is replaced from the reviewed Bakery product list in a compact one-page theme; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.",
+    "Time To Stretch uses the supplied color guide; Soil uses uniformly regenerated Code 128 barcodes under a green heading, preserving exact source values; scan the printed page before use. Floral Codes appear on Misc Codes; Weighed more $100 uses the visually compared owner upload with muted green colors, unchanged instructions and label values on one portrait page; Misc Codes uses green headings and pale-green entry shading on one page, with original cells and number formats retained; Conversions uses the owner-uploaded, visually checked one-page image; the original source charts remain preserved in the original binder and workbook package; Delivery Charges retains its two source pages with green header bands and an explicit page split; Store Directory uses identity-matched list stripes and highlights on the template's two images; Bakery is replaced from the reviewed Bakery product list in a compact one-page theme; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.",
     "Future unclassified entries are retained for review, not silently discarded or approved."
   ],
   "till_binder_audit": {

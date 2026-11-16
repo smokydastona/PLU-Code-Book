@@ -74,7 +74,7 @@ def audit_package(original_path, built_path):
 def section_plan(validation):
     produce = validation["planned_produce_print_pages"]
     return ([("Time To Stretch", 1, (612, 792)), ("Conversions", 1, (612, 792)),
-             ("Weighed Items Over $100", 1, (612, 792)), ("Soil and Floral Codes", 1, (612, 792)),
+             ("Weighed Items Over $100", 1, (612, 792)), ("Soil", 1, (612, 792)),
              ("Misc Codes", 1, (612, 792)), ("Bakery", 1, (612, 792)), ("Deli", 1, (612, 792)),
              ("Produce", produce, (792, 612)), ("Bulk", 6, (792, 612)),
              ("Delivery Charges", 2, (612, 792)), ("Store Directory", 2, (792, 612))])
@@ -105,7 +105,7 @@ def audit_pdf(pdf_path, validation, output):
         if spill:
             problems.append(f"{len(spill)} words within the print-margin guard")
         if name not in {"Time To Stretch", "Conversions", "Weighed Items Over $100", "Delivery Charges",
-                        "Store Directory", "Soil and Floral Codes"} and not words:
+                        "Store Directory", "Soil"} and not words:
             problems.append("no extractable text")
         rows.append(dict(page=number, section=name, width_pt=width, height_pt=height,
                          orientation="landscape" if width > height else "portrait",

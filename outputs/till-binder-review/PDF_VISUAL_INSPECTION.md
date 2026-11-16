@@ -1,5 +1,9 @@
 # PDF Page-by-Page Visual Inspection
 
+Soil barcode update (2026-11-16): the Soil page was rendered and inspected. All eight recreated Code 128 barcodes have matching dimensions, retain their original decoded values and display their digits. PDF renderings independently decoded at 150 and 300 dpi; test the physical print with the cashier's scanner before use.
+
+Floral relocation (2026-11-16, before the barcode update): the Soil and Misc Codes pages were rendered and inspected. Soil's then-existing barcode artwork remained on one portrait page, while all eight floral codes and names appeared on the single Misc Codes page.
+
 Editable-sheet heading update (2026-11-16): Bulk headings are centered, and all 12 continuing Bulk categories print their full non-bold, half-size `(continued)` label directly after the centered name. The longest category is slightly reduced in size so its label fits without clipping. Bakery, Deli and Misc Codes headings are centered in their existing cells; Soil and Floral headings remain centered. The owner-approved image-based artwork is unchanged. The updated Bulk first and final pages were inspected, and automated checks measured every continuation label.
 
 Produce heading update (2026-11-16): the first Produce page was rendered and inspected. Letter and subgroup names remain centered. The 17 repeated subgroup headings have a native-text, non-bold `(continued)` overlay immediately beside the name, separated by one normal word space rather than a separate cell. Declared font sizes are exactly half the title sizes. All printed labels were checked for inline word gaps, regular weight and half-size rendering within Calc font quantization. The Apples heading centers are unchanged across the three column blocks.
