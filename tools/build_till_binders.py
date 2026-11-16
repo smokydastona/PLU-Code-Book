@@ -698,7 +698,7 @@ def style_soil_guide(binder, destination):
                         target.font = Font(name="DejaVu Sans", size=20, bold=True, color="FFFFFF")
                         target.alignment = Alignment(horizontal="center", vertical="center")
                     else:
-                        target.fill = row_fill((row - 3) // 8)
+                        target.fill = PatternFill("solid", fgColor="FFFFFF")
         content = io.BytesIO()
         donor.save(content)
     finally:
@@ -1375,6 +1375,33 @@ def combine_bulk(binder, destination):
             for entry in original.infolist():
                 output.writestr(entry, changes.get(entry.filename, original.read(entry.filename)))
         return True
+
+
+def order_misc_before_soil(binder, destination):
+    with zipfile.ZipFile(binder) as original:
+        workbook = xml(original.read("xl/workbook.xml"))
+        sheets = workbook.find(f"{{{S}}}sheets")
+        previous = list(sheets)
+        by_name = {sheet.get("name"): sheet for sheet in previous}
+        if SOIL_SHEET not in by_name or MISC_SHEET not in by_name:
+            shutil.copyfile(binder, destination)
+            return
+        misc = by_name[MISC_SHEET]
+        sheets.remove(misc)
+        by_name[SOIL_SHEET].addprevious(misc)
+        indexes = {index: list(sheets).index(sheet) for index, sheet in enumerate(previous)}
+        for node in workbook.findall(f"{{{S}}}definedNames/{{{S}}}definedName"):
+            if node.get("localSheetId") is not None:
+                node.set("localSheetId", str(indexes[int(node.get("localSheetId"))]))
+        for view in workbook.iter(f"{{{S}}}workbookView"):
+            for attribute in ("activeTab", "firstSheet"):
+                if view.get(attribute) is not None:
+                    view.set(attribute, str(indexes[int(view.get(attribute))]))
+        with zipfile.ZipFile(destination, "x", compression=zipfile.ZIP_DEFLATED) as output:
+            output.comment = original.comment
+            for entry in original.infolist():
+                output.writestr(entry, serialize(workbook) if entry.filename == "xl/workbook.xml"
+                                else original.read(entry.filename))
 
 
 def visual_records(root):
@@ -2852,6 +2879,7 @@ def generate(root, binder, output, verify_print=False):
         path = output / filename
         with tempfile.TemporaryDirectory(prefix="till-produce-") as temporary:
             combined_binder = Path(temporary) / "Combined.xlsx"
+            ordered_binder = Path(temporary) / "Ordered.xlsx"
             bulk_binder = Path(temporary) / "Bulk.xlsx"
             operational_binder = Path(temporary) / "Operational.xlsx"
             soil_binder = Path(temporary) / "Soil.xlsx"
@@ -2866,7 +2894,8 @@ def generate(root, binder, output, verify_print=False):
             produce_binder = Path(temporary) / "Produce.xlsx"
             bakery_binder = Path(temporary) / "Bakery.xlsx"
             bulk_combined = combine_bulk(binder, combined_binder)
-            template = load_workbook(combined_binder)
+            order_misc_before_soil(combined_binder, ordered_binder)
+            template = load_workbook(ordered_binder)
             try:
                 has_soil = SOIL_SHEET in template
                 conversion_sheet = template[CONVERSIONS_SHEET] if CONVERSIONS_SHEET in template else None
@@ -2883,9 +2912,9 @@ def generate(root, binder, output, verify_print=False):
             finally:
                 template.close()
             if bulk_coordinates is not None:
-                replace_sheet(combined_binder, bulk_content, bulk_binder, "Bulk")
+                replace_sheet(ordered_binder, bulk_content, bulk_binder, "Bulk")
             else:
-                shutil.copyfile(combined_binder, bulk_binder)
+                shutil.copyfile(ordered_binder, bulk_binder)
             theme_operational_sheets(bulk_binder, operational_binder)
             if has_soil:
                 soil_drawing_parts = set(normalize_soil_barcodes(operational_binder, soil_binder))

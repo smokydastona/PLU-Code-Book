@@ -20,7 +20,7 @@ from openpyxl.worksheet.pagebreak import Break
 from PIL import Image, ImageChops, ImageOps
 
 from build_till_binders import (BULK_SHEETS, CONVERSIONS_ACCURACY_REVIEW, CONVERSIONS_SOURCE, CONVERSIONS_SOURCE_SHA256, DELIVERY_HEADER_BANDS, DELIVERY_SHEET, DIRECTORY_EMERGENCY_HIGHLIGHTS, DIRECTORY_SOURCES, FILENAMES, MAX_GITHUB_FILE_SIZE, PDF_EXPORT_FORMAT, STRETCH_SOURCE, VISUALS, bulk_print_pages,
-                               MISC_TITLE, SOIL_BARCODE_SOURCES, SOIL_BARCODE_WIDTH, SOIL_BARCODE_HEIGHT, SOIL_PRODUCT_IMAGE_SIZE, soil_product_image, add_continuation_labels, combine_bulk, comparisons, decoded_soil_barcode, directory_sheet, fit_misc_sheet, generate, layout_rows, misc_page_matches, misc_print_text, normalize_soil_barcodes, restore_floral_codes, style_soil_guide,
+                               MISC_TITLE, SOIL_BARCODE_SOURCES, SOIL_BARCODE_WIDTH, SOIL_BARCODE_HEIGHT, SOIL_PRODUCT_IMAGE_SIZE, soil_product_image, add_continuation_labels, combine_bulk, comparisons, decoded_soil_barcode, directory_sheet, fit_misc_sheet, generate, layout_rows, misc_page_matches, misc_print_text, normalize_soil_barcodes, order_misc_before_soil, restore_floral_codes, style_soil_guide,
                                docx_compatible_image,
                                delivery_sheet, map_images, produce_catalog, quick_sheet, replace_produce, replace_sheet,
                                sha, sheet_info, stretch_sheet, theme_conversions_sheet, theme_operational_sheets,
@@ -815,7 +815,7 @@ class TillBinderChecks(unittest.TestCase):
             self.assertEqual([soil[f"A{row}"].value for row in range(3, 67, 8)], list(range(1, 9)))
             self.assertEqual(soil["A3"].fill.fgColor.rgb, "00305040")
             self.assertEqual(soil["B3"].fill.fgColor.rgb, "00FFFFFF")
-            self.assertEqual(soil["B11"].fill.fgColor.rgb, "00" + PALE_GREEN)
+            self.assertEqual(soil["B11"].fill.fgColor.rgb, "00FFFFFF")
             self.assertEqual([sha(image._data()) for image in original["Soil"]._images],
                              [sha(image._data()) for image in soil._images])
         finally:
@@ -827,6 +827,29 @@ class TillBinderChecks(unittest.TestCase):
             self.assertEqual([result["Soil"][f"A{row}"].value for row in range(3, 67, 8)], list(range(1, 9)))
         finally:
             result.close()
+
+    def test_misc_moves_before_soil_without_changing_sheet_parts_or_print_areas(self):
+        source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
+        result = self.root / "ordered.xlsx"
+        order_misc_before_soil(source, result)
+        original, updated = load_workbook(source), load_workbook(result)
+        try:
+            expected = original.sheetnames[:]
+            expected.remove("Misc Codes")
+            expected.insert(expected.index("Soil"), "Misc Codes")
+            self.assertEqual(updated.sheetnames, expected)
+            for name in original.sheetnames:
+                self.assertEqual(str(original[name].print_area), str(updated[name].print_area))
+        finally:
+            original.close()
+            updated.close()
+        with zipfile.ZipFile(source) as before, zipfile.ZipFile(result) as after:
+            for name in before.namelist():
+                if name != "xl/workbook.xml":
+                    self.assertEqual(before.read(name), after.read(name), name)
+        repeated = self.root / "ordered-again.xlsx"
+        order_misc_before_soil(result, repeated)
+        self.assertEqual(result.read_bytes(), repeated.read_bytes())
 
     def test_soil_guide_refuses_existing_number_column_data(self):
         source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"

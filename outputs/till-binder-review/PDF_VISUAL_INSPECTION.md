@@ -1,5 +1,7 @@
 # PDF Page-by-Page Visual Inspection
 
+Soil white rows and sheet order (2026-11-16): Misc Codes now prints on page 4, immediately before Soil on page 5. All Soil product rows are white, without alternating green bands; the green headings and numbered column remain. The rendered Soil page was inspected, and barcode print checks passed.
+
 Soil product 7 correction (2026-11-16): excess background around the Premium Organic All Purpose Potting Soil 20L package is trimmed in its display derivative before fitting the same photo box. The package is enlarged without distortion or cutting off its edges. The updated Soil page was inspected and barcode print checks passed; the source photo is unchanged.
 
 Soil product-photo sizing (2026-11-16): all eight package photos now use matching square display boxes, approximately 78.72 pt per side in the PDF, with white padding preserving their aspect ratios. The rendered page was inspected. Original images remain in the workbook package, and all eight barcodes still decode at 150 and 300 dpi.
