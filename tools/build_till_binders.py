@@ -1549,8 +1549,13 @@ def quick_sheet(rows, images, with_photos, title="PRODUCE"):
             sheet.merge_cells(start_row=number, start_column=base, end_row=number, end_column=base + 3)
             cell = sheet.cell(number, base)
             set_text(cell, entry["text"])
-            cell.font = Font(name="DejaVu Sans", size=9, bold=True)
-            cell.fill = PatternFill("solid", fgColor="DCE6DA" if entry["level"] == 1 else "EEF3EC")
+            if entry["level"] == 1:
+                cell.font = Font(name="DejaVu Sans", size=15, bold=True, color="FFFFFF")
+                cell.fill = PatternFill("solid", fgColor=DARK_GREEN)
+            else:
+                cell.font = Font(name="DejaVu Sans", size=11, bold=True, color=DARK_GREEN)
+                cell.fill = PatternFill("solid", fgColor="C9DCC5")
+            cell.border = Border(bottom=Side(style="medium", color=DARK_GREEN))
             cell.alignment = Alignment(vertical="center", wrap_text=True,
                                        indent=1 if entry["level"] == 2 else 0)
             continue
