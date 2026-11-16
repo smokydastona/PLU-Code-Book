@@ -1,15 +1,20 @@
 """Build the compact, one-page Bakery sheet from the reviewed product list."""
 import csv
 import io
-import math
 from pathlib import Path
 
 from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.worksheet.page import PageMargins
 
+from text_fit import line_count
+
 BAKERY_SOURCE = Path("sources/binders/Bakery_Products.csv")
 TITLE = "BAKERY PRODUCT & PLU REFERENCE GUIDE"
+PRODUCT_WIDTH, CODE_WIDTH, GAP_WIDTH = 40, 8, 2
+ROW_HEIGHT = 24
+BODY_POINTS = 12
+FONT = "DejaVu Sans"
 VALID_CATEGORIES = {"Bulk Buns", "Bagels", "Muffins"}
 
 
@@ -62,29 +67,30 @@ def _group_panel(rows, column_start, sheet, coordinates):
                           end_row=row_number, end_column=code_column)
         heading = sheet.cell(row_number, product_column, category)
         heading.data_type = "s"
-        heading.font = Font(name="Calibri", size=11, bold=True, color="FFFFFF")
+        heading.font = Font(name=FONT, size=BODY_POINTS + 1, bold=True, color="FFFFFF")
         heading.fill = PatternFill("solid", fgColor="375623")
         sheet.row_dimensions[row_number].height = max(
-            sheet.row_dimensions[row_number].height or 0, 19)
+            sheet.row_dimensions[row_number].height or 0, 24)
         row_number += 1
         for column, label in ((product_column, "Product"), (code_column, "PLU")):
             cell = sheet.cell(row_number, column, label)
-            cell.font = Font(name="Calibri", size=10, bold=True, color="375623")
+            cell.font = Font(name=FONT, size=BODY_POINTS, bold=True, color="375623")
             cell.border = Border(bottom=Side(style="thin", color="375623"))
+        sheet.row_dimensions[row_number].height = 20
         row_number += 1
         for entry in products:
             product = sheet.cell(row_number, product_column, entry["product"])
             code = sheet.cell(row_number, code_column, entry["plu"])
             for cell in (product, code):
                 cell.data_type = "s"
-                cell.font = Font(name="Calibri", size=10)
+                cell.font = Font(name=FONT, size=BODY_POINTS)
                 cell.alignment = Alignment(wrap_text=True, vertical="center",
                                            horizontal="left" if cell.column == product_column else "center")
                 cell.border = border
             code.number_format = "@"
-            lines = max(1, math.ceil(len(entry["product"]) / 20))
+            lines = line_count(entry["product"], BODY_POINTS, PRODUCT_WIDTH)
             sheet.row_dimensions[row_number].height = max(
-                sheet.row_dimensions[row_number].height or 0, 15 * lines)
+                sheet.row_dimensions[row_number].height or 0, ROW_HEIGHT + 15 * (lines - 1))
             coordinates.append(dict(
                 category=category, product=entry["product"], plu=entry["plu"],
                 product_cell=product.coordinate, code_cell=code.coordinate))
@@ -100,10 +106,11 @@ def workbook_bytes(rows):
     sheet.merge_cells("A1:E1")
     sheet["A1"] = TITLE
     sheet["A1"].data_type = "s"
-    sheet["A1"].font = Font(name="Calibri", size=14, bold=True, color="375623")
+    sheet["A1"].font = Font(name=FONT, size=16, bold=True, color="375623")
     sheet["A1"].alignment = Alignment(horizontal="center")
-    sheet.row_dimensions[1].height = 25
-    for column, width in (("A", 31), ("B", 9), ("C", 3), ("D", 31), ("E", 9)):
+    sheet.row_dimensions[1].height = 30
+    for column, width in (("A", PRODUCT_WIDTH), ("B", CODE_WIDTH), ("C", GAP_WIDTH),
+                          ("D", PRODUCT_WIDTH), ("E", CODE_WIDTH)):
         sheet.column_dimensions[column].width = width
 
     boundaries = [index for index in range(1, len(rows))

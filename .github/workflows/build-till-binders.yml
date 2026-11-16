@@ -46,6 +46,8 @@ jobs:
         run: |
           python tools/build_till_binders.py --binder "$BINDER_PATH" \
             --output "$RUNNER_TEMP/till-binder-review" --verify-print
+          python tools/audit_till_binder.py --binder "$BINDER_PATH" \
+            --output "$RUNNER_TEMP/till-binder-review"
       - name: Upload review binder and reports without publishing a release
         if: always()
         uses: actions/upload-artifact@v4

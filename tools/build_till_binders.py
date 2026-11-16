@@ -70,6 +70,8 @@ MAX_GITHUB_FILE_SIZE = 100 * 1024 * 1024
 BLOCKS = (1, 6, 11)
 LINES = 20
 PAGE_ROWS = LINES + 3
+PRODUCE_ROW_HEIGHT = 31
+PRODUCE_IMAGE_BOX = (54, 38)
 BULK_SHEETS = ("Bulk", "Bulk (2)", "Bulk (3)", "Bulk (4)")
 STRETCH_SOURCE = Path("sources/binders/Time_To_Stretch.jpg")
 STRETCH_SHEET = "Time To Stretch"
@@ -1517,7 +1519,7 @@ def quick_sheet(rows, images, with_photos, title="PRODUCE"):
         for offset, height in enumerate((18, 18, 18)):
             sheet.row_dimensions[start + offset].height = height
         for number in range(start + 3, start + PAGE_ROWS):
-            sheet.row_dimensions[number].height = 25
+            sheet.row_dimensions[number].height = PRODUCE_ROW_HEIGHT
         sheet.merge_cells(start_row=start, start_column=1, end_row=start, end_column=14)
         set_text(sheet.cell(start, 1), title + " PLU QUICK GUIDE - " +
                  ("VISUAL REFERENCES" if with_photos else "TEXT ONLY"))
@@ -1569,7 +1571,7 @@ def quick_sheet(rows, images, with_photos, title="PRODUCE"):
             content = images.get(row["source_id"])
             if content:
                 picture = ExcelImage(io.BytesIO(content))
-                factor = min(48 / picture.width, 30 / picture.height)
+                factor = min(PRODUCE_IMAGE_BOX[0] / picture.width, PRODUCE_IMAGE_BOX[1] / picture.height)
                 picture.width *= factor
                 picture.height *= factor
                 sheet.add_image(picture, photo.coordinate)

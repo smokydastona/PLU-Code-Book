@@ -57,7 +57,12 @@ The checked-in sources are sufficient to generate the complete binder without ad
   --binder sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx \
   --output "/path/to/empty/till-binder-review" \
   --verify-print
+.venv/bin/python tools/audit_till_binder.py \
+  --binder sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx \
+  --output "/path/to/that/till-binder-review"
 ```
+
+`audit_till_binder.py` checks the finished build (package preservation against the untouched original, per-page PDF size/orientation/blank/margin checks, section page counts, image coverage) and writes `AUDIT_REPORT.json`, `PRINT_LAYOUT_REPORT.csv` and `PRODUCTION_BLOCKERS.csv`. It exits non-zero on a technical failure; a pass never approves operational use while blockers remain. Text wrapping in Bulk and Bakery is measured with the DejaVu Sans print font (`tools/text_fit.py`), so install `fonts-dejavu-core` and LibreOffice before building.
 
 The output directory must be empty. Neither the input workbook nor the owner-maintained XML is modified. After a future owner XML upload, repeat the command with a new empty output directory. The manually triggered **Build complete till-binder review** workflow defaults to the committed original and accepts a repository-relative binder template path. Future owner edits to other sheets can be supplied in an updated complete binder template; the build preserves those sheets, rebuilds Time To Stretch, Produce, Bakery and Deli from their respective sources, themes the existing Delivery Charges pages, and combines the four original Bulk sheets if present. Do not upload any different workbook or additional operational/contact information without owner authorization.
 
