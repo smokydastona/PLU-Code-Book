@@ -95,6 +95,17 @@ SOIL_BARCODE_SOURCES = {
 }
 SOIL_BARCODE_WIDTH, SOIL_BARCODE_HEIGHT = 286, 130
 SOIL_PRODUCT_IDENTITIES_SHA256 = "ed99f2abc048a372dab740bc7049b657e33584c2cd9bc10fa55585772a632bab"
+SOIL_PRODUCT_IMAGES = {
+    2: ("95ab1a4c2b5cdf9d3cd0aea8bbbade4c31dbfc53d314748b0651b996111eb590", 10079, 9525),
+    10: ("dc033c9cc79fa0b1f152af0f335ebcb1f841998b7722d516b1587394c06975ed", 19050, 19050),
+    18: ("fecddbd5f97956598ea4906297742d46a3e534ebca660b31607c3aaa55ecfc2f", 19050, 19051),
+    26: ("7eae4a4aad63551ca7278185470e050e5ebc93bcd21123e657ce27dfb1685cfb", 9526, 9526),
+    34: ("6b33b9523f00873af214094f307551fc780183946ebc1a17c54f9a645092b742", 19051, 19050),
+    42: ("b740e6801f9b2f9b8513f1ab2e5e033b2d4a643654ce8a1bb6ee18be59216cdd", 19051, 19050),
+    50: ("ccbeb93fdff1a2fbdba2634da2d088d106ae17b3f3d7cd839d1778026bd3f6d5", 19050, 19050),
+    58: ("d0f8db5dcd554521d08c7e847eec5278d162a54dc077d4bdbebcce90e98a84b2", 28575, 28576),
+}
+SOIL_PRODUCT_IMAGE_SIZE = 140
 WEIGHED_SHEET = "Weighed more $100"
 CONVERSIONS_SHEET = "Conversions"
 CONVERSIONS_SOURCE = Path("sources/binders/Conversions_Updated.jpg")
@@ -239,6 +250,18 @@ def soil_barcode_image(code):
     return output.getvalue()
 
 
+def soil_product_image(content, *, trim_padding=True):
+    with Image.open(io.BytesIO(content)) as source:
+        image = source.convert("RGB")
+        if trim_padding and sha(content) == SOIL_PRODUCT_IMAGES[50][0]:
+            image = image.crop((18, 21, 202, 292))
+        image = ImageOps.pad(image, (350, 350),
+                             method=Image.Resampling.LANCZOS, color="white")
+    output = io.BytesIO()
+    image.save(output, format="PNG")
+    return output.getvalue()
+
+
 def normalize_soil_barcodes(binder, destination):
     xdr = "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"
     drawingml = "http://schemas.openxmlformats.org/drawingml/2006/main"
@@ -255,6 +278,17 @@ def normalize_soil_barcodes(binder, destination):
         rel_path = rels_part(drawing_path)
         relationships = xml(original.read(rel_path))
         relations = {node.get("Id"): node.get("Target") for node in relationships}
+        source_images = {sha(original.read(name)): name for name in original.namelist()
+                         if name.startswith("xl/media/")}
+        product_images = {}
+        accepted_product_hashes = {}
+        for row, (digest, _, _) in SOIL_PRODUCT_IMAGES.items():
+            if digest not in source_images:
+                raise ValueError(f"Original Soil product image at row {row + 1} is missing")
+            source_content = original.read(source_images[digest])
+            product_images[row] = soil_product_image(source_content)
+            accepted_product_hashes[row] = {sha(product_images[row]),
+                                           sha(soil_product_image(source_content, trim_padding=False))}
         identities = []
         for anchor in drawing:
             marker = anchor.find(f"{{{xdr}}}from")
@@ -265,42 +299,61 @@ def normalize_soil_barcodes(binder, destination):
             if blip is None or blip.get(f"{{{R}}}embed") not in relations:
                 raise ValueError("Soil product identity image is missing")
             image_path = resolve_part(drawing_path, relations[blip.get(f"{{{R}}}embed")])
-            identities.append((int(marker.findtext(f"{{{xdr}}}col")),
-                               int(marker.findtext(f"{{{xdr}}}row")),
-                               int(marker.findtext(f"{{{xdr}}}colOff")),
-                               int(marker.findtext(f"{{{xdr}}}rowOff")),
-                               sha(original.read(image_path))))
+            col = int(marker.findtext(f"{{{xdr}}}col"))
+            row = int(marker.findtext(f"{{{xdr}}}row"))
+            digest = sha(original.read(image_path))
+            col_off = int(marker.findtext(f"{{{xdr}}}colOff"))
+            row_off = int(marker.findtext(f"{{{xdr}}}rowOff"))
+            if col == 8 and row in product_images and digest in accepted_product_hashes[row]:
+                extent = anchor.find(f"{{{xdr}}}ext")
+                if (col_off != pixels_to_EMU(10) or row_off != pixels_to_EMU(7) or extent is None or
+                        any(int(extent.get(axis)) != pixels_to_EMU(SOIL_PRODUCT_IMAGE_SIZE)
+                            for axis in ("cx", "cy"))):
+                    raise ValueError("Normalized Soil product image position or size changed")
+                digest, col_off, row_off = SOIL_PRODUCT_IMAGES[row]
+            identities.append((col, row, col_off, row_off, digest))
         fingerprint = sha(json.dumps(sorted(identities), separators=(",", ":")).encode())
         if len(identities) != 16 or fingerprint != SOIL_PRODUCT_IDENTITIES_SHA256:
             raise ValueError("Soil product labels or image positions changed; barcode associations need review")
         generated = {}
         found = set()
+        found_products = set()
         for anchor in drawing:
             marker = anchor.find(f"{{{xdr}}}from")
-            if marker is None or marker.findtext(f"{{{xdr}}}col") != "4":
+            if marker is None or marker.findtext(f"{{{xdr}}}col") not in {"4", "8"}:
                 continue
             row = int(marker.findtext(f"{{{xdr}}}row"))
-            if row not in SOIL_BARCODE_SOURCES or row in found:
+            is_product = marker.findtext(f"{{{xdr}}}col") == "8"
+            seen = found_products if is_product else found
+            if row not in SOIL_BARCODE_SOURCES or row in seen:
                 raise ValueError("Soil barcode anchors changed or are ambiguous")
-            found.add(row)
+            seen.add(row)
             code, source_hash = SOIL_BARCODE_SOURCES[row]
-            image = soil_barcode_image(code)
+            image = product_images[row] if is_product else soil_barcode_image(code)
+            if is_product:
+                source_hash = SOIL_PRODUCT_IMAGES[row][0]
             picture = anchor.find(f"{{{xdr}}}pic")
             blip = picture.find(f".//{{{drawingml}}}blip") if picture is not None else None
             if blip is None or blip.get(f"{{{R}}}embed") not in relations:
                 raise ValueError("Soil barcode image relationship is missing")
             image_path = resolve_part(drawing_path, relations[blip.get(f"{{{R}}}embed")])
             content = original.read(image_path)
-            if sha(content) not in (source_hash, sha(image)):
+            accepted_hashes = {source_hash, sha(image)}
+            if is_product:
+                accepted_hashes.update(accepted_product_hashes[row])
+            if sha(content) not in accepted_hashes:
                 raise ValueError(f"Soil barcode source changed at row {row + 1}; review required")
-            with Image.open(io.BytesIO(content)) as original_image:
-                if decoded_soil_barcode(original_image.convert("RGB")) != code:
-                    raise ValueError(f"Soil barcode at row {row + 1} does not decode to its reviewed value")
-            new_path = f"xl/media/soil-code128-{row + 1}.png"
+            if not is_product:
+                with Image.open(io.BytesIO(content)) as original_image:
+                    if decoded_soil_barcode(original_image.convert("RGB")) != code:
+                        raise ValueError(f"Soil barcode at row {row + 1} does not decode to its reviewed value")
+            image_name = ("product-trimmed" if row == 50 else "product") if is_product else "code128"
+            new_path = f"xl/media/soil-{image_name}-{row + 1}.png"
             if new_path in original.namelist() and original.read(new_path) != image:
                 raise ValueError(f"Conflicting Soil barcode image: {new_path}")
             generated[new_path] = image
-            relation_id = f"rIdSoilBarcode{row + 1}"
+            relation_id = (f"rIdSoilProductTrimmed{row + 1}" if row == 50 else
+                           f"rIdSoilProduct{row + 1}") if is_product else f"rIdSoilBarcode{row + 1}"
             if relation_id in relations:
                 if resolve_part(drawing_path, relations[relation_id]) != new_path:
                     raise ValueError(f"Conflicting Soil barcode relationship: {relation_id}")
@@ -308,16 +361,18 @@ def normalize_soil_barcodes(binder, destination):
                 ET.SubElement(relationships, f"{{{P}}}Relationship", Id=relation_id, Type=R + "/image",
                               Target="../media/" + posixpath.basename(new_path))
             blip.set(f"{{{R}}}embed", relation_id)
-            marker.find(f"{{{xdr}}}colOff").text = str(pixels_to_EMU(2))
-            marker.find(f"{{{xdr}}}rowOff").text = str(pixels_to_EMU(3))
+            marker.find(f"{{{xdr}}}colOff").text = str(pixels_to_EMU(10 if is_product else 2))
+            marker.find(f"{{{xdr}}}rowOff").text = str(pixels_to_EMU(7 if is_product else 3))
+            width = SOIL_PRODUCT_IMAGE_SIZE if is_product else SOIL_BARCODE_WIDTH
+            height = SOIL_PRODUCT_IMAGE_SIZE if is_product else SOIL_BARCODE_HEIGHT
             replacement = ET.Element(f"{{{xdr}}}oneCellAnchor")
             replacement.append(marker)
-            ET.SubElement(replacement, f"{{{xdr}}}ext", cx=str(pixels_to_EMU(SOIL_BARCODE_WIDTH)),
-                          cy=str(pixels_to_EMU(SOIL_BARCODE_HEIGHT)))
+            ET.SubElement(replacement, f"{{{xdr}}}ext", cx=str(pixels_to_EMU(width)),
+                          cy=str(pixels_to_EMU(height)))
             transform = picture.find(f"{{{xdr}}}spPr/{{{drawingml}}}xfrm/{{{drawingml}}}ext")
             if transform is not None:
-                transform.set("cx", str(pixels_to_EMU(SOIL_BARCODE_WIDTH)))
-                transform.set("cy", str(pixels_to_EMU(SOIL_BARCODE_HEIGHT)))
+                transform.set("cx", str(pixels_to_EMU(width)))
+                transform.set("cy", str(pixels_to_EMU(height)))
             replacement.append(picture)
             client = anchor.find(f"{{{xdr}}}clientData")
             if client is None:
@@ -327,6 +382,8 @@ def normalize_soil_barcodes(binder, destination):
             drawing.remove(anchor)
         if found != set(SOIL_BARCODE_SOURCES):
             raise ValueError("Soil barcode entries are missing; review the template")
+        if found_products != set(SOIL_PRODUCT_IMAGES):
+            raise ValueError("Soil product images are missing; review the template")
         changes = {drawing_path: serialize(drawing), rel_path: serialize(relationships)}
         with zipfile.ZipFile(destination, "x", compression=zipfile.ZIP_DEFLATED) as output:
             output.comment = original.comment
@@ -2294,6 +2351,16 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                     if [code for _, code in printed_barcodes] != [
                             value[0] for _, value in sorted(SOIL_BARCODE_SOURCES.items())]:
                         raise ValueError(f"{edition}: printed Soil barcodes are missing or in the wrong rows")
+                    products = sorted((pymupdf.Rect(image["bbox"]) for image in page.get_image_info()
+                                       if (image["width"], image["height"]) == (350, 350)),
+                                      key=lambda bounds: bounds.y0)
+                    if len(products) != 8:
+                        raise ValueError(f"{edition}: uniform Soil product images are missing")
+                    for bounds, (barcode_bounds, _) in zip(products, printed_barcodes):
+                        if (abs(bounds.width - bounds.height) > .5 or
+                                abs(bounds.width - products[0].width) > .5 or
+                                abs(bounds.y0 - barcode_bounds.y0) > 5 or bounds.x0 <= barcode_bounds.x1):
+                            raise ValueError(f"{edition}: Soil product image size or row alignment differs")
                     for row_number, (bounds, code) in enumerate(printed_barcodes, 1):
                         if (abs(bounds.width - printed_barcodes[0][0].width) > .5 or
                                 abs(bounds.height - printed_barcodes[0][0].height) > .5 or bounds.width < 140):
@@ -2573,6 +2640,7 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 delivery_print_pages_verified=len(delivery_images) if delivery_images is not None else 0,
                 delivery_page_split_verified=delivery_images is not None,
                 soil_print_images_verified=len(soil_images) if soil_images is not None else 0,
+                soil_uniform_product_images_verified=8 if soil_images is not None else 0,
                 soil_barcodes_decoded_at_dpi=[150, 300] if soil_images is not None else [],
                 weighed_print_text_verified=weighed_text is not None,
                 weighed_print_image_verified=weighed_image is not None,

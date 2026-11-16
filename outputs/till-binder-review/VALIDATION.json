@@ -468,8 +468,8 @@
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "9a68a624dd2d9f80d0d800c10bb8c89a150abdf3919e179a007114bdda2c9ddc",
-      "file_size_bytes": 14524365,
+      "file_sha256": "ac1173f9853c1d34cdb432374d4acd6745efad78f8dff9f1b9c113d45ef318c3",
+      "file_size_bytes": 15483803,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 400,
       "output_sheet_names": [
@@ -510,6 +510,7 @@
       "delivery_print_pages_verified": 2,
       "delivery_page_split_verified": true,
       "soil_print_images_verified": 24,
+      "soil_uniform_product_images_verified": 8,
       "soil_barcodes_decoded_at_dpi": [
         150,
         300

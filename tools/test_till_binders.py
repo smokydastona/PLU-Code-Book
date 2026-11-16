@@ -20,7 +20,7 @@ from openpyxl.worksheet.pagebreak import Break
 from PIL import Image, ImageChops, ImageOps
 
 from build_till_binders import (BULK_SHEETS, CONVERSIONS_ACCURACY_REVIEW, CONVERSIONS_SOURCE, CONVERSIONS_SOURCE_SHA256, DELIVERY_HEADER_BANDS, DELIVERY_SHEET, DIRECTORY_EMERGENCY_HIGHLIGHTS, DIRECTORY_SOURCES, FILENAMES, MAX_GITHUB_FILE_SIZE, PDF_EXPORT_FORMAT, STRETCH_SOURCE, VISUALS, bulk_print_pages,
-                               MISC_TITLE, SOIL_BARCODE_SOURCES, SOIL_BARCODE_WIDTH, SOIL_BARCODE_HEIGHT, add_continuation_labels, combine_bulk, comparisons, decoded_soil_barcode, directory_sheet, fit_misc_sheet, generate, layout_rows, misc_page_matches, misc_print_text, normalize_soil_barcodes, restore_floral_codes, style_soil_guide,
+                               MISC_TITLE, SOIL_BARCODE_SOURCES, SOIL_BARCODE_WIDTH, SOIL_BARCODE_HEIGHT, SOIL_PRODUCT_IMAGE_SIZE, soil_product_image, add_continuation_labels, combine_bulk, comparisons, decoded_soil_barcode, directory_sheet, fit_misc_sheet, generate, layout_rows, misc_page_matches, misc_print_text, normalize_soil_barcodes, restore_floral_codes, style_soil_guide,
                                docx_compatible_image,
                                delivery_sheet, map_images, produce_catalog, quick_sheet, replace_produce, replace_sheet,
                                sha, sheet_info, stretch_sheet, theme_conversions_sheet, theme_operational_sheets,
@@ -849,19 +849,28 @@ class TillBinderChecks(unittest.TestCase):
         old, new = load_workbook(source), load_workbook(result)
         try:
             old_other = {(image.anchor._from.col, image.anchor._from.row): sha(image._data()) for image in old["Soil"]._images
-                         if image.anchor._from.col != 4}
+                         if image.anchor._from.col == 1}
             new_other = {(image.anchor._from.col, image.anchor._from.row): sha(image._data()) for image in new["Soil"]._images
-                         if image.anchor._from.col != 4}
+                         if image.anchor._from.col == 1}
             self.assertEqual(old_other, new_other)
+            expected_products = {image.anchor._from.row: sha(soil_product_image(image._data()))
+                                 for image in old["Soil"]._images if image.anchor._from.col == 8}
+            actual_products = {}
             found = {}
             for image in new["Soil"]._images:
                 marker = image.anchor._from
+                if marker.col == 8:
+                    self.assertEqual((image.anchor.ext.cx, image.anchor.ext.cy),
+                                     (SOIL_PRODUCT_IMAGE_SIZE * 9525,) * 2)
+                    self.assertEqual((marker.colOff, marker.rowOff), (10 * 9525, 7 * 9525))
+                    actual_products[marker.row] = sha(image._data())
                 if marker.col != 4:
                     continue
                 self.assertEqual((image.anchor.ext.cx, image.anchor.ext.cy),
                                  (SOIL_BARCODE_WIDTH * 9525, SOIL_BARCODE_HEIGHT * 9525))
                 found[marker.row] = decoded_soil_barcode(Image.open(io.BytesIO(image._data())))
             self.assertEqual(found, {row: value[0] for row, value in SOIL_BARCODE_SOURCES.items()})
+            self.assertEqual(actual_products, expected_products)
         finally:
             old.close()
             new.close()
@@ -869,6 +878,28 @@ class TillBinderChecks(unittest.TestCase):
         normalize_soil_barcodes(result, repeated)
         with zipfile.ZipFile(repeated) as archive:
             self.assertIsNone(archive.testzip())
+
+    def test_soil_product_seven_fills_its_display_box_without_background_padding(self):
+        source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
+        workbook = load_workbook(source)
+        try:
+            photo = next(image for image in workbook["Soil"]._images
+                         if image.anchor._from.col == 8 and image.anchor._from.row == 50)
+            content = photo._data()
+        finally:
+            workbook.close()
+        heights = []
+        for trimmed in (False, True):
+            image = Image.open(io.BytesIO(soil_product_image(content, trim_padding=trimmed))).convert("RGB")
+            self.assertEqual(image.size, (350, 350))
+            mask = Image.new("L", image.size)
+            mask.putdata([255 if max(pixel) - min(pixel) > 45 else 0
+                          for pixel in image.get_flattened_data()])
+            bounds = mask.getbbox()
+            self.assertIsNotNone(bounds)
+            heights.append(bounds[3] - bounds[1])
+        self.assertGreaterEqual(heights[1], 300)
+        self.assertGreater(heights[1], heights[0] * 1.1)
 
     def test_soil_barcodes_reject_changed_source_or_row(self):
         source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"

@@ -1,5 +1,9 @@
 # PDF Page-by-Page Visual Inspection
 
+Soil product 7 correction (2026-11-16): excess background around the Premium Organic All Purpose Potting Soil 20L package is trimmed in its display derivative before fitting the same photo box. The package is enlarged without distortion or cutting off its edges. The updated Soil page was inspected and barcode print checks passed; the source photo is unchanged.
+
+Soil product-photo sizing (2026-11-16): all eight package photos now use matching square display boxes, approximately 78.72 pt per side in the PDF, with white padding preserving their aspect ratios. The rendered page was inspected. Original images remain in the workbook package, and all eight barcodes still decode at 150 and 300 dpi.
+
 Soil guide redesign (2026-11-16): the page was visually inspected with numbered dark-green rows, centered column headings and alternating pale-green bands. It occupies about 95% of the portrait page height, while keeping the original product and package images. All eight uniform barcodes decoded correctly at 150 and 300 dpi; test the physical print with the cashier's scanner before use.
 
 Asian Produce pagination (2026-11-16): all 15 entries, starting with Bean Sprouts, appear together on PDF page 20 (Produce page 13). The rendered page was inspected; no Asian Produce heading or Bean Sprouts entry remains on the preceding page. Product identities, codes and ordering are unchanged.
