@@ -417,8 +417,8 @@
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "6c83256bda39bc4bd978c8060b2f5b85edfcfea55e6e3ce9613d72e07e25dca0",
-      "file_size_bytes": 14493224,
+      "file_sha256": "1643788d13e001536584dd00b1a289bc2110a023bc887c1669be64dac6acbb70",
+      "file_size_bytes": 14494419,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 400,
       "output_sheet_names": [

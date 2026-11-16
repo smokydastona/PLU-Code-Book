@@ -20,7 +20,7 @@ from openpyxl.worksheet.pagebreak import Break
 from PIL import Image, ImageChops, ImageOps
 
 from build_till_binders import (BULK_SHEETS, CONVERSIONS_ACCURACY_REVIEW, CONVERSIONS_SOURCE, CONVERSIONS_SOURCE_SHA256, DELIVERY_HEADER_BANDS, DELIVERY_SHEET, DIRECTORY_EMERGENCY_HIGHLIGHTS, DIRECTORY_SOURCES, FILENAMES, MAX_GITHUB_FILE_SIZE, PDF_EXPORT_FORMAT, STRETCH_SOURCE, VISUALS, bulk_print_pages,
-                               MISC_TITLE, combine_bulk, comparisons, directory_sheet, fit_misc_sheet, generate, layout_rows, misc_page_matches, misc_print_text, move_floral_codes,
+                               MISC_TITLE, add_continuation_labels, combine_bulk, comparisons, directory_sheet, fit_misc_sheet, generate, layout_rows, misc_page_matches, misc_print_text, move_floral_codes,
                                docx_compatible_image,
                                delivery_sheet, map_images, produce_catalog, quick_sheet, replace_produce, replace_sheet,
                                sha, sheet_info, stretch_sheet, theme_conversions_sheet, theme_operational_sheets,
@@ -36,6 +36,7 @@ from build_bulk_sheet import bulk_sheet, read_bulk, validate_bulk
 from build_bakery_sheet import (BAKERY_SOURCE, read_source as read_bakery_source,
                                 validate_sheet as validate_bakery_sheet, workbook_bytes as bakery_workbook_bytes)
 from binder_theme import PALE_GREEN
+from build_weighed_sheet import SOURCE as WEIGHED_SOURCE
 
 
 class TillBinderChecks(unittest.TestCase):
@@ -119,6 +120,57 @@ class TillBinderChecks(unittest.TestCase):
             original.close()
             with self.assertRaisesRegex(ValueError, "outside its print area"):
                 combine_bulk(changed, Path(directory) / "result.xlsx")
+
+    @unittest.skipUnless(shutil.which("soffice"), "LibreOffice Calc is required")
+    def test_bulk_continuations_print_adjacent_at_half_size_without_clipping(self):
+        import pymupdf
+
+        source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
+        combined = self.root / "combined-bulk.xlsx"
+        combine_bulk(source, combined)
+        workbook = load_workbook(combined)
+        try:
+            entries = read_bulk(workbook["Bulk"])
+        finally:
+            workbook.close()
+        labels = []
+        content, coordinates = bulk_sheet(entries, labels)
+        workbook = load_workbook(io.BytesIO(content))
+        try:
+            validate_bulk(workbook["Bulk"], coordinates)
+            for label in labels:
+                cell = workbook["Bulk"].cell(label["row"] + 1, label["column"] + 1)
+                self.assertEqual(cell.value, label["title"])
+                self.assertEqual(cell.alignment.horizontal, "center")
+                self.assertEqual(label["size"] * 2, cell.font.sz)
+        finally:
+            workbook.close()
+        path = self.root / "bulk-inline.xlsx"
+        path.write_bytes(add_continuation_labels(content, labels, "Bulk"))
+        subprocess.run(["soffice", "-env:UserInstallation=" + (self.root / "lo-bulk-inline").as_uri(),
+                        "--headless", "--convert-to", "pdf", "--outdir", str(self.root), str(path)],
+                       check=True, capture_output=True, timeout=120)
+        printed = []
+        with pymupdf.open(self.root / "bulk-inline.pdf") as document:
+            for page in document:
+                spans = [span for block in page.get_text("dict")["blocks"] if "lines" in block
+                         for line in block["lines"] for span in line["spans"]]
+                for label in [span for span in spans if "(continued" in span["text"]]:
+                    self.assertEqual(label["text"], "(continued)")
+                    midpoint = (label["bbox"][1] + label["bbox"][3]) / 2
+                    candidates = [span for span in spans if "Bold" in span["font"]
+                                  and span["bbox"][2] <= label["bbox"][0]
+                                  and abs((span["bbox"][1] + span["bbox"][3]) / 2 - midpoint) < 3]
+                    self.assertTrue(candidates)
+                    title = min(candidates, key=lambda span: label["bbox"][0] - span["bbox"][2])
+                    gap = label["bbox"][0] - title["bbox"][2]
+                    self.assertGreater(gap, title["size"] * .15)
+                    self.assertLess(gap, title["size"] * .5)
+                    self.assertAlmostEqual(label["size"] / title["size"], .5, delta=.01)
+                    self.assertNotIn("Bold", label["font"])
+                    printed.append(title["text"])
+        self.assertCountEqual(printed, [label["title"] for label in labels])
+        self.assertIn("Wrapped Candy/Chocolate", printed)
 
     def test_delivery_charges_preserves_two_ordered_pages_with_green_headers(self):
         source = load_workbook(self.binder)
@@ -316,6 +368,8 @@ class TillBinderChecks(unittest.TestCase):
         (self.root / CONVERSIONS_SOURCE).parent.mkdir(parents=True, exist_ok=True)
         (self.root / CONVERSIONS_SOURCE).write_bytes(
             (Path(__file__).resolve().parents[1] / CONVERSIONS_SOURCE).read_bytes())
+        (self.root / WEIGHED_SOURCE).write_bytes(
+            (Path(__file__).resolve().parents[1] / WEIGHED_SOURCE).read_bytes())
         self.binder = self.root / "Original.xlsx"
         image = io.BytesIO()
         Image.new("RGB", (600, 500), "green").save(image, format="PNG")
@@ -682,6 +736,8 @@ class TillBinderChecks(unittest.TestCase):
             self.assertEqual(sheet["A2"].value, "00012")
             self.assertEqual(sheet["C3"].number_format, '"$"#,##0.00')
             self.assertEqual(sheet["B4"].value, "=C3*2")
+            self.assertEqual(sheet["A1"].alignment.horizontal, "center")
+            self.assertEqual(sheet["D1"].alignment.horizontal, "center")
             self.assertFalse(sheet.sheet_view.showGridLines)
             self.assertEqual(sheet.oddHeader.center.text, MISC_TITLE)
         finally:
@@ -1141,6 +1197,10 @@ class TillBinderChecks(unittest.TestCase):
                     self.assertEqual(sheet.cell(row, 1).fill.fgColor.rgb, color)
                     self.assertEqual(sheet.cell(row, 2).fill.fgColor.rgb, color)
                 self.assertEqual(sheet["A3"].fill.fgColor.rgb, "00305040")
+                for merged in sheet.merged_cells.ranges:
+                    heading = sheet.cell(merged.min_row, merged.min_col)
+                    if heading.value is not None:
+                        self.assertEqual(heading.alignment.horizontal, "center")
             finally:
                 workbook.close()
 

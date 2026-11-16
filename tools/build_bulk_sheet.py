@@ -8,7 +8,7 @@ from openpyxl.worksheet.page import PageMargins
 from openpyxl.worksheet.pagebreak import Break
 
 from binder_theme import DARK_GREEN, row_fill
-from text_fit import line_count
+from text_fit import DIGIT_PIXELS, line_count, text_points
 
 TITLE = "BULK PLU QUICK GUIDE"
 PAGE_CATEGORIES = (
@@ -20,6 +20,8 @@ PAGE_CATEGORIES = (
     ("Dried Fruit", "Mealtime", "Wrapped Candy/Chocolate"),
 )
 BASES = (1, 4, 7)
+PRODUCT_WIDTH, CODE_WIDTH = 26, 7
+COLUMN_MIDPOINT = (PRODUCT_WIDTH + CODE_WIDTH) * DIGIT_PIXELS * .75 / 2
 
 
 def read_bulk(sheet):
@@ -66,7 +68,7 @@ def read_bulk(sheet):
     return sections
 
 
-def bulk_sheet(entries):
+def bulk_sheet(entries, continuation_labels=None):
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = "Bulk"
@@ -82,8 +84,8 @@ def bulk_sheet(entries):
     sheet.oddFooter.center.size = 8
     sheet.oddFooter.center.font = "DejaVu Sans"
     for base in BASES:
-        sheet.column_dimensions[sheet.cell(1, base).column_letter].width = 26
-        sheet.column_dimensions[sheet.cell(1, base + 1).column_letter].width = 7
+        sheet.column_dimensions[sheet.cell(1, base).column_letter].width = PRODUCT_WIDTH
+        sheet.column_dimensions[sheet.cell(1, base + 1).column_letter].width = CODE_WIDTH
     for column in ("C", "F"):
         sheet.column_dimensions[column].width = 1.5
     coordinates = []
@@ -98,7 +100,7 @@ def bulk_sheet(entries):
                 if entry["category"] != category:
                     category = entry["category"]
                     lines.append((category, None, 16))
-                height = 16 * line_count(entry["product"], 11, 26)
+                height = 16 * line_count(entry["product"], 11, PRODUCT_WIDTH)
                 lines.append((None, entry, height))
             return lines
 
@@ -118,9 +120,11 @@ def bulk_sheet(entries):
             sheet.row_breaks.append(Break(id=start - 1))
         sheet.merge_cells(start_row=start, start_column=1, end_row=start, end_column=8)
         sheet.cell(start, 1, TITLE).font = Font(name="DejaVu Sans", size=14, bold=True, color=DARK_GREEN)
+        sheet.cell(start, 1).alignment = Alignment(horizontal="center", vertical="center")
         sheet.row_dimensions[start].height = 24
         sheet.merge_cells(start_row=start + 1, start_column=1, end_row=start + 1, end_column=8)
         sheet.cell(start + 1, 1, " / ".join(categories)).font = Font(name="DejaVu Sans", size=10)
+        sheet.cell(start + 1, 1).alignment = Alignment(horizontal="center", vertical="center")
         sheet.row_dimensions[start + 1].height = 20
         for base in BASES:
             for offset, text in enumerate(("PRODUCT", "PLU")):
@@ -128,6 +132,7 @@ def bulk_sheet(entries):
                 cell.font = Font(name="DejaVu Sans", size=10, bold=True, color="FFFFFF")
                 cell.fill = PatternFill("solid", fgColor=DARK_GREEN)
         sheet.row_dimensions[start + 2].height = 20
+        seen_categories = set()
         for base, lines in zip(BASES, columns):
             row = start + 3
             product_index = 0
@@ -138,9 +143,25 @@ def bulk_sheet(entries):
                 if category:
                     sheet.merge_cells(start_row=row, start_column=base, end_row=row, end_column=base + 1)
                     cell = sheet.cell(row, base, category)
-                    cell.font = Font(name="DejaVu Sans", size=11, bold=True)
+                    heading_size = 11
+                    while (text_points(category, heading_size, bold=True) / 2 +
+                           text_points(" ", heading_size, bold=True) +
+                           text_points("(continued)", heading_size / 2) >
+                           COLUMN_MIDPOINT - 2):
+                        heading_size -= .5
+                        if heading_size < 8:
+                            raise ValueError(f"Bulk heading {category!r} cannot fit its continuation label")
+                    cell.font = Font(name="DejaVu Sans", size=heading_size, bold=True)
                     cell.fill = PatternFill("solid", fgColor="DCE6DA")
-                    cell.alignment = Alignment(vertical="center")
+                    cell.alignment = Alignment(vertical="center", horizontal="center")
+                    if category in seen_categories and continuation_labels is not None:
+                        continuation_labels.append(dict(
+                            row=row - 1, column=base - 1, title=category, height=16,
+                            offset=(COLUMN_MIDPOINT +
+                                    text_points(category, heading_size, bold=True) / 2 +
+                                    text_points(" ", heading_size, bold=True)),
+                            size=heading_size / 2, color="000000"))
+                    seen_categories.add(category)
                     row += units
                     continue
                 for column, value in ((base, entry["product"]), (base + 1, entry["plu"])):

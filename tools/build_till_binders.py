@@ -510,6 +510,9 @@ def fit_misc_sheet(binder, destination):
                     target = themed[cell.coordinate]
                     target.value = cell.value
                     target.alignment = copy.copy(cell.alignment)
+                    if heading and cell.value is not None:
+                        target.alignment = Alignment(horizontal="center", vertical="center",
+                                                     wrap_text=cell.alignment.wrap_text)
                     target.number_format = cell.number_format
                     target.protection = copy.copy(cell.protection)
                     font = copy.copy(cell.font)
@@ -1502,7 +1505,7 @@ def validate_stretch(sheet, content):
         raise ValueError("Time To Stretch must print on one portrait US Letter page")
 
 
-def add_continuation_labels(content, labels):
+def add_continuation_labels(content, labels, sheet_name="Produce"):
     """Overlay native text beside centered titles without shifting their cell text."""
     if not labels:
         return content
@@ -1510,7 +1513,7 @@ def add_continuation_labels(content, labels):
     drawingml = "http://schemas.openxmlformats.org/drawingml/2006/main"
     changes = {}
     with zipfile.ZipFile(io.BytesIO(content)) as archive:
-        part, _ = sheet_info(archive, "Produce")
+        part, _ = sheet_info(archive, sheet_name)
         sheet = xml(archive.read(part))
         relationships_path = rels_part(part)
         relationships = (xml(archive.read(relationships_path)) if relationships_path in archive.namelist()
@@ -1522,11 +1525,11 @@ def add_continuation_labels(content, labels):
             drawing_path = resolve_part(part, target)
             drawing = xml(archive.read(drawing_path))
         else:
-            drawing_path = "xl/drawings/produce-continuations.xml"
+            drawing_path = f"xl/drawings/{sheet_name.lower()}-continuations.xml"
             drawing = ET.Element(f"{{{xdr}}}wsDr", nsmap={"xdr": xdr, "a": drawingml})
-            relation_id = "rIdProduceContinuations"
+            relation_id = f"rId{sheet_name}Continuations"
             ET.SubElement(relationships, f"{{{P}}}Relationship", Id=relation_id,
-                          Type=R + "/drawing", Target="../drawings/produce-continuations.xml")
+                          Type=R + "/drawing", Target="../drawings/" + posixpath.basename(drawing_path))
             ET.SubElement(sheet, f"{{{S}}}drawing", {f"{{{R}}}id": relation_id})
             changes[part] = serialize(sheet)
             changes[relationships_path] = serialize(relationships)
@@ -1538,7 +1541,7 @@ def add_continuation_labels(content, labels):
         for label in labels:
             shape_id += 1
             width = round((text_points("(continued)", label["size"]) + 1) * 12700)
-            height = round(PRODUCE_ROW_HEIGHT * 12700)
+            height = round(label.get("height", PRODUCE_ROW_HEIGHT) * 12700)
             anchor = ET.SubElement(drawing, f"{{{xdr}}}oneCellAnchor")
             marker = ET.SubElement(anchor, f"{{{xdr}}}from")
             for tag, value in (("col", label["column"]), ("colOff", round(label["offset"] * 12700)),
@@ -1548,7 +1551,7 @@ def add_continuation_labels(content, labels):
             shape = ET.SubElement(anchor, f"{{{xdr}}}sp")
             properties = ET.SubElement(shape, f"{{{xdr}}}nvSpPr")
             ET.SubElement(properties, f"{{{xdr}}}cNvPr", id=str(shape_id),
-                          name=f"Produce continuation {shape_id}", descr=label["title"] + " (continued)")
+                          name=f"{sheet_name} continuation {shape_id}", descr=label["title"] + " (continued)")
             ET.SubElement(properties, f"{{{xdr}}}cNvSpPr", txBox="1")
             properties = ET.SubElement(shape, f"{{{xdr}}}spPr")
             geometry = ET.SubElement(properties, f"{{{drawingml}}}prstGeom", prst="rect")
@@ -1699,6 +1702,7 @@ def theme_product_table(content, sheet_name, coordinates):
         title_font.name = "DejaVu Sans"
         title_font.color = DARK_GREEN
         sheet["A1"].font = title_font
+        sheet["A1"].alignment = Alignment(horizontal="center", vertical="center")
         for merged in sheet.merged_cells.ranges:
             if merged.min_row == 1:
                 continue
@@ -1706,6 +1710,7 @@ def theme_product_table(content, sheet_name, coordinates):
             font = copy.copy(heading.font)
             font.color = "FFFFFF"
             heading.font = font
+            heading.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
             heading.fill = PatternFill("solid", fgColor=DARK_GREEN)
             for col in range(merged.min_col + 1, merged.max_col + 1):
                 sheet.cell(merged.min_row, col).fill = PatternFill("solid", fgColor=DARK_GREEN)
@@ -2506,7 +2511,9 @@ def generate(root, binder, output, verify_print=False):
                 conversion_source = ("owner-uploaded image" if conversion_sheet is not None else "not present")
                 bulk_coordinates = None
                 if "Bulk" in template:
-                    bulk_content, bulk_coordinates = bulk_sheet(read_bulk(template["Bulk"]))
+                    bulk_continuations = []
+                    bulk_content, bulk_coordinates = bulk_sheet(read_bulk(template["Bulk"]), bulk_continuations)
+                    bulk_content = add_continuation_labels(bulk_content, bulk_continuations, "Bulk")
                 directory_content, directory_images = directory_sheet(template[DIRECTORY_SHEET], directory_originals)
                 delivery_content, delivery_images = delivery_sheet(template[DELIVERY_SHEET])
                 if weighed_image is not None:
