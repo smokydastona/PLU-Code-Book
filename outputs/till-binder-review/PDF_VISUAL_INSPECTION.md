@@ -1,5 +1,7 @@
 # PDF Page-by-Page Visual Inspection
 
+Current update (2026-11-16): page 3 of the current 30-page binder was rendered and inspected. The uploaded weighed-items guide has binder-green headings, unchanged red warnings, legible instructions and examples, and a complete border within a single portrait Letter page. Its contents were compared with the original worksheet and embedded label. At the owner's request, only the final price digit is changed to correct the total from $134.31 to $134.32; all other label pixels are unchanged. The complete binder also passed automated print and package checks. The table below records the earlier 27-page inspection; its later page ranges are historical, not current.
+
 Every page of the regenerated 27-page PDF was rendered (70-110 dpi contact sheets; pages with defects at 200 dpi) and inspected by eye. Automated checks (`PRINT_LAYOUT_REPORT.csv`) are supplementary, not a substitute.
 
 | Page | Section | Result |

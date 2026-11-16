@@ -48,6 +48,7 @@ from sync_picklist import (booklet_order, csv_output, organic, organic_display_s
 from working_list import read_working_list
 from build_deli_sheet import DELI_SOURCE, read_source as read_deli_source, validate_sheet as validate_deli_sheet
 from build_bulk_sheet import TITLE as BULK_TITLE, bulk_sheet, read_bulk, validate_bulk
+import build_weighed_sheet as weighed_guide
 from binder_theme import DARK_GREEN, PALE_GREEN, row_fill
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -1883,7 +1884,8 @@ def normalize_printed_produce_text(text):
 def validate_print(output, coordinates, expected_pages, deli_coordinates=None, deli_title=None,
                    bulk_pages=None, stretch_size=None, misc_text=None, directory_images=None,
                    conversions_image=None, stretch_image=None, bakery_coordinates=None,
-                   delivery_images=None, soil_images=None, weighed_text=None, floral_entries=None):
+                   delivery_images=None, soil_images=None, weighed_text=None, floral_entries=None,
+                   weighed_image=None):
     from pypdf import PdfReader
 
     if not shutil.which("soffice"):
@@ -2015,11 +2017,13 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 if (abs(float(matches[0].mediabox.width) - 612) > 1 or
                         abs(float(matches[0].mediabox.height) - 792) > 1):
                     raise ValueError(f"{edition}: Misc Codes is not portrait US Letter")
-            if conversions_image is not None:
+            for guide_name, guide_image in (("Conversions", conversions_image), ("Weighed", weighed_image)):
+                if guide_image is None:
+                    continue
                 import pymupdf
 
                 with pymupdf.open(complete) as document:
-                    with Image.open(io.BytesIO(conversions_image)) as expected_image:
+                    with Image.open(io.BytesIO(guide_image)) as expected_image:
                         expected_size = expected_image.size
                         expected_pixels = expected_image.convert("RGB").tobytes()
                     matches = []
@@ -2033,11 +2037,11 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                             if exact:
                                 matches.append((page, pymupdf.Rect(printed["bbox"])))
                     if len(matches) != 1:
-                        raise ValueError(f"{edition}: Uploaded Conversions image is missing or altered in print")
+                        raise ValueError(f"{edition}: {guide_name} image is missing or altered in print")
                     page, bounds = matches[0]
                     if (abs(page.rect.width - 612) > 1 or abs(page.rect.height - 792) > 1 or
                             not page.rect.contains(bounds) or bounds.width < 350 or bounds.height < 500):
-                        raise ValueError(f"{edition}: Conversions image is clipped or too small")
+                        raise ValueError(f"{edition}: {guide_name} image is clipped or too small")
             if stretch_size is not None:
                 import pymupdf
 
@@ -2183,6 +2187,7 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 delivery_page_split_verified=delivery_images is not None,
                 soil_print_images_verified=len(soil_images) if soil_images is not None else 0,
                 weighed_print_text_verified=weighed_text is not None,
+                weighed_print_image_verified=weighed_image is not None,
                 complete_pdf=complete.name,
                 visual_review="REQUIRED; automated text/geometry checks are not a visual print approval",
             )
@@ -2236,6 +2241,7 @@ def report_text(summary):
         f"Time To Stretch image SHA-256: {summary['stretch_source_sha256']}",
         f"Conversions image SHA-256: {summary['conversions_source_image_sha256']}",
         f"Conversions accuracy review: {summary['conversions_accuracy_review']}",
+        f"Weighed guide accuracy review: {summary['weighed_guide']['accuracy_review'] if summary['weighed_guide'] else 'not present'}",
         f"XML records: {summary['total_source_records']}; active: {summary['active_source_records']}; "
         f"hidden/deleted: {summary['hidden_or_deleted_records']}",
         f"Produce included: {summary['produce_records_included']}; "
@@ -2331,6 +2337,7 @@ def generate(root, binder, output, verify_print=False):
         deli_title = deli_workbook["Deli"]["A1"].value
     finally:
         deli_workbook.close()
+    weighed_source = weighed_image = None
     with zipfile.ZipFile(binder) as original:
         sheet_info(original, "Deli")
         sheet_info(original, "Bakery")
@@ -2339,6 +2346,10 @@ def generate(root, binder, output, verify_print=False):
         sheet_info(original, DIRECTORY_SHEET)
         sheet_info(original, DELIVERY_SHEET)
         validate_directory_template(original)
+        if any(sheet.get("name") == WEIGHED_SHEET for sheet in
+               xml(original.read("xl/workbook.xml")).find(f"{{{S}}}sheets")):
+            weighed_source = (root / weighed_guide.SOURCE).read_bytes()
+            weighed_image = weighed_guide.themed_image(weighed_source)
     source_items, digest = read_picklist(root / "sources/plu/PickList.xml")
     assignments = read_assignments(root / "data/picklist_assignments.json")
     reconciliation = output / "reconciliation"
@@ -2385,6 +2396,7 @@ def generate(root, binder, output, verify_print=False):
             combined_binder = Path(temporary) / "Combined.xlsx"
             bulk_binder = Path(temporary) / "Bulk.xlsx"
             operational_binder = Path(temporary) / "Operational.xlsx"
+            weighed_binder = Path(temporary) / "Weighed.xlsx"
             floral_binder = Path(temporary) / "Floral.xlsx"
             misc_binder = Path(temporary) / "Misc.xlsx"
             delivery_binder = Path(temporary) / "Delivery.xlsx"
@@ -2403,6 +2415,8 @@ def generate(root, binder, output, verify_print=False):
                     bulk_content, bulk_coordinates = bulk_sheet(read_bulk(template["Bulk"]))
                 directory_content, directory_images = directory_sheet(template[DIRECTORY_SHEET], directory_originals)
                 delivery_content, delivery_images = delivery_sheet(template[DELIVERY_SHEET])
+                if weighed_image is not None:
+                    weighed_content = weighed_guide.workbook_bytes(template[WEIGHED_SHEET], weighed_image)
             finally:
                 template.close()
             if bulk_coordinates is not None:
@@ -2410,7 +2424,11 @@ def generate(root, binder, output, verify_print=False):
             else:
                 shutil.copyfile(combined_binder, bulk_binder)
             theme_operational_sheets(bulk_binder, operational_binder)
-            floral_entries = move_floral_codes(operational_binder, floral_binder)
+            if weighed_image is not None:
+                replace_sheet(operational_binder, weighed_content, weighed_binder, WEIGHED_SHEET)
+            else:
+                shutil.copyfile(operational_binder, weighed_binder)
+            floral_entries = move_floral_codes(weighed_binder, floral_binder)
             fit_misc_sheet(floral_binder, misc_binder)
             replace_sheet(misc_binder, delivery_content, delivery_binder, DELIVERY_SHEET)
             with zipfile.ZipFile(misc_binder) as archive:
@@ -2442,11 +2460,13 @@ def generate(root, binder, output, verify_print=False):
                             any(cell.value == entry["name"] for row in misc for cell in row)):
                         raise ValueError("Floral Codes move failed workbook validation")
             validate_delivery(result[DELIVERY_SHEET], delivery_images)
+            if weighed_image is not None:
+                weighed_guide.validate_sheet(result[WEIGHED_SHEET], weighed_image)
             soil_images = ([image._data() for image in result[SOIL_SHEET]._images]
                            if SOIL_SHEET in result else None)
             weighed_text = ([cell.value for row in result[WEIGHED_SHEET] for cell in row
                              if isinstance(cell.value, str)]
-                            if WEIGHED_SHEET in result else None)
+                            if WEIGHED_SHEET in result and weighed_image is None else None)
         finally:
             result.close()
         if bulk_coordinates is not None:
@@ -2475,6 +2495,8 @@ def generate(root, binder, output, verify_print=False):
             delivery_part, _ = sheet_info(original, DELIVERY_SHEET)
             operational_parts = {sheet_info(original, name)[0] for name in (SOIL_SHEET, WEIGHED_SHEET)
                                  if name in sheet_names}
+            if WEIGHED_SHEET in sheet_names:
+                operational_parts.add(rels_part(sheet_info(original, WEIGHED_SHEET)[0]))
             validations[edition]["output_sheet_names"] = validations[edition]["original_sheet_names"]
             validations[edition]["original_sheet_names"] = [
                 sheet.get("name") for sheet in xml(original.read("xl/workbook.xml")).find(f"{{{S}}}sheets")
@@ -2551,6 +2573,13 @@ def generate(root, binder, output, verify_print=False):
         conversions_source_image_sha256=sha(conversions_source_image),
         conversions_original_chart_source_sha256=list(CONVERSION_IMAGE_HASHES),
         conversions_accuracy_review=CONVERSIONS_ACCURACY_REVIEW,
+        weighed_guide=(dict(
+            source=str(root / weighed_guide.SOURCE), source_sha256=sha(weighed_source),
+            derivative_sha256=sha(weighed_image),
+            original_cells_sha256=weighed_guide.ORIGINAL_CELLS_SHA256,
+            original_label_sha256=weighed_guide.ORIGINAL_LABEL_SHA256,
+            accuracy_review=weighed_guide.ACCURACY_REVIEW,
+        ) if weighed_image is not None else None),
         directory_images=[
             dict(source=str(root / path), source_sha256=sha(original), derivative_sha256=sha(derivative))
             for path, original, derivative in zip(DIRECTORY_SOURCES, directory_originals, directory_images)
@@ -2596,7 +2625,8 @@ def generate(root, binder, output, verify_print=False):
             "AI provenance and uncertain visual verdicts are recorded only in the external audit report.",
             "Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.",
             "Time To Stretch uses the supplied color guide; Soil retains its original barcode images under "
-            "a green heading, with Floral Codes beside them; Weighed more $100 uses green headings with original instructions; "
+            "a green heading, with Floral Codes beside them; Weighed more $100 uses the visually compared owner upload "
+            "with muted green colors, unchanged instructions and label values on one portrait page; "
             "Misc Codes uses green headings and pale-green "
             "entry shading on one page, with original cells and number formats retained; "
             "Conversions uses the owner-uploaded, visually checked one-page image; the original source charts "
@@ -2626,7 +2656,7 @@ def generate(root, binder, output, verify_print=False):
             conversions_image=conversions_source_image if conversion_source != "not present" else None,
             stretch_image=stretch_source, bakery_coordinates=bakery_coordinates,
             delivery_images=delivery_images, soil_images=soil_images, weighed_text=weighed_text,
-            floral_entries=floral_entries)
+            floral_entries=floral_entries, weighed_image=weighed_image)
         if summary["print_validation"]["photos"]["drawn_images"] != len(images):
             raise ValueError("printed reference count differs from the exact image mapping")
         (output / "VALIDATION.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
@@ -2643,6 +2673,8 @@ def generate(root, binder, output, verify_print=False):
         raise ValueError("Time To Stretch source changed during generation; discard outputs and retry")
     if sha((root / CONVERSIONS_SOURCE).read_bytes()) != CONVERSIONS_SOURCE_SHA256:
         raise ValueError("Conversions source changed during generation; discard outputs and retry")
+    if weighed_source is not None and (root / weighed_guide.SOURCE).read_bytes() != weighed_source:
+        raise ValueError("Weighed guide source changed during generation; discard outputs and retry")
     if any((root / path).read_bytes() != content for path, content in zip(DIRECTORY_SOURCES, directory_originals)):
         raise ValueError("Store Directory originals changed during generation; discard outputs and retry")
     command = [sys.executable, str((ROOT / "tools/build_till_binders.py").resolve()),

@@ -3,6 +3,12 @@
 Status: **REVIEW ONLY — NOT APPROVED FOR OPERATIONAL USE.** Technical checks pass; production blockers remain open (`PRODUCTION_BLOCKERS.csv`).
 Machine-readable results: `AUDIT_REPORT.json`, `VALIDATION.json`, `PRINT_LAYOUT_REPORT.csv`.
 
+## Current weighed-guide update (2026-11-16)
+
+The current binder has 30 pages, including 13 Produce pages. Page 3 now uses the owner-uploaded weighed-items guide with muted binder-green colors. All original instructions, rounding examples and label values were compared. At the owner's request, the displayed total is corrected from $134.31 to $134.32 ($35.07/kg x 3.830 kg = $134.3181, rounded to cents). The upload is retained unchanged; only the final price digit is changed in the label. Other label pixels and red warnings are unchanged in the derivative. The rendered page was inspected for readability and its complete border; automated print verification checks the full-resolution image pixels, placement and portrait Letter page. The build and post-build technical audit pass. Publication remains blocked.
+
+The baseline, defects and page numbers below describe the earlier 27-page audit, not a new inspection of every current page.
+
 ## 1. Baseline (regenerated against the current repository, not copied from old reports)
 
 * `PickList.xml` SHA-256 `38732869…8727` unchanged; original binder SHA-256 `6b0aeaa1…0f63` unchanged.
