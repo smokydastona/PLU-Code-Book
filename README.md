@@ -13,9 +13,11 @@ Build artifacts are kept in `outputs/till-binder-review/`:
 | `Pocket Guide.pdf` | Imposed 2-up, duplex binder guide for folding and saddle-stitching |
 | `OldTimers_Produce.pdf` | Large-print, text-only list: Fruits, then Vegetables ending with the Asian Produce group |
 | `BINDER_BOOKLET_IMPOSITION.csv` | Source-page placement for each physical sheet side |
-| `VALIDATION.json`, `AUDIT_REPORT.json`, and CSV reports | Build, print-layout, image and production-readiness evidence |
+| `VALIDATION.json`, `AUDIT_REPORT.json`, `PRODUCTION_BLOCKERS.csv`, `OWNER_REVIEW_FINDINGS.csv`, and CSV reports | Separate build, technical, data, image, rights and release evidence |
 
-These are review outputs, not authorization for operational publication. Production remains blocked until WorkingList reconciliation and all applicable image, identity, rights, classification and reuse reviews pass. The original source records and the last approved production materials are not replaced by a review build.
+These are review outputs, not authorization for operational publication. Release blockers are mandatory unresolved reconciliation or product-identity decisions, missing exact-identity image selection, explicit image rejection/supersession, known usage restrictions, and required classification/section decisions. Low resolution, incomplete optional provenance, unverified rights documentation and duplicate fingerprints are reported separately as findings; they do not by themselves revoke an approval or block release. The original source records and the last approved production materials are not replaced by a review build.
+
+The old `records_needing_review: 232` count was the number of distinct rows among 594 included catalogue records that had at least one pre-M1 blocker. It was not a count of unresolved PickList records: 219 rows had duplicate/reuse findings, 26 had image-quality, rights or provenance findings, and 13 rows appeared in both groups (`219 + 26 - 13 = 232`). `PICKLIST_SYNC.json` now records the recomputed component sets and documents each counter. The separate count of 50 merged/standardized WorkingList identities records applied owner decisions, not unresolved decisions or image findings. Current explicit rejection findings still block release and are listed in `PRODUCTION_BLOCKERS.csv`.
 
 ## Build and audit
 
@@ -37,6 +39,36 @@ sudo apt-get install -y libreoffice-calc libreoffice-writer fonts-dejavu-core fo
 
 The output directory must be empty. `--verify-print` exports and checks the complete workbook, then creates the imposed booklet PDF and its page map. The audit checks workbook package preservation, printed page count and geometry, image coverage, booklet imposition, and open production blockers. Technical success never clears owner-review gates or approves a binder for cashier use.
 
+## Management app
+
+The read-only browser app at `management-app/` loads the generated catalogue,
+WorkingList reconciliation and production readiness reports. See
+`management-app/README.md` for local serving, Node.js tests, GitHub Pages
+deployment and the concrete server-side authentication prerequisite for any
+future write feature. The app does not simulate approvals or writes.
+
+## Review packages and production publication
+
+Run the **Package and publish PLU binder** workflow manually with `review` to
+produce a complete ZIP review artifact, or `production` to request a
+production candidate. The package includes the editable workbook, complete
+PDF, imposed booklet, OldTimers PDF, validation and audit reports, reconciliation
+evidence, and `RELEASE_MANIFEST.json` with input/output checksums, generator
+identity, dependency versions, available approval-basis metadata and distinct
+gate results. A review build is retained as a workflow artifact even if a
+mandatory gate fails.
+
+Production packaging fails closed on mandatory readiness blockers or failed
+technical/print validation. Quality, rights-documentation, provenance and
+duplicate/reuse findings remain separately reported and are not converted into
+approval revocations. A passing automated gate still requires approval through
+the GitHub `production` environment and a run from the repository default
+branch; configure required reviewers for that environment before enabling
+publication. Publication creates a new
+commit-tagged release and never updates or deletes an existing release. The
+packager refuses to overwrite an existing ZIP, and a blocked run leaves the
+last approved production release intact.
+
 The owner-supplied sheets are retained for review; suitable crops are references, not production image approvals. Newer suitable crops take precedence over older sheet references only for the same exact WorkingList identity; superseded and unselected panels remain in the reference audit. Invalid approved assignments may fall back to a review reference without clearing their validation errors or production gates.
 
 `data/review-references/lettuce_image_exact.pdf` is a lettuce-identification guide only. Its sidecar records the source checksum and reference-only authorization; the labelled chart is not assigned to cashier entries and grants no image approvals.
@@ -54,7 +86,8 @@ Print the imposed PDF on US Letter paper in landscape orientation, 2-up duplex, 
 - `sources/plu/PickList.xml` is the authoritative imported record source. Only @smokydastona may update it. Scripts must report XML errors, never repair or normalize it, and preserve exact PLU strings, including leading zeros.
 - `sources/plu/WorkingList.xml` is regenerated from the PickList and reconciled with owner-approved decisions. Preserve original XML records and identities in audit reports. Apply decisions only when their original identities still match; flag changed, new or ambiguous records for review.
 - Cashier sheets are generated from the reviewed WorkingList and owner-maintained binder sources. Product-name decisions do not approve images; changed identities require fresh image review. Keep provenance and approval metadata in audit evidence, not cashier-facing entries.
-- Block production publication when reconciliation, identity, image, rights or reuse gates fail. Keep the last published production materials intact while blocked.
+- Production approval is identity- and asset-specific. Explicit rejection or supersession overrides prior approval; replacing an approved asset or changing its product identity requires fresh review. Keep production approval, image quality, rights/permission status, provenance completeness and duplicate/reuse review as separate findings.
+- Block production publication for unresolved mandatory reconciliation, identity, image-selection, known rights/permission, classification or section decisions. A duplicate fingerprint alone, a low-resolution warning, or missing optional metadata does not revoke approval or block release. Keep the last published production materials intact while blocked.
 
 The build keeps the original complete workbook in `sources/binders/` unchanged. Produce, Bakery, Deli and Bulk updates preserve source values and print layouts; PLUs appear to the left of product descriptions. Standalone “Organic” in product names displays as “Org.” while the “Organics” heading and organic image badges remain unchanged. Bulk exclusions and source identities are recorded separately from cashier content.
 

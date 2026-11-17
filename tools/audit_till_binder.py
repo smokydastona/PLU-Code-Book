@@ -26,7 +26,10 @@ MIN_IMAGE_EDGE = 200
 BLOCKER_ACTIONS = {
     "APPROVED_IMAGE_REQUIRED": "Owner supplies or approves an exact-identity image for each listed PLU (MISSING_IMAGES.csv).",
     "PRODUCT_IMAGE_REVIEW_REQUIRED": "Fresh product-specific image review after identity change (MISSING_IMAGES.csv).",
-    "PROHIBITED_IMAGE_REUSE": "Owner resolves image reuse between different product identities (reconciliation/IMAGE_REQUESTS.csv).",
+    "EXPLICIT_IMAGE_REJECTION": "Replace the rejected image or record a new exact-identity approval.",
+    "IMAGE_ASSET_CHANGED_REVIEW": "Review the changed image asset and record its current checksum.",
+    "IMAGE_APPROVAL_REQUIRED": "Owner records an explicit image approval for the exact identity and asset.",
+    "RIGHTS_PERMISSION_REVIEW_REQUIRED": "Resolve the recorded usage restriction or absent required permission.",
     "CLASSIFICATION_REQUIRED": "Owner classifies the listed products (PLACEMENT_REVIEW.csv).",
     "SECTION_REQUIRED": "Owner assigns the listed products to a display section (PLACEMENT_REVIEW.csv).",
 }
@@ -165,15 +168,32 @@ def write_blockers(validation, output):
     reconciliation = validation["source_reconciliation"]
     rows = [dict(blocker=name, records=count, required_owner_action=BLOCKER_ACTIONS.get(
         name, "Review the reconciliation reports."), status="OPEN")
-        for name, count in sorted(reconciliation["blocker_counts"].items())]
-    rows.append(dict(blocker="WORKING_LIST_RECONCILIATION", records=reconciliation["working_list_review_records"],
-                     required_owner_action="Owner records reviewed decisions for each flagged WorkingList record "
-                     "(reconciliation/WORKING_LIST_RECONCILIATION.csv); decisions recorded: "
-                     f"{reconciliation['reconciliation_review_decisions']}.", status="OPEN"))
-    rows.append(dict(blocker="ORGANIC_PLACEMENT", records=reconciliation["organic_placements_needing_review"],
-                     required_owner_action="Owner confirms organic counterpart placement (PLACEMENT_REVIEW.csv).",
-                     status="OPEN"))
+        for name, count in sorted(reconciliation.get(
+            "release_blocker_counts", reconciliation.get("blocker_counts", {})).items())
+        if count]
+    if reconciliation["working_list_review_records"]:
+        rows.append(dict(
+            blocker="WORKING_LIST_RECONCILIATION",
+            records=reconciliation["working_list_review_records"],
+            required_owner_action="Owner records reviewed decisions for each flagged WorkingList record "
+            "(reconciliation/WORKING_LIST_RECONCILIATION.csv); decisions recorded: "
+            f"{reconciliation['reconciliation_review_decisions']}.", status="OPEN"))
+    if reconciliation["organic_placements_needing_review"]:
+        rows.append(dict(
+            blocker="ORGANIC_PLACEMENT", records=reconciliation["organic_placements_needing_review"],
+            required_owner_action="Owner confirms organic counterpart placement (PLACEMENT_REVIEW.csv).",
+            status="OPEN"))
     write_csv(output / "PRODUCTION_BLOCKERS.csv", rows, ["blocker", "records", "required_owner_action", "status"])
+    return rows
+
+
+def write_owner_review_findings(validation, output):
+    reconciliation = validation["source_reconciliation"]
+    rows = [dict(finding=name, finding_occurrences=count, release_blocking="False")
+            for name, count in sorted(reconciliation.get(
+                "owner_review_finding_counts", {}).items()) if count]
+    write_csv(output / "OWNER_REVIEW_FINDINGS.csv", rows,
+              ["finding", "finding_occurrences", "release_blocking"])
     return rows
 
 
@@ -210,15 +230,16 @@ def main(argv=None):
     except (OSError, ValueError, KeyError) as error:
         failures.append(f"OldTimers produce list: {error}")
     blockers = write_blockers(validation, output)
-    if validation.get("production_publication") != "BLOCKED" and blockers:
-        failures.append("open blockers exist but production publication is not BLOCKED")
+    owner_review_findings = write_owner_review_findings(validation, output)
     report = dict(
         technical_checks="PASS" if not failures else "FAIL", failures=failures,
         operational_status="REVIEW ONLY — NOT APPROVED FOR OPERATIONAL USE" if blockers
         else "TECHNICAL CHECKS ONLY",
         original_binder_sha256=original_sha, package=package, print_layout=layout,
         booklet_imposition=booklet, images=images, oldtimers_produce=oldtimers,
-        open_blockers={row["blocker"]: row["records"] for row in blockers})
+        open_blockers={row["blocker"]: row["records"] for row in blockers},
+        owner_review_findings={row["finding"]: row["records"]
+                               for row in owner_review_findings})
     (output / "AUDIT_REPORT.json").write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n",
                                               encoding="utf-8")
     validation["till_binder_audit"] = dict(

@@ -77,7 +77,8 @@ def _group_panel(rows, column_start, sheet, coordinates):
             cell = sheet.cell(row_number, column, label)
             cell.font = Font(name=FONT, size=BODY_POINTS, bold=True, color="375623")
             cell.border = Border(bottom=Side(style="thin", color="375623"))
-        sheet.row_dimensions[row_number].height = 20
+        sheet.row_dimensions[row_number].height = max(
+            sheet.row_dimensions[row_number].height or 0, 20)
         row_number += 1
         for entry in products:
             product_name = display_product_name(entry["product"])

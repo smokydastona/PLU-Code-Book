@@ -3139,7 +3139,7 @@ def generate(root, binder, output, verify_print=False):
                ["source_id", "plu", "name", "display_section", "classification_status",
                 "placement_status", "counterpart_source_ids", "placement_note"])
     summary = dict(
-        status="REVIEW_ONLY_NOT_RELEASED", production_publication="BLOCKED",
+        status="REVIEW_ONLY_NOT_RELEASED", production_publication="NOT_AUTHORIZED_REVIEW_BUILD",
         oldtimers_produce=oldtimers_summary,
         original_binder=str(binder), original_binder_sha256=original_checksum,
         soil_barcodes=[dict(source_row=row + 1, code=code, original_image_sha256=digest,

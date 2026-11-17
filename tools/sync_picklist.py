@@ -13,6 +13,13 @@ from PIL import Image, ImageOps
 
 from check_image_uniqueness import image_fingerprint
 from picklist_catalog import read_assignments, read_picklist
+from release_policy import (
+    COUNTER_DEFINITIONS,
+    explicit_image_rejection,
+    finding_category,
+    known_permission_restriction,
+    release_status,
+)
 from working_list import read_working_list, rebuild_working_list
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,10 +27,8 @@ BOOKS = {"Fruit": "FRUIT_VISUAL_PLU_BOOKLET_PRODUCTION",
          "Vegetable": "VEGETABLE_VISUAL_PLU_BOOKLET_PRODUCTION",
          "Non-produce": "NON_PRODUCE_PLU_CASHIER_BOOKLET"}
 
-
 def organic(item):
     return bool(re.search(r"\borganic\b", item["name"], re.I))
-
 
 def safe_asset(root, name):
     if not isinstance(name, str) or not name:
@@ -118,17 +123,21 @@ def reconcile(root, output):
         classification_assignment = (None if source_record_changed else
                                      assignments.get(item["classification_source_id"]) or
                                      source_assignment)
-        errors = []
+        errors, review_findings = [], []
+        image_rejected = bool(
+            assignment and explicit_image_rejection(assignment, legacy_record))
         if source_record_changed:
             errors.append("SOURCE_RECORD_CHANGED_REVIEW")
         row = dict(item, book=classification_assignment["book"] if classification_assignment else "",
                    section=classification_assignment.get("section", "") if classification_assignment else "",
                    image=assignment.get("image", "") if assignment else "",
-                   image_approval_status=("APPROVED_LEGACY" if legacy_record else
+                   image_approval_status=("NOT_APPROVED" if image_rejected else
+                                          "APPROVED_LEGACY" if legacy_record else
                                           "APPROVED" if assignment and
                                           assignment.get("visual_approval_status") == "APPROVED"
                                           else "NOT_APPROVED"),
-                   image_approval_basis=("OWNER_LEGACY_PREAPPROVED_POLICY" if legacy_record else
+                   image_approval_basis=("" if image_rejected else
+                                         "OWNER_LEGACY_PREAPPROVED_POLICY" if legacy_record else
                                          "EXACT_WORKINGLIST_APPROVAL" if assignment and
                                          assignment.get("visual_approval_status") == "APPROVED" else ""),
                    legacy_entry_idx=legacy_record["idx"] if legacy_record else "",
@@ -155,9 +164,27 @@ def reconcile(root, output):
             errors.append("APPROVED_IMAGE_REQUIRED")
         else:
             try:
-                content, width, height, image_errors = reviewed_image(
+                content, width, height, image_findings = reviewed_image(
                     root, item, assignment, legacy_approved=bool(legacy_record))
-                errors.extend(image_errors)
+                if assignment.get("visual_approval_status") != "APPROVED" and not legacy_record:
+                    errors.append("IMAGE_APPROVAL_REQUIRED")
+                if image_rejected:
+                    errors.append("EXPLICIT_IMAGE_REJECTION")
+                if known_permission_restriction(assignment):
+                    errors.append("RIGHTS_PERMISSION_REVIEW_REQUIRED")
+                for finding in image_findings:
+                    if finding == "IMAGE_CHECKSUM_MISMATCH":
+                        errors.append("IMAGE_ASSET_CHANGED_REVIEW")
+                    elif finding == "PRODUCT_IMAGE_REVIEW_REQUIRED":
+                        errors.append(finding)
+                    elif finding == "OWNER_PERMISSION_MUST_NOT_CLAIM_PUBLIC_LICENCE":
+                        errors.append("RIGHTS_PERMISSION_REVIEW_REQUIRED")
+                    elif finding == "INVALID_IMAGE":
+                        errors.append("IMAGE_FILE_UNUSABLE")
+                    elif finding == "MULTIFRAME_IMAGE":
+                        review_findings.append(finding)
+                    else:
+                        review_findings.append(finding)
                 row.update(width=width, height=height)
                 images[item["source_id"]] = content
                 groups[image_fingerprint(io.BytesIO(content))].append(row)
@@ -168,6 +195,7 @@ def reconcile(root, output):
         if not row["section"]:
             errors.append("SECTION_REQUIRED")
         row["blockers"] = errors
+        row["review_findings"] = review_findings
         rows.append(row)
         request = dict(
             idx=str(item["source_position"]), source_id=item["source_id"],
@@ -183,7 +211,8 @@ def reconcile(root, output):
             all_image_requests.append(request)
         if not assignment or not assignment.get("image") and assignment.get("image_mode") != "CODE_ONLY":
             requests.append(request)
-    for group in groups.values():
+    duplicate_reviews, intentional_reuses = [], []
+    for fingerprint, group in groups.items():
         if len(group) < 2:
             continue
         conventional = [row for row in group if not row["organic"]]
@@ -195,7 +224,17 @@ def reconcile(root, output):
             for row in group if row["organic"])
         if not permitted:
             for row in group:
-                row["blockers"].append("PROHIBITED_IMAGE_REUSE")
+                row["review_findings"].append("DUPLICATE_IMAGE_REUSE_REVIEW")
+        report = dict(
+            fingerprint=fingerprint,
+            status="INTENTIONAL_REUSE_RECORDED" if permitted else "OWNER_REVIEW_REQUIRED",
+            members=[dict(source_id=row["source_id"], source_ids=row["source_ids"],
+                          plu=row["plu"], product=row["name"]) for row in group],
+            rationale=[assignments[row["source_id"]].get("reuse_rationale", "")
+                       for row in group if assignments[row["source_id"]].get(
+                           "reuse_from_source_id")],
+        )
+        (intentional_reuses if permitted else duplicate_reviews).append(report)
     if not rows:
         raise ValueError("PickList has no visible, non-deleted products; nothing to publish")
     presentation = booklet_order(rows, assignments)
@@ -216,10 +255,11 @@ def reconcile(root, output):
     csv_output(output / "PICKLIST_SYNC.csv",
                [dict(row, source_ids=";".join(row["source_ids"]),
                      source_positions=";".join(map(str, row["source_positions"])),
-                     blockers="; ".join(row["blockers"])) for row in rows],
+                     blockers="; ".join(row["blockers"]),
+                     review_findings="; ".join(row["review_findings"])) for row in rows],
                fields + ["book", "section", "image", "image_approval_status",
                          "image_approval_basis", "legacy_entry_idx", "legacy_original_verdict",
-                         "organic", "width", "height", "blockers"])
+                         "organic", "width", "height", "blockers", "review_findings"])
     csv_output(output / "IMAGE_REQUESTS.csv", requests,
                ["idx", "source_id", "source_ids", "plu", "name", "query"])
     csv_output(output / "ALL_IMAGE_REQUESTS.csv", all_image_requests,
@@ -231,16 +271,59 @@ def reconcile(root, output):
                 "display_section", "placement_status", "counterpart_source_ids", "placement_note"])
     review_decisions = sum(decision["status"] != "APPLIED_TO_EXACT_SOURCE_IDENTITIES"
                            for decision in working_summary["decisions"])
+    release_blocker_counts = Counter(
+        error for row in rows for error in row["blockers"])
+    review_finding_counts = Counter(
+        finding for row in rows for finding in row["review_findings"])
+    legacy_duplicate_ids = {
+        member["source_id"] for report in duplicate_reviews for member in report["members"]
+    }
+    legacy_non_duplicate_ids = {
+        row["source_id"] for row in rows
+        if any(blocker != "EXPLICIT_IMAGE_REJECTION" for blocker in row["blockers"]) or any(
+            finding != "DUPLICATE_IMAGE_REUSE_REVIEW"
+            for finding in row["review_findings"])
+    }
+    legacy_rows_with_any_finding = legacy_duplicate_ids | legacy_non_duplicate_ids
+    source_reconciliation = (
+        working_summary["review_required_records"] +
+        working_summary["orphaned_record_baseline_identities"])
+    identity_review_records = sum(
+        row["working_list_status"] not in {
+            "UNCHANGED_SOURCE_IDENTITY", "APPLIED_TO_EXACT_SOURCE_IDENTITIES"
+        } for row in items)
+    counters = dict(
+        unresolved_source_record_reconciliation=source_reconciliation,
+        unresolved_product_identity=identity_review_records,
+        unresolved_image_selection=sum(
+            bool({"APPROVED_IMAGE_REQUIRED", "IMAGE_APPROVAL_REQUIRED",
+                  "IMAGE_ASSET_CHANGED_REVIEW", "EXPLICIT_IMAGE_REJECTION",
+                  "PRODUCT_IMAGE_REVIEW_REQUIRED"} & set(row["blockers"]))
+            for row in rows),
+        image_quality_warnings=sum(
+            count for finding, count in review_finding_counts.items()
+            if finding_category(finding) == "image_quality_warnings"),
+        rights_permission_findings=sum(
+            count for finding, count in review_finding_counts.items()
+            if finding_category(finding) == "rights_permission_findings"),
+        provenance_documentation_gaps=sum(
+            count for finding, count in review_finding_counts.items()
+            if finding_category(finding) == "provenance_documentation_gaps"),
+        duplicate_image_reuse_reviews=len(duplicate_reviews),
+        classification_section_reviews=sum(
+            bool({"CLASSIFICATION_REQUIRED", "SECTION_REQUIRED"} & set(row["blockers"]))
+            for row in rows),
+    )
     summary = dict(
         source="sources/plu/PickList.xml", cashier_source="sources/plu/WorkingList.xml",
         source_sha256=digest, source_unchanged=True,
         total_xml_records=len(read_picklist(root / "sources/plu/PickList.xml")[0]),
         total_working_records=len(items), included_records=len(rows),
         excluded_records=len(items) - len(rows),
-        status="BLOCKED" if (any(row["blockers"] for row in rows) or
-                             working_summary["review_required_records"] or review_decisions)
-               else "READY_TO_BUILD",
-        records_needing_review=sum(bool(row["blockers"]) for row in rows),
+        status=release_status(
+            any(row["blockers"] for row in rows),
+            working_summary["review_required_records"], review_decisions),
+        rows_with_release_blockers=sum(bool(row["blockers"]) for row in rows),
         missing_image_requests=len(requests), inactive_assignments=len(inactive),
         organic_placements_needing_review=sum(
             row["placement_status"] == "PLACEMENT_REVIEW_REQUIRED" for row in presentation),
@@ -251,8 +334,25 @@ def reconcile(root, output):
         reconciliation_review_records=working_summary["review_required_records"],
         reconciliation_review_decisions=review_decisions,
         identity_changed_entries=sum(row["identity_changed"] for row in items),
-        blocker_counts=dict(sorted(Counter(
-            error for row in rows for error in row["blockers"]).items())),
+        reconciled_identity_changes=working_summary["merged_or_standardized_records"],
+        release_blocker_counts=dict(sorted(release_blocker_counts.items())),
+        owner_review_finding_counts=dict(sorted(review_finding_counts.items())),
+        counters=counters, counter_definitions=COUNTER_DEFINITIONS,
+        legacy_232_count_explanation=dict(
+            reported_value=232,
+            recomputed_pre_m1_rows=len(legacy_rows_with_any_finding),
+            included_catalogue_rows=len(rows),
+            meaning="Distinct included catalogue rows with at least one pre-M1 image or release "
+                    "finding; it was not a count of unresolved source records.",
+            inputs=dict(
+                duplicate_image_reuse_rows=len(legacy_duplicate_ids),
+                non_duplicate_finding_rows=len(legacy_non_duplicate_ids),
+                rows_in_both_groups=len(legacy_duplicate_ids & legacy_non_duplicate_ids)),
+            derivation="The old counter counted the union of rows with any blocker, including "
+                       "duplicate fingerprints and non-blocking quality/rights/provenance findings. "
+                       "Component sets above make the overlap explicit."),
+        duplicate_image_reuse_reviews=duplicate_reviews,
+        intentional_image_reuses=intentional_reuses,
     )
     (output / "PICKLIST_SYNC.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     return rows, images, assignments, summary

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Read-only PLU catalogue, reconciliation, image review and release status.">
+    <title>PLU Catalogue Management</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script type="module" src="./app.mjs"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+      <p class="eyebrow">PLU Code Book</p>
+      <h1>Catalogue management</h1>
+      <p>Read-only catalogue and audit evidence from the current repository reports.</p>
+    </header>
+    <main id="main-content">
+      <aside class="notice" aria-label="Read-only access notice">
+        This application is read-only. It cannot change product decisions, approve images or publish materials.
+        Technical checks and review builds are not production authorization.
+      </aside>
+      <p id="app-status" class="message" role="status" aria-live="polite">Loading application data…</p>
+      <section id="release-dashboard" class="panel" aria-labelledby="release-heading" aria-live="polite">
+      </section>
+      <section class="panel" aria-labelledby="catalogue-heading">
+        <h2 id="catalogue-heading">Catalogue search</h2>
+        <div class="search-controls">
+          <div>
+            <label for="catalogue-search">Search by PLU, description, or category</label>
+            <input id="catalogue-search" type="search" maxlength="100" autocomplete="off">
+          </div>
+          <div>
+            <label for="category-filter">Filter by category or section</label>
+            <select id="category-filter">
+              <option value="">All categories</option>
+            </select>
+          </div>
+        </div>
+        <div class="catalogue-layout">
+          <div id="catalogue-results" class="results" aria-label="Catalogue results">
+            <p class="message">Loading catalogue…</p>
+          </div>
+          <article id="product-details" class="product-details" aria-live="polite"
+            aria-label="Selected product and image review details"></article>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <p>PLUs are displayed as text; leading zeros are preserved from the catalogue report.</p>
+    </footer>
+  </body>
+</html>

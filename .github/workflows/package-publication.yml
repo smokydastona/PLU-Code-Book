@@ -1,0 +1,155 @@
+name: Package and publish PLU binder
+
+on:
+  workflow_dispatch:
+    inputs:
+      package_mode:
+        description: Review package or gated production release
+        type: choice
+        options:
+          - review
+          - production
+        required: true
+        default: review
+      binder_path:
+        description: Repository-relative path to the untouched original complete till binder
+        type: string
+        required: true
+        default: sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    outputs:
+      package_mode: ${{ inputs.package_mode }}
+      production_gate_pass: ${{ steps.review.outputs.production_gate_pass }}
+      publish: ${{ steps.review.outputs.production_gate_pass == 'true' && inputs.package_mode == 'production' && github.ref_name == github.event.repository.default_branch }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - run: python -m pip install -r requirements.txt
+      - run: sudo apt-get update -qq && sudo apt-get install -y libreoffice-calc libreoffice-writer fonts-dejavu-core fonts-dejavu-extra
+      - name: Run regression suite
+        run: PYTHONPATH=tools python -m unittest discover -s tools -p 'test_*.py'
+      - name: Require an existing original workbook inside this checkout
+        env:
+          BINDER_PATH: ${{ inputs.binder_path }}
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          root = Path.cwd().resolve()
+          path = (root / os.environ["BINDER_PATH"]).resolve()
+          if not path.is_relative_to(root) or not path.is_file() or path.suffix.lower() != ".xlsx":
+              raise SystemExit("Missing original .xlsx inside repository; no source is fabricated.")
+          PY
+      - name: Build editable workbook, full PDF, booklet, OldTimers list and reports
+        env:
+          BINDER_PATH: ${{ inputs.binder_path }}
+          BUILD_DIR: ${{ runner.temp }}/plu-publication
+        run: |
+          python tools/build_till_binders.py --binder "$BINDER_PATH" \
+            --output "$BUILD_DIR" --verify-print
+      - name: Run technical audit without treating review findings as authorization
+        env:
+          BINDER_PATH: ${{ inputs.binder_path }}
+          BUILD_DIR: ${{ runner.temp }}/plu-publication
+        continue-on-error: true
+        run: |
+          python tools/audit_till_binder.py --binder "$BINDER_PATH" --output "$BUILD_DIR"
+      - name: Record production readiness and mandatory blockers
+        env:
+          BUILD_DIR: ${{ runner.temp }}/plu-publication
+        continue-on-error: true
+        run: |
+          python tools/audit_production.py --root . --output "$BUILD_DIR/reconciliation"
+      - name: Package complete review build and expose gate result
+        id: review
+        env:
+          BUILD_DIR: ${{ runner.temp }}/plu-publication
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          python tools/package_publication.py --root . --build-dir "$BUILD_DIR" \
+            --output "$RUNNER_TEMP/plu-code-book-review.zip" --mode review --commit "$GITHUB_SHA"
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          import os
+          import zipfile
+          with zipfile.ZipFile(os.path.join(os.environ["RUNNER_TEMP"], "plu-code-book-review.zip")) as archive:
+              manifest = json.loads(archive.read("RELEASE_MANIFEST.json"))
+          print(f"production_gate_pass={str(manifest['production_gate_pass']).lower()}")
+          PY
+      - name: Explain why requested production publication was withheld
+        if: inputs.package_mode == 'production' && steps.review.outputs.production_gate_pass != 'true'
+        env:
+          RUNNER_TEMP: ${{ runner.temp }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import zipfile
+          path = os.path.join(os.environ["RUNNER_TEMP"], "plu-code-book-review.zip")
+          with zipfile.ZipFile(path) as archive:
+              manifest = json.loads(archive.read("RELEASE_MANIFEST.json"))
+          print("Production publication withheld; the prior approved release was not modified.")
+          for finding in manifest["production_gate_findings"]:
+              print(f"- {finding}")
+          PY
+      - name: Require the default branch for production publication
+        if: inputs.package_mode == 'production' && steps.review.outputs.production_gate_pass == 'true' && github.ref_name != github.event.repository.default_branch
+        run: echo "Production publication withheld because this run is not on the repository default branch."
+      - name: Package production candidate after mandatory gates pass
+        if: inputs.package_mode == 'production' && steps.review.outputs.production_gate_pass == 'true' && github.ref_name == github.event.repository.default_branch
+        env:
+          BUILD_DIR: ${{ runner.temp }}/plu-publication
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          python tools/package_publication.py --root . --build-dir "$BUILD_DIR" \
+            --output "$RUNNER_TEMP/plu-code-book-production.zip" --mode production --commit "$GITHUB_SHA"
+      - uses: actions/upload-artifact@v4
+        if: always() && (inputs.package_mode != 'production' || steps.review.outputs.production_gate_pass != 'true' || github.ref_name != github.event.repository.default_branch)
+        with:
+          name: plu-code-book-review-${{ github.sha }}
+          path: ${{ runner.temp }}/plu-code-book-review.zip
+          if-no-files-found: warn
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        if: inputs.package_mode == 'production' && steps.review.outputs.production_gate_pass == 'true' && github.ref_name == github.event.repository.default_branch
+        with:
+          name: plu-code-book-production-${{ github.sha }}
+          path: ${{ runner.temp }}/plu-code-book-production.zip
+          if-no-files-found: error
+          retention-days: 90
+
+  publish:
+    needs: build
+    if: needs.build.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: plu-code-book-production-${{ github.sha }}
+          path: ${{ runner.temp }}/plu-code-book-production
+      - name: Publish a new immutable tagged release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARCHIVE: ${{ runner.temp }}/plu-code-book-production/plu-code-book-production.zip
+          TAG: plu-production-${{ github.sha }}
+        run: |
+          gh release create "$TAG" "$ARCHIVE" \
+            --title "PLU Code Book production $GITHUB_SHA" \
+            --notes "Automated mandatory gates passed. Publication was approved through the protected production environment. See RELEASE_MANIFEST.json in the attached package for inputs, validations and checksums."

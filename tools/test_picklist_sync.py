@@ -213,6 +213,71 @@ class PickListSyncChecks(unittest.TestCase):
         self.assertEqual(summary["reconciliation_review_decisions"], 1)
         self.assertEqual(summary["status"], "BLOCKED")
 
+    def test_exact_approval_survives_optional_metadata_low_resolution_and_duplicate_findings(self):
+        Image.new("RGB", (499, 499), "red").save(self.image)
+        self.write_source([
+            ("03283", "Honeycrisp Apple", True),
+            ("42", "Other Apple", True),
+        ])
+        items, _ = read_picklist(self.source)
+        self.register_current_source(items)
+        first = self.approved_assignment(items[0])
+        first.update(
+            image_sha256=hashlib.sha256(self.image.read_bytes()).hexdigest(),
+            photographic_origin="NOT_VERIFIED",
+            rights_verification_status="NOT_VERIFIED",
+            provenance={},
+        )
+        second = self.approved_assignment(items[1])
+        second.update(
+            image_sha256=first["image_sha256"],
+            photographic_origin="NOT_VERIFIED",
+            rights_verification_status="NOT_VERIFIED",
+            provenance={},
+        )
+        self.write_assignments([first, second])
+
+        rows, _, _, summary = reconcile(self.root, self.output)
+
+        self.assertEqual(summary["status"], "READY_TO_BUILD")
+        self.assertEqual([row["image_approval_status"] for row in rows], ["APPROVED", "APPROVED"])
+        self.assertTrue(all(not row["blockers"] for row in rows))
+        self.assertTrue(all("BELOW_500_PX" in row["review_findings"] for row in rows))
+        self.assertTrue(all("IMAGE_RIGHTS_NOT_VERIFIED" in row["review_findings"] for row in rows))
+        self.assertTrue(all("DUPLICATE_IMAGE_REUSE_REVIEW" in row["review_findings"] for row in rows))
+        self.assertEqual(summary["counters"]["image_quality_warnings"], 2)
+        self.assertEqual(summary["counters"]["rights_permission_findings"], 4)
+        self.assertEqual(summary["counters"]["provenance_documentation_gaps"], 16)
+        self.assertEqual(summary["counters"]["duplicate_image_reuse_reviews"], 1)
+        self.assertNotIn("records_needing_review", summary)
+
+    def test_supersession_and_replaced_assets_require_fresh_review(self):
+        self.assignment["production_status"] = "SUPERSEDED"
+        self.write_assignments([self.assignment])
+        rows, _, _, summary = reconcile(self.root, self.output)
+        self.assertIn("EXPLICIT_IMAGE_REJECTION", rows[0]["blockers"])
+        self.assertEqual(summary["status"], "BLOCKED")
+
+        self.assignment.pop("production_status")
+        self.assignment["image_sha256"] = "replaced-asset-checksum"
+        self.write_assignments([self.assignment])
+        rows, _, _, summary = reconcile(self.root, self.output)
+        self.assertIn("IMAGE_ASSET_CHANGED_REVIEW", rows[0]["blockers"])
+        self.assertEqual(summary["status"], "BLOCKED")
+
+    def test_known_usage_restriction_blocks_without_treating_blank_license_url_as_restriction(self):
+        self.assignment["provenance"] = {}
+        self.assignment["rights_verification_status"] = "VERIFIED"
+        self.write_assignments([self.assignment])
+        _, _, _, summary = reconcile(self.root, self.output)
+        self.assertEqual(summary["status"], "READY_TO_BUILD")
+
+        self.assignment["rights_verification_status"] = "REQUIRED_PERMISSION_NOT_GRANTED"
+        self.write_assignments([self.assignment])
+        rows, _, _, summary = reconcile(self.root, self.output)
+        self.assertIn("RIGHTS_PERMISSION_REVIEW_REQUIRED", rows[0]["blockers"])
+        self.assertEqual(summary["status"], "BLOCKED")
+
     def test_full_candidate_requests_follow_xml_and_skip_only_reviewed_code_only(self):
         self.write_source([
             ("03283", "Honeycrisp Apple", True), ("00042", "New Apple", True),
@@ -269,7 +334,7 @@ class PickListSyncChecks(unittest.TestCase):
         current.mkdir(parents=True)
         sentinel = current / "previous.pdf"
         sentinel.write_bytes(b"last published")
-        self.assignment["rights_verification_status"] = "NOT_VERIFIED"
+        self.assignment["visual_approval_status"] = "REJECTED"
         self.write_assignments([self.assignment])
         script = Path(__file__).with_name("sync_picklist.py")
         result = subprocess.run(
@@ -285,14 +350,15 @@ class PickListSyncChecks(unittest.TestCase):
              "--output", str(self.root / "staging")], capture_output=True, text=True)
         self.assertIn("output must be empty", second.stderr)
 
-    def test_duplicate_photos_across_conventional_entries_block_build(self):
+    def test_duplicate_photos_are_review_findings_not_approval_revocations(self):
         self.write_source([("03283", "Honeycrisp Apple", True), ("42", "Other Apple", True)])
         items, _ = read_picklist(self.source)
         self.register_current_source(items)
         self.write_assignments([self.approved_assignment(item) for item in items])
         rows, _, _, summary = reconcile(self.root, self.output)
-        self.assertEqual(summary["status"], "BLOCKED")
-        self.assertTrue(all("PROHIBITED_IMAGE_REUSE" in row["blockers"] for row in rows))
+        self.assertEqual(summary["status"], "READY_TO_BUILD")
+        self.assertTrue(all("DUPLICATE_IMAGE_REUSE_REVIEW" in row["review_findings"] for row in rows))
+        self.assertTrue(all(not row["blockers"] for row in rows))
 
     def test_matching_organic_pair_renders_same_upper_left_badge(self):
         self.write_source([("03283", "Honeycrisp Apple", True), ("903283", "Organic Honeycrisp Apple", True)])
@@ -399,8 +465,7 @@ class PickListSyncChecks(unittest.TestCase):
         self.write_assignments(assignments)
         before = self.source.read_bytes()
         rows, images, registry, summary = reconcile(self.root, self.output)
-        # Layout fixtures do not grant publication approval to reused test images.
-        self.assertEqual(summary["status"], "BLOCKED")
+        self.assertEqual(summary["status"], "READY_TO_BUILD")
         build_documents(self.root, self.output, rows, images, registry, summary["source_sha256"])
         with (self.output / "BOOKLET_ORDER.csv").open(encoding="utf-8-sig", newline="") as file:
             report = list(csv.DictReader(file))
@@ -426,7 +491,7 @@ class PickListSyncChecks(unittest.TestCase):
             check_library(self.root)
         self.assertEqual(image.read_bytes(), b"modified")
 
-    def test_exact_legacy_identity_is_preapproved_without_rewriting_assignment_evidence(self):
+    def test_explicit_historical_rejection_overrides_legacy_preapproval(self):
         self.assignment.update(
             legacy_entry_idx="1", visual_approval_status="NOT_APPROVED",
             photographic_origin="NOT_VERIFIED", rights_verification_status="NOT_VERIFIED",
@@ -444,22 +509,17 @@ class PickListSyncChecks(unittest.TestCase):
                 writer.writeheader()
                 writer.writerow(row)
         rows, _, assignments, summary = reconcile(self.root, self.output)
-        self.assertEqual(summary["status"], "READY_TO_BUILD")
-        self.assertEqual(rows[0]["image_approval_status"], "APPROVED_LEGACY")
+        self.assertEqual(summary["status"], "BLOCKED")
+        self.assertEqual(rows[0]["image_approval_status"], "NOT_APPROVED")
+        self.assertIn("EXPLICIT_IMAGE_REJECTION", rows[0]["blockers"])
         self.assertEqual(rows[0]["legacy_original_verdict"], "Rejected")
         self.assertEqual(assignments[self.items[0]["source_id"]]["visual_approval_status"],
                          "NOT_APPROVED")
         result = build_library(self.root, self.root / "legacy-approved")
-        self.assertEqual(result["images"], 1)
+        self.assertEqual(result["images"], 0)
         with (self.root / "legacy-approved/IMAGE_LIBRARY.csv").open(
                 encoding="utf-8-sig", newline="") as file:
-            library_record = next(csv.DictReader(file))
-        self.assertEqual(library_record["image_approval_status"], "APPROVED_LEGACY")
-        self.assertEqual(library_record["approval_basis"], "OWNER_LEGACY_PREAPPROVED_POLICY")
-        metadata = json.loads((self.root / "legacy-approved" /
-                               (library_record["image"] + ".json")).read_text())
-        self.assertEqual(metadata["recorded_visual_approval_status"], "NOT_APPROVED")
-        self.assertEqual(metadata["rights_verification_status"], "NOT_VERIFIED")
+            self.assertEqual(list(csv.DictReader(file)), [])
 
     def test_legacy_preapproval_does_not_transfer_to_changed_product_identity(self):
         from legacy_approval import legacy_approval, legacy_entries
@@ -670,10 +730,14 @@ class PickListSyncChecks(unittest.TestCase):
         self.register_current_source(items)
         first, second = [self.approved_assignment(item) for item in items]
         self.write_assignments([first, second])
-        self.assertIn("PROHIBITED_IMAGE_REUSE", reconcile(self.root, self.output)[0][1]["blockers"])
+        rows, _, _, summary = reconcile(self.root, self.output)
+        self.assertEqual(summary["status"], "READY_TO_BUILD")
+        self.assertIn("DUPLICATE_IMAGE_REUSE_REVIEW", rows[1]["review_findings"])
         second["reuse_from_source_id"] = first["source_id"]
         self.write_assignments([first, second])
-        self.assertEqual(reconcile(self.root, self.output)[3]["status"], "READY_TO_BUILD")
+        summary = reconcile(self.root, self.output)[3]
+        self.assertEqual(summary["status"], "READY_TO_BUILD")
+        self.assertEqual(len(summary["intentional_image_reuses"]), 1)
 
     def test_unrelated_organic_product_cannot_reuse_a_conventional_photo(self):
         self.write_source([
@@ -685,8 +749,8 @@ class PickListSyncChecks(unittest.TestCase):
         second["reuse_from_source_id"] = first["source_id"]
         self.write_assignments([first, second])
         rows, _, _, summary = reconcile(self.root, self.output)
-        self.assertEqual(summary["status"], "BLOCKED")
-        self.assertTrue(all("PROHIBITED_IMAGE_REUSE" in row["blockers"] for row in rows))
+        self.assertEqual(summary["status"], "READY_TO_BUILD")
+        self.assertTrue(all("DUPLICATE_IMAGE_REUSE_REVIEW" in row["review_findings"] for row in rows))
 
     def test_reviewer_metadata_and_original_file_are_both_required(self):
         self.assignment["rights_verification_status"] = "NOT_VERIFIED"
@@ -800,15 +864,16 @@ class PickListSyncChecks(unittest.TestCase):
         metadata = json.loads((library / (record["image"] + ".json")).read_text())
         self.assertEqual(metadata["photographic_origin"], "NOT_VERIFIED")
         self.assertEqual(record["rights_verification_status"], "NOT_VERIFIED")
-        self.assertEqual(record["production_status"], "BLOCKED")
+        self.assertEqual(record["production_status"], "REVIEW_FINDINGS_PRESENT")
+        self.assertEqual(record["production_authorization"], "NOT_AUTHORIZED")
         for error in ("BELOW_500_PX", "IMAGE_RIGHTS_NOT_VERIFIED",
                       "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED"):
-            self.assertIn(error, metadata["production_blockers"])
+            self.assertIn(error, metadata["review_findings"])
         self.assertNotIn("license", metadata)
         with Image.open(library / record["image"]) as image:
             self.assertEqual((image.size, image.format, image.mode), ((500, 500), "JPEG", "RGB"))
         self.assertEqual(self.image.read_bytes(), original)
-        self.assertEqual(reconcile(self.root, self.output)[3]["status"], "BLOCKED")
+        self.assertEqual(reconcile(self.root, self.output)[3]["status"], "READY_TO_BUILD")
         self.assignment["image_sha256"] = "stale"
         self.write_assignments([self.assignment])
         self.assertEqual(refresh_library(self.root)["images"], 0)
@@ -824,7 +889,7 @@ class PickListSyncChecks(unittest.TestCase):
                 encoding="utf-8-sig", newline="") as file:
             records = list(csv.DictReader(file))
         self.assertEqual(len(records), 2)
-        self.assertTrue(all("PROHIBITED_IMAGE_REUSE" in r["production_blockers"] for r in records))
+        self.assertTrue(all("DUPLICATE_IMAGE_REUSE_REVIEW" in r["review_findings"] for r in records))
         assignments[1]["reviewed_product"] = "Previous identity"
         self.write_assignments(assignments)
         self.assertEqual(refresh_library(self.root)["images"], 1)
@@ -966,7 +1031,7 @@ class PickListSyncChecks(unittest.TestCase):
         self.assertEqual(json.loads(organic.with_suffix(".png.json").read_text())["product"],
                          "Organic Honeycrisp Apple")
         rows, _, _, _ = reconcile(self.root, self.output)
-        self.assertTrue(all("PROHIBITED_IMAGE_REUSE" not in row["blockers"] for row in rows))
+        self.assertTrue(all("DUPLICATE_IMAGE_REUSE_REVIEW" not in row["blockers"] for row in rows))
         self.assertEqual(reconcile(self.root, self.output)[3]["status"], "READY_TO_BUILD")
 
     def test_approval_rejects_reuse_for_a_different_product(self):
@@ -1025,17 +1090,22 @@ class PickListSyncChecks(unittest.TestCase):
         self.assertTrue(approved_sidecar["visual_approval_evidence"])
         self.assertEqual(reconcile(self.root, self.output)[3]["status"], "READY_TO_BUILD")
 
-    def test_approval_still_reports_production_blockers_after_library_inclusion(self):
+    def test_duplicate_review_does_not_prevent_exact_image_approval(self):
         self.write_source([("03283", "Honeycrisp Apple", True), ("42", "Other Apple", True)])
         items, _ = read_picklist(self.source)
         self.register_current_source(items)
         self.write_assignments([self.approved_assignment(item) for item in items])
         self.candidate_metadata()
         rebuild_working_list(self.root, self.root / "audit")
-        with self.assertRaisesRegex(ValueError, "remains blocked for production.*PROHIBITED_IMAGE_REUSE"):
-            approve(self.root, items[0]["source_id"], self.image, "Fruit", "Apples",
-                    self.digest, "Test licence evidence", replace=True)
-        self.assertIn(items[0]["source_id"], check_library(self.root)["blockers_by_source_id"])
+        approve(self.root, items[0]["source_id"], self.image, "Fruit", "Apples",
+                self.digest, "Test licence evidence", replace=True)
+        library = check_library(self.root)
+        self.assertNotIn(items[0]["source_id"], library["blockers_by_source_id"])
+        with (self.root / "sources/image-library/IMAGE_LIBRARY.csv").open(
+                encoding="utf-8-sig", newline="") as file:
+            records = list(csv.DictReader(file))
+        self.assertTrue(all("DUPLICATE_IMAGE_REUSE_REVIEW" in row["review_findings"]
+                            for row in records))
 
     def test_approval_reports_library_refresh_failure_without_overwriting_edits(self):
         self.candidate_metadata()

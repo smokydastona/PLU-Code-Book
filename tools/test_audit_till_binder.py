@@ -2,7 +2,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from audit_till_binder import audit_images, audit_package, read_csv, write_blockers, write_csv
+from audit_till_binder import (audit_images, audit_package, read_csv,
+                               write_blockers, write_csv, write_owner_review_findings)
 
 
 class TillBinderAuditChecks(unittest.TestCase):
@@ -24,10 +25,16 @@ class TillBinderAuditChecks(unittest.TestCase):
             self.assertEqual(summary["images_shared_by_multiple_plus"], 1)
             self.assertEqual(len(small), 1)
             rows = write_blockers(dict(source_reconciliation=dict(
-                blocker_counts={"PROHIBITED_IMAGE_REUSE": 3}, working_list_review_records=2,
+                release_blocker_counts={"APPROVED_IMAGE_REQUIRED": 3},
+                owner_review_finding_counts={"DUPLICATE_IMAGE_REUSE_REVIEW": 3},
+                working_list_review_records=2,
                 reconciliation_review_decisions=0, organic_placements_needing_review=1)), output)
             self.assertTrue(rows and all(row["status"] == "OPEN" for row in rows))
             self.assertEqual(len(read_csv(output / "PRODUCTION_BLOCKERS.csv")), 3)
+            findings = write_owner_review_findings(dict(source_reconciliation=dict(
+                owner_review_finding_counts={"DUPLICATE_IMAGE_REUSE_REVIEW": 3})), output)
+            self.assertEqual(findings[0]["release_blocking"], "False")
+            self.assertEqual(len(read_csv(output / "OWNER_REVIEW_FINDINGS.csv")), 1)
             self.assertNotIn(b"\r", (output / "PRODUCTION_BLOCKERS.csv").read_bytes())
 
     def test_package_audit_flags_removed_media(self):

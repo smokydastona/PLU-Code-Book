@@ -413,6 +413,10 @@ class TillBinderChecks(unittest.TestCase):
         (self.root / "sources/binders").mkdir(parents=True)
         bakery_source = Path(__file__).resolve().parents[1] / BAKERY_SOURCE
         shutil.copyfile(bakery_source, self.root / BAKERY_SOURCE)
+        repository_root = Path(__file__).resolve().parents[1]
+        for path in ("sources/binders/OldTimers_Produce_codes.pdf",
+                     "sources/binders/Rain_Check.pdf"):
+            shutil.copyfile(repository_root / path, self.root / path)
         (self.root / STRETCH_SOURCE).write_bytes(
             (Path(__file__).resolve().parents[1] / STRETCH_SOURCE).read_bytes())
         for path in DIRECTORY_SOURCES:
@@ -592,7 +596,7 @@ class TillBinderChecks(unittest.TestCase):
         self.assertEqual(summary["embedded_references"], 5)
         self.assertEqual(summary["ai_illustrations_omitted"], 0)
         self.assertEqual(summary["ai_illustrations_embedded"], 1)
-        self.assertEqual(summary["production_publication"], "BLOCKED")
+        self.assertEqual(summary["production_publication"], "NOT_AUTHORIZED_REVIEW_BUILD")
         for edition, filename in FILENAMES.items():
             path = self.output / filename
             workbook = load_workbook(path)
@@ -764,7 +768,8 @@ class TillBinderChecks(unittest.TestCase):
                               result["Misc Codes"].page_setup.fitToHeight), (1, 1))
             self.assertEqual([image._data() for image in result["Store Directory"]._images],
                              self.directory_content)
-            self.assertEqual(result["Deli"]["A5"].value, "Updated meal")
+            self.assertEqual(result["Deli"]["A5"].value, "00012")
+            self.assertEqual(result["Deli"]["B5"].value, "Updated meal Org.")
             self.assertEqual(len(result["Produce"]._images), 5)
         finally:
             result.close()
@@ -1550,7 +1555,7 @@ class TillBinderChecks(unittest.TestCase):
         summary = generate(self.root, self.binder, self.output)
         self.assertEqual(summary["new_ai_crops_embedded"], 2)
         self.assertEqual(summary["embedded_references"], 7)
-        self.assertEqual(summary["production_publication"], "BLOCKED")
+        self.assertEqual(summary["production_publication"], "NOT_AUTHORIZED_REVIEW_BUILD")
         self.assertEqual((self.root / "data/picklist_assignments.json").read_bytes(), before)
         with (self.output / "PHOTO_MAPPING.csv").open(encoding="utf-8-sig", newline="") as file:
             audit = list(csv.DictReader(file))
@@ -1621,7 +1626,7 @@ class TillBinderChecks(unittest.TestCase):
         path.write_text(json.dumps(manifest))
         before = (self.root / "data/picklist_assignments.json").read_bytes()
         summary = generate(self.root, self.binder, self.output)
-        self.assertEqual(summary["production_publication"], "BLOCKED")
+        self.assertEqual(summary["production_publication"], "NOT_AUTHORIZED_REVIEW_BUILD")
         self.assertEqual(summary["new_ai_crops_embedded"], 0)
         self.assertEqual((self.root / "data/picklist_assignments.json").read_bytes(), before)
         with (self.output / "PHOTO_MAPPING.csv").open(encoding="utf-8-sig", newline="") as file:
