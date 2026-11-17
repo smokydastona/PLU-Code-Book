@@ -1,3 +1,3 @@
 Exact generation command (output must be empty; use a new directory when rerunning):
 
-/tmp/v/bin/python /workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/congenial-parakeet/tools/build_till_binders.py --root /workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/congenial-parakeet --binder /workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/congenial-parakeet/sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx --output /root/.copilot/session-state/17413871ecdb47059990a9e957cc63f5/files/final-review-binder --verify-print
+/tmp/plu-code-book-venv/bin/python /workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book/tools/build_till_binders.py --root /workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book --binder /workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book/sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx --output /tmp/plu-raincheck-review-2026-11-17 --verify-print

@@ -37,7 +37,8 @@ from build_bulk_sheet import (bulk_sheet, read_bulk, remove_discontinued_bulk_en
 from build_bakery_sheet import (BAKERY_SOURCE, read_source as read_bakery_source,
                                 validate_sheet as validate_bakery_sheet, workbook_bytes as bakery_workbook_bytes)
 from binder_theme import PALE_GREEN, display_product_name
-from build_weighed_sheet import SOURCE as WEIGHED_SOURCE
+from build_weighed_sheet import (RAIN_CHECK_SOURCE, RAIN_CHECK_UPLOAD,
+                                 SOURCE as WEIGHED_SOURCE)
 
 
 class TillBinderChecks(unittest.TestCase):
@@ -415,7 +416,7 @@ class TillBinderChecks(unittest.TestCase):
         shutil.copyfile(bakery_source, self.root / BAKERY_SOURCE)
         repository_root = Path(__file__).resolve().parents[1]
         for path in ("sources/binders/OldTimers_Produce_codes.pdf",
-                     "sources/binders/Rain_Check.pdf"):
+                     "sources/binders/Rain_Check.pdf", RAIN_CHECK_SOURCE, RAIN_CHECK_UPLOAD):
             shutil.copyfile(repository_root / path, self.root / path)
         (self.root / STRETCH_SOURCE).write_bytes(
             (Path(__file__).resolve().parents[1] / STRETCH_SOURCE).read_bytes())

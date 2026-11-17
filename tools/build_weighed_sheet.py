@@ -17,8 +17,19 @@ import pymupdf
 SHEET = "Weighed more $100"
 SOURCE = Path("sources/binders/Weighed_Items_Over_100_Updated.jpg")
 SOURCE_SHA256 = "bd2689fd49f13d5050753e30d850e3c89001e9db98bcf3ff9930bddd374d3604"
-RAIN_CHECK_SOURCE = Path("sources/binders/Rain_Check.pdf")
-RAIN_CHECK_SHA256 = "9aeb587f43b8022735666e04dd771c89d7d08f15150964f7f095e6dc762af777"
+RAIN_CHECK_SOURCE = Path("sources/binders/Rain_Check_Instructions_Updated.png")
+RAIN_CHECK_SHA256 = "f77357eefb6eab755471b8674f6a8fedbbba52c0719117c3ff7bfa94421ad10a"
+RAIN_CHECK_UPLOAD = Path("sources/binders/Rain_Check_Instructions_Upload.png")
+RAIN_CHECK_UPLOAD_SHA256 = "8377569b18af0d783745f4a8fc0336a66b6baac2ca0fb20a8598f25e725baa44"
+RAIN_CHECK_ORIGINAL_PDF = Path("sources/binders/Rain_Check.pdf")
+RAIN_CHECK_ORIGINAL_PDF_SHA256 = "9aeb587f43b8022735666e04dd771c89d7d08f15150964f7f095e6dc762af777"
+RAIN_CHECK_ACCURACY_REVIEW = (
+    "Compared the owner upload with the original Rain Check PDF. Updated the sample date to the form's "
+    "mm/dd/yy format, matched the sample product description and PLU 3181 to Strawberries BC 1 Pound, "
+    "and added the store number, banner, and store name fields to step 1. The original form, 30-day "
+    "validity, quantity-in-words, size, price-per-unit, and SCENE+ instructions remain present. "
+    "The 1 lb sample is 454 g; $4.99/lb converts to $11.00/kg rounded to cents."
+)
 ORIGINAL_CELLS_SHA256 = "e8e096a7650e27f8e67382de3f894e4083fa269230cca9f117fe9a2621be0b21"
 ORIGINAL_LABEL_SHA256 = "506394d7b873668c64e1143a56b9455cd7e774baa37387dff27cae5a13e644b6"
 PRICE_CORRECTION_BOX = (939, 537, 966, 588)
@@ -69,11 +80,12 @@ def themed_image(content):
 
 def rain_check_image(content):
     if digest(content) != RAIN_CHECK_SHA256:
-        raise ValueError("Rain Check PDF changed; review it before rebuilding")
-    with pymupdf.open(stream=content, filetype="pdf") as document:
-        if len(document) != 1 or document[0].rect != pymupdf.Rect(0, 0, 612, 792):
-            raise ValueError("Rain Check PDF must contain one portrait US Letter page")
-        return document[0].get_pixmap(dpi=150, colorspace=pymupdf.csRGB, alpha=False).tobytes("png")
+        raise ValueError("Corrected Rain Check image changed; review it before rebuilding")
+    with Image.open(io.BytesIO(content)) as image:
+        if image.format != "PNG" or image.size != (1024, 1536):
+            raise ValueError("Corrected Rain Check image must be a 1024 x 1536 PNG")
+        image.verify()
+    return content
 
 
 def workbook_bytes(source, image, rain_check):
@@ -104,11 +116,11 @@ def workbook_bytes(source, image, rain_check):
     sheet.sheet_format.defaultRowHeight = 14
     sheet.print_area = "A1:A106"
     sheet.row_breaks.append(Break(id=53))
-    for content, row, height in ((image, 0, 975), (rain_check, 55, 650 * 792 / 612)):
+    for content, row, width, height in ((image, 0, 650, 975), (rain_check, 55, 560, 840)):
         picture = ExcelImage(io.BytesIO(content))
         picture.anchor = OneCellAnchor(
             _from=AnchorMarker(col=0, row=row, colOff=pixels_to_EMU(100)),
-            ext=XDRPositiveSize2D(cx=pixels_to_EMU(650), cy=pixels_to_EMU(height)))
+            ext=XDRPositiveSize2D(cx=pixels_to_EMU(width), cy=pixels_to_EMU(height)))
         sheet.add_image(picture)
     result = io.BytesIO()
     workbook.save(result)
@@ -121,6 +133,8 @@ def validate_sheet(sheet, image, rain_check):
             [digest(picture._data()) for picture in sheet._images] !=
             [digest(image), digest(rain_check)] or
             [picture.anchor._from.row for picture in sheet._images] != [0, 55] or
+            (sheet._images[1].anchor.ext.cx, sheet._images[1].anchor.ext.cy) !=
+            (pixels_to_EMU(560), pixels_to_EMU(840)) or
             [page_break.id for page_break in sheet.row_breaks.brk] != [53] or sheet._charts or
             any(cell.value is not None for row in sheet for cell in row) or
             sheet.page_setup.orientation != "portrait" or str(sheet.page_setup.paperSize) != "1" or

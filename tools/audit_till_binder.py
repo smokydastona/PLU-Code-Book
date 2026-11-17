@@ -238,7 +238,7 @@ def main(argv=None):
         original_binder_sha256=original_sha, package=package, print_layout=layout,
         booklet_imposition=booklet, images=images, oldtimers_produce=oldtimers,
         open_blockers={row["blocker"]: row["records"] for row in blockers},
-        owner_review_findings={row["finding"]: row["records"]
+        owner_review_findings={row["finding"]: row["finding_occurrences"]
                                for row in owner_review_findings})
     (output / "AUDIT_REPORT.json").write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n",
                                               encoding="utf-8")

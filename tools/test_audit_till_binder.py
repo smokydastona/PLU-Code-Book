@@ -34,6 +34,7 @@ class TillBinderAuditChecks(unittest.TestCase):
             findings = write_owner_review_findings(dict(source_reconciliation=dict(
                 owner_review_finding_counts={"DUPLICATE_IMAGE_REUSE_REVIEW": 3})), output)
             self.assertEqual(findings[0]["release_blocking"], "False")
+            self.assertEqual(findings[0]["finding_occurrences"], 3)
             self.assertEqual(len(read_csv(output / "OWNER_REVIEW_FINDINGS.csv")), 1)
             self.assertNotIn(b"\r", (output / "PRODUCTION_BLOCKERS.csv").read_bytes())
 

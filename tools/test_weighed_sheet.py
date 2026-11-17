@@ -6,6 +6,7 @@ from openpyxl import load_workbook
 from PIL import Image, ImageChops
 
 import build_weighed_sheet as guide
+import prepare_raincheck_image as raincheck_prep
 
 ROOT = Path(__file__).resolve().parents[1]
 BINDER = ROOT / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
@@ -16,6 +17,8 @@ class WeighedGuideTests(unittest.TestCase):
     def setUpClass(cls):
         cls.upload = (ROOT / guide.SOURCE).read_bytes()
         cls.themed = guide.themed_image(cls.upload)
+        cls.rain_upload = (ROOT / guide.RAIN_CHECK_UPLOAD).read_bytes()
+        cls.rain_original_pdf = (ROOT / guide.RAIN_CHECK_ORIGINAL_PDF).read_bytes()
         cls.rain_source = (ROOT / guide.RAIN_CHECK_SOURCE).read_bytes()
         cls.rain = guide.rain_check_image(cls.rain_source)
 
@@ -81,8 +84,15 @@ class WeighedGuideTests(unittest.TestCase):
                 finally:
                     workbook.close()
 
-    def test_rain_check_changes_and_wrong_page_placement_are_rejected(self):
-        with self.assertRaisesRegex(ValueError, "Rain Check PDF changed"):
+    def test_corrected_rain_check_sources_and_page_placement_are_verified(self):
+        self.assertEqual(guide.digest(self.rain_upload), guide.RAIN_CHECK_UPLOAD_SHA256)
+        self.assertEqual(guide.digest(self.rain_original_pdf), guide.RAIN_CHECK_ORIGINAL_PDF_SHA256)
+        self.assertEqual(guide.digest(self.rain_source), guide.RAIN_CHECK_SHA256)
+        self.assertEqual(raincheck_prep.prepare_image(self.rain_upload), self.rain_source)
+        with Image.open(io.BytesIO(self.rain)) as corrected:
+            self.assertEqual(corrected.format, "PNG")
+            self.assertEqual(corrected.size, (1024, 1536))
+        with self.assertRaisesRegex(ValueError, "Corrected Rain Check image changed"):
             guide.rain_check_image(self.rain_source + b"changed")
         workbook = load_workbook(BINDER)
         try:

@@ -2562,6 +2562,9 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                     if (abs(page.rect.width - 612) > 1 or abs(page.rect.height - 792) > 1 or
                             not page.rect.contains(bounds) or bounds.width < 350 or bounds.height < 500):
                         raise ValueError(f"{edition}: {guide_name} image is clipped or too small")
+                    if (guide_name == "Rain Check" and
+                            abs(bounds.width / bounds.height - expected_size[0] / expected_size[1]) > .01):
+                        raise ValueError(f"{edition}: Rain Check poster is distorted in print")
             if rain_check_image is not None and guide_pages["Rain Check"] != guide_pages["Weighed"] + 1:
                 raise ValueError(f"{edition}: Rain Check must immediately follow the Weighed guide")
             if stretch_size is not None:
@@ -2879,6 +2882,7 @@ def generate(root, binder, output, verify_print=False):
     finally:
         deli_workbook.close()
     weighed_source = weighed_image = rain_check_source = rain_check_image = None
+    rain_check_upload_source = rain_check_original_pdf = None
     with zipfile.ZipFile(binder) as original:
         sheet_info(original, "Deli")
         sheet_info(original, "Bakery")
@@ -2891,6 +2895,11 @@ def generate(root, binder, output, verify_print=False):
                xml(original.read("xl/workbook.xml")).find(f"{{{S}}}sheets")):
             weighed_source = (root / weighed_guide.SOURCE).read_bytes()
             weighed_image = weighed_guide.themed_image(weighed_source)
+            rain_check_upload_source = (root / weighed_guide.RAIN_CHECK_UPLOAD).read_bytes()
+            rain_check_original_pdf = (root / weighed_guide.RAIN_CHECK_ORIGINAL_PDF).read_bytes()
+            if (sha(rain_check_upload_source) != weighed_guide.RAIN_CHECK_UPLOAD_SHA256 or
+                    sha(rain_check_original_pdf) != weighed_guide.RAIN_CHECK_ORIGINAL_PDF_SHA256):
+                raise ValueError("Rain Check comparison sources changed; review them before rebuilding")
             rain_check_source = (root / weighed_guide.RAIN_CHECK_SOURCE).read_bytes()
             rain_check_image = weighed_guide.rain_check_image(rain_check_source)
     source_items, digest = read_picklist(root / "sources/plu/PickList.xml")
@@ -3160,7 +3169,12 @@ def generate(root, binder, output, verify_print=False):
             derivative_sha256=sha(weighed_image),
             rain_check_source=str(root / weighed_guide.RAIN_CHECK_SOURCE),
             rain_check_source_sha256=sha(rain_check_source),
+            rain_check_upload=str(root / weighed_guide.RAIN_CHECK_UPLOAD),
+            rain_check_upload_sha256=sha(rain_check_upload_source),
+            rain_check_original_pdf=str(root / weighed_guide.RAIN_CHECK_ORIGINAL_PDF),
+            rain_check_original_pdf_sha256=sha(rain_check_original_pdf),
             rain_check_derivative_sha256=sha(rain_check_image),
+            rain_check_accuracy_review=weighed_guide.RAIN_CHECK_ACCURACY_REVIEW,
             original_cells_sha256=weighed_guide.ORIGINAL_CELLS_SHA256,
             original_label_sha256=weighed_guide.ORIGINAL_LABEL_SHA256,
             accuracy_review=weighed_guide.ACCURACY_REVIEW,
@@ -3213,7 +3227,8 @@ def generate(root, binder, output, verify_print=False):
             "with uniformly regenerated Code 128 barcodes preserving exact source values; scan the printed page before use. "
             "Floral Codes appear on Misc Codes; Weighed more $100 uses the visually compared owner upload "
             "with muted green colors and unchanged instructions and label values, followed by the "
-            "owner-supplied Rain Check PDF on a second portrait page; "
+            "corrected owner-uploaded Rain Check PNG on a second portrait page; the original upload "
+            "and comparison PDF are preserved and checksummed; "
             "Misc Codes uses green headings and pale-green "
             "entry shading on one page, with original cells and number formats retained; "
             "Conversions uses the owner-uploaded, visually checked one-page image; the original source charts "
@@ -3264,6 +3279,10 @@ def generate(root, binder, output, verify_print=False):
         raise ValueError("Weighed guide source changed during generation; discard outputs and retry")
     if rain_check_source is not None and (root / weighed_guide.RAIN_CHECK_SOURCE).read_bytes() != rain_check_source:
         raise ValueError("Rain Check source changed during generation; discard outputs and retry")
+    if (rain_check_upload_source is not None and
+            ((root / weighed_guide.RAIN_CHECK_UPLOAD).read_bytes() != rain_check_upload_source or
+             (root / weighed_guide.RAIN_CHECK_ORIGINAL_PDF).read_bytes() != rain_check_original_pdf)):
+        raise ValueError("Rain Check comparison source changed during generation; discard outputs and retry")
     if (root / oldtimers.SOURCE).read_bytes() != oldtimers_source:
         raise ValueError("OldTimers source changed during generation; discard outputs and retry")
     if any((root / path).read_bytes() != content for path, content in zip(DIRECTORY_SOURCES, directory_originals)):
