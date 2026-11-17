@@ -21,9 +21,7 @@
   "working_source_ids": [
     "93db3afe2b8188d14656419d324d6452e7adcfdc956470900a5bad125671dc1b"
   ],
-  "production_status": "BLOCKED",
-  "production_blockers": [
-    "PROHIBITED_IMAGE_REUSE"
-  ],
+  "production_status": "IMAGE_CHECKS_PASSED",
+  "production_blockers": [],
   "transformation": "Aspect-ratio-preserving resize and centered solid white padding to 500x500 JPEG (quality 90, optimized, progressive)"
 }

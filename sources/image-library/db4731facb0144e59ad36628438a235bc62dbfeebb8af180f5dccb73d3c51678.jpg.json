@@ -1,0 +1,43 @@
+{
+  "plu": "94823",
+  "product": "Organic White Potatoes",
+  "width": 500,
+  "height": 500,
+  "sha256": "4b4d4df327bf017c962bcf042e2d0096020bfc73cf4566e728fcd76a57c35910",
+  "approval_status": "CANDIDATE",
+  "image_approval_status": "APPROVED",
+  "approval_basis": "EXACT_WORKINGLIST_APPROVAL",
+  "recorded_visual_approval_status": "APPROVED",
+  "photographic_origin": "NOT_VERIFIED",
+  "visual_approval_status": "APPROVED",
+  "rights_verification_status": "NOT_VERIFIED",
+  "original_image_sha256": "67db9b8fa02b291c214a53027738433fb5a9b2d3701aa615e2423aca5c0fc8e6",
+  "original_image_path": "sources/visual/VEGETABLE_VISUAL_PLU_BOOKLET_CORRECTED.docx#word/media/image57.jpg",
+  "original_width": 276,
+  "original_height": 276,
+  "assigned_image_path": "data/images/Vegetable/0561_94823.png",
+  "legacy_organic_original": {
+    "source_document": "sources/visual/VEGETABLE_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+    "source_member": "word/media/image57.jpg",
+    "original_sha256": "67db9b8fa02b291c214a53027738433fb5a9b2d3701aa615e2423aca5c0fc8e6"
+  },
+  "working_source_id": "db4731facb0144e59ad36628438a235bc62dbfeebb8af180f5dccb73d3c51678",
+  "working_source_ids": [
+    "812bbb4f1965149c97183fed20168925d75b6bcfdcdd03ca12e28a2863906195"
+  ],
+  "production_status": "BLOCKED",
+  "production_blockers": [
+    "BELOW_500_PX",
+    "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED",
+    "IMAGE_RIGHTS_NOT_VERIFIED",
+    "SUPPORTED_IMAGE_LICENCE_REQUIRED",
+    "MISSING_PROVENANCE_CREATOR",
+    "MISSING_PROVENANCE_LICENSE_URL",
+    "MISSING_PROVENANCE_SOURCE_PAGE_URL",
+    "MISSING_PROVENANCE_ORIGINAL_IMAGE_URL",
+    "MISSING_PROVENANCE_ATTRIBUTION",
+    "MISSING_PROVENANCE_CHANGES",
+    "MISSING_PROVENANCE_RIGHTS_EVIDENCE"
+  ],
+  "transformation": "Aspect-ratio-preserving resize and centered solid white padding to 500x500 JPEG (quality 90, optimized, progressive); standard pink organic badge added"
+}

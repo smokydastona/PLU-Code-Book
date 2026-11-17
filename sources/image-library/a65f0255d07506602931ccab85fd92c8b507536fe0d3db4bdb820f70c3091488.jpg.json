@@ -1,0 +1,45 @@
+{
+  "plu": "94317",
+  "product": "Organic Canary Melon",
+  "width": 500,
+  "height": 500,
+  "sha256": "719189067e513c3f13e442b0e3f0b397904425775ae9ad1a8a0be3a9ada29ea1",
+  "approval_status": "CANDIDATE",
+  "image_approval_status": "APPROVED",
+  "approval_basis": "EXACT_WORKINGLIST_APPROVAL",
+  "recorded_visual_approval_status": "APPROVED",
+  "photographic_origin": "NOT_VERIFIED",
+  "visual_approval_status": "APPROVED",
+  "rights_verification_status": "NOT_VERIFIED",
+  "original_image_sha256": "b8a7325834732bc07ace2b818a334b4cad3c41927bc0d1e67179b98bd9b74505",
+  "original_image_path": "sources/visual/FRUIT_VISUAL_PLU_BOOKLET_CORRECTED.docx#word/media/image61.jpg",
+  "original_width": 229,
+  "original_height": 229,
+  "assigned_image_path": "data/images/Fruit/0239_94317.png",
+  "legacy_organic_original": {
+    "source_document": "sources/visual/FRUIT_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+    "source_member": "word/media/image61.jpg",
+    "original_sha256": "b8a7325834732bc07ace2b818a334b4cad3c41927bc0d1e67179b98bd9b74505"
+  },
+  "working_source_id": "a65f0255d07506602931ccab85fd92c8b507536fe0d3db4bdb820f70c3091488",
+  "working_source_ids": [
+    "2d25bc28835f6861052e3380adcd961d004edeeaaff384ccad5ec2d1ef711829",
+    "974ccce0d7ca031cd445b2d2dfce3300e201405af1b2c64c324b4bffe8903034"
+  ],
+  "production_status": "BLOCKED",
+  "production_blockers": [
+    "BELOW_500_PX",
+    "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED",
+    "IMAGE_RIGHTS_NOT_VERIFIED",
+    "SUPPORTED_IMAGE_LICENCE_REQUIRED",
+    "MISSING_PROVENANCE_CREATOR",
+    "MISSING_PROVENANCE_LICENSE_URL",
+    "MISSING_PROVENANCE_SOURCE_PAGE_URL",
+    "MISSING_PROVENANCE_ORIGINAL_IMAGE_URL",
+    "MISSING_PROVENANCE_ATTRIBUTION",
+    "MISSING_PROVENANCE_CHANGES",
+    "MISSING_PROVENANCE_RIGHTS_EVIDENCE",
+    "PROHIBITED_IMAGE_REUSE"
+  ],
+  "transformation": "Aspect-ratio-preserving resize and centered solid white padding to 500x500 JPEG (quality 90, optimized, progressive); standard pink organic badge added"
+}

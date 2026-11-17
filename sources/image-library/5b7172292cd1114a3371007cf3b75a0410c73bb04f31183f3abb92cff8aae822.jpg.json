@@ -1,0 +1,44 @@
+{
+  "plu": "94769",
+  "product": "Organic Kabocha Squash",
+  "width": 500,
+  "height": 500,
+  "sha256": "1fc4bb3963b607cc0a787aa3230698876f3207210bbec5a2ad9efa55e3da6a5a",
+  "approval_status": "CANDIDATE",
+  "image_approval_status": "APPROVED",
+  "approval_basis": "EXACT_WORKINGLIST_APPROVAL",
+  "recorded_visual_approval_status": "APPROVED",
+  "photographic_origin": "NOT_VERIFIED",
+  "visual_approval_status": "APPROVED",
+  "rights_verification_status": "NOT_VERIFIED",
+  "original_image_sha256": "e453ea1b734d0b66280afd352696a869c1f8d9367801a44295f1bdf7c0a3824f",
+  "original_image_path": "sources/visual/VEGETABLE_VISUAL_PLU_BOOKLET_CORRECTED.docx#word/media/image101.jpg",
+  "original_width": 349,
+  "original_height": 349,
+  "assigned_image_path": "data/images/Vegetable/0577_94769.png",
+  "legacy_organic_original": {
+    "source_document": "sources/visual/VEGETABLE_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+    "source_member": "word/media/image101.jpg",
+    "original_sha256": "e453ea1b734d0b66280afd352696a869c1f8d9367801a44295f1bdf7c0a3824f"
+  },
+  "working_source_id": "5b7172292cd1114a3371007cf3b75a0410c73bb04f31183f3abb92cff8aae822",
+  "working_source_ids": [
+    "13b8831b65328f78bf8af5368c7d49907606fa383e645ae94801643dc9e79e02"
+  ],
+  "production_status": "BLOCKED",
+  "production_blockers": [
+    "BELOW_500_PX",
+    "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED",
+    "IMAGE_RIGHTS_NOT_VERIFIED",
+    "SUPPORTED_IMAGE_LICENCE_REQUIRED",
+    "MISSING_PROVENANCE_CREATOR",
+    "MISSING_PROVENANCE_LICENSE_URL",
+    "MISSING_PROVENANCE_SOURCE_PAGE_URL",
+    "MISSING_PROVENANCE_ORIGINAL_IMAGE_URL",
+    "MISSING_PROVENANCE_ATTRIBUTION",
+    "MISSING_PROVENANCE_CHANGES",
+    "MISSING_PROVENANCE_RIGHTS_EVIDENCE",
+    "PROHIBITED_IMAGE_REUSE"
+  ],
+  "transformation": "Aspect-ratio-preserving resize and centered solid white padding to 500x500 JPEG (quality 90, optimized, progressive); standard pink organic badge added"
+}

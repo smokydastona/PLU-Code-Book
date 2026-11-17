@@ -1,0 +1,44 @@
+{
+  "plu": "94648",
+  "product": "Organic Cremini Mushrooms",
+  "width": 500,
+  "height": 500,
+  "sha256": "0897d5456ec077277a7674c6f676214dc88f06ab80cb9ca4c7675e8769b6e278",
+  "approval_status": "CANDIDATE",
+  "image_approval_status": "APPROVED",
+  "approval_basis": "EXACT_WORKINGLIST_APPROVAL",
+  "recorded_visual_approval_status": "APPROVED",
+  "photographic_origin": "NOT_VERIFIED",
+  "visual_approval_status": "APPROVED",
+  "rights_verification_status": "NOT_VERIFIED",
+  "original_image_sha256": "5093678251a6d7861cdc19e2b7021e8c3bddef2bcb42828355e2355236c60fbd",
+  "original_image_path": "sources/visual/VEGETABLE_VISUAL_PLU_BOOKLET_CORRECTED.docx#word/media/image160.jpg",
+  "original_width": 185,
+  "original_height": 185,
+  "assigned_image_path": "data/images/Vegetable/0536_94648.png",
+  "legacy_organic_original": {
+    "source_document": "sources/visual/VEGETABLE_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+    "source_member": "word/media/image160.jpg",
+    "original_sha256": "5093678251a6d7861cdc19e2b7021e8c3bddef2bcb42828355e2355236c60fbd"
+  },
+  "working_source_id": "cc3c4d0e37bde64efcb713174b4286fa8f3bedfcd56568e98cdc384e3b76a78b",
+  "working_source_ids": [
+    "b4f0e40b5e82ab5b60f48da300b0b15aee297404ad7dc2d8ea89292f4262c670",
+    "a2a7fe33b0230ec32674950366966f68fb87c1f12175ea47d73d8d6db582382d"
+  ],
+  "production_status": "BLOCKED",
+  "production_blockers": [
+    "BELOW_500_PX",
+    "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED",
+    "IMAGE_RIGHTS_NOT_VERIFIED",
+    "SUPPORTED_IMAGE_LICENCE_REQUIRED",
+    "MISSING_PROVENANCE_CREATOR",
+    "MISSING_PROVENANCE_LICENSE_URL",
+    "MISSING_PROVENANCE_SOURCE_PAGE_URL",
+    "MISSING_PROVENANCE_ORIGINAL_IMAGE_URL",
+    "MISSING_PROVENANCE_ATTRIBUTION",
+    "MISSING_PROVENANCE_CHANGES",
+    "MISSING_PROVENANCE_RIGHTS_EVIDENCE"
+  ],
+  "transformation": "Aspect-ratio-preserving resize and centered solid white padding to 500x500 JPEG (quality 90, optimized, progressive); standard pink organic badge added"
+}

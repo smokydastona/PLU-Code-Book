@@ -1,3 +1,3 @@
-convert /root/.copilot/session-state/92bea4f4e4694d0bab2863dfa69c936c/files/till-binder-asian-group/Complete Till Binder - Updated - Photos.xlsx as a Calc document -> /tmp/till-print-31lo7tcy/Complete Till Binder - Updated - Photos.pdf using filter : calc_pdf_Export:{"UseLosslessCompression":{"type":"boolean","value":"true"},"ReduceImageResolution":{"type":"boolean","value":"false"}}
+convert /root/.copilot/session-state/17413871ecdb47059990a9e957cc63f5/files/binder-regeneration/Complete Till Binder - Updated - Photos.xlsx as a Calc document -> /tmp/till-print-1s4viudk/Complete Till Binder - Updated - Photos.pdf using filter : calc_pdf_Export:{"UseLosslessCompression":{"type":"boolean","value":"true"},"ReduceImageResolution":{"type":"boolean","value":"false"}}
 Warning: failed to launch javaldx - java may not function correctly
 libpng warning: iCCP: known incorrect sRGB profile

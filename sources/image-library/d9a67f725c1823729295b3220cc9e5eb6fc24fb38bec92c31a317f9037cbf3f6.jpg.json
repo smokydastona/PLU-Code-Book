@@ -1,0 +1,40 @@
+{
+  "plu": "4899",
+  "product": "Parsley",
+  "width": 500,
+  "height": 500,
+  "sha256": "9d7a09bf97fab1921eb27f6cc9fcc59711afafb3b741cf7daef4bd521ad9d04d",
+  "approval_status": "CANDIDATE",
+  "image_approval_status": "APPROVED",
+  "approval_basis": "EXACT_WORKINGLIST_APPROVAL",
+  "recorded_visual_approval_status": "APPROVED",
+  "photographic_origin": "NOT_VERIFIED",
+  "visual_approval_status": "APPROVED",
+  "rights_verification_status": "NOT_VERIFIED",
+  "original_image_sha256": "3c12aac969e18366111c0d71e74aef0c0daa988fe125dd4192003621e12bc724",
+  "original_image_path": "data/images/Vegetable/0325_4899.jpg",
+  "original_width": 180,
+  "original_height": 180,
+  "assigned_image_path": "data/images/Vegetable/0325_4899.jpg",
+  "legacy_organic_original": null,
+  "working_source_id": "d9a67f725c1823729295b3220cc9e5eb6fc24fb38bec92c31a317f9037cbf3f6",
+  "working_source_ids": [
+    "9d62fc39e1cfbb03b99e797a28363bd795db3f3340e4548363e98756c9d7053f",
+    "141ee4d3131707e5320391420acb097ecd64e5c486fd83c5b93d14f66d437fb3"
+  ],
+  "production_status": "BLOCKED",
+  "production_blockers": [
+    "BELOW_500_PX",
+    "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED",
+    "IMAGE_RIGHTS_NOT_VERIFIED",
+    "SUPPORTED_IMAGE_LICENCE_REQUIRED",
+    "MISSING_PROVENANCE_CREATOR",
+    "MISSING_PROVENANCE_LICENSE_URL",
+    "MISSING_PROVENANCE_SOURCE_PAGE_URL",
+    "MISSING_PROVENANCE_ORIGINAL_IMAGE_URL",
+    "MISSING_PROVENANCE_ATTRIBUTION",
+    "MISSING_PROVENANCE_CHANGES",
+    "MISSING_PROVENANCE_RIGHTS_EVIDENCE"
+  ],
+  "transformation": "Aspect-ratio-preserving resize and centered solid white padding to 500x500 JPEG (quality 90, optimized, progressive)"
+}

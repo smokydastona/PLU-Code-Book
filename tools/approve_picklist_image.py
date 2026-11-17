@@ -66,7 +66,8 @@ def approve(root, source_id, candidate, book, section, source_sha, evidence,
         shutil.copyfile(candidate, destination)
     approved_metadata = dict(
         metadata, visual_approval_status="APPROVED",
-        rights_verification_status="VERIFIED",
+        rights_verification_status=("VERIFIED" if owner_permission else
+                                    metadata.get("rights_verification_status", "VERIFIED")),
     )
     sidecar = destination.with_suffix(destination.suffix + ".json")
     approved_metadata = dict(
@@ -97,7 +98,7 @@ def approve(root, source_id, candidate, book, section, source_sha, evidence,
         working_source_ids=item["source_ids"], working_decision_id=item["decision_id"],
         image_sha256=checksum, photographic_origin="VERIFIED_PHOTO",
         visual_approval_status="APPROVED",
-        rights_verification_status=metadata.get("rights_verification_status", "VERIFIED"),
+        rights_verification_status="VERIFIED",
         production_status="APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
         provenance=provenance, reuse_from_source_id=reuse_from,
     )

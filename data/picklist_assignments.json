@@ -4027,7 +4027,8 @@
         "original_sha256": "aaba6fb40146e1ddd437ecb946ce7aca3163cd60c02535df5d02b46b1e528c6e"
       },
       "image_sha256": "aaba6fb40146e1ddd437ecb946ce7aca3163cd60c02535df5d02b46b1e528c6e",
-      "source_id": "ef7cc25e2aeb9fe47d33a91324d8b9eb20103e61ecebed3c756589a7be0e6207"
+      "source_id": "ef7cc25e2aeb9fe47d33a91324d8b9eb20103e61ecebed3c756589a7be0e6207",
+      "reuse_from_source_id": "2d59fb15fe66ee2d5f2d98956ca7eeb0d40f56a38beb890e24681cdaa0622833"
     },
     {
       "book": "Fruit",
@@ -4048,7 +4049,9 @@
         "original_sha256": "0f2a68fc518b527a9dd9bea2cb71db2a6767ae4dfcdb76135f72360f22a4054c"
       },
       "image_sha256": "0f2a68fc518b527a9dd9bea2cb71db2a6767ae4dfcdb76135f72360f22a4054c",
-      "source_id": "29e1aff156d3c64d981122128d4addbf2776cbecde29ed34acbac602b1fb16ae"
+      "source_id": "29e1aff156d3c64d981122128d4addbf2776cbecde29ed34acbac602b1fb16ae",
+      "reuse_from_source_id": "d318b055b057b13867aec3e712748f7727084b0079d46901d64055425937a7aa",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Fruit",
@@ -4174,7 +4177,9 @@
         "original_sha256": "aba9392101578d42158ec30f7607e3a422e3af1507bcbf1fa7bc33940485e8a5"
       },
       "image_sha256": "aba9392101578d42158ec30f7607e3a422e3af1507bcbf1fa7bc33940485e8a5",
-      "source_id": "845e4d4fc8db1f9881c5844b28e7c724565204e12eb5ca4087ecda74814c1e25"
+      "source_id": "845e4d4fc8db1f9881c5844b28e7c724565204e12eb5ca4087ecda74814c1e25",
+      "reuse_from_source_id": "1645365b5c290b1674d3dcd01ef050f2bfde741ad506530addb6ca4f17874eb6",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Fruit",
@@ -4195,7 +4200,9 @@
         "original_sha256": "aba9392101578d42158ec30f7607e3a422e3af1507bcbf1fa7bc33940485e8a5"
       },
       "image_sha256": "aba9392101578d42158ec30f7607e3a422e3af1507bcbf1fa7bc33940485e8a5",
-      "source_id": "c20c523253b8568a89a45d008a3ce3a49db2c6d7285206b19d421c1c7371d81f"
+      "source_id": "c20c523253b8568a89a45d008a3ce3a49db2c6d7285206b19d421c1c7371d81f",
+      "reuse_from_source_id": "1645365b5c290b1674d3dcd01ef050f2bfde741ad506530addb6ca4f17874eb6",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Fruit",
@@ -4216,7 +4223,8 @@
         "original_sha256": "efc03ee4762fb8fc412115905036ae238d34c69c8b0dd7ef25651af7eb9f077d"
       },
       "image_sha256": "efc03ee4762fb8fc412115905036ae238d34c69c8b0dd7ef25651af7eb9f077d",
-      "source_id": "4d619eb7a50e6d8f17e2c7de165e5b0162a51ba7251f8b16c3aaaee8ee76ac38"
+      "source_id": "4d619eb7a50e6d8f17e2c7de165e5b0162a51ba7251f8b16c3aaaee8ee76ac38",
+      "reuse_from_source_id": "06b8492bb2252805409c2f606b0ebcbebe4053e19653b6cc505a9dab2f8f09fa"
     },
     {
       "book": "Fruit",
@@ -4237,7 +4245,8 @@
         "original_sha256": "efc03ee4762fb8fc412115905036ae238d34c69c8b0dd7ef25651af7eb9f077d"
       },
       "image_sha256": "efc03ee4762fb8fc412115905036ae238d34c69c8b0dd7ef25651af7eb9f077d",
-      "source_id": "9cc65983b1156bb8d08b9f97ec33c6c73feb8e797b273a551db0d53fb1c12746"
+      "source_id": "9cc65983b1156bb8d08b9f97ec33c6c73feb8e797b273a551db0d53fb1c12746",
+      "reuse_from_source_id": "06b8492bb2252805409c2f606b0ebcbebe4053e19653b6cc505a9dab2f8f09fa"
     },
     {
       "book": "Fruit",
@@ -4279,7 +4288,9 @@
         "original_sha256": "315fdfc7b616b7993742242cb8f1f11c7213d02687b8ac7341b2a5e9eac6eceb"
       },
       "image_sha256": "315fdfc7b616b7993742242cb8f1f11c7213d02687b8ac7341b2a5e9eac6eceb",
-      "source_id": "bf1a7347d225441b1e4ec29c8c3f57daeac5d05e9cc831b4f968492740790936"
+      "source_id": "bf1a7347d225441b1e4ec29c8c3f57daeac5d05e9cc831b4f968492740790936",
+      "reuse_from_source_id": "dbbc1c41419c5cbb688f30ca59292ab81eb0fc04e813d86f41a2c54889c463e8",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Fruit",
@@ -4384,7 +4395,8 @@
         "original_sha256": "315fdfc7b616b7993742242cb8f1f11c7213d02687b8ac7341b2a5e9eac6eceb"
       },
       "image_sha256": "315fdfc7b616b7993742242cb8f1f11c7213d02687b8ac7341b2a5e9eac6eceb",
-      "source_id": "83306531c6d45cc56bba14520d30a9d91520ad706079a8d1ac7ce360ae8c352b"
+      "source_id": "83306531c6d45cc56bba14520d30a9d91520ad706079a8d1ac7ce360ae8c352b",
+      "reuse_from_source_id": "dbbc1c41419c5cbb688f30ca59292ab81eb0fc04e813d86f41a2c54889c463e8"
     },
     {
       "book": "Fruit",
@@ -4405,7 +4417,8 @@
         "original_sha256": "c1fefb71fc06beaca6fdb5bc4eccf7618bb0d2e062e399689d3f3b3357a8cef0"
       },
       "image_sha256": "c1fefb71fc06beaca6fdb5bc4eccf7618bb0d2e062e399689d3f3b3357a8cef0",
-      "source_id": "e007a9c2425c1f7dd5a24b58f45b8ddcbfe4316fee29abd33422a3eee8e8f14d"
+      "source_id": "e007a9c2425c1f7dd5a24b58f45b8ddcbfe4316fee29abd33422a3eee8e8f14d",
+      "reuse_from_source_id": "7cecc35681f07091c99d70c2964507e243d576f5178c1c16f1d5947f17fcda9e"
     },
     {
       "book": "Fruit",
@@ -4426,7 +4439,8 @@
         "original_sha256": "7175527cf74eda53183ff96cd61365c8b615eded987f27d5dda34b7244cde337"
       },
       "image_sha256": "7175527cf74eda53183ff96cd61365c8b615eded987f27d5dda34b7244cde337",
-      "source_id": "27c57125ec8231301142173ae456f96b15c44d5e3b6c87ac56a375e2f147d544"
+      "source_id": "27c57125ec8231301142173ae456f96b15c44d5e3b6c87ac56a375e2f147d544",
+      "reuse_from_source_id": "a019e1961f21e9f85bd3028622e1cf62d0bb7b03d43dfbab1f9bef075c6affea"
     },
     {
       "book": "Fruit",
@@ -4489,7 +4503,8 @@
         "original_sha256": "ecbdb84445ad381b9245c15144e7768abe2f63b14b8b7dcaaf04bcbddf013ab7"
       },
       "image_sha256": "ecbdb84445ad381b9245c15144e7768abe2f63b14b8b7dcaaf04bcbddf013ab7",
-      "source_id": "4c064fd7c0486888fe51844d6e3d51ac490ad7ec0cb16a866e6d01faac524084"
+      "source_id": "4c064fd7c0486888fe51844d6e3d51ac490ad7ec0cb16a866e6d01faac524084",
+      "reuse_from_source_id": "4e47d1641b851897cbfa6e6c18a39d3c9c0c46b720aa0ae7ea9f95f8efc53f63"
     },
     {
       "book": "Vegetable",
@@ -4573,7 +4588,8 @@
         "original_sha256": "747f5e44dcdd4e526b3a8174950b03b72bcf07b2fd32989ac3ab14a021cf40d3"
       },
       "image_sha256": "747f5e44dcdd4e526b3a8174950b03b72bcf07b2fd32989ac3ab14a021cf40d3",
-      "source_id": "c99d83d7ace911c3b9cb912448c6abfda07ecbf55f3fec71efec52b3713288ed"
+      "source_id": "c99d83d7ace911c3b9cb912448c6abfda07ecbf55f3fec71efec52b3713288ed",
+      "reuse_from_source_id": "c9e3892215c342d85386af63bee5340fad860089c1c4c36290f6b58945f89204"
     },
     {
       "book": "Vegetable",
@@ -4594,7 +4610,8 @@
         "original_sha256": "1d0e2a357027d1b2b2cfc257995fba50267ac80777df85febe242dc98da8e02e"
       },
       "image_sha256": "1d0e2a357027d1b2b2cfc257995fba50267ac80777df85febe242dc98da8e02e",
-      "source_id": "12083a4cf6fc9571986c5645ad8a67ee18777c9bed0b085bfeca89a5594af849"
+      "source_id": "12083a4cf6fc9571986c5645ad8a67ee18777c9bed0b085bfeca89a5594af849",
+      "reuse_from_source_id": "5452cdbdbab06a3db2f34d948cce8fbdc17cd2672548e9f7869262bdf07b8524"
     },
     {
       "book": "Vegetable",
@@ -4615,7 +4632,8 @@
         "original_sha256": "7193cb3e304f449c13344d622b91955b0aeb6b5abe0e573b2b9da38acba1bfec"
       },
       "image_sha256": "7193cb3e304f449c13344d622b91955b0aeb6b5abe0e573b2b9da38acba1bfec",
-      "source_id": "e70fc63da261476939b14e48e4cfcfa464963b3bbb895742ffe80cb0625728fc"
+      "source_id": "e70fc63da261476939b14e48e4cfcfa464963b3bbb895742ffe80cb0625728fc",
+      "reuse_from_source_id": "7a742f54de0ea2fe3ffda8a9b6ce35a925efeb4685a1ba5449018e981e5212c8"
     },
     {
       "book": "Vegetable",
@@ -4636,7 +4654,9 @@
         "original_sha256": "bda14aca6a397f78489a5fb6790a89034ea883eed1b1978bc31368d15aab783a"
       },
       "image_sha256": "bda14aca6a397f78489a5fb6790a89034ea883eed1b1978bc31368d15aab783a",
-      "source_id": "3d22b3c21a1e7523739ae71ef2f9dac749f3d181f8e91acfad482d68d7533f23"
+      "source_id": "3d22b3c21a1e7523739ae71ef2f9dac749f3d181f8e91acfad482d68d7533f23",
+      "reuse_from_source_id": "41086b7e77d9779e769a62df8d42e78b6a2fa6b3dc2703fd8b995378a2818e50",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Vegetable",
@@ -4657,7 +4677,9 @@
         "original_sha256": "8ddd8de3e8af88dac239165499d06950df77e55415a115085c1751ddaf1195fd"
       },
       "image_sha256": "8ddd8de3e8af88dac239165499d06950df77e55415a115085c1751ddaf1195fd",
-      "source_id": "c3efaacfbfd58e9eaa657f3b315352cd87caeb1ddc6daf7d5fa63a5744d9a298"
+      "source_id": "c3efaacfbfd58e9eaa657f3b315352cd87caeb1ddc6daf7d5fa63a5744d9a298",
+      "reuse_from_source_id": "8bb2c63ac0c85beee1f605fd5bebcd59551831f3cacbf90ed17f0082afd2b6c2",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Fruit",
@@ -4678,7 +4700,8 @@
         "original_sha256": "ade2c752f928bc4ddf07affcc3ebe774b4ca165755b6eb9a47849adf3cdb648d"
       },
       "image_sha256": "ade2c752f928bc4ddf07affcc3ebe774b4ca165755b6eb9a47849adf3cdb648d",
-      "source_id": "a0d1dfd7b95ad801882f5268572b7dbc687d846d9850c54e904658040277f3ea"
+      "source_id": "a0d1dfd7b95ad801882f5268572b7dbc687d846d9850c54e904658040277f3ea",
+      "reuse_from_source_id": "272be14f456f337c206f35e4d140a89f6f59b63007c0ba934bd13ffc3c7cd84e"
     },
     {
       "book": "Vegetable",
@@ -4799,7 +4822,8 @@
         "original_sha256": "c6184626c4c9e5acdd64efcaefb6e6fc02ba9cf0f2b00812f65284ecdb84541a"
       },
       "image_sha256": "c6184626c4c9e5acdd64efcaefb6e6fc02ba9cf0f2b00812f65284ecdb84541a",
-      "source_id": "2cd71f1b9d2a3358943a221712add19119b8972594a97fb7806fbf8a3450ba33"
+      "source_id": "2cd71f1b9d2a3358943a221712add19119b8972594a97fb7806fbf8a3450ba33",
+      "reuse_from_source_id": "656dccfc2738b92e61657267e1b6dd8725c02353e0990c235f48f704899b30d9"
     },
     {
       "book": "Vegetable",
@@ -4820,7 +4844,8 @@
         "original_sha256": "07835c43ceec7c62efaba60e393f73e2c3bcebf91dfc404dfe74203963671edb"
       },
       "image_sha256": "07835c43ceec7c62efaba60e393f73e2c3bcebf91dfc404dfe74203963671edb",
-      "source_id": "5b441cd9c33cc4e68174441d635a4b253040e99aeb21d0aaef6bef0438ca20eb"
+      "source_id": "5b441cd9c33cc4e68174441d635a4b253040e99aeb21d0aaef6bef0438ca20eb",
+      "reuse_from_source_id": "1a01a6174f26f5021d1d93a5d81d619c981f9bb783a04e3ad788e53457529f0d"
     },
     {
       "book": "Vegetable",
@@ -4883,7 +4908,8 @@
         "original_sha256": "72e1fabfc4510061bd65fdf75701ad3be696d6e940a8a0c9e6de416adba9f3a7"
       },
       "image_sha256": "72e1fabfc4510061bd65fdf75701ad3be696d6e940a8a0c9e6de416adba9f3a7",
-      "source_id": "b2dd168ca1ba5614b8193642e0169ec6962bcdbd3f8edc1bc3d7d8608ce16dd4"
+      "source_id": "b2dd168ca1ba5614b8193642e0169ec6962bcdbd3f8edc1bc3d7d8608ce16dd4",
+      "reuse_from_source_id": "c0644a56bf1f800b679c47b96e05656e8cc4f097e42b856c7b86952cd5aca113"
     },
     {
       "book": "Vegetable",
@@ -4904,7 +4930,9 @@
         "original_sha256": "6fa642a734582193596ee0231ff9f0a814b252b228a23431fcbc04f2dd748223"
       },
       "image_sha256": "6fa642a734582193596ee0231ff9f0a814b252b228a23431fcbc04f2dd748223",
-      "source_id": "db0c52b5d53a81fdfa20d01bbbdc3488089cd65a3c2d3f6704f5e010ef9b4bf4"
+      "source_id": "db0c52b5d53a81fdfa20d01bbbdc3488089cd65a3c2d3f6704f5e010ef9b4bf4",
+      "reuse_from_source_id": "b8f739f691e28f91ab3740174e474b20e581abc007942c642264b1b84626fe52",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Fruit",
@@ -4988,7 +5016,9 @@
         "original_sha256": "340d756ba79027607eea7e7f4151ee436a930425a897f98d5632d68e7a832ebc"
       },
       "image_sha256": "340d756ba79027607eea7e7f4151ee436a930425a897f98d5632d68e7a832ebc",
-      "source_id": "36fff826b93249e5f977da40281e9f936ba2ba859e55c33f7de753c0e5ba442b"
+      "source_id": "36fff826b93249e5f977da40281e9f936ba2ba859e55c33f7de753c0e5ba442b",
+      "reuse_from_source_id": "8acb2f055c485b8600872c86b801d1860947d0b42e63a36ef71846cff67a6dd3",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Fruit",
@@ -5051,7 +5081,8 @@
         "original_sha256": "6e72feef4cc8d6f65e2b493baf8dbb5ab17acad122cda47de45d3fc473e66ddb"
       },
       "image_sha256": "6e72feef4cc8d6f65e2b493baf8dbb5ab17acad122cda47de45d3fc473e66ddb",
-      "source_id": "2552b057d3aecc98fbc3305230c3e7b274cb2561c5a529396eda9c7424671632"
+      "source_id": "2552b057d3aecc98fbc3305230c3e7b274cb2561c5a529396eda9c7424671632",
+      "reuse_from_source_id": "394667550617ed4edf5c0e833d8e70d764d867daad5ee0049304a84cca8e147e"
     },
     {
       "book": "Vegetable",
@@ -5072,7 +5103,9 @@
         "original_sha256": "0fa32d137152aa0d16a794c5fff3d9c96a43f15ddb452fb900cb1bb5efc6c11e"
       },
       "image_sha256": "0fa32d137152aa0d16a794c5fff3d9c96a43f15ddb452fb900cb1bb5efc6c11e",
-      "source_id": "89163ef0c7ef32c3c754b14f4234bc3da5142dd4fdaf89e3dc99ddeda9ddb2be"
+      "source_id": "89163ef0c7ef32c3c754b14f4234bc3da5142dd4fdaf89e3dc99ddeda9ddb2be",
+      "reuse_from_source_id": "3ee97faa523d5f7ef0bec07c41242a59117dbeab6528709d139c68df67bed922",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Vegetable",
@@ -5135,7 +5168,8 @@
         "original_sha256": "f7183e75f8789db89913bcd304bd5de87c8d16b43812e20a7fe1c322673c58cb"
       },
       "image_sha256": "f7183e75f8789db89913bcd304bd5de87c8d16b43812e20a7fe1c322673c58cb",
-      "source_id": "5d01953a1902cd83c21b3bc90f6f4a170c27149bdd17039c53e6e6d329ff93c3"
+      "source_id": "5d01953a1902cd83c21b3bc90f6f4a170c27149bdd17039c53e6e6d329ff93c3",
+      "reuse_from_source_id": "bce0e8f5e15da7ecd567a5c6b09388c66a5c203fc36e859edd6d2711b4eacfe9"
     },
     {
       "book": "Fruit",
@@ -5177,7 +5211,8 @@
         "original_sha256": "c36880e6d06974ab0764a2f842346131fad9b28b7a697a6408d0662904a7a0a6"
       },
       "image_sha256": "c36880e6d06974ab0764a2f842346131fad9b28b7a697a6408d0662904a7a0a6",
-      "source_id": "c651c929391aeed48d98525f1308c9876ddb22fe4523433a0c1d8354ec472a2d"
+      "source_id": "c651c929391aeed48d98525f1308c9876ddb22fe4523433a0c1d8354ec472a2d",
+      "reuse_from_source_id": "2656dbaa50444be7d9939b19a141a546b8860de58ffc0cd944d0a144011c134a"
     },
     {
       "book": "Vegetable",
@@ -5219,7 +5254,8 @@
         "original_sha256": "4ff7c228e22161c6ba645747bb509026dd736777ee8f44851c7e83a081f871b0"
       },
       "image_sha256": "4ff7c228e22161c6ba645747bb509026dd736777ee8f44851c7e83a081f871b0",
-      "source_id": "8192c7942abb0111220f2c6c40acb92025fbc16b0b46452bddaa71315cae51f2"
+      "source_id": "8192c7942abb0111220f2c6c40acb92025fbc16b0b46452bddaa71315cae51f2",
+      "reuse_from_source_id": "6d342c8b2e6243776cfaccdc337622951d531dd8dab8f35acef3865be6311e53"
     },
     {
       "book": "Fruit",
@@ -5240,7 +5276,8 @@
         "original_sha256": "f3210efddd65b6fb0f56858a73936bc1820bf47364ef2dde95e994ea6c63be54"
       },
       "image_sha256": "f3210efddd65b6fb0f56858a73936bc1820bf47364ef2dde95e994ea6c63be54",
-      "source_id": "a7e4c8dac0f3ade29c9531e9e06f51f02a80506940a522186bf39e48be17902f"
+      "source_id": "a7e4c8dac0f3ade29c9531e9e06f51f02a80506940a522186bf39e48be17902f",
+      "reuse_from_source_id": "dde0ee3863c016a754cc020c325670425fecee0782ae34af5dd5723fa5701ce6"
     },
     {
       "book": "Fruit",
@@ -5282,7 +5319,9 @@
         "original_sha256": "e64c8bba5e257999e5f3120ea6088e49c4ed88584d9dd3dee8fc324e78aec431"
       },
       "image_sha256": "e64c8bba5e257999e5f3120ea6088e49c4ed88584d9dd3dee8fc324e78aec431",
-      "source_id": "8c2dfe1aa335f136fbe8a9c3145a3823a1d02988c2f629dc99eaf70442d17e45"
+      "source_id": "8c2dfe1aa335f136fbe8a9c3145a3823a1d02988c2f629dc99eaf70442d17e45",
+      "reuse_from_source_id": "e42e46806ba1b7753137e3e9ea065cbb5f274f6a86935aa9ff5d5ae0b68a0384",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Vegetable",
@@ -5324,7 +5363,8 @@
         "original_sha256": "e179834156117ccdddafd34ef776bf4add067e068c7d77bea5642773cd87bdeb"
       },
       "image_sha256": "e179834156117ccdddafd34ef776bf4add067e068c7d77bea5642773cd87bdeb",
-      "source_id": "76d5d67cb80ddd19b839e950e55c73ea5461c64927e9247296c6e2520d282e56"
+      "source_id": "76d5d67cb80ddd19b839e950e55c73ea5461c64927e9247296c6e2520d282e56",
+      "reuse_from_source_id": "770dd6d9e210b73fe9d5d3c565ef120cd14fa9bc6c19ce6b05f4ad48e2f792a5"
     },
     {
       "book": "Fruit",
@@ -5366,7 +5406,8 @@
         "original_sha256": "e8d910a913e966c78675173f0d702420698ae56e515c5353e48e3481e4a9b4ce"
       },
       "image_sha256": "e8d910a913e966c78675173f0d702420698ae56e515c5353e48e3481e4a9b4ce",
-      "source_id": "bfdacc2fd0c41bdb49bc7ab7de89b6067d44b96f52cc79753d959cefb0549a2d"
+      "source_id": "bfdacc2fd0c41bdb49bc7ab7de89b6067d44b96f52cc79753d959cefb0549a2d",
+      "reuse_from_source_id": "c5153b8f43ed574e09eb25e6e855c13d540c29098032c5b047a9295f8a177b65"
     },
     {
       "book": "Fruit",
@@ -5660,7 +5701,9 @@
         "original_sha256": "26b3bf83813d0717eb27b3f23948208a25795a0cef583bfe84dcac30592631d8"
       },
       "image_sha256": "26b3bf83813d0717eb27b3f23948208a25795a0cef583bfe84dcac30592631d8",
-      "source_id": "102fd4a77e308170957515aed888e1d12b22d655816025e3e61768a116966550"
+      "source_id": "102fd4a77e308170957515aed888e1d12b22d655816025e3e61768a116966550",
+      "reuse_from_source_id": "b9c2e0d534500dc87b5164decaadf17cd1e5f407d1cdbb1098600a0d2a49c393",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Fruit",
@@ -5681,7 +5724,9 @@
         "original_sha256": "26b3bf83813d0717eb27b3f23948208a25795a0cef583bfe84dcac30592631d8"
       },
       "image_sha256": "26b3bf83813d0717eb27b3f23948208a25795a0cef583bfe84dcac30592631d8",
-      "source_id": "1f12372de0d4a07dd7d9cf55c18733bc7f42cc552a0891c0ab1395734264808a"
+      "source_id": "1f12372de0d4a07dd7d9cf55c18733bc7f42cc552a0891c0ab1395734264808a",
+      "reuse_from_source_id": "b9c2e0d534500dc87b5164decaadf17cd1e5f407d1cdbb1098600a0d2a49c393",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Vegetable",
@@ -5702,7 +5747,8 @@
         "original_sha256": "5b4313352bc487bc63e4cd109624dc6449be8ae8cc63882eadd07362a8e9049d"
       },
       "image_sha256": "5b4313352bc487bc63e4cd109624dc6449be8ae8cc63882eadd07362a8e9049d",
-      "source_id": "950f0bf9c445b63bbd56e694c4693666a080cccec39a03e1a3c938ac01fa8845"
+      "source_id": "950f0bf9c445b63bbd56e694c4693666a080cccec39a03e1a3c938ac01fa8845",
+      "reuse_from_source_id": "5a62dbb7e2aeb50718ed6aab354c28b0d01eb595b428d711b5189465accee0ae"
     },
     {
       "book": "Vegetable",
@@ -5828,7 +5874,8 @@
         "original_sha256": "008abcfb300080899a36c4dcf527612785140af41cbf88d1a8eae0a000bb44b3"
       },
       "image_sha256": "008abcfb300080899a36c4dcf527612785140af41cbf88d1a8eae0a000bb44b3",
-      "source_id": "f6ee168aa7eec92c43bdae912b9b3048810415ae1a0e54556020d4d1c7c7e355"
+      "source_id": "f6ee168aa7eec92c43bdae912b9b3048810415ae1a0e54556020d4d1c7c7e355",
+      "reuse_from_source_id": "9346dac97f7776ad903d431774c21d0393a37be791bc42619c8ba6fbbfbd3f17"
     },
     {
       "book": "Fruit",
@@ -5849,7 +5896,8 @@
         "original_sha256": "008abcfb300080899a36c4dcf527612785140af41cbf88d1a8eae0a000bb44b3"
       },
       "image_sha256": "008abcfb300080899a36c4dcf527612785140af41cbf88d1a8eae0a000bb44b3",
-      "source_id": "b30aae9ca78bf69c36e5b4ec2e63c42a69096eb905311532560f02a7b5d93ba0"
+      "source_id": "b30aae9ca78bf69c36e5b4ec2e63c42a69096eb905311532560f02a7b5d93ba0",
+      "reuse_from_source_id": "9346dac97f7776ad903d431774c21d0393a37be791bc42619c8ba6fbbfbd3f17"
     },
     {
       "book": "Fruit",
@@ -5870,7 +5918,8 @@
         "original_sha256": "008abcfb300080899a36c4dcf527612785140af41cbf88d1a8eae0a000bb44b3"
       },
       "image_sha256": "008abcfb300080899a36c4dcf527612785140af41cbf88d1a8eae0a000bb44b3",
-      "source_id": "a195ece293a560b69c2d25ff867f0dfaf3af30977dd936c34b91d3f0df52fd32"
+      "source_id": "a195ece293a560b69c2d25ff867f0dfaf3af30977dd936c34b91d3f0df52fd32",
+      "reuse_from_source_id": "9346dac97f7776ad903d431774c21d0393a37be791bc42619c8ba6fbbfbd3f17"
     },
     {
       "book": "Fruit",
@@ -5933,7 +5982,8 @@
         "original_sha256": "27704884e98f747205c13343159bd105647ab43fce0f0063826c48cba9235739"
       },
       "image_sha256": "27704884e98f747205c13343159bd105647ab43fce0f0063826c48cba9235739",
-      "source_id": "dd3645fd18054c75a78b169f9f0e577ed066445453b25571fc92cf1f3a02cb3c"
+      "source_id": "dd3645fd18054c75a78b169f9f0e577ed066445453b25571fc92cf1f3a02cb3c",
+      "reuse_from_source_id": "36ab073af410a7635372c80582523427e5983220a832c41385a007f8b4e5f43b"
     },
     {
       "book": "Vegetable",
@@ -5954,7 +6004,8 @@
         "original_sha256": "a12deb5cecfdd0440aa5965cd704b39c74e47cdbdfc24b43686a1a783a662773"
       },
       "image_sha256": "a12deb5cecfdd0440aa5965cd704b39c74e47cdbdfc24b43686a1a783a662773",
-      "source_id": "b8adaca1f2239ee2acfbdb22114e75d7b0f74373e47ba316ad2f35bbc99ac8e6"
+      "source_id": "b8adaca1f2239ee2acfbdb22114e75d7b0f74373e47ba316ad2f35bbc99ac8e6",
+      "reuse_from_source_id": "c2b00f4c2c89ab2fe8566422e3936bca851ef82bd0be7187ea413e503641a35e"
     },
     {
       "book": "Vegetable",
@@ -5975,7 +6026,8 @@
         "original_sha256": "a9dde9fb78bd66a19762459965a3278dfd29cc93c6386ac9b7aa85896886dabf"
       },
       "image_sha256": "a9dde9fb78bd66a19762459965a3278dfd29cc93c6386ac9b7aa85896886dabf",
-      "source_id": "e252d07adf46166921a5011a13a5c16b175a1999af12e05448ed2b34825e5b4b"
+      "source_id": "e252d07adf46166921a5011a13a5c16b175a1999af12e05448ed2b34825e5b4b",
+      "reuse_from_source_id": "49338c17b2cf1196d0a1077412fcb6ea33611805d4dc265907a06a6586c6a5c7"
     },
     {
       "book": "Vegetable",
@@ -6038,7 +6090,8 @@
         "original_sha256": "bb372216128746b8f9e814dd572e3d7d80b445e92b90cbc5a95ba3a06a542ac4"
       },
       "image_sha256": "bb372216128746b8f9e814dd572e3d7d80b445e92b90cbc5a95ba3a06a542ac4",
-      "source_id": "4d3da4c6dae2ae11d8ad956975ab6a6f519f1c9aea04c22ce00694039d1b74ff"
+      "source_id": "4d3da4c6dae2ae11d8ad956975ab6a6f519f1c9aea04c22ce00694039d1b74ff",
+      "reuse_from_source_id": "2080f53d3ff35e02757d6be72af1a50b203d0fc401ce8003dba249b0a466e373"
     },
     {
       "book": "Fruit",
@@ -6059,7 +6112,8 @@
         "original_sha256": "b397f9102bb26231acfd62b064be19ed2437e09b021c982272575d3eb180f534"
       },
       "image_sha256": "b397f9102bb26231acfd62b064be19ed2437e09b021c982272575d3eb180f534",
-      "source_id": "a5609a68871339a70827f5abe2cbe78bd847ffe072ce1f9c9a82b30fdfd20030"
+      "source_id": "a5609a68871339a70827f5abe2cbe78bd847ffe072ce1f9c9a82b30fdfd20030",
+      "reuse_from_source_id": "d602997ac785bdd5a07d6443cd9bdc1b0624ca1cbaa0c52224f7b41521842900"
     },
     {
       "book": "Fruit",
@@ -6206,7 +6260,9 @@
         "original_sha256": "0c04d992539ed16bcbcbaf6ca7b7fa9c09dc448d262b4104a05a69480e92b505"
       },
       "image_sha256": "0c04d992539ed16bcbcbaf6ca7b7fa9c09dc448d262b4104a05a69480e92b505",
-      "source_id": "a8ee6321181145e88926256fe44ff21be12080d60cd9fbf7b61b1e5a9abcbc9b"
+      "source_id": "a8ee6321181145e88926256fe44ff21be12080d60cd9fbf7b61b1e5a9abcbc9b",
+      "reuse_from_source_id": "9d04ab3fc060865002ce8f4bb5ccbf1d21d8ed738ab8c0920d57f272c335a01d",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Fruit",
@@ -6290,7 +6346,8 @@
         "original_sha256": "3c12aac969e18366111c0d71e74aef0c0daa988fe125dd4192003621e12bc724"
       },
       "image_sha256": "3c12aac969e18366111c0d71e74aef0c0daa988fe125dd4192003621e12bc724",
-      "source_id": "e922b5cae32004ae2c277109eef66ed870325837b4f427887caac76ce8bba965"
+      "source_id": "e922b5cae32004ae2c277109eef66ed870325837b4f427887caac76ce8bba965",
+      "reuse_from_source_id": "d9a67f725c1823729295b3220cc9e5eb6fc24fb38bec92c31a317f9037cbf3f6"
     },
     {
       "book": "Vegetable",
@@ -6311,7 +6368,9 @@
         "original_sha256": "f522489443c66fa399e2c6b60a491a28ded1105d3ded8f35f4204365c9c9c3ca"
       },
       "image_sha256": "f522489443c66fa399e2c6b60a491a28ded1105d3ded8f35f4204365c9c9c3ca",
-      "source_id": "0872a8786f0a0cfb266469a31979dfc7384b5a01952e190c6d9890aa53e742a0"
+      "source_id": "0872a8786f0a0cfb266469a31979dfc7384b5a01952e190c6d9890aa53e742a0",
+      "reuse_from_source_id": "94f87bb8c8d960ab0b40853787eba8e16d26e53ad4946452e2daf2811323ae5e",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Fruit",
@@ -6353,7 +6412,8 @@
         "original_sha256": "a4b846f361e2264a3b5cf9bad618232c653c311cf7a39203b7d81236b39016a3"
       },
       "image_sha256": "a4b846f361e2264a3b5cf9bad618232c653c311cf7a39203b7d81236b39016a3",
-      "source_id": "e77569ae087d3bb0bf99029d48e5a609058bfd4396da2b6535356580bbd8ff47"
+      "source_id": "e77569ae087d3bb0bf99029d48e5a609058bfd4396da2b6535356580bbd8ff47",
+      "reuse_from_source_id": "83714835d4b44179c2bc6e015c95cb244812bacbcabe286e47432dfbff429b22"
     },
     {
       "book": "Fruit",
@@ -6395,7 +6455,9 @@
         "original_sha256": "fe81d9fbf72c4b9b0b3f49c925aaec7cf5d32f88d8aa3342ed707ed13e41d042"
       },
       "image_sha256": "fe81d9fbf72c4b9b0b3f49c925aaec7cf5d32f88d8aa3342ed707ed13e41d042",
-      "source_id": "0d6a5895d0f5a114ec0f1141668c7efb5e68012352278da4496a34c14e012511"
+      "source_id": "0d6a5895d0f5a114ec0f1141668c7efb5e68012352278da4496a34c14e012511",
+      "reuse_from_source_id": "93db3afe2b8188d14656419d324d6452e7adcfdc956470900a5bad125671dc1b",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Fruit",
@@ -6601,7 +6663,9 @@
         "original_sha256": "3f89f7e555121723e05bb68a08b1aa6eed73d5f47ed8fe0142a8098b2473dd0a"
       },
       "image_sha256": "3f89f7e555121723e05bb68a08b1aa6eed73d5f47ed8fe0142a8098b2473dd0a",
-      "source_id": "3f8a6a225ea3a7cfac2d83ad52359802ca0e78270dd256a378ded476b32f745a"
+      "source_id": "3f8a6a225ea3a7cfac2d83ad52359802ca0e78270dd256a378ded476b32f745a",
+      "reuse_from_source_id": "d41e45e50eb47e9d8ff4e5d113e645e43460579776493c22ff552dc4726cd089",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Fruit",
@@ -6622,7 +6686,8 @@
         "original_sha256": "3f89f7e555121723e05bb68a08b1aa6eed73d5f47ed8fe0142a8098b2473dd0a"
       },
       "image_sha256": "3f89f7e555121723e05bb68a08b1aa6eed73d5f47ed8fe0142a8098b2473dd0a",
-      "source_id": "9f1b0837bb6b5f14b909bbfada9f14f35a5715a95318c7fb504ebd808084effa"
+      "source_id": "9f1b0837bb6b5f14b909bbfada9f14f35a5715a95318c7fb504ebd808084effa",
+      "reuse_from_source_id": "d41e45e50eb47e9d8ff4e5d113e645e43460579776493c22ff552dc4726cd089"
     },
     {
       "book": "Fruit",
@@ -6664,7 +6729,8 @@
         "original_sha256": "da2c4ed7f65c0e70368f7ebf66e9673ed4e5c0a8d1f049260d5b4dc65a0286c4"
       },
       "image_sha256": "da2c4ed7f65c0e70368f7ebf66e9673ed4e5c0a8d1f049260d5b4dc65a0286c4",
-      "source_id": "3cc2d2341bee33a0d4b3b25380d7f646273462956ec9a092f46f9b35108053d4"
+      "source_id": "3cc2d2341bee33a0d4b3b25380d7f646273462956ec9a092f46f9b35108053d4",
+      "reuse_from_source_id": "4465fbc0dbf53e421ce30751d08c7395c7f8619b9ae5c395773bada98c167862"
     },
     {
       "book": "Vegetable",
@@ -6706,7 +6772,9 @@
         "original_sha256": "cd2d1a16e470e98bcc4f08b1f4fe60eebe157615c0334895d7a27f1fcbdd79df"
       },
       "image_sha256": "cd2d1a16e470e98bcc4f08b1f4fe60eebe157615c0334895d7a27f1fcbdd79df",
-      "source_id": "1de14709691dc1f6cd1e6668a418dd41e59238d768334f1dbdf3e00e18116915"
+      "source_id": "1de14709691dc1f6cd1e6668a418dd41e59238d768334f1dbdf3e00e18116915",
+      "reuse_from_source_id": "e134feef5825dc8339e3f960014420953f6fa986e341808a03683d3aa0efba23",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Vegetable",
@@ -6727,7 +6795,8 @@
         "original_sha256": "cd2d1a16e470e98bcc4f08b1f4fe60eebe157615c0334895d7a27f1fcbdd79df"
       },
       "image_sha256": "cd2d1a16e470e98bcc4f08b1f4fe60eebe157615c0334895d7a27f1fcbdd79df",
-      "source_id": "7348c3f4ff527a0546cd1a4694447f4704d80ed2a8183d0cfdf17a1dfde0d855"
+      "source_id": "7348c3f4ff527a0546cd1a4694447f4704d80ed2a8183d0cfdf17a1dfde0d855",
+      "reuse_from_source_id": "e134feef5825dc8339e3f960014420953f6fa986e341808a03683d3aa0efba23"
     },
     {
       "book": "Vegetable",
@@ -6748,7 +6817,9 @@
         "original_sha256": "478aa73394e7ec5faf428f57e23a6e0e70fc84327049e95d3a5806fe5b255027"
       },
       "image_sha256": "478aa73394e7ec5faf428f57e23a6e0e70fc84327049e95d3a5806fe5b255027",
-      "source_id": "4d89074d0979f9ad07915cfcc8ce1940cc68af6892bd3554bd89d5ce7015039c"
+      "source_id": "4d89074d0979f9ad07915cfcc8ce1940cc68af6892bd3554bd89d5ce7015039c",
+      "reuse_from_source_id": "8eaaa1eec5a0490a2194370ad9f5cb3add9ad06f1de923f3db561a2ec8f3b6cb",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Vegetable",
@@ -6769,7 +6840,8 @@
         "original_sha256": "79365cdcb26211015bb60fdc26203a9b90f25adbc1f5da8a33a5d99481151f26"
       },
       "image_sha256": "79365cdcb26211015bb60fdc26203a9b90f25adbc1f5da8a33a5d99481151f26",
-      "source_id": "497b9f9495ed4acf70ea5805efec7b3c019992a4a25044942ca334db7cd8a5fc"
+      "source_id": "497b9f9495ed4acf70ea5805efec7b3c019992a4a25044942ca334db7cd8a5fc",
+      "reuse_from_source_id": "0d080e5551a308fb358238c6405e3adb7d302f3a7c0803f20635bbb760b98da7"
     },
     {
       "book": "Vegetable",
@@ -6790,7 +6862,9 @@
         "original_sha256": "4f2fd3db0df4a2337731b86ff9ef189e37be8030ff21a8d1ea9682557ab2ac0d"
       },
       "image_sha256": "4f2fd3db0df4a2337731b86ff9ef189e37be8030ff21a8d1ea9682557ab2ac0d",
-      "source_id": "840f1c595c528b0ce0eff8b136c7bd79c5b5faaa123a994e42f8609507b4144c"
+      "source_id": "840f1c595c528b0ce0eff8b136c7bd79c5b5faaa123a994e42f8609507b4144c",
+      "reuse_from_source_id": "d5d8c38f2cbe261757926dd788950dab55fcadb30b839cd0cfbfc23d426c9142",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Vegetable",
@@ -6811,7 +6885,8 @@
         "original_sha256": "2761caa57efde206d7bca4fb46eb4c5414b108689df72f8a69f435e785820f89"
       },
       "image_sha256": "2761caa57efde206d7bca4fb46eb4c5414b108689df72f8a69f435e785820f89",
-      "source_id": "7a00988c24a770fc14e24c3e315970ba203405e4b308c5c506cb8238eff1cd18"
+      "source_id": "7a00988c24a770fc14e24c3e315970ba203405e4b308c5c506cb8238eff1cd18",
+      "reuse_from_source_id": "4ea0666cd993ea69a0a473e0f1fdf6a1985cffc4b8312c5fa5f0a1583307e1a0"
     },
     {
       "book": "Fruit",
@@ -7021,7 +7096,9 @@
         "original_sha256": "280c49d7d8352de999f00ab848573d13f8979b0a2e91275d4e80a657bcd57e23"
       },
       "image_sha256": "280c49d7d8352de999f00ab848573d13f8979b0a2e91275d4e80a657bcd57e23",
-      "source_id": "fca7e9c86b762642a726ca9ac838b3d0a165954fbcf047591cd419f0b2caf0cd"
+      "source_id": "fca7e9c86b762642a726ca9ac838b3d0a165954fbcf047591cd419f0b2caf0cd",
+      "reuse_from_source_id": "fef9095dba339d95d1ab04cf36c362f52498ff1175611db850493d9e01f948cc",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Vegetable",
@@ -7042,7 +7119,9 @@
         "original_sha256": "ec789b3f4af1e898ac09756855edc995d4773e632d3096ec61ce391a3eb61d45"
       },
       "image_sha256": "ec789b3f4af1e898ac09756855edc995d4773e632d3096ec61ce391a3eb61d45",
-      "source_id": "0e1e23bde128de3cf7e0ff6cd14b9a345ca6b7aeae4afeb0c5a00c718276cda7"
+      "source_id": "0e1e23bde128de3cf7e0ff6cd14b9a345ca6b7aeae4afeb0c5a00c718276cda7",
+      "reuse_from_source_id": "64cd7dfbe20f187ad2a1b19a2a3c775cba529afe61998a354522036c4bef46a0",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Vegetable",
@@ -7105,7 +7184,8 @@
         "original_sha256": "9a959b9b98947aabf7e178dbafe8480b96d734df8d336eb9c95c4947f6c18be6"
       },
       "image_sha256": "9a959b9b98947aabf7e178dbafe8480b96d734df8d336eb9c95c4947f6c18be6",
-      "source_id": "e7415528e4bb4eba156bc4e8dc17bf178a61ef946b9018887acc84a57a33b9bf"
+      "source_id": "e7415528e4bb4eba156bc4e8dc17bf178a61ef946b9018887acc84a57a33b9bf",
+      "reuse_from_source_id": "9a2f20feefdd0c7ef86513fd41dc2b78844b48f370199e9cbb9ce254682fb94f"
     },
     {
       "book": "Vegetable",
@@ -7147,7 +7227,8 @@
         "original_sha256": "209b7c14b909c9ede2c34c69adc921c93cc739f49d7f863a61fc4d40b7e90801"
       },
       "image_sha256": "209b7c14b909c9ede2c34c69adc921c93cc739f49d7f863a61fc4d40b7e90801",
-      "source_id": "e1153f6dc01c978fa2462a33b426da6fd426fa58e91aa0db9f3df40961500265"
+      "source_id": "e1153f6dc01c978fa2462a33b426da6fd426fa58e91aa0db9f3df40961500265",
+      "reuse_from_source_id": "4516e43c3ebae141d602d639b3d352828fd735f3a7839a9d76b9d5514529141f"
     },
     {
       "book": "Vegetable",
@@ -7189,7 +7270,9 @@
         "original_sha256": "4141b3eaafb25b80e6411bf534dd18bc59f99e799d3ca0d5bdac5597eee63a58"
       },
       "image_sha256": "4141b3eaafb25b80e6411bf534dd18bc59f99e799d3ca0d5bdac5597eee63a58",
-      "source_id": "2c4244ccb935fa994ff658737a7814ae28c4754af762bdae0b6d2e524629e996"
+      "source_id": "2c4244ccb935fa994ff658737a7814ae28c4754af762bdae0b6d2e524629e996",
+      "reuse_from_source_id": "4aaeade6ec18c9da6e10254e60652e8876e2ef6876a4a6e1125e8771b77fab97",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Vegetable",
@@ -7210,7 +7293,9 @@
         "original_sha256": "c967c2fe730c43722ac085e4c160a088865e79acdd6cd5212588c3bcc5a8f010"
       },
       "image_sha256": "c967c2fe730c43722ac085e4c160a088865e79acdd6cd5212588c3bcc5a8f010",
-      "source_id": "749c27eb09ca02bb094a9775a4b04e1904852ec42ec03be7f8d543d801dff67e"
+      "source_id": "749c27eb09ca02bb094a9775a4b04e1904852ec42ec03be7f8d543d801dff67e",
+      "reuse_from_source_id": "5c4829d0bb67645c86eb6e26423fbc5bc890958e188c3269759fd20be593c9e7",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Vegetable",
@@ -7273,7 +7358,8 @@
         "original_sha256": "0014fde5353a81acea48fb74299e251a8807c8500276e1fcb1d081f956b601da"
       },
       "image_sha256": "0014fde5353a81acea48fb74299e251a8807c8500276e1fcb1d081f956b601da",
-      "source_id": "8c6541aa18a66b887accc9891379db79be3a72911bcc27160e4a0541066e3e3d"
+      "source_id": "8c6541aa18a66b887accc9891379db79be3a72911bcc27160e4a0541066e3e3d",
+      "reuse_from_source_id": "c5411e73c304bab2e87368c4e99ff620ae7935e2defe99b09883e6df8406332e"
     },
     {
       "book": "Vegetable",
@@ -7399,7 +7485,8 @@
         "original_sha256": "ff67d8fcfa23365b46016a1d0f854ba9ea7fcd7c5b2cbc8db7da4b717906fec1"
       },
       "image_sha256": "ff67d8fcfa23365b46016a1d0f854ba9ea7fcd7c5b2cbc8db7da4b717906fec1",
-      "source_id": "ec3fc9e46ed357d1b8a78f771f18a53277ef022ca9f73224ed37109343dc1a0a"
+      "source_id": "ec3fc9e46ed357d1b8a78f771f18a53277ef022ca9f73224ed37109343dc1a0a",
+      "reuse_from_source_id": "1cb1db65761f0aad58e29adc9960bfadadeebed25555b680cb7e647e4bfd46c9"
     },
     {
       "book": "Vegetable",
@@ -7462,7 +7549,8 @@
         "original_sha256": "1ceee1ae5a8ba3629ee1cda7253ad0176ed798dd1dffbc6ea111d06db206e2b3"
       },
       "image_sha256": "1ceee1ae5a8ba3629ee1cda7253ad0176ed798dd1dffbc6ea111d06db206e2b3",
-      "source_id": "811c28b9451b55f047a421cc17fa461e129f46318377b242b000110d148d5fac"
+      "source_id": "811c28b9451b55f047a421cc17fa461e129f46318377b242b000110d148d5fac",
+      "reuse_from_source_id": "fa99f7d31d1f9e5f251c432e6d97420b0911f9acd759698678f2940191bf5c26"
     },
     {
       "book": "Vegetable",
@@ -7504,7 +7592,8 @@
         "original_sha256": "03b3297e24e1d1b77fb89210058351dfa28507c3581dad9d20068bc991972706"
       },
       "image_sha256": "03b3297e24e1d1b77fb89210058351dfa28507c3581dad9d20068bc991972706",
-      "source_id": "d037ab1f1b16139a61b333dd26e1b0fe6d0cdb8bac53050a9a0621d62777169a"
+      "source_id": "d037ab1f1b16139a61b333dd26e1b0fe6d0cdb8bac53050a9a0621d62777169a",
+      "reuse_from_source_id": "03bf8098f422c68e5ee0bc2885889e23f3d943533f252308d152511805f31363"
     },
     {
       "book": "Vegetable",
@@ -7546,7 +7635,8 @@
         "original_sha256": "bf86a35f78f9c1785f09b3d15d9fec9c9a9f6b47bbad9783afcce53bbcb9f854"
       },
       "image_sha256": "bf86a35f78f9c1785f09b3d15d9fec9c9a9f6b47bbad9783afcce53bbcb9f854",
-      "source_id": "63e18643c80ae4b676c69be2bf803d9d132041c942189806eb668d2ba8be4d48"
+      "source_id": "63e18643c80ae4b676c69be2bf803d9d132041c942189806eb668d2ba8be4d48",
+      "reuse_from_source_id": "1f42db9128c13d460cc84d83908192e5c74dd68905f60bf5c8fa9647ff523a74"
     },
     {
       "book": "Vegetable",
@@ -7609,7 +7699,8 @@
         "original_sha256": "b2406e0a335238ab64798b036f77bf56184c9135c6f4b40bef80de65ee001e16"
       },
       "image_sha256": "b2406e0a335238ab64798b036f77bf56184c9135c6f4b40bef80de65ee001e16",
-      "source_id": "87d07f8030c638a19c75dab1e29ad5491d652e2c4ac10884a7a62f214d513dd9"
+      "source_id": "87d07f8030c638a19c75dab1e29ad5491d652e2c4ac10884a7a62f214d513dd9",
+      "reuse_from_source_id": "4f77e0c856009ab7f48a3b84545d3a424c4110657d614c84f9f36969ce152777"
     },
     {
       "book": "Vegetable",
@@ -7630,7 +7721,9 @@
         "original_sha256": "bb7201cf81ff9ca17c4f281234c3f7237dc851378a03dde6e74000f92f687b99"
       },
       "image_sha256": "bb7201cf81ff9ca17c4f281234c3f7237dc851378a03dde6e74000f92f687b99",
-      "source_id": "970c1952ad6648e2d7c263a1f2044967092d86018dbbb719c12134614c943cc9"
+      "source_id": "970c1952ad6648e2d7c263a1f2044967092d86018dbbb719c12134614c943cc9",
+      "reuse_from_source_id": "e0eb4c0cbceace1b9d322ffcf2be1833878ee4c4dc1ae53385ecd5bce0be59cc",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Vegetable",
@@ -7693,7 +7786,9 @@
         "original_sha256": "a7c91e28d20976c442b370a1a92fc5dc6baf9333c1c48071c4227706fc8492ff"
       },
       "image_sha256": "a7c91e28d20976c442b370a1a92fc5dc6baf9333c1c48071c4227706fc8492ff",
-      "source_id": "7afbae4cc1575a0d791bff2221b3b8d57545ef8c2c95dd2271b42bcf24eb015b"
+      "source_id": "7afbae4cc1575a0d791bff2221b3b8d57545ef8c2c95dd2271b42bcf24eb015b",
+      "reuse_from_source_id": "f9322db6e1a0ca1fd9e841d7a308bcdfc0d2ab604db0d85cb8ee8c284906d3ca",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Vegetable",
@@ -7735,7 +7830,9 @@
         "original_sha256": "6fb6c6671d016b766db9824491238e5fd9b3c4727321de403f68227e744b6413"
       },
       "image_sha256": "6fb6c6671d016b766db9824491238e5fd9b3c4727321de403f68227e744b6413",
-      "source_id": "c1076b185e46bca412c21ff9e000d418da81f7c4f6d165037a0b85c21b560a8f"
+      "source_id": "c1076b185e46bca412c21ff9e000d418da81f7c4f6d165037a0b85c21b560a8f",
+      "reuse_from_source_id": "cdd6f554db5d0a4868640fa2d8cc618965876cc01bd2998aba3a6edb9ed983e6",
+      "reuse_name_variant_approved": true
     },
     {
       "book": "Vegetable",
@@ -7819,7 +7916,8 @@
         "original_sha256": "e10c864480e209be7288ef5b7f5d63fbf956f13e1b5a8b356b2b90e2fb4ca574"
       },
       "image_sha256": "e10c864480e209be7288ef5b7f5d63fbf956f13e1b5a8b356b2b90e2fb4ca574",
-      "source_id": "f1b795b9d02a6ab3614a561ec66f1ee6b64f9c9233e92780a62ba50ad696bfd3"
+      "source_id": "f1b795b9d02a6ab3614a561ec66f1ee6b64f9c9233e92780a62ba50ad696bfd3",
+      "reuse_from_source_id": "686a1db41e14200ae060c7f7fd4a0c25fe09b2a9c2e3368b7b8b24a95e1c2f30"
     },
     {
       "book": "Vegetable",
@@ -7861,7 +7959,8 @@
         "original_sha256": "5a1fc412fea58b7aba0af82764e564e4f4ee86819420fbe4809a6fb5ffca6173"
       },
       "image_sha256": "5a1fc412fea58b7aba0af82764e564e4f4ee86819420fbe4809a6fb5ffca6173",
-      "source_id": "595634020d8384e65aa70b1a9c404a2426ee6646db72e6f9f6846d9b16aeda6f"
+      "source_id": "595634020d8384e65aa70b1a9c404a2426ee6646db72e6f9f6846d9b16aeda6f",
+      "reuse_from_source_id": "c5cbb1dd75a1094d2123327990fb2aa81ae9c436e36827c2476a9b26462c0119"
     },
     {
       "book": "Vegetable",
@@ -9188,7 +9287,8 @@
         "original_sha256": "6e72feef4cc8d6f65e2b493baf8dbb5ab17acad122cda47de45d3fc473e66ddb"
       },
       "image_sha256": "6e72feef4cc8d6f65e2b493baf8dbb5ab17acad122cda47de45d3fc473e66ddb",
-      "source_id": "f7d26caca46c33ead47d62853c160625d6a1534a07072c4b13904c311daabab9"
+      "source_id": "f7d26caca46c33ead47d62853c160625d6a1534a07072c4b13904c311daabab9",
+      "reuse_from_source_id": "394667550617ed4edf5c0e833d8e70d764d867daad5ee0049304a84cca8e147e"
     },
     {
       "book": "Fruit",
@@ -9838,23 +9938,41 @@
         "original_sha256": "0de12b23419c3941e0a2001078ff001e3227eef1a7aae972ef9859ebcd0e6218"
       },
       "image_sha256": "0de12b23419c3941e0a2001078ff001e3227eef1a7aae972ef9859ebcd0e6218",
-      "source_id": "5b0c761b4e0db843476fce9cc87e4a8114b9af99d3e2eda6bf3c1e56b6b2be8f"
+      "source_id": "5b0c761b4e0db843476fce9cc87e4a8114b9af99d3e2eda6bf3c1e56b6b2be8f",
+      "reuse_from_source_id": "188349fae8e12c851d5bad12a6e7b36b06f5a759da485a1363a0017d8f7c617a"
     },
     {
+      "source_id": "8cfcd80566d157d9937240ffa2f105ea62af6e9f9617209f228fc6abd8a5dfdf",
       "book": "Vegetable",
       "section": "Cucumbers",
-      "image": "data/images/Vegetable/0424_4999.jpg",
+      "image": "data/images/approved/2fe3ea6a8c7f854645132a402eb80b9dae3eba3f96a774d6882531f4e17b44d5.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "4999",
       "reviewed_product": "Cucumber Mini",
-      "visual_approval_status": "NOT_APPROVED",
-      "photographic_origin": "NOT_VERIFIED",
-      "rights_verification_status": "NOT_VERIFIED",
-      "provenance": {},
-      "legacy_entry_idx": "424",
-      "migration_note": "Existing visual verdict preserved; original source/rights not verified.",
-      "image_sha256": "3a93d3fd8d8ef6773f2ab1086e3917bee5cf88cd12304be5ea488d4db94107c2",
-      "source_id": "8cfcd80566d157d9937240ffa2f105ea62af6e9f9617209f228fc6abd8a5dfdf"
+      "working_source_ids": [
+        "8cfcd80566d157d9937240ffa2f105ea62af6e9f9617209f228fc6abd8a5dfdf"
+      ],
+      "working_decision_id": "",
+      "image_sha256": "2fe3ea6a8c7f854645132a402eb80b9dae3eba3f96a774d6882531f4e17b44d5",
+      "photographic_origin": "VERIFIED_PHOTO",
+      "visual_approval_status": "APPROVED",
+      "rights_verification_status": "VERIFIED",
+      "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+      "provenance": {
+        "creator": "Owner-provided; original creator not separately identified",
+        "license": "OWNER_CONFIRMED_PERMISSION",
+        "license_url": "",
+        "source_page_url": "",
+        "original_image_url": "",
+        "source_reference": "Owner-uploaded chat attachment Mini_cucumber.jpg (2026-11-17)",
+        "rights_status": "OWNER_CONFIRMED_PERMISSION",
+        "photographic_origin_evidence": "Owner supplied the photograph as Mini_cucumber.jpg for Cucumber Mini PLU 4999 (2026-11-17).",
+        "visual_approval_evidence": "Owner confirmed use of this photo for PLU 4999 Cucumber Mini (2026-11-17).",
+        "attribution": "Owner-provided image; owner-confirmed permission. No public reuse licence is asserted.",
+        "changes": "Original upload retained unchanged; white-padded to 500 × 500 for display.",
+        "rights_evidence": "Owner confirmed: \"Yes—mine/authorized; create the white-padded copy (Recommended)\" (2026-11-17). Owner-confirmed, not independently documented."
+      },
+      "reuse_from_source_id": ""
     },
     {
       "book": "Vegetable",
@@ -9971,7 +10089,8 @@
         "original_sha256": "b4ddc81d124edcfdf2c3c585e8d96aa390ce652156cf70b5599efb966b5ea6fe"
       },
       "image_sha256": "b4ddc81d124edcfdf2c3c585e8d96aa390ce652156cf70b5599efb966b5ea6fe",
-      "source_id": "28e4e2ce66461b02134ee6d4f6f25aca584df5dc03c3dfe572df7b6b7179241e"
+      "source_id": "28e4e2ce66461b02134ee6d4f6f25aca584df5dc03c3dfe572df7b6b7179241e",
+      "reuse_from_source_id": "bc7927c8518bcf8098e0e862ece0ec4755e46a2885e60fa42862da09e632f443"
     },
     {
       "book": "Fruit",
@@ -10098,7 +10217,8 @@
         "original_sha256": "d98c1fa5821b15d86f4862a7c0c0a3d44fe5800a6728ca28a5b83243bbee1f90"
       },
       "image_sha256": "d98c1fa5821b15d86f4862a7c0c0a3d44fe5800a6728ca28a5b83243bbee1f90",
-      "source_id": "435be7b9146ed30473a7436bf9b8db9c2e1779e01875715434dcee5c98345978"
+      "source_id": "435be7b9146ed30473a7436bf9b8db9c2e1779e01875715434dcee5c98345978",
+      "reuse_from_source_id": "5bcc5b13c1fe769cc6c08327c00b03d04d32b565810c07994a91279f5b31ca9a"
     },
     {
       "book": "Fruit",
@@ -11659,6 +11779,696 @@
         "rights_evidence": "Owner confirmed permission from Four Seasons Produce/Buck Brand to use matching supplier images in binders and the repository, as recorded in data/review-references/buck-brand.json. Owner-confirmed, not independently documented."
       },
       "reuse_from_source_id": ""
+    },
+    {
+      "book": "Fruit",
+      "section": "Melons",
+      "image": "data/images/Fruit/0123_4336.jpg",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "4336",
+      "reviewed_product": "Santa Claus Melon",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "123",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "image_sha256": "3efa032df1bf5984132a9b87e11d92bd6f778d7947597f534a3e7293f2082381",
+      "source_id": "f0bdfb32e781ad1cecaf89ceb1cfeed2c5a052324ab923b9b20a941d322a9a9f",
+      "reapproved_from_source_id": "df689eba8547b5efcb8e7a5ce0f8f6954b21fb38e3eddf417a27f9f6a407a8c2"
+    },
+    {
+      "book": "Fruit",
+      "section": "Citrus",
+      "image": "data/images/Fruit/0057_4450.jpg",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "4450",
+      "reviewed_product": "Clementine",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "57",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "image_sha256": "f375aba41cc15686dacaa8afe39f158285017000402035833b266f48621c79f5",
+      "source_id": "83a2de5980f4289fcbdfe4d226566d86506d50832bc6f90f8b20e8d886865237",
+      "reapproved_from_source_id": "27b62477ffba40b74b7a45d9d83db9a7f0bfb1d6a1e764d1a69b97398db348c8"
+    },
+    {
+      "book": "Vegetable",
+      "section": "Lettuce",
+      "image": "data/images/Vegetable/0299_4640.jpg",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "4640",
+      "reviewed_product": "Romaine Lettuce",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "299",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "image_sha256": "e179834156117ccdddafd34ef776bf4add067e068c7d77bea5642773cd87bdeb",
+      "source_id": "770dd6d9e210b73fe9d5d3c565ef120cd14fa9bc6c19ce6b05f4ad48e2f792a5",
+      "reapproved_from_source_id": "dedb5ccbdd83757a6881527d5311d31fd4127b0b8240842f73df00f6d4d42a9b"
+    },
+    {
+      "book": "Vegetable",
+      "section": "Asian Vegetables",
+      "image": "data/images/Vegetable/0471_4598.jpg",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "4598",
+      "reviewed_product": "Daikon Radish",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "471",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "image_sha256": "03ace4635d4bd294082a33552b9ac1f777fa2d2a4d373518e6626b20711dd9b9",
+      "source_id": "1f65455622a6184d58ffb38dbca7ee0d98d4ceced5d2dcd2137ff0f27b4b9420",
+      "reapproved_from_source_id": "b6686bc3587d19e48a34e0f83efe152775952a30e45bf52b4471bc1b96c5412d"
+    },
+    {
+      "book": "Fruit",
+      "section": "Citrus",
+      "image": "data/images/Fruit/0064_3129.jpg",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "3129",
+      "reviewed_product": "Pomelo",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "64",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "image_sha256": "1cee8e7b0ae8b4f8ebbd7e4c449e316748732cfea25783e5c73b60fc3c871b17",
+      "source_id": "6f4db4c750341628eb9b96fde6f691e92f88ef716981d1bc6c4c80f6956ed6fa",
+      "reapproved_from_source_id": "3b5933c522e6f3ac6b6e04ad7cab58de17e7de688988844d242d40b6a9568094"
+    },
+    {
+      "book": "Fruit",
+      "section": "Pears",
+      "image": "data/images/Fruit/0036_4425.jpg",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "4425",
+      "reviewed_product": "Shinko (Shingo) Asian Pear",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "36",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "image_sha256": "ece68ef75675cffc99f07bc90046c1e5f7abe5613d4cf2e0e098fea57c3d501a",
+      "source_id": "fe37e4f92291cb134b96dd8fd3b854fe65880324a751fa5b34c7063877457040",
+      "reapproved_from_source_id": "225ecb5b37338f8579afa8fd03b88f613497858fea0690a63b16064b19f912c1"
+    },
+    {
+      "book": "Fruit",
+      "section": "Organic Fruit",
+      "image": "data/images/Fruit/0226_94022.png",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "94022",
+      "reviewed_product": "Organic Green Seedless Grapes",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "226",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "legacy_organic_original": {
+        "source_document": "sources/visual/FRUIT_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+        "source_member": "word/media/image46.jpg",
+        "original_sha256": "17f4a6d23639d4cd091c7897bd3dc4ed003e0d79ee62c0ae6f65c1f53ce0960c"
+      },
+      "image_sha256": "17f4a6d23639d4cd091c7897bd3dc4ed003e0d79ee62c0ae6f65c1f53ce0960c",
+      "source_id": "2f12bde7cf6c61f489e67bdfa7602e505568ffb9476f9c79aeb23837af6bdfb0",
+      "reapproved_from_source_id": "c67112294b47e7ba516ee51f164b187c54ed18ab57e63cfbd0fab6ef2591445c"
+    },
+    {
+      "book": "Fruit",
+      "section": "Apples",
+      "image": "data/images/Fruit/0016_4059.jpg",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "4059",
+      "reviewed_product": "Red Prince Apples",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "16",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "image_sha256": "023f70802c48c44fac225fc6c75e157ff832688df98c0e3e144a0f65d08807ac",
+      "source_id": "2691db398e418f597b9a873710acdec756a2463e77a35fceb66e19a2647623ac",
+      "reapproved_from_source_id": "0842e09683c06be8eebe95d2759041fb646144ae4fe11a0680d5839409d28366"
+    },
+    {
+      "book": "Vegetable",
+      "section": "Leafy Greens",
+      "image": "data/images/Vegetable/0300_4884.jpg",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "4884",
+      "reviewed_product": "Arugula",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "300",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "image_sha256": "2438bf50c9230eda04ab146a518b54df08fa9ceed5666c3a1813fce1a3f658f1",
+      "source_id": "dc1f51ba8caacc887d6f6cc5ca1aa95c39336046cca282c6c7fdf72a8827a60b",
+      "reapproved_from_source_id": "291483fb168352826773f6b2036499640d063eadd7b96531ab5fb614bc3a1917"
+    },
+    {
+      "book": "Fruit",
+      "section": "Organic Fruit",
+      "image": "data/images/Fruit/0189_94153.png",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "94153",
+      "reviewed_product": "Organic McIntosh Apples",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "189",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "legacy_organic_original": {
+        "source_document": "sources/visual/FRUIT_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+        "source_member": "word/media/image11.jpg",
+        "original_sha256": "1aa22b908a301036f24c75d8a63df1064161fe519196f161c269050e0a9e0fa3"
+      },
+      "image_sha256": "1aa22b908a301036f24c75d8a63df1064161fe519196f161c269050e0a9e0fa3",
+      "source_id": "0d248ba7b6d294eb1ef4768a4c3196aa61ba90ab1147c903b1f0a224cda92657",
+      "reapproved_from_source_id": "da977ac59d0aeb7d5f14cbdb2b32d1245ba270f830b710c46e6f2cfab76856af"
+    },
+    {
+      "book": "Fruit",
+      "section": "Organic Fruit",
+      "image": "data/images/Fruit/0245_94329.png",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "94329",
+      "reviewed_product": "Organic Honeydew Melon",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "245",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "legacy_organic_original": {
+        "source_document": "sources/visual/FRUIT_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+        "source_member": "word/media/image64.jpg",
+        "original_sha256": "7a5ef8930b24f1234e454b1da5e33695798c8a6e4c39235f6ae95b1012ee67b8"
+      },
+      "image_sha256": "7a5ef8930b24f1234e454b1da5e33695798c8a6e4c39235f6ae95b1012ee67b8",
+      "source_id": "808eeb35497c5b06d07af85d6df1ed850e1ff91dbea222db272c9ba488afb4ab",
+      "reapproved_from_source_id": "2a9fad986444638acfdeeab2a7acecd34020d954d7004eb50f0dec3c1b653afd"
+    },
+    {
+      "book": "Fruit",
+      "section": "Organic Fruit",
+      "image": "data/images/Fruit/0252_94342.png",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "94342",
+      "reviewed_product": "Organic Watermelon",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "252",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "legacy_organic_original": {
+        "source_document": "sources/visual/FRUIT_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+        "source_member": "word/media/image70.jpg",
+        "original_sha256": "26b3bf83813d0717eb27b3f23948208a25795a0cef583bfe84dcac30592631d8"
+      },
+      "image_sha256": "26b3bf83813d0717eb27b3f23948208a25795a0cef583bfe84dcac30592631d8",
+      "source_id": "8764d9445ce973f9109c8cb02d54274ff2e6b98c13437608a51a8030bff787d5",
+      "reapproved_from_source_id": "0dd7caf0291627a98f4ecf509a590deeb9597e6405f92d75e2dc9815864e20d8",
+      "reuse_from_source_id": "b9c2e0d534500dc87b5164decaadf17cd1e5f407d1cdbb1098600a0d2a49c393"
+    },
+    {
+      "book": "Fruit",
+      "section": "Organic Fruit",
+      "image": "data/images/Fruit/0247_94031.png",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "94031",
+      "reviewed_product": "Organic Watermelon",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "247",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "legacy_organic_original": {
+        "source_document": "sources/visual/FRUIT_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+        "source_member": "word/media/image70.jpg",
+        "original_sha256": "26b3bf83813d0717eb27b3f23948208a25795a0cef583bfe84dcac30592631d8"
+      },
+      "image_sha256": "26b3bf83813d0717eb27b3f23948208a25795a0cef583bfe84dcac30592631d8",
+      "source_id": "f578175d2a42c92e42f55a9f0eff5620dba4cfd8d4d45aaa44636e415fa9149f",
+      "reapproved_from_source_id": "605efd9a7801449c517074defe0fa5941ad9f07259761fff5cd545db6b37e8d0",
+      "reuse_from_source_id": "b9c2e0d534500dc87b5164decaadf17cd1e5f407d1cdbb1098600a0d2a49c393"
+    },
+    {
+      "book": "Vegetable",
+      "section": "Organic Vegetables",
+      "image": "data/images/Vegetable/0536_94648.png",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "94648",
+      "reviewed_product": "Organic Cremini Mushrooms",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "536",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "legacy_organic_original": {
+        "source_document": "sources/visual/VEGETABLE_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+        "source_member": "word/media/image160.jpg",
+        "original_sha256": "5093678251a6d7861cdc19e2b7021e8c3bddef2bcb42828355e2355236c60fbd"
+      },
+      "image_sha256": "5093678251a6d7861cdc19e2b7021e8c3bddef2bcb42828355e2355236c60fbd",
+      "source_id": "cc3c4d0e37bde64efcb713174b4286fa8f3bedfcd56568e98cdc384e3b76a78b",
+      "reapproved_from_source_id": "b4f0e40b5e82ab5b60f48da300b0b15aee297404ad7dc2d8ea89292f4262c670"
+    },
+    {
+      "book": "Vegetable",
+      "section": "Organic Vegetables",
+      "image": "data/images/Vegetable/0547_94093.png",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "94093",
+      "reviewed_product": "Organic Yellow (Spanish) Onion",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "547",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "legacy_organic_original": {
+        "source_document": "sources/visual/VEGETABLE_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+        "source_member": "word/media/image66.jpg",
+        "original_sha256": "6feb1386ea480b5bee1b77ee21ddbcf05a000ed37edbd2c76e55e88f99316007"
+      },
+      "image_sha256": "6feb1386ea480b5bee1b77ee21ddbcf05a000ed37edbd2c76e55e88f99316007",
+      "source_id": "4fcf219af06c88ca404f2f139bac665f13fc16af8ef3d940d9d9ee6a120f6dad",
+      "reapproved_from_source_id": "11708d7532a1b588bd7ceed66d1504c9d9e0bcede00bc796db8ced3e28a5fe5a",
+      "reuse_from_source_id": "af5a56b9589179d0a595ab7e7fcf1cf48b25312be36c13fcb027f53b99a278a1"
+    },
+    {
+      "book": "Vegetable",
+      "section": "Organic Vegetables",
+      "image": "data/images/Vegetable/0589_94664.png",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "94664",
+      "reviewed_product": "Organic Red Cluster Tomatoes (On the Vine)",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "589",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "legacy_organic_original": {
+        "source_document": "sources/visual/VEGETABLE_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+        "source_member": "word/media/image95.jpg",
+        "original_sha256": "1e172562276bc3b1d77420ed87c2b0a116c395df926b5147f9377a5be5f49d7a"
+      },
+      "image_sha256": "1e172562276bc3b1d77420ed87c2b0a116c395df926b5147f9377a5be5f49d7a",
+      "source_id": "7334f2287fa84193819046a3799712cebcbd1d64915c6b8b39c35d60eb17a002",
+      "reapproved_from_source_id": "048912d775258ab20610c28791c4e24a2bb186c47e947ce2e10667d862f9e1e1"
+    },
+    {
+      "book": "Fruit",
+      "section": "Organic Fruit",
+      "image": "data/images/Fruit/0225_94023.png",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "94023",
+      "reviewed_product": "Organic Red Seedless Grapes",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "225",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "legacy_organic_original": {
+        "source_document": "sources/visual/FRUIT_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+        "source_member": "word/media/image47.jpg",
+        "original_sha256": "8a0a4aacaeb06bc5553efaf3a9d4844c64cabbe205552a2922ee035b7593859e"
+      },
+      "image_sha256": "8a0a4aacaeb06bc5553efaf3a9d4844c64cabbe205552a2922ee035b7593859e",
+      "source_id": "607d62236733c9417c43a6a4fa79ed5843f558565a57516d368cbee3829e48c0",
+      "reapproved_from_source_id": "0f6ffea493dd42c978df7ac8b0b3d5c77bdc74420f45f29fb9c7547b1ad34f17"
+    },
+    {
+      "book": "Fruit",
+      "section": "Melons",
+      "image": "data/images/Fruit/0100_4050.jpg",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "4050",
+      "reviewed_product": "Cantaloupe – Large",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "100",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "image_sha256": "07e16920067ba63a8a006c226fe882cf4c309cf8d217f74a59a700648b732788",
+      "source_id": "7753809b20e76b7ca128b95411d6dceb11960ed58ecd882f619351b2e5bceb24",
+      "reapproved_from_source_id": "06a53334ac822712cca0b9e4af0e37128735143ed7926e9ba2703aa4483cebb1"
+    },
+    {
+      "book": "Vegetable",
+      "section": "Herbs",
+      "image": "data/images/Vegetable/0316_4893.jpg",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "4893",
+      "reviewed_product": "Dill",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "316",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "image_sha256": "07835c43ceec7c62efaba60e393f73e2c3bcebf91dfc404dfe74203963671edb",
+      "source_id": "1a01a6174f26f5021d1d93a5d81d619c981f9bb783a04e3ad788e53457529f0d",
+      "reapproved_from_source_id": "cb6a3168db84316a66088ab1d3ebb25643e23c1e4e7e91e22dd9ce2aa29c6f6d"
+    },
+    {
+      "book": "Vegetable",
+      "section": "Herbs",
+      "image": "data/images/Vegetable/0325_4899.jpg",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "4899",
+      "reviewed_product": "Parsley",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "325",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "image_sha256": "3c12aac969e18366111c0d71e74aef0c0daa988fe125dd4192003621e12bc724",
+      "source_id": "d9a67f725c1823729295b3220cc9e5eb6fc24fb38bec92c31a317f9037cbf3f6",
+      "reapproved_from_source_id": "9d62fc39e1cfbb03b99e797a28363bd795db3f3340e4548363e98756c9d7053f"
+    },
+    {
+      "book": "Vegetable",
+      "section": "Herbs",
+      "image": "data/images/Vegetable/0326_4901.jpg",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "4901",
+      "reviewed_product": "Italian Parsley",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "326",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "image_sha256": "f522489443c66fa399e2c6b60a491a28ded1105d3ded8f35f4204365c9c9c3ca",
+      "source_id": "94f87bb8c8d960ab0b40853787eba8e16d26e53ad4946452e2daf2811323ae5e",
+      "reapproved_from_source_id": "c522d706e6019b03320a0e3dfc83a0ddcd7c227f1ed2c141fd1337a4a0b1f051"
+    },
+    {
+      "book": "Vegetable",
+      "section": "Peppers",
+      "image": "data/images/Vegetable/0408_4688.jpg",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "4688",
+      "reviewed_product": "Red Sweet Bell Pepper",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "408",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "image_sha256": "4f2fd3db0df4a2337731b86ff9ef189e37be8030ff21a8d1ea9682557ab2ac0d",
+      "source_id": "d5d8c38f2cbe261757926dd788950dab55fcadb30b839cd0cfbfc23d426c9142",
+      "reapproved_from_source_id": "67eb5992245e9367906267e65fb3caaf5de9bb8036210833236a98a745fcdf26"
+    },
+    {
+      "book": "Fruit",
+      "section": "Stone Fruit",
+      "image": "data/images/Fruit/0134_4436.jpg",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "4436",
+      "reviewed_product": "Italian Prune Plum",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "134",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "image_sha256": "84bbc9d21ed6e3c47c5b77479f3b77d48808bdf90da528420de1e2014eaf1b09",
+      "source_id": "df07cba84598645e44427aadde161e4b3b1a8252ff9dcc227aeced9bbfe58b28",
+      "reapproved_from_source_id": "c007883c370d9091a564d02403396505b38052114bb7c5944cf7a61da7748587"
+    },
+    {
+      "book": "Vegetable",
+      "section": "Potatoes",
+      "image": "data/images/Vegetable/0371_4727.jpg",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "4727",
+      "reviewed_product": "Yellow Potatoes",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "371",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "image_sha256": "209b7c14b909c9ede2c34c69adc921c93cc739f49d7f863a61fc4d40b7e90801",
+      "source_id": "4516e43c3ebae141d602d639b3d352828fd735f3a7839a9d76b9d5514529141f",
+      "reapproved_from_source_id": "ef9938b470d7274c2139116eb74dab10f2296da85a6b1d7de10a33d49478f224"
+    },
+    {
+      "book": "Fruit",
+      "section": "Organic Fruit",
+      "image": "data/images/Fruit/0221_94461.png",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "94461",
+      "reviewed_product": "Organic Shaddock (Pomelo)",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "221",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "legacy_organic_original": {
+        "source_document": "sources/visual/FRUIT_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+        "source_member": "word/media/image37.jpg",
+        "original_sha256": "1cee8e7b0ae8b4f8ebbd7e4c449e316748732cfea25783e5c73b60fc3c871b17"
+      },
+      "image_sha256": "1cee8e7b0ae8b4f8ebbd7e4c449e316748732cfea25783e5c73b60fc3c871b17",
+      "source_id": "70302e03e25f7912c941786ccd9d7f260f68dd1a7115af3a617aacada7d21c02",
+      "reapproved_from_source_id": "e7105783128c26e52ad5e13edabb2670f587faccbec4a0fb67d276a12f18c3aa"
+    },
+    {
+      "book": "Fruit",
+      "section": "Organic Fruit",
+      "image": "data/images/Fruit/0239_94317.png",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "94317",
+      "reviewed_product": "Organic Canary Melon",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "239",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "legacy_organic_original": {
+        "source_document": "sources/visual/FRUIT_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+        "source_member": "word/media/image61.jpg",
+        "original_sha256": "b8a7325834732bc07ace2b818a334b4cad3c41927bc0d1e67179b98bd9b74505"
+      },
+      "image_sha256": "b8a7325834732bc07ace2b818a334b4cad3c41927bc0d1e67179b98bd9b74505",
+      "source_id": "a65f0255d07506602931ccab85fd92c8b507536fe0d3db4bdb820f70c3091488",
+      "reapproved_from_source_id": "2d25bc28835f6861052e3380adcd961d004edeeaaff384ccad5ec2d1ef711829"
+    },
+    {
+      "book": "Fruit",
+      "section": "Organic Fruit",
+      "image": "data/images/Fruit/0241_94049.png",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "94049",
+      "reviewed_product": "Organic Cantaloupe – Small",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "241",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "legacy_organic_original": {
+        "source_document": "sources/visual/FRUIT_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+        "source_member": "word/media/image59.jpg",
+        "original_sha256": "07e16920067ba63a8a006c226fe882cf4c309cf8d217f74a59a700648b732788"
+      },
+      "image_sha256": "07e16920067ba63a8a006c226fe882cf4c309cf8d217f74a59a700648b732788",
+      "source_id": "b976d9a319269bcb613f4553dc49bff6f35890574b0a44c1752022aaef630884",
+      "reapproved_from_source_id": "bd0f0c69ab78a91ce0be0ba1ef7a98f6f0ebfe180ab08646ff47c1f40ffb2e4d"
+    },
+    {
+      "book": "Fruit",
+      "section": "Organic Fruit",
+      "image": "data/images/Fruit/0249_94321.png",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "94321",
+      "reviewed_product": "Organic Watermelon",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "249",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "legacy_organic_original": {
+        "source_document": "sources/visual/FRUIT_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+        "source_member": "word/media/image70.jpg",
+        "original_sha256": "26b3bf83813d0717eb27b3f23948208a25795a0cef583bfe84dcac30592631d8"
+      },
+      "image_sha256": "26b3bf83813d0717eb27b3f23948208a25795a0cef583bfe84dcac30592631d8",
+      "source_id": "0288a6e2ffb877ba3a8ec2e1b40b14f0c180c709f28e4b96d7a30cd36f419611",
+      "reapproved_from_source_id": "66ecdc5b2662d1525653415a48f4672e19fed1acb5425725d52eb4ce5debfdcf",
+      "reuse_from_source_id": "b9c2e0d534500dc87b5164decaadf17cd1e5f407d1cdbb1098600a0d2a49c393"
+    },
+    {
+      "book": "Vegetable",
+      "section": "Organic Vegetables",
+      "image": "data/images/Vegetable/0534_94657.png",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "94657",
+      "reviewed_product": "Organic Portobello Mushrooms",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "534",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "legacy_organic_original": {
+        "source_document": "sources/visual/VEGETABLE_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+        "source_member": "word/media/image159.jpg",
+        "original_sha256": "6640a043f98ac708d7662b66a87b614c152052da1ec40a475247d595bffd7183"
+      },
+      "image_sha256": "6640a043f98ac708d7662b66a87b614c152052da1ec40a475247d595bffd7183",
+      "source_id": "dea0a4a71f38a53c8a8b8e13a0c8827033f3e202796034e6efa64134f4c1315f",
+      "reapproved_from_source_id": "7222196c4dc7c31541d2e7657186ce82d53ec93fb435cde790200b5293849d95"
+    },
+    {
+      "book": "Fruit",
+      "section": "Organic Fruit",
+      "image": "data/images/Fruit/0282_94281.png",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "94281",
+      "reviewed_product": "Organic Pink Grapefruit",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "282",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "legacy_organic_original": {
+        "source_document": "sources/visual/FRUIT_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+        "source_member": "word/media/image36.jpg",
+        "original_sha256": "31c9d102d7f9775213b57d056588c1dcf4737055205c05dffc5eef2ed87931e7"
+      },
+      "image_sha256": "31c9d102d7f9775213b57d056588c1dcf4737055205c05dffc5eef2ed87931e7",
+      "source_id": "5906a249c29cb7ef9da62457ae53041d0cad20bfca1d896523019b8830303f50",
+      "reapproved_from_source_id": "2805c5fc22672cb920ba7a8ea08e704bc15b2fc25dd3ce43ba646613c0799872"
+    },
+    {
+      "book": "Fruit",
+      "section": "Organic Fruit",
+      "image": "data/images/Fruit/0283_94040.png",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "94040",
+      "reviewed_product": "Organic Black Plums",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "283",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "legacy_organic_original": {
+        "source_document": "sources/visual/FRUIT_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+        "source_member": "word/media/image77.jpg",
+        "original_sha256": "132fe3144435d9f57742440111612e2e1dad8b9a73c78f107ee1745c4b3f2b04"
+      },
+      "image_sha256": "132fe3144435d9f57742440111612e2e1dad8b9a73c78f107ee1745c4b3f2b04",
+      "source_id": "67cb70ea6007543d1930e574c1d31450b95212b5cd87358d702c81935efe0265",
+      "reapproved_from_source_id": "3d25b6817fb490f0fc366b05386714acd24a6169ff9d8e82212750e89388095c"
+    },
+    {
+      "book": "Vegetable",
+      "section": "Organic Vegetables",
+      "image": "data/images/Vegetable/0561_94823.png",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "94823",
+      "reviewed_product": "Organic White Potatoes",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "561",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "legacy_organic_original": {
+        "source_document": "sources/visual/VEGETABLE_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+        "source_member": "word/media/image57.jpg",
+        "original_sha256": "67db9b8fa02b291c214a53027738433fb5a9b2d3701aa615e2423aca5c0fc8e6"
+      },
+      "image_sha256": "67db9b8fa02b291c214a53027738433fb5a9b2d3701aa615e2423aca5c0fc8e6",
+      "source_id": "db4731facb0144e59ad36628438a235bc62dbfeebb8af180f5dccb73d3c51678",
+      "reapproved_from_source_id": "812bbb4f1965149c97183fed20168925d75b6bcfdcdd03ca12e28a2863906195",
+      "reuse_from_source_id": "c579b4efef1373780058d494c9941f7cd6ad8e5f49ef0a98681c8b5f876e3cd3"
+    },
+    {
+      "book": "Vegetable",
+      "section": "Organic Vegetables",
+      "image": "data/images/Vegetable/0577_94769.png",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "94769",
+      "reviewed_product": "Organic Kabocha Squash",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "577",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "legacy_organic_original": {
+        "source_document": "sources/visual/VEGETABLE_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+        "source_member": "word/media/image101.jpg",
+        "original_sha256": "e453ea1b734d0b66280afd352696a869c1f8d9367801a44295f1bdf7c0a3824f"
+      },
+      "image_sha256": "e453ea1b734d0b66280afd352696a869c1f8d9367801a44295f1bdf7c0a3824f",
+      "source_id": "5b7172292cd1114a3371007cf3b75a0410c73bb04f31183f3abb92cff8aae822",
+      "reapproved_from_source_id": "13b8831b65328f78bf8af5368c7d49907606fa383e645ae94801643dc9e79e02"
+    },
+    {
+      "book": "Vegetable",
+      "section": "Squash",
+      "image": "data/images/Vegetable/0456_4067.jpg",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "4067",
+      "reviewed_product": "Zucchini",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "456",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "image_sha256": "5a1fc412fea58b7aba0af82764e564e4f4ee86819420fbe4809a6fb5ffca6173",
+      "source_id": "c5cbb1dd75a1094d2123327990fb2aa81ae9c436e36827c2476a9b26462c0119",
+      "reapproved_from_source_id": "9e2c148d5563a26e81e03998a05c321acb08745023bc763d41c82dc316baf9e1"
+    },
+    {
+      "book": "Vegetable",
+      "section": "Onions",
+      "image": "data/images/Vegetable/0384_4093.jpg",
+      "image_mode": "PHOTO",
+      "reviewed_plu": "4093",
+      "reviewed_product": "Yellow (Spanish) Onion",
+      "visual_approval_status": "APPROVED",
+      "photographic_origin": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "provenance": {},
+      "legacy_entry_idx": "384",
+      "migration_note": "Owner re-approved the prior reviewed image for the merged identity; original source/rights not verified.",
+      "image_sha256": "6feb1386ea480b5bee1b77ee21ddbcf05a000ed37edbd2c76e55e88f99316007",
+      "source_id": "af5a56b9589179d0a595ab7e7fcf1cf48b25312be36c13fcb027f53b99a278a1",
+      "reapproved_from_source_id": "217496304da3acdf75bbae91f7f83e2948a869565f5920f5e1c3dd4bf868c240"
     }
   ]
 }

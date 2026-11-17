@@ -1,0 +1,40 @@
+{
+  "plu": "4450",
+  "product": "Clementine",
+  "width": 500,
+  "height": 500,
+  "sha256": "de102ffd831395fd40fb1b283008dec591fda7cb1ff794816610738c9f9eb589",
+  "approval_status": "CANDIDATE",
+  "image_approval_status": "APPROVED",
+  "approval_basis": "EXACT_WORKINGLIST_APPROVAL",
+  "recorded_visual_approval_status": "APPROVED",
+  "photographic_origin": "NOT_VERIFIED",
+  "visual_approval_status": "APPROVED",
+  "rights_verification_status": "NOT_VERIFIED",
+  "original_image_sha256": "f375aba41cc15686dacaa8afe39f158285017000402035833b266f48621c79f5",
+  "original_image_path": "data/images/Fruit/0057_4450.jpg",
+  "original_width": 200,
+  "original_height": 200,
+  "assigned_image_path": "data/images/Fruit/0057_4450.jpg",
+  "legacy_organic_original": null,
+  "working_source_id": "83a2de5980f4289fcbdfe4d226566d86506d50832bc6f90f8b20e8d886865237",
+  "working_source_ids": [
+    "27b62477ffba40b74b7a45d9d83db9a7f0bfb1d6a1e764d1a69b97398db348c8",
+    "14d6f9f4bd9755259b0e3e63641198aa276a202c2518b2ae5133deaa6cf0aac4"
+  ],
+  "production_status": "BLOCKED",
+  "production_blockers": [
+    "BELOW_500_PX",
+    "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED",
+    "IMAGE_RIGHTS_NOT_VERIFIED",
+    "SUPPORTED_IMAGE_LICENCE_REQUIRED",
+    "MISSING_PROVENANCE_CREATOR",
+    "MISSING_PROVENANCE_LICENSE_URL",
+    "MISSING_PROVENANCE_SOURCE_PAGE_URL",
+    "MISSING_PROVENANCE_ORIGINAL_IMAGE_URL",
+    "MISSING_PROVENANCE_ATTRIBUTION",
+    "MISSING_PROVENANCE_CHANGES",
+    "MISSING_PROVENANCE_RIGHTS_EVIDENCE"
+  ],
+  "transformation": "Aspect-ratio-preserving resize and centered solid white padding to 500x500 JPEG (quality 90, optimized, progressive)"
+}

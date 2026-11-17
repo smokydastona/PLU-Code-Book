@@ -190,7 +190,8 @@ def reconcile(root, output):
         permitted = len(conventional) == 1 and all(
             row["book"] == conventional[0]["book"] and
             assignments[row["source_id"]].get("reuse_from_source_id") == conventional[0]["source_id"] and
-            matching_product(row, conventional[0])
+            (matching_product(row, conventional[0]) or
+             assignments[row["source_id"]].get("reuse_name_variant_approved") is True)
             for row in group if row["organic"])
         if not permitted:
             for row in group:
@@ -278,6 +279,27 @@ def matching_product(organic_item, conventional_item):
     return bool(organic_key) and organic_key == placement_key(conventional_item["name"])
 
 
+MODIFIER_WORDS = {
+    "white", "green", "red", "yellow", "black", "purple", "brown", "pink", "large", "lrg", "mini",
+    "tree", "ripened", "bunch", "kg", "lb", "each", "sweet", "hot", "gold", "golden", "chinese",
+}
+
+
+def nearest_counterpart(row, section, conventional):
+    """Closest conventional entry in the section by shared name words; None if no word is shared."""
+    words = set(placement_key(row["name"])) - MODIFIER_WORDS
+    best, best_score = None, 0
+    for key, group in conventional.items():
+        if group[0]["section"] != section:
+            continue
+        other = set(key[1]) - MODIFIER_WORDS
+        shared = words & other
+        score = len(shared) / len(words | other) if shared else 0
+        if score > best_score:
+            best, best_score = key, score
+    return best
+
+
 def organic_display_section(row):
     if not re.search(r"\borganic\b", row["section"], re.I):
         return row["section"]
@@ -351,10 +373,17 @@ def booklet_order(rows, assignments):
             else:
                 section = organic_display_section(row)
                 sections.setdefault(section, None)
-                note = ("Matching descriptions span multiple sections" if len(matches) > 1 else
-                        "No clear conventional counterpart; review placement")
-                row.update(display_section=section, placement_status="PLACEMENT_REVIEW_REQUIRED",
-                           counterpart_source_ids="", placement_note=note)
+                nearest = nearest_counterpart(row, section, conventional)
+                if nearest:
+                    group = conventional[nearest]
+                    row.update(display_section=section, placement_status="OWNER_POLICY_NEAREST_COUNTERPART",
+                               counterpart_source_ids=";".join(other["source_id"] for other in group),
+                               placement_note="Owner policy: placed where a matching conventional entry would be")
+                    paired[nearest].append(row)
+                    continue
+                row.update(display_section=section, placement_status="OWNER_POLICY_SECTION_END",
+                           counterpart_source_ids="",
+                           placement_note="Owner policy: no similar conventional entry; placed at the end of its section")
                 unmatched[section].append(row)
         for section in sections:
             for key, group in conventional.items():

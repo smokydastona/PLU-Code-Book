@@ -6,7 +6,7 @@
   "package": {
     "zip_integrity": true,
     "original_parts": 104,
-    "built_parts": 689,
+    "built_parts": 654,
     "unchanged_parts": 79,
     "changed_parts": [
       "[Content_Types].xml",
@@ -36,7 +36,7 @@
       "xl/worksheets/sheet9.xml"
     ],
     "removed_parts": [],
-    "added_part_count": 585,
+    "added_part_count": 550,
     "original_media_parts": 37,
     "original_media_byte_identical": 37,
     "original_media_removed": [],
@@ -129,27 +129,25 @@
   },
   "images": {
     "records": 548,
-    "embedded": 548,
-    "missing_or_uncertain": 0,
+    "embedded": 513,
+    "missing_or_uncertain": 35,
     "status_counts": {
-      "LEGACY_PREAPPROVED_IMAGE": 495,
-      "SUPPLIED_AI_CROP_REVIEW": 33,
-      "APPROVED_WORKINGLIST_IMAGE": 18,
-      "SUPPLIED_IMAGE_REVIEW": 2
+      "LEGACY_PREAPPROVED_IMAGE": 494,
+      "APPROVED_ASSIGNMENT_INVALID": 35,
+      "APPROVED_WORKINGLIST_IMAGE": 19
     },
     "sources": {
       "Code Booklet": 334,
-      "AI Generated": 164,
+      "AI Generated": 131,
       "Produce Sheets": 2,
-      "": 17,
-      "Produce Guide": 28,
-      "Owner Supplied": 2,
+      "": 18,
+      "Produce Guide": 27,
       "https://www.fsproduce.com/wp-content/uploads/2015/05/BUCK-BRAND-SPECIALTY-CITRUS-INFOGRAPHIC-1.pdf": 1
     },
-    "organic_badge_embedded": 191,
+    "organic_badge_embedded": 173,
     "images_shared_by_multiple_plus": 70,
-    "embedded_below_200px": 187,
-    "smallest_edge": 109
+    "embedded_below_200px": 154,
+    "smallest_edge": 114
   },
   "oldtimers_produce": {
     "file": "OldTimers_Produce.pdf",
@@ -157,21 +155,28 @@
     "fruit_records": 272,
     "vegetable_records": 276,
     "asian_records": 15,
-    "pages": 11,
+    "pages": 10,
     "image_free": true,
     "minimum_font_points": 12,
     "groups_kept_on_one_page": true,
     "source": "sources/binders/OldTimers_Produce_codes.pdf",
     "source_sha256": "6846210817a7f7bffe84bb5f30db75ef1276b203fda53c0256cb77cf037e0672",
-    "sha256": "adaf3f696512592936faa984ea1bde4853a5b14e9bc651dfa8f34108c891e0d3"
+    "sha256": "d081f79552ef883326bd4de2c2d44e793d8a07478d054202324db04a22d7fdea"
   },
   "open_blockers": {
-    "APPROVED_IMAGE_REQUIRED": 35,
-    "CLASSIFICATION_REQUIRED": 5,
-    "PRODUCT_IMAGE_REVIEW_REQUIRED": 35,
-    "PROHIBITED_IMAGE_REUSE": 323,
-    "SECTION_REQUIRED": 5,
-    "WORKING_LIST_RECONCILIATION": 248,
-    "ORGANIC_PLACEMENT": 90
+    "BELOW_500_PX": 35,
+    "IMAGE_RIGHTS_NOT_VERIFIED": 35,
+    "MISSING_PROVENANCE_ATTRIBUTION": 35,
+    "MISSING_PROVENANCE_CHANGES": 35,
+    "MISSING_PROVENANCE_CREATOR": 35,
+    "MISSING_PROVENANCE_LICENSE_URL": 35,
+    "MISSING_PROVENANCE_ORIGINAL_IMAGE_URL": 35,
+    "MISSING_PROVENANCE_RIGHTS_EVIDENCE": 35,
+    "MISSING_PROVENANCE_SOURCE_PAGE_URL": 35,
+    "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED": 35,
+    "PROHIBITED_IMAGE_REUSE": 223,
+    "SUPPORTED_IMAGE_LICENCE_REQUIRED": 35,
+    "WORKING_LIST_RECONCILIATION": 0,
+    "ORGANIC_PLACEMENT": 0
   }
 }
