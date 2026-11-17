@@ -54,15 +54,15 @@
     }
   ],
   "soil_product_identities_sha256": "ed99f2abc048a372dab740bc7049b657e33584c2cd9bc10fa55585772a632bab",
-  "deli_source": "sources/binders/Updated_Deli_Two_Columns.xlsx",
+  "deli_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Updated_Deli_Two_Columns.xlsx",
   "deli_source_sha256": "a26ab6cf98d72d656e5cfd7a5c8928a7938ae1d965934a597c047f8eb37438f3",
-  "bakery_source": "sources/binders/Bakery_Products.csv",
+  "bakery_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Bakery_Products.csv",
   "bakery_source_sha256": "d863f9410b7b33ee1979b224b3b64bcb0c4ad944c5d998dcc297ca337297eee3",
   "bakery_records_included": 31,
-  "stretch_source": "sources/binders/Time_To_Stretch.jpg",
+  "stretch_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Time_To_Stretch.jpg",
   "stretch_source_sha256": "b96e6cbecc167c31e77235b6b02171fc0e94b63aa1f76860fb22258d25f088ed",
   "conversions_source": "owner-uploaded image",
-  "conversions_source_image": "sources/binders/Conversions_Updated.jpg",
+  "conversions_source_image": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Conversions_Updated.jpg",
   "conversions_source_image_sha256": "e3a51d715ee020604a65041c046dbd4092ebe043c390c82c3f427e98775ae504",
   "conversions_original_chart_source_sha256": [
     "61982efebf133df82dff82c7cdd0851cbba7bc15dd40ea7279c1b6f9027b03ec",
@@ -71,21 +71,24 @@
   ],
   "conversions_accuracy_review": "Owner-uploaded image visually checked against all three original chart images: volume values, weight values, kilograms-to-pounds values, price tiers and rounding note match. The $4.99 price converts to $11.00/kg in both the original chart and uploaded image; a prior editable draft's $11.02 value was incorrect and is not used.",
   "weighed_guide": {
-    "source": "sources/binders/Weighed_Items_Over_100_Updated.jpg",
+    "source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Weighed_Items_Over_100_Updated.jpg",
     "source_sha256": "bd2689fd49f13d5050753e30d850e3c89001e9db98bcf3ff9930bddd374d3604",
     "derivative_sha256": "88d7ec5bddd8788531e68cebe46fb92d9efb7771d5bbf9bb1cb04c3a99d45832",
+    "rain_check_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Rain_Check.pdf",
+    "rain_check_source_sha256": "9aeb587f43b8022735666e04dd771c89d7d08f15150964f7f095e6dc762af777",
+    "rain_check_derivative_sha256": "6539b098b0b7913cac3f1d329f3ca15fa9bc19d6cb5635b1ef2f312e0c19b1d9",
     "original_cells_sha256": "e8e096a7650e27f8e67382de3f894e4083fa269230cca9f117fe9a2621be0b21",
     "original_label_sha256": "506394d7b873668c64e1143a56b9455cd7e774baa37387dff27cae5a13e644b6",
     "accuracy_review": "Uploaded guide compared with every original instruction and the original embedded label. Preserved UPC 052110 / entry 52110, weight 3.830 kg / entry 3830, ending-in-0-or-5 rule, and examples 3.826 -> 3830, 4.117 -> 4120, 2.941 -> 2945 exactly as supplied. Label product, date 2024JL18, time 15:01, unit price $35.07/kg and total $134.31 match. Owner requested correction of the displayed total to $134.32: $35.07/kg x 3.830 kg = $134.3181, rounded to cents. Only the final price digit is replaced in the label. Green colors are muted to the binder palette; other label pixels, red warnings, text geometry and image dimensions are unchanged. Original upload and original workbook are retained."
   },
   "directory_images": [
     {
-      "source": "sources/binders/Store_Directory_Original_1.png",
+      "source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Store_Directory_Original_1.png",
       "source_sha256": "c5beab3173c87b3ab5876bcad374bb85e5cefc57ba616edb749791852cc3bc69",
       "derivative_sha256": "b6380172d5c4a787da7fede67a1841aec24ccbe74e9dc50bef39564b044cad26"
     },
     {
-      "source": "sources/binders/Store_Directory_Original_2.png",
+      "source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Store_Directory_Original_2.png",
       "source_sha256": "0274edd4cd7893d0f087f73e380295bf562ac80c0e10a4022ae7f69b686418a3",
       "derivative_sha256": "fcce4b14be6dddd9136ece540036526ddc8ba7306a7a9e2090f0ea4c43529310"
     }
@@ -469,8 +472,8 @@
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "cd83001be7546db729fecf44372393784ee254ee2f69d9bf4f136eb36c221caf",
-      "file_size_bytes": 25873340,
+      "file_sha256": "e5fed752e552aba5f240577fc130fde4249e9e155e5349d78b7f09d15ad5d9d7",
+      "file_size_bytes": 26479455,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 399,
       "output_sheet_names": [
@@ -494,7 +497,7 @@
       "pages": 13,
       "landscape_us_letter": true,
       "complete_workbook_opened_and_exported_by_calc": true,
-      "complete_binder_pdf_pages": 30,
+      "complete_binder_pdf_pages": 31,
       "every_page_code_count_verified": true,
       "every_description_found": true,
       "drawn_images": 548,
@@ -518,13 +521,14 @@
       ],
       "weighed_print_text_verified": false,
       "weighed_print_image_verified": true,
+      "rain_check_print_image_verified": true,
       "complete_pdf": "Complete Till Binder - Updated - Photos.pdf",
       "visual_review": "REQUIRED; automated text/geometry checks are not a visual print approval",
       "imposed_booklet_pdf": "Pocket Guide.pdf",
       "booklet_imposition": {
-        "source_pages": 30,
+        "source_pages": 31,
         "padded_pages": 32,
-        "blank_padding_pages": 2,
+        "blank_padding_pages": 1,
         "physical_sheets": 8,
         "imposed_pdf_pages": 16,
         "paper": "US Letter landscape",
@@ -536,7 +540,6 @@
           "Store Directory"
         ],
         "rotated_source_pages": [
-          8,
           9,
           10,
           11,
@@ -555,8 +558,9 @@
           24,
           25,
           26,
-          29,
-          30
+          27,
+          30,
+          31
         ]
       }
     }
@@ -567,7 +571,7 @@
     "Missing, identity-mismatched, checksum-changed and unreadable image associations remain blank.",
     "Existing and newly supplied identity-linked AI illustrations are visual references at the owner's request; AI provenance and uncertain visual verdicts are recorded only in the external audit report.",
     "Old descriptions are contextual abbreviations; code-only/name-only differences are not automatic corrections.",
-    "Time To Stretch uses the supplied color guide; Soil uses a numbered, enlarged green-themed guide with uniformly regenerated Code 128 barcodes preserving exact source values; scan the printed page before use. Floral Codes appear on Misc Codes; Weighed more $100 uses the visually compared owner upload with muted green colors, unchanged instructions and label values on one portrait page; Misc Codes uses green headings and pale-green entry shading on one page, with original cells and number formats retained; Conversions uses the owner-uploaded, visually checked one-page image; the original source charts remain preserved in the original binder and workbook package; Delivery Charges retains its two source pages with green header bands and an explicit page split; Store Directory uses identity-matched list stripes and highlights on the template's two images; Bakery is replaced from the reviewed Bakery product list in a compact one-page theme; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.",
+    "Time To Stretch uses the supplied color guide; Soil uses a numbered, enlarged green-themed guide with uniformly regenerated Code 128 barcodes preserving exact source values; scan the printed page before use. Floral Codes appear on Misc Codes; Weighed more $100 uses the visually compared owner upload with muted green colors and unchanged instructions and label values, followed by the owner-supplied Rain Check PDF on a second portrait page; Misc Codes uses green headings and pale-green entry shading on one page, with original cells and number formats retained; Conversions uses the owner-uploaded, visually checked one-page image; the original source charts remain preserved in the original binder and workbook package; Delivery Charges retains its two source pages with green header bands and an explicit page split; Store Directory uses identity-matched list stripes and highlights on the template's two images; Bakery is replaced from the reviewed Bakery product list in a compact one-page theme; Deli is replaced from the owner-supplied two-column source; Bulk sections are combined with page breaks; all other unrelated operational sheets remain unchanged.",
     "Future unclassified entries are retained for review, not silently discarded or approved."
   ],
   "till_binder_audit": {

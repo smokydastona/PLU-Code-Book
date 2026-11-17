@@ -16,6 +16,8 @@ class WeighedGuideTests(unittest.TestCase):
     def setUpClass(cls):
         cls.upload = (ROOT / guide.SOURCE).read_bytes()
         cls.themed = guide.themed_image(cls.upload)
+        cls.rain_source = (ROOT / guide.RAIN_CHECK_SOURCE).read_bytes()
+        cls.rain = guide.rain_check_image(cls.rain_source)
 
     def test_theme_changes_only_green_colors_and_owner_corrected_price_digit(self):
         with Image.open(io.BytesIO(self.upload)) as source, Image.open(io.BytesIO(self.themed)) as themed:
@@ -40,26 +42,26 @@ class WeighedGuideTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "upload changed"):
             guide.themed_image(b"unreviewed upload")
 
-    def test_original_and_generated_templates_produce_same_one_page_guide(self):
+    def test_original_and_generated_templates_produce_same_two_page_guide(self):
         original_bytes = BINDER.read_bytes()
         workbook = load_workbook(BINDER)
         try:
-            content = guide.workbook_bytes(workbook[guide.SHEET], self.themed)
+            content = guide.workbook_bytes(workbook[guide.SHEET], self.themed, self.rain)
         finally:
             workbook.close()
         generated = load_workbook(io.BytesIO(content))
         try:
-            guide.validate_sheet(generated[guide.SHEET], self.themed)
+            guide.validate_sheet(generated[guide.SHEET], self.themed, self.rain)
         finally:
             generated.close()
         generated = load_workbook(io.BytesIO(content))
         try:
-            repeated = guide.workbook_bytes(generated[guide.SHEET], self.themed)
+            repeated = guide.workbook_bytes(generated[guide.SHEET], self.themed, self.rain)
         finally:
             generated.close()
         generated = load_workbook(io.BytesIO(repeated))
         try:
-            guide.validate_sheet(generated[guide.SHEET], self.themed)
+            guide.validate_sheet(generated[guide.SHEET], self.themed, self.rain)
         finally:
             generated.close()
         self.assertEqual(original_bytes, BINDER.read_bytes())
@@ -75,9 +77,26 @@ class WeighedGuideTests(unittest.TestCase):
                     else:
                         sheet._images.clear()
                     with self.assertRaisesRegex(ValueError, "instructions or label changed"):
-                        guide.workbook_bytes(sheet, self.themed)
+                        guide.workbook_bytes(sheet, self.themed, self.rain)
                 finally:
                     workbook.close()
+
+    def test_rain_check_changes_and_wrong_page_placement_are_rejected(self):
+        with self.assertRaisesRegex(ValueError, "Rain Check PDF changed"):
+            guide.rain_check_image(self.rain_source + b"changed")
+        workbook = load_workbook(BINDER)
+        try:
+            content = guide.workbook_bytes(workbook[guide.SHEET], self.themed, self.rain)
+        finally:
+            workbook.close()
+        generated = load_workbook(io.BytesIO(content))
+        try:
+            sheet = generated[guide.SHEET]
+            sheet._images[1].anchor._from.row = 0
+            with self.assertRaisesRegex(ValueError, "two-page"):
+                guide.validate_sheet(sheet, self.themed, self.rain)
+        finally:
+            generated.close()
 
 
 if __name__ == "__main__":

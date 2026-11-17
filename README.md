@@ -51,6 +51,8 @@ Print the imposed PDF on US Letter paper in landscape orientation, 2-up duplex, 
 
 The build keeps the original complete workbook in `sources/binders/` unchanged. Produce, Bakery, Deli and Bulk updates preserve source values and print layouts; PLUs appear to the left of product descriptions. Standalone “Organic” in product names displays as “Org.” while the “Organics” heading and organic image badges remain unchanged. Bulk exclusions and source identities are recorded separately from cashier content.
 
+The Weighed more $100 section prints the weighed-items guide followed by the owner-supplied `sources/binders/Rain_Check.pdf` as its second page. The PDF is retained unchanged and rendered into the workbook; changes to it require review before rebuilding.
+
 ## Repository map
 
 | Path | Contents |

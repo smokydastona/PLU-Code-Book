@@ -1,4 +1,4 @@
-"""Reviewed owner-uploaded weighed-items guide, fitted to one binder page."""
+"""Owner-uploaded weighed-items guide and rain-check page for the binder."""
 import hashlib
 import io
 import json
@@ -9,12 +9,16 @@ from openpyxl.drawing.image import Image as ExcelImage
 from openpyxl.drawing.spreadsheet_drawing import AnchorMarker, OneCellAnchor
 from openpyxl.drawing.xdr import XDRPositiveSize2D
 from openpyxl.utils.units import pixels_to_EMU
+from openpyxl.worksheet.pagebreak import Break
 from openpyxl.worksheet.page import PageMargins
 from PIL import Image, ImageDraw, ImageFont
+import pymupdf
 
 SHEET = "Weighed more $100"
 SOURCE = Path("sources/binders/Weighed_Items_Over_100_Updated.jpg")
 SOURCE_SHA256 = "bd2689fd49f13d5050753e30d850e3c89001e9db98bcf3ff9930bddd374d3604"
+RAIN_CHECK_SOURCE = Path("sources/binders/Rain_Check.pdf")
+RAIN_CHECK_SHA256 = "9aeb587f43b8022735666e04dd771c89d7d08f15150964f7f095e6dc762af777"
 ORIGINAL_CELLS_SHA256 = "e8e096a7650e27f8e67382de3f894e4083fa269230cca9f117fe9a2621be0b21"
 ORIGINAL_LABEL_SHA256 = "506394d7b873668c64e1143a56b9455cd7e774baa37387dff27cae5a13e644b6"
 PRICE_CORRECTION_BOX = (939, 537, 966, 588)
@@ -63,14 +67,23 @@ def themed_image(content):
     return result.getvalue()
 
 
-def workbook_bytes(source, image):
+def rain_check_image(content):
+    if digest(content) != RAIN_CHECK_SHA256:
+        raise ValueError("Rain Check PDF changed; review it before rebuilding")
+    with pymupdf.open(stream=content, filetype="pdf") as document:
+        if len(document) != 1 or document[0].rect != pymupdf.Rect(0, 0, 612, 792):
+            raise ValueError("Rain Check PDF must contain one portrait US Letter page")
+        return document[0].get_pixmap(dpi=150, colorspace=pymupdf.csRGB, alpha=False).tobytes("png")
+
+
+def workbook_bytes(source, image, rain_check):
     cells = [(cell.coordinate, cell.value) for row in source for cell in row
              if cell.value is not None]
     if source._charts or any(cell.comment or cell.hyperlink for row in source for cell in row):
         raise ValueError("Weighed guide contains additional objects; review before replacement")
     hashes = [digest(picture._data()) for picture in source._images]
     if source.sheet_properties.codeName == "UpdatedWeighedImage":
-        if cells or hashes != [digest(image)]:
+        if cells or hashes not in ([digest(image)], [digest(image), digest(rain_check)]):
             raise ValueError("Updated Weighed guide changed; review before replacement")
     elif (digest(json.dumps(cells, ensure_ascii=True).encode()) != ORIGINAL_CELLS_SHA256 or
           hashes != [ORIGINAL_LABEL_SHA256]):
@@ -83,30 +96,35 @@ def workbook_bytes(source, image):
     sheet.sheet_properties.pageSetUpPr.fitToPage = True
     sheet.page_setup.orientation = "portrait"
     sheet.page_setup.paperSize = sheet.PAPERSIZE_LETTER
-    sheet.page_setup.fitToWidth = sheet.page_setup.fitToHeight = 1
+    sheet.page_setup.fitToWidth = 1
+    sheet.page_setup.fitToHeight = 0
     sheet.page_margins = PageMargins(left=.25, right=.25, top=.25, bottom=.25, header=.1, footer=.1)
     sheet.print_options.horizontalCentered = True
     sheet.column_dimensions["A"].width = 100
-    sheet.sheet_format.defaultRowHeight = 15
-    sheet.print_area = "A1:A53"
-    picture = ExcelImage(io.BytesIO(image))
-    picture.width, picture.height = 700, 1050
-    picture.anchor = OneCellAnchor(
-        _from=AnchorMarker(col=0, row=0, colOff=pixels_to_EMU(100)),
-        ext=XDRPositiveSize2D(cx=pixels_to_EMU(700), cy=pixels_to_EMU(1050)))
-    sheet.add_image(picture)
+    sheet.sheet_format.defaultRowHeight = 14
+    sheet.print_area = "A1:A106"
+    sheet.row_breaks.append(Break(id=53))
+    for content, row, height in ((image, 0, 975), (rain_check, 55, 650 * 792 / 612)):
+        picture = ExcelImage(io.BytesIO(content))
+        picture.anchor = OneCellAnchor(
+            _from=AnchorMarker(col=0, row=row, colOff=pixels_to_EMU(100)),
+            ext=XDRPositiveSize2D(cx=pixels_to_EMU(650), cy=pixels_to_EMU(height)))
+        sheet.add_image(picture)
     result = io.BytesIO()
     workbook.save(result)
     workbook.close()
     return result.getvalue()
 
 
-def validate_sheet(sheet, image):
-    if (sheet.sheet_properties.codeName != "UpdatedWeighedImage" or len(sheet._images) != 1 or
-            digest(sheet._images[0]._data()) != digest(image) or sheet._charts or
+def validate_sheet(sheet, image, rain_check):
+    if (sheet.sheet_properties.codeName != "UpdatedWeighedImage" or len(sheet._images) != 2 or
+            [digest(picture._data()) for picture in sheet._images] !=
+            [digest(image), digest(rain_check)] or
+            [picture.anchor._from.row for picture in sheet._images] != [0, 55] or
+            [page_break.id for page_break in sheet.row_breaks.brk] != [53] or sheet._charts or
             any(cell.value is not None for row in sheet for cell in row) or
             sheet.page_setup.orientation != "portrait" or str(sheet.page_setup.paperSize) != "1" or
-            sheet.page_setup.fitToWidth != 1 or sheet.page_setup.fitToHeight != 1 or
+            sheet.page_setup.fitToWidth != 1 or sheet.page_setup.fitToHeight != 0 or
             not sheet.sheet_properties.pageSetUpPr.fitToPage or str(sheet.print_area) !=
-            "'Weighed more $100'!$A$1:$A$53"):
-        raise ValueError("Weighed guide image or one-page print settings changed")
+            "'Weighed more $100'!$A$1:$A$106"):
+        raise ValueError("Weighed guide or Rain Check image or two-page print settings changed")

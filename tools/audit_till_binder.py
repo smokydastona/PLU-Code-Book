@@ -77,7 +77,7 @@ def audit_package(original_path, built_path):
 def section_plan(validation):
     produce = validation["planned_produce_print_pages"]
     return ([("Time To Stretch", 1, (612, 792)), ("Conversions", 1, (612, 792)),
-             ("Weighed Items Over $100", 1, (612, 792)), ("Misc Codes", 1, (612, 792)),
+             ("Weighed Items Over $100", 2, (612, 792)), ("Misc Codes", 1, (612, 792)),
              ("Soil", 1, (612, 792)), ("Bakery", 1, (612, 792)), ("Deli", 1, (612, 792)),
              ("Produce", produce, (792, 612)), ("Bulk", 6, (792, 612)),
              ("Delivery Charges", 2, (612, 792)), ("Store Directory", 2, (792, 612))])

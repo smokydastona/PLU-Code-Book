@@ -2342,7 +2342,7 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                    bulk_pages=None, stretch_size=None, misc_text=None, directory_images=None,
                    conversions_image=None, stretch_image=None, bakery_coordinates=None,
                    delivery_images=None, soil_images=None, weighed_text=None, floral_entries=None,
-                   weighed_image=None):
+                   weighed_image=None, rain_check_image=None):
     from pypdf import PdfReader
 
     if not shutil.which("soffice"):
@@ -2529,7 +2529,9 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                         if any("Floral Codes" in other.get_text() for other in document
                                if other.number != page.number):
                             raise ValueError(f"{edition}: Floral Codes heading also appears outside Misc Codes")
-            for guide_name, guide_image in (("Conversions", conversions_image), ("Weighed", weighed_image)):
+            guide_pages = {}
+            for guide_name, guide_image in (("Conversions", conversions_image), ("Weighed", weighed_image),
+                                            ("Rain Check", rain_check_image)):
                 if guide_image is None:
                     continue
                 import pymupdf
@@ -2551,9 +2553,12 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                     if len(matches) != 1:
                         raise ValueError(f"{edition}: {guide_name} image is missing or altered in print")
                     page, bounds = matches[0]
+                    guide_pages[guide_name] = page.number
                     if (abs(page.rect.width - 612) > 1 or abs(page.rect.height - 792) > 1 or
                             not page.rect.contains(bounds) or bounds.width < 350 or bounds.height < 500):
                         raise ValueError(f"{edition}: {guide_name} image is clipped or too small")
+            if rain_check_image is not None and guide_pages["Rain Check"] != guide_pages["Weighed"] + 1:
+                raise ValueError(f"{edition}: Rain Check must immediately follow the Weighed guide")
             if stretch_size is not None:
                 import pymupdf
 
@@ -2702,6 +2707,7 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 soil_barcodes_decoded_at_dpi=[150, 300] if soil_images is not None else [],
                 weighed_print_text_verified=weighed_text is not None,
                 weighed_print_image_verified=weighed_image is not None,
+                rain_check_print_image_verified=rain_check_image is not None,
                 complete_pdf=complete.name,
                 visual_review="REQUIRED; automated text/geometry checks are not a visual print approval",
             )
@@ -2867,7 +2873,7 @@ def generate(root, binder, output, verify_print=False):
         deli_title = deli_workbook["Deli"]["A1"].value
     finally:
         deli_workbook.close()
-    weighed_source = weighed_image = None
+    weighed_source = weighed_image = rain_check_source = rain_check_image = None
     with zipfile.ZipFile(binder) as original:
         sheet_info(original, "Deli")
         sheet_info(original, "Bakery")
@@ -2880,6 +2886,8 @@ def generate(root, binder, output, verify_print=False):
                xml(original.read("xl/workbook.xml")).find(f"{{{S}}}sheets")):
             weighed_source = (root / weighed_guide.SOURCE).read_bytes()
             weighed_image = weighed_guide.themed_image(weighed_source)
+            rain_check_source = (root / weighed_guide.RAIN_CHECK_SOURCE).read_bytes()
+            rain_check_image = weighed_guide.rain_check_image(rain_check_source)
     source_items, digest = read_picklist(root / "sources/plu/PickList.xml")
     assignments = read_assignments(root / "data/picklist_assignments.json")
     reconciliation = output / "reconciliation"
@@ -2959,7 +2967,8 @@ def generate(root, binder, output, verify_print=False):
                 directory_content, directory_images = directory_sheet(template[DIRECTORY_SHEET], directory_originals)
                 delivery_content, delivery_images = delivery_sheet(template[DELIVERY_SHEET])
                 if weighed_image is not None:
-                    weighed_content = weighed_guide.workbook_bytes(template[WEIGHED_SHEET], weighed_image)
+                    weighed_content = weighed_guide.workbook_bytes(
+                        template[WEIGHED_SHEET], weighed_image, rain_check_image)
             finally:
                 template.close()
             if bulk_coordinates is not None:
@@ -3013,7 +3022,7 @@ def generate(root, binder, output, verify_print=False):
                         raise ValueError("Floral Codes restoration failed workbook validation")
             validate_delivery(result[DELIVERY_SHEET], delivery_images)
             if weighed_image is not None:
-                weighed_guide.validate_sheet(result[WEIGHED_SHEET], weighed_image)
+                weighed_guide.validate_sheet(result[WEIGHED_SHEET], weighed_image, rain_check_image)
             soil_images = ([image._data() for image in result[SOIL_SHEET]._images]
                            if SOIL_SHEET in result else None)
             weighed_text = ([cell.value for row in result[WEIGHED_SHEET] for cell in row
@@ -3137,6 +3146,9 @@ def generate(root, binder, output, verify_print=False):
         weighed_guide=(dict(
             source=str(root / weighed_guide.SOURCE), source_sha256=sha(weighed_source),
             derivative_sha256=sha(weighed_image),
+            rain_check_source=str(root / weighed_guide.RAIN_CHECK_SOURCE),
+            rain_check_source_sha256=sha(rain_check_source),
+            rain_check_derivative_sha256=sha(rain_check_image),
             original_cells_sha256=weighed_guide.ORIGINAL_CELLS_SHA256,
             original_label_sha256=weighed_guide.ORIGINAL_LABEL_SHA256,
             accuracy_review=weighed_guide.ACCURACY_REVIEW,
@@ -3188,7 +3200,8 @@ def generate(root, binder, output, verify_print=False):
             "Time To Stretch uses the supplied color guide; Soil uses a numbered, enlarged green-themed guide "
             "with uniformly regenerated Code 128 barcodes preserving exact source values; scan the printed page before use. "
             "Floral Codes appear on Misc Codes; Weighed more $100 uses the visually compared owner upload "
-            "with muted green colors, unchanged instructions and label values on one portrait page; "
+            "with muted green colors and unchanged instructions and label values, followed by the "
+            "owner-supplied Rain Check PDF on a second portrait page; "
             "Misc Codes uses green headings and pale-green "
             "entry shading on one page, with original cells and number formats retained; "
             "Conversions uses the owner-uploaded, visually checked one-page image; the original source charts "
@@ -3218,7 +3231,7 @@ def generate(root, binder, output, verify_print=False):
             conversions_image=conversions_source_image if conversion_source != "not present" else None,
             stretch_image=stretch_source, bakery_coordinates=bakery_coordinates,
             delivery_images=delivery_images, soil_images=soil_images, weighed_text=weighed_text,
-            floral_entries=floral_entries, weighed_image=weighed_image)
+            floral_entries=floral_entries, weighed_image=weighed_image, rain_check_image=rain_check_image)
         if summary["print_validation"]["photos"]["drawn_images"] != len(images):
             raise ValueError("printed reference count differs from the exact image mapping")
         (output / "VALIDATION.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
@@ -3237,6 +3250,8 @@ def generate(root, binder, output, verify_print=False):
         raise ValueError("Conversions source changed during generation; discard outputs and retry")
     if weighed_source is not None and (root / weighed_guide.SOURCE).read_bytes() != weighed_source:
         raise ValueError("Weighed guide source changed during generation; discard outputs and retry")
+    if rain_check_source is not None and (root / weighed_guide.RAIN_CHECK_SOURCE).read_bytes() != rain_check_source:
+        raise ValueError("Rain Check source changed during generation; discard outputs and retry")
     if any((root / path).read_bytes() != content for path, content in zip(DIRECTORY_SOURCES, directory_originals)):
         raise ValueError("Store Directory originals changed during generation; discard outputs and retry")
     command = [sys.executable, str((ROOT / "tools/build_till_binders.py").resolve()),

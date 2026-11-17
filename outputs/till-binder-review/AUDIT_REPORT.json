@@ -6,7 +6,7 @@
   "package": {
     "zip_integrity": true,
     "original_parts": 104,
-    "built_parts": 688,
+    "built_parts": 689,
     "unchanged_parts": 79,
     "changed_parts": [
       "[Content_Types].xml",
@@ -36,7 +36,7 @@
       "xl/worksheets/sheet9.xml"
     ],
     "removed_parts": [],
-    "added_part_count": 584,
+    "added_part_count": 585,
     "original_media_parts": 37,
     "original_media_byte_identical": 37,
     "original_media_removed": [],
@@ -77,12 +77,12 @@
     ]
   },
   "print_layout": {
-    "pages": 30,
-    "expected_pages": 30,
+    "pages": 31,
+    "expected_pages": 31,
     "sections": {
       "Time To Stretch": 1,
       "Conversions": 1,
-      "Weighed Items Over $100": 1,
+      "Weighed Items Over $100": 2,
       "Misc Codes": 1,
       "Soil": 1,
       "Bakery": 1,
@@ -96,15 +96,14 @@
   },
   "booklet_imposition": {
     "technical_checks": "PASS",
-    "source_pages": 30,
+    "source_pages": 31,
     "padded_pages": 32,
-    "blank_padding_pages": 2,
+    "blank_padding_pages": 1,
     "physical_sheets": 8,
     "imposed_pdf_pages": 16,
     "all_source_pages_preserved_once": true,
     "all_panels_fit_without_text_clipping": true,
     "rotated_source_pages": [
-      8,
       9,
       10,
       11,
@@ -123,8 +122,9 @@
       24,
       25,
       26,
-      29,
-      30
+      27,
+      30,
+      31
     ]
   },
   "images": {
