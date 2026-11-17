@@ -1,0 +1,100 @@
+{
+  "plu": "4899",
+  "product": "Parsley",
+  "creator": "Shixart1985",
+  "license": "CC BY 2.0",
+  "license_url": "https://creativecommons.org/licenses/by/2.0",
+  "source_page_url": "https://commons.wikimedia.org/wiki/File:Bunches_of_fresh_parsley_displayed_for_sale_at_a_market_stall.jpg",
+  "original_image_url": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Bunches_of_fresh_parsley_displayed_for_sale_at_a_market_stall.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+  "width": 7728,
+  "height": 5152,
+  "attribution": "Shixart1985 / File:Bunches of fresh parsley displayed for sale at a market stall.jpg / CC BY 2.0",
+  "approval_status": "CANDIDATE",
+  "visual_verification": "NOT REVIEWED",
+  "description": "Bundles of parsley tied with blue bands sit on a market counter during a daytime produce sale, with other vegetables visible behind them.",
+  "sha256": "0b4945b831ecf8a659c97c3f4ca5804529b0bde6057d092baff4898a34e01418",
+  "commons_metadata": {
+    "size": 14466694,
+    "width": 7728,
+    "height": 5152,
+    "url": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Bunches_of_fresh_parsley_displayed_for_sale_at_a_market_stall.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "descriptionurl": "https://commons.wikimedia.org/wiki/File:Bunches_of_fresh_parsley_displayed_for_sale_at_a_market_stall.jpg",
+    "descriptionshorturl": "https://commons.wikimedia.org/wiki/Special:Redirect/page/202770487",
+    "extmetadata": {
+      "DateTime": {
+        "value": "2026-11-03 21:12:31",
+        "source": "mediawiki-metadata",
+        "hidden": ""
+      },
+      "ObjectName": {
+        "value": "Bunches of fresh parsley displayed for sale at a market stall",
+        "source": "mediawiki-metadata"
+      },
+      "CommonsMetadataExtension": {
+        "value": 1.2,
+        "source": "extension",
+        "hidden": ""
+      },
+      "Categories": {
+        "value": "Viktor-Adler-Markt, Vienna|Self-published work|Food displayed for sale in Austria|Vienna photographs taken on 2026-10-30",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "Assessments": {
+        "value": "",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "ImageDescription": {
+        "value": "Bundles of parsley tied with blue bands sit on a market counter during a daytime produce sale, with other vegetables visible behind them.",
+        "source": "commons-desc-page"
+      },
+      "DateTimeOriginal": {
+        "value": "2026-10-30 11:26:31",
+        "source": "commons-desc-page"
+      },
+      "Credit": {
+        "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+        "source": "commons-desc-page"
+      },
+      "Artist": {
+        "value": "<a href=\"//commons.wikimedia.org/wiki/User:Shixart1985\" title=\"User:Shixart1985\">Shixart1985</a>",
+        "source": "commons-desc-page"
+      },
+      "LicenseShortName": {
+        "value": "CC BY 2.0",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "UsageTerms": {
+        "value": "Creative Commons Attribution 2.0",
+        "source": "commons-desc-page"
+      },
+      "AttributionRequired": {
+        "value": "true",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "LicenseUrl": {
+        "value": "https://creativecommons.org/licenses/by/2.0",
+        "source": "commons-desc-page"
+      },
+      "Copyrighted": {
+        "value": "True",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "Restrictions": {
+        "value": "",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "License": {
+        "value": "cc-by-2.0",
+        "source": "commons-templates",
+        "hidden": ""
+      }
+    },
+    "mime": "image/jpeg"
+  }
+}

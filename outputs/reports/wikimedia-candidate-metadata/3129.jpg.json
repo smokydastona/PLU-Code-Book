@@ -1,0 +1,100 @@
+{
+  "plu": "3129",
+  "product": "Pomelo",
+  "creator": "Ivar Leidus",
+  "license": "CC BY-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source_page_url": "https://commons.wikimedia.org/wiki/File:Pomelo_fruit.jpg",
+  "original_image_url": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Pomelo_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+  "width": 5333,
+  "height": 4000,
+  "attribution": "Ivar Leidus / File:Pomelo fruit.jpg / CC BY-SA 4.0",
+  "approval_status": "CANDIDATE",
+  "visual_verification": "NOT REVIEWED",
+  "description": "Pomelo fruit with segments",
+  "sha256": "dc9b5ef05d1c453ebefc665d99e5d281c06611bc846a9c987c0aaf67eda1bfd3",
+  "commons_metadata": {
+    "size": 13441113,
+    "width": 5333,
+    "height": 4000,
+    "url": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Pomelo_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "descriptionurl": "https://commons.wikimedia.org/wiki/File:Pomelo_fruit.jpg",
+    "descriptionshorturl": "https://commons.wikimedia.org/wiki/Special:Redirect/page/98324833",
+    "extmetadata": {
+      "DateTime": {
+        "value": "2021-04-19 17:27:04",
+        "source": "mediawiki-metadata",
+        "hidden": ""
+      },
+      "ObjectName": {
+        "value": "Pomelo fruit",
+        "source": "mediawiki-metadata"
+      },
+      "CommonsMetadataExtension": {
+        "value": 1.2,
+        "source": "extension",
+        "hidden": ""
+      },
+      "Categories": {
+        "value": "Pomelos|Self-published work|Featured pictures on Wikipedia, English|Featured pictures of fruit|Featured pictures on Wikipedia, Turkish|Featured pictures on Wikipedia, Vietnamese|Featured pictures by iifar|Fruits on gray background|Photographs taken on 2020-12-31|Focus stacking images of fruits|Uploads by iifar|Focus stacked image",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "Assessments": {
+        "value": "featured",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "ImageDescription": {
+        "value": "Pomelo fruit with segments",
+        "source": "commons-desc-page"
+      },
+      "DateTimeOriginal": {
+        "value": "2020-12-31",
+        "source": "commons-desc-page"
+      },
+      "Credit": {
+        "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+        "source": "commons-desc-page"
+      },
+      "Artist": {
+        "value": "<a href=\"//commons.wikimedia.org/wiki/User:Iifar\" title=\"User:Iifar\">Ivar Leidus</a>",
+        "source": "commons-desc-page"
+      },
+      "LicenseShortName": {
+        "value": "CC BY-SA 4.0",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "UsageTerms": {
+        "value": "Creative Commons Attribution-Share Alike 4.0",
+        "source": "commons-desc-page"
+      },
+      "AttributionRequired": {
+        "value": "true",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "LicenseUrl": {
+        "value": "https://creativecommons.org/licenses/by-sa/4.0",
+        "source": "commons-desc-page"
+      },
+      "Copyrighted": {
+        "value": "True",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "Restrictions": {
+        "value": "",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "License": {
+        "value": "cc-by-sa-4.0",
+        "source": "commons-templates",
+        "hidden": ""
+      }
+    },
+    "mime": "image/jpeg"
+  }
+}

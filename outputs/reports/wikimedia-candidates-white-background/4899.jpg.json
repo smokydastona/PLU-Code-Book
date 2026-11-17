@@ -1,0 +1,100 @@
+{
+  "plu": "4899",
+  "product": "Parsley",
+  "creator": "Gideon from Paris, France",
+  "license": "CC BY 2.0",
+  "license_url": "https://creativecommons.org/licenses/by/2.0",
+  "source_page_url": "https://commons.wikimedia.org/wiki/File:Lunch_(41415099).jpg",
+  "original_image_url": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Lunch_%2841415099%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+  "width": 730,
+  "height": 710,
+  "attribution": "Gideon from Paris, France / File:Lunch (41415099).jpg / CC BY 2.0",
+  "approval_status": "CANDIDATE",
+  "visual_verification": "NOT REVIEWED",
+  "description": "diet lunch ;-) \nLunch plate with carrot and parsley. \n\n(Obviously a misguided diet that does not last long but leads to a poor metabolism ..)",
+  "sha256": "dee70135632bd1b5c8c02f0997df2a3ee6a81c8fdd9e61adf4b8c167a4040253",
+  "commons_metadata": {
+    "size": 32035,
+    "width": 730,
+    "height": 710,
+    "url": "https://upload.wikimedia.org/wikipedia/commons/3/3b/Lunch_%2841415099%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "descriptionurl": "https://commons.wikimedia.org/wiki/File:Lunch_(41415099).jpg",
+    "descriptionshorturl": "https://commons.wikimedia.org/wiki/Special:Redirect/page/34291418",
+    "extmetadata": {
+      "DateTime": {
+        "value": "2014-07-29 09:49:24",
+        "source": "mediawiki-metadata",
+        "hidden": ""
+      },
+      "ObjectName": {
+        "value": "Lunch (41415099)",
+        "source": "mediawiki-metadata"
+      },
+      "CommonsMetadataExtension": {
+        "value": 1.2,
+        "source": "extension",
+        "hidden": ""
+      },
+      "Categories": {
+        "value": "Diets|Carrots|Flickr images reviewed by FlickreviewR|Parsley as food|Small amount|Plates with food|Roots on white background",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "Assessments": {
+        "value": "",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "ImageDescription": {
+        "value": "diet lunch ;-) \n<p>Lunch plate with carrot and parsley. \n</p>\n(Obviously a misguided diet that does not last long but leads to a poor metabolism ..)",
+        "source": "commons-desc-page"
+      },
+      "DateTimeOriginal": {
+        "value": "2005-09-08 14:16",
+        "source": "commons-desc-page"
+      },
+      "Credit": {
+        "value": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/malias/41415099/\">lunch</a>",
+        "source": "commons-desc-page"
+      },
+      "Artist": {
+        "value": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/62752875@N00\">Gideon</a> from Paris, France",
+        "source": "commons-desc-page"
+      },
+      "LicenseShortName": {
+        "value": "CC BY 2.0",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "UsageTerms": {
+        "value": "Creative Commons Attribution 2.0",
+        "source": "commons-desc-page"
+      },
+      "AttributionRequired": {
+        "value": "true",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "LicenseUrl": {
+        "value": "https://creativecommons.org/licenses/by/2.0",
+        "source": "commons-desc-page"
+      },
+      "Copyrighted": {
+        "value": "True",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "Restrictions": {
+        "value": "",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "License": {
+        "value": "cc-by-2.0",
+        "source": "commons-templates",
+        "hidden": ""
+      }
+    },
+    "mime": "image/jpeg"
+  }
+}

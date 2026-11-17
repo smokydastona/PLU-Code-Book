@@ -1,0 +1,105 @@
+{
+  "plu": "3129",
+  "product": "Pomelo",
+  "creator": "Ananda",
+  "license": "CC BY-SA 3.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+  "source_page_url": "https://commons.wikimedia.org/wiki/File:Citrus_grandis_-_Honey_White.jpg",
+  "original_image_url": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Citrus_grandis_-_Honey_White.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+  "width": 2288,
+  "height": 1712,
+  "attribution": "Ananda / File:Citrus grandis - Honey White.jpg / CC BY-SA 3.0",
+  "approval_status": "CANDIDATE",
+  "visual_verification": "NOT REVIEWED",
+  "description": "Citrus grandis 'Honey White Brand' or 'Khao Nam Phueng' grown in Nakhon Chai Si, Nakhon Pathom province in Thailand.\n\nส้มโอขาวน้ำผึ้ง ณ นครชัยศรี",
+  "sha256": "a822b7edcb080fcfc40dfa4dccc45b75eb045a23bedaa733cb8298bb485facec",
+  "commons_metadata": {
+    "size": 338462,
+    "width": 2288,
+    "height": 1712,
+    "url": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Citrus_grandis_-_Honey_White.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "descriptionurl": "https://commons.wikimedia.org/wiki/File:Citrus_grandis_-_Honey_White.jpg",
+    "descriptionshorturl": "https://commons.wikimedia.org/wiki/Special:Redirect/page/457650",
+    "extmetadata": {
+      "DateTime": {
+        "value": "2005-12-12 11:56:09",
+        "source": "mediawiki-metadata",
+        "hidden": ""
+      },
+      "ObjectName": {
+        "value": "Citrus grandis - Honey White",
+        "source": "mediawiki-metadata"
+      },
+      "CommonsMetadataExtension": {
+        "value": 1.2,
+        "source": "extension",
+        "hidden": ""
+      },
+      "Categories": {
+        "value": "GFDL|CC-BY-SA-2.5,2.0,1.0|License migration redundant|Self-published work|Citrus in Thailand|Cross sections of pomelos|Citrus fruits on white background",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "Assessments": {
+        "value": "",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "ImageDescription": {
+        "value": "<p><i><a href=\"//commons.wikimedia.org/wiki/Citrus_grandis\" class=\"mw-redirect\" title=\"Citrus grandis\">Citrus grandis</a></i> 'Honey White Brand' or 'Khao Nam Phueng' grown in Nakhon Chai Si, Nakhon Pathom province in Thailand.\n</p>\nส้มโอขาวน้ำผึ้ง ณ นครชัยศรี",
+        "source": "commons-desc-page"
+      },
+      "DateTimeOriginal": {
+        "value": "date of uploading",
+        "source": "commons-desc-page"
+      },
+      "Credit": {
+        "value": "uploader's creation",
+        "source": "commons-desc-page"
+      },
+      "Artist": {
+        "value": "<a href=\"//commons.wikimedia.org/wiki/User:Ananda\" title=\"User:Ananda\">Ananda</a>",
+        "source": "commons-desc-page"
+      },
+      "Permission": {
+        "value": "GFDL and CC-BY-SA-2.5 by author",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "LicenseShortName": {
+        "value": "CC BY-SA 3.0",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "UsageTerms": {
+        "value": "Creative Commons Attribution-Share Alike 3.0",
+        "source": "commons-desc-page"
+      },
+      "AttributionRequired": {
+        "value": "true",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "LicenseUrl": {
+        "value": "http://creativecommons.org/licenses/by-sa/3.0/",
+        "source": "commons-desc-page"
+      },
+      "Copyrighted": {
+        "value": "True",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "Restrictions": {
+        "value": "",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "License": {
+        "value": "cc-by-sa-3.0",
+        "source": "commons-templates",
+        "hidden": ""
+      }
+    },
+    "mime": "image/jpeg"
+  }
+}

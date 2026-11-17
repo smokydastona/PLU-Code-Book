@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "source": "data/review-references/Romaine.jpg",
+  "source_sha256": "0a53adf9d23039f82414d6196eb41b32836e7e52b87e045b10271728a0e5e78f",
+  "source_size": [488, 488],
+  "image_kind": "UNVERIFIED_IMAGE",
+  "origin": "Owner-supplied product image. Owner confirmed: \"Yes, I own them or have permission\" in response to permission for binders and repository use of santaclaus-1.jpg and Romaine.jpg. Creator and photographic origin have not been independently verified.",
+  "review_note": "Review reference only, not a production image approval. Original retained unchanged, with no upscaling. Native resolution is below 500 pixels; production resolution and other image gates remain in force.",
+  "panels": [
+    {
+      "plu": "4640",
+      "product": "Romaine Lettuce",
+      "box": [0, 0, 488, 488],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "770dd6d9e210b73fe9d5d3c565ef120cd14fa9bc6c19ce6b05f4ad48e2f792a5",
+        "source_ids": [
+          "dedb5ccbdd83757a6881527d5311d31fd4127b0b8240842f73df00f6d4d42a9b",
+          "85a97a6e62e82198c028d1debf1a0f5dae2508cc534e85e15c15265a707ff776"
+        ],
+        "record_sha256": "943deb3a0b2dc17fc60d9e39cdf5d2ed5e56711925ed600adc5de7380c94f4ea"
+      }
+    }
+  ]
+}

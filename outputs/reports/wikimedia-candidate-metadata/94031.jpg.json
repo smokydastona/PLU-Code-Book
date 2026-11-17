@@ -1,0 +1,100 @@
+{
+  "plu": "94031",
+  "product": "Organic Watermelon",
+  "creator": "George Chernilevsky",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0",
+  "source_page_url": "https://commons.wikimedia.org/wiki/File:Watermelon_yellow_2024_G1.jpg",
+  "original_image_url": "https://upload.wikimedia.org/wikipedia/commons/0/0b/Watermelon_yellow_2024_G1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+  "width": 5700,
+  "height": 3400,
+  "attribution": "George Chernilevsky / File:Watermelon yellow 2024 G1.jpg / CC BY 4.0",
+  "approval_status": "CANDIDATE",
+  "visual_verification": "NOT REVIEWED",
+  "description": "Watermelon with yellow flesh. Ukraine, Vinnytsia Rajon",
+  "sha256": "f3e8989c459f3a6460f24ae82d161787f7d2fc13c06ef7307dc082d823c5e2db",
+  "commons_metadata": {
+    "size": 5223922,
+    "width": 5700,
+    "height": 3400,
+    "url": "https://upload.wikimedia.org/wikipedia/commons/0/0b/Watermelon_yellow_2024_G1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "descriptionurl": "https://commons.wikimedia.org/wiki/File:Watermelon_yellow_2024_G1.jpg",
+    "descriptionshorturl": "https://commons.wikimedia.org/wiki/Special:Redirect/page/151875501",
+    "extmetadata": {
+      "DateTime": {
+        "value": "2024-08-27 16:44:43",
+        "source": "mediawiki-metadata",
+        "hidden": ""
+      },
+      "ObjectName": {
+        "value": "Watermelon yellow 2024 G1",
+        "source": "mediawiki-metadata"
+      },
+      "CommonsMetadataExtension": {
+        "value": 1.2,
+        "source": "extension",
+        "hidden": ""
+      },
+      "Categories": {
+        "value": "Taken with Canon EOS 750D|Watermelons in Ukraine|Taken with Canon EF 50mm F1.4 USM|Self-published work|Watermelons as food|Ukraine photographs taken on 2024-08-25|Images by George Chernilevsky",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "Assessments": {
+        "value": "quality",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "ImageDescription": {
+        "value": "Watermelon with yellow flesh. Ukraine, Vinnytsia Rajon",
+        "source": "commons-desc-page"
+      },
+      "DateTimeOriginal": {
+        "value": "2024-08-25 19:03:58",
+        "source": "commons-desc-page"
+      },
+      "Credit": {
+        "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+        "source": "commons-desc-page"
+      },
+      "Artist": {
+        "value": "<a href=\"//commons.wikimedia.org/wiki/User:George_Chernilevsky\" title=\"User:George Chernilevsky\">George Chernilevsky</a>",
+        "source": "commons-desc-page"
+      },
+      "LicenseShortName": {
+        "value": "CC BY 4.0",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "UsageTerms": {
+        "value": "Creative Commons Attribution 4.0",
+        "source": "commons-desc-page"
+      },
+      "AttributionRequired": {
+        "value": "true",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "LicenseUrl": {
+        "value": "https://creativecommons.org/licenses/by/4.0",
+        "source": "commons-desc-page"
+      },
+      "Copyrighted": {
+        "value": "True",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "Restrictions": {
+        "value": "",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "License": {
+        "value": "cc-by-4.0",
+        "source": "commons-templates",
+        "hidden": ""
+      }
+    },
+    "mime": "image/jpeg"
+  }
+}

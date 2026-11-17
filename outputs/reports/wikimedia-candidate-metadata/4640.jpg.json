@@ -1,0 +1,100 @@
+{
+  "plu": "4640",
+  "product": "Romaine Lettuce",
+  "creator": "Rainer Zenz",
+  "license": "CC BY-SA 3.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+  "source_page_url": "https://commons.wikimedia.org/wiki/File:Romaine_lettuce.jpg",
+  "original_image_url": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Romaine_lettuce.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+  "width": 2136,
+  "height": 2520,
+  "attribution": "Rainer Zenz / File:Romaine lettuce.jpg / CC BY-SA 3.0",
+  "approval_status": "CANDIDATE",
+  "visual_verification": "NOT REVIEWED",
+  "description": "Romaine lettuce (Lactuca sativa var. longifolia).",
+  "sha256": "ac0fc556707e773fb9731621949de3d22b446185bee3edbf8311d77068b97191",
+  "commons_metadata": {
+    "size": 1288457,
+    "width": 2136,
+    "height": 2520,
+    "url": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Romaine_lettuce.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "descriptionurl": "https://commons.wikimedia.org/wiki/File:Romaine_lettuce.jpg",
+    "descriptionshorturl": "https://commons.wikimedia.org/wiki/Special:Redirect/page/642664",
+    "extmetadata": {
+      "DateTime": {
+        "value": "2014-05-03 17:45:08",
+        "source": "mediawiki-metadata",
+        "hidden": ""
+      },
+      "ObjectName": {
+        "value": "Romaine lettuce",
+        "source": "mediawiki-metadata"
+      },
+      "CommonsMetadataExtension": {
+        "value": 1.2,
+        "source": "extension",
+        "hidden": ""
+      },
+      "Categories": {
+        "value": "Lactuca sativa var. longifolia|GFDL|Taken with Nikon Coolpix 7900|CC-BY-SA-2.5,2.0,1.0|License migration redundant|Self-published work|Featured pictures on Wikipedia, Persian|Featured pictures on Wikipedia, Vietnamese|Lettuce as food",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "Assessments": {
+        "value": "quality",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "ImageDescription": {
+        "value": "<a href=\"https://en.wikipedia.org/wiki/Romaine_lettuce\" class=\"extiw\" title=\"en:Romaine lettuce\">Romaine lettuce</a> (<i>Lactuca sativa</i> var. longifolia).",
+        "source": "commons-desc-page"
+      },
+      "DateTimeOriginal": {
+        "value": "2006",
+        "source": "commons-desc-page"
+      },
+      "Credit": {
+        "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span> <a href=\"//commons.wikimedia.org/wiki/User:Rainer_Zenz\" title=\"User:Rainer Zenz\">Rainer Z</a><a href=\"//commons.wikimedia.org/wiki/User_talk:Rainer_Zenz\" title=\"User talk:Rainer Zenz\"> ...</a> 14:24, 5 November 2016 (UTC)",
+        "source": "commons-desc-page"
+      },
+      "Artist": {
+        "value": "Rainer Zenz",
+        "source": "commons-desc-page"
+      },
+      "LicenseShortName": {
+        "value": "CC BY-SA 3.0",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "UsageTerms": {
+        "value": "Creative Commons Attribution-Share Alike 3.0",
+        "source": "commons-desc-page"
+      },
+      "AttributionRequired": {
+        "value": "true",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "LicenseUrl": {
+        "value": "http://creativecommons.org/licenses/by-sa/3.0/",
+        "source": "commons-desc-page"
+      },
+      "Copyrighted": {
+        "value": "True",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "Restrictions": {
+        "value": "",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "License": {
+        "value": "cc-by-sa-3.0",
+        "source": "commons-templates",
+        "hidden": ""
+      }
+    },
+    "mime": "image/jpeg"
+  }
+}
