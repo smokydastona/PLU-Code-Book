@@ -10,9 +10,10 @@ ROOT = Path(__file__).resolve().parents[1]
 UPLOAD = Path("sources/binders/Rain_Check_Instructions_Upload.png")
 OUTPUT = Path("sources/binders/Rain_Check_Instructions_Updated.png")
 UPLOAD_SHA256 = "8377569b18af0d783745f4a8fc0336a66b6baac2ca0fb20a8598f25e725baa44"
-OUTPUT_SHA256 = "f77357eefb6eab755471b8674f6a8fedbbba52c0719117c3ff7bfa94421ad10a"
+OUTPUT_SHA256 = "c211ff2d648e93fd4663ae6f5183023b173c46e9c892416c42125614e6745f3a"
 SIZE = (1024, 1536)
 PAPER = (250, 250, 250)
+CORNER_INSTRUCTION = "Follow these steps to complete the raincheck/voucher correctly."
 
 
 def digest(content):
@@ -66,6 +67,16 @@ def prepare_image(content):
     paint_gradient_background(image, (624, 300, 997, 330), 623, 998)
     draw.text((626, 303), "•", font=body_bullet, fill=ink)
     draw.text((646, 302), "Write today's date in mm/dd/yy format.", font=body, fill=ink)
+
+    corner_box = (731, 11, 994, 145)
+    paint_gradient_background(image, corner_box, 728, 996)
+    corner_font = font("DejaVuSans-Bold.ttf", 22)
+    corner_text = "Follow these steps\nto complete the\nraincheck/voucher\ncorrectly."
+    bounds = draw.multiline_textbbox((0, 0), corner_text, font=corner_font, align="center", spacing=4)
+    left, top, right, bottom = bounds
+    x = (corner_box[0] + corner_box[2] - right + left) / 2 - left
+    y = (corner_box[1] + corner_box[3] - bottom + top) / 2 - top
+    draw.multiline_text((x, y), corner_text, font=corner_font, fill=ink, align="center", spacing=4)
 
     blue = (0, 59, 190)
     date_font = font("DejaVuSans-Oblique.ttf", 26)

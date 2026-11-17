@@ -163,7 +163,7 @@
     "groups_kept_on_one_page": true,
     "source": "sources/binders/OldTimers_Produce_codes.pdf",
     "source_sha256": "6846210817a7f7bffe84bb5f30db75ef1276b203fda53c0256cb77cf037e0672",
-    "sha256": "5cc2e097bc68bf979fac0ccbf9c0795d1ddc546a5122e33c6d8cf0ccb54b222a"
+    "sha256": "a081bf05cca849e0545266ad81c5e8374b60d4c0a13a710b0a1e9cc554df1950"
   },
   "open_blockers": {
     "EXPLICIT_IMAGE_REJECTION": 24

@@ -18,7 +18,7 @@ SHEET = "Weighed more $100"
 SOURCE = Path("sources/binders/Weighed_Items_Over_100_Updated.jpg")
 SOURCE_SHA256 = "bd2689fd49f13d5050753e30d850e3c89001e9db98bcf3ff9930bddd374d3604"
 RAIN_CHECK_SOURCE = Path("sources/binders/Rain_Check_Instructions_Updated.png")
-RAIN_CHECK_SHA256 = "f77357eefb6eab755471b8674f6a8fedbbba52c0719117c3ff7bfa94421ad10a"
+RAIN_CHECK_SHA256 = "c211ff2d648e93fd4663ae6f5183023b173c46e9c892416c42125614e6745f3a"
 RAIN_CHECK_UPLOAD = Path("sources/binders/Rain_Check_Instructions_Upload.png")
 RAIN_CHECK_UPLOAD_SHA256 = "8377569b18af0d783745f4a8fc0336a66b6baac2ca0fb20a8598f25e725baa44"
 RAIN_CHECK_ORIGINAL_PDF = Path("sources/binders/Rain_Check.pdf")
@@ -28,7 +28,9 @@ RAIN_CHECK_ACCURACY_REVIEW = (
     "mm/dd/yy format, matched the sample product description and PLU 3181 to Strawberries BC 1 Pound, "
     "and added the store number, banner, and store name fields to step 1. The original form, 30-day "
     "validity, quantity-in-words, size, price-per-unit, and SCENE+ instructions remain present. "
-    "The 1 lb sample is 454 g; $4.99/lb converts to $11.00/kg rounded to cents."
+    "Removed the confusing accuracy claim from the corner and enlarged the remaining instruction to "
+    "'Follow these steps to complete the raincheck/voucher correctly.' The 1 lb sample is 454 g; "
+    "$4.99/lb converts to $11.00/kg rounded to cents."
 )
 ORIGINAL_CELLS_SHA256 = "e8e096a7650e27f8e67382de3f894e4083fa269230cca9f117fe9a2621be0b21"
 ORIGINAL_LABEL_SHA256 = "506394d7b873668c64e1143a56b9455cd7e774baa37387dff27cae5a13e644b6"
