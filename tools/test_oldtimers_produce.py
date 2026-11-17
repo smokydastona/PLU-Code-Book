@@ -23,12 +23,12 @@ class OldTimersProduceTests(unittest.TestCase):
             row("2", "90001", "Org. TOMATO ON THE VINE", "TOMATO", "Vegetable"),
         ]
         rows.extend(row(f"apple-{i}", str(4000 + i), f"APPLES VARIETY {i}", "APPLE", "Fruit", str(i))
-                    for i in range(160))
+                    for i in range(50))
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "oldtimers.pdf"
             summary = generate(path, rows)
             self.assertEqual((summary["records"], summary["fruit_records"],
-                              summary["vegetable_records"]), (162, 161, 1))
+                              summary["vegetable_records"]), (52, 51, 1))
             with pymupdf.open(path) as document:
                 texts = [page.get_text() for page in document]
                 self.assertIn("00123", " ".join(texts))
@@ -37,6 +37,32 @@ class OldTimersProduceTests(unittest.TestCase):
                 self.assertIn("VEGETABLES", texts[-1])
                 self.assertTrue(any("APPLE (CONT.)" in text for text in texts))
                 self.assertTrue(all(not page.get_images() for page in document))
+
+    def test_whole_group_moves_to_next_page_when_remaining_space_is_insufficient(self):
+        rows = [row(f"apple-{i}", str(4000 + i), f"APPLES VARIETY {i}", "APPLE", "Fruit", str(i))
+                for i in range(50)]
+        rows.extend(row(f"apricot-{i}", str(5000 + i), f"APRICOTS VARIETY {i}", "APRICOT", "Fruit", str(i))
+                    for i in range(60))
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "oldtimers.pdf"
+            generate(path, rows)
+            with pymupdf.open(path) as document:
+                self.assertEqual(len(document), 2)
+                for number, (start, count) in enumerate(((4000, 50), (5000, 60))):
+                    codes = [word[4] for word in document[number].get_text("words")
+                             if word[4].isdigit() and len(word[4]) == 4]
+                    self.assertCountEqual(codes, [str(start + i) for i in range(count)])
+                self.assertNotIn("APRICOT", document[0].get_text())
+                self.assertIn("APRICOT", document[1].get_text())
+
+    def test_oversized_group_is_rejected_without_shrinking_or_splitting(self):
+        rows = [row(str(i), str(4000 + i), f"APPLES VARIETY {i}", "APPLE", "Fruit", str(i))
+                for i in range(160)]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "oldtimers.pdf"
+            with self.assertRaisesRegex(ValueError, "cannot fit on one page at 12 points"):
+                generate(path, rows)
+            self.assertFalse(path.exists())
 
     def test_rejects_non_text_plu_and_invalid_classification(self):
         with tempfile.TemporaryDirectory() as directory:

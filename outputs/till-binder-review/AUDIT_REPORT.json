@@ -157,12 +157,13 @@
     "fruit_records": 272,
     "vegetable_records": 261,
     "asian_records": 15,
-    "pages": 11,
+    "pages": 12,
     "image_free": true,
     "minimum_font_points": 12,
+    "groups_kept_on_one_page": true,
     "source": "sources/binders/OldTimers_Produce_codes.pdf",
     "source_sha256": "6846210817a7f7bffe84bb5f30db75ef1276b203fda53c0256cb77cf037e0672",
-    "sha256": "2d8c33f1afc84d59423b88385e1e1549f97eaf4394ef44e85574b138fee54593"
+    "sha256": "d31b94ea8534c6065c054d153d68f8c35de13b8e32e15235cde1ba382e1493bc"
   },
   "open_blockers": {
     "APPROVED_IMAGE_REQUIRED": 35,

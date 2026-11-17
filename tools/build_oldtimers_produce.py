@@ -56,6 +56,26 @@ def wrap_name(text, width):
     return lines
 
 
+def group_layout(entries, column, y):
+    """Fit a whole group into the remaining columns of one page."""
+    layout = []
+    show_heading = True
+    for row, lines in entries:
+        height = len(lines) * LINE_HEIGHT
+        if y + height + (HEADING_HEIGHT if show_heading else 0) > PAGE_HEIGHT - BOTTOM:
+            column += 1
+            y = TOP
+            show_heading = True
+        if column >= COLUMNS or y + height + (HEADING_HEIGHT if show_heading else 0) > PAGE_HEIGHT - BOTTOM:
+            return None
+        if show_heading:
+            y += HEADING_HEIGHT
+        layout.append((row, lines, column, y, show_heading))
+        y += height
+        show_heading = False
+    return layout
+
+
 def generate(path, rows):
     """Write all and only the displayed binder rows, in the legacy category split."""
     groups = {"FRUITS": {}, "VEGETABLES": {}, ASIAN_SECTION: {}}
@@ -76,45 +96,42 @@ def generate(path, rows):
             if not categories:
                 continue
             page = None
-            column = COLUMNS - 1
-            y = 0
+            column = 0
+            y = TOP
 
-            def advance():
+            def new_page():
                 nonlocal page, column, y
-                column += 1
-                if column == COLUMNS:
-                    page = document.new_page(width=PAGE_WIDTH, height=PAGE_HEIGHT)
-                    page.insert_font(fontname="regular", fontfile=REGULAR_FONT)
-                    page.insert_font(fontname="bold", fontfile=BOLD_FONT)
-                    page.insert_text((LEFT, 35), "PRODUCE DEPARTMENT CODES (DEPT #2)",
-                                     fontname="bold", fontsize=13)
-                    page.insert_text((LEFT, 58), title, fontname="bold", fontsize=12)
-                    column = 0
+                page = document.new_page(width=PAGE_WIDTH, height=PAGE_HEIGHT)
+                page.insert_font(fontname="regular", fontfile=REGULAR_FONT)
+                page.insert_font(fontname="bold", fontfile=BOLD_FONT)
+                page.insert_text((LEFT, 35), "PRODUCE DEPARTMENT CODES (DEPT #2)",
+                                 fontname="bold", fontsize=13)
+                page.insert_text((LEFT, 58), title, fontname="bold", fontsize=12)
+                column = 0
                 y = TOP
-
-            def x_position():
-                return LEFT + column * (COLUMN_WIDTH + COLUMN_GAP)
 
             for category, entries in sorted(categories.items()):
                 entries.sort(key=lambda row: (row["sort_variety"], row["organic"],
                                               row["display_name"], row["plu"], row["source_id"]))
-                show_heading = True
-                for row in entries:
-                    lines = wrap_name(row["display_name"], COLUMN_WIDTH - CODE_WIDTH)
-                    height = len(lines) * LINE_HEIGHT
-                    if page is None or y + height + (HEADING_HEIGHT if show_heading else 0) > PAGE_HEIGHT - BOTTOM:
-                        advance()
-                        show_heading = True
-                    if y + height + (HEADING_HEIGHT if show_heading else 0) > PAGE_HEIGHT - BOTTOM:
-                        raise ValueError(f"{row['source_id']}: produce entry is too tall to print")
-                    x = x_position()
+                prepared = [(row, wrap_name(row["display_name"], COLUMN_WIDTH - CODE_WIDTH))
+                            for row in entries]
+                if page is None:
+                    new_page()
+                layout = group_layout(prepared, column, y)
+                if layout is None:
+                    if column != 0 or y != TOP:
+                        new_page()
+                    layout = group_layout(prepared, column, y)
+                if layout is None:
+                    raise ValueError(f"Produce group {category!r} cannot fit on one page at 12 points")
+                for row, lines, column, y, show_heading in layout:
+                    x = LEFT + column * (COLUMN_WIDTH + COLUMN_GAP)
                     if show_heading:
                         heading = category + (" (CONT.)" if row is not entries[0] else "")
                         if BOLD.text_length(heading, fontsize=FONT_SIZE) > COLUMN_WIDTH:
                             raise ValueError(f"Produce heading is too wide to print: {heading!r}")
-                        page.insert_text((x, y), heading, fontname="bold", fontsize=FONT_SIZE)
-                        y += HEADING_HEIGHT
-                        show_heading = False
+                        page.insert_text((x, y - HEADING_HEIGHT), heading, fontname="bold",
+                                         fontsize=FONT_SIZE)
                     page.insert_text((x, y), row["plu"], fontname="regular", fontsize=FONT_SIZE)
                     for index, line in enumerate(lines):
                         page.insert_text((x + CODE_WIDTH, y + index * LINE_HEIGHT), line,
@@ -123,7 +140,7 @@ def generate(path, rows):
                                            product=row["display_name"], section=title,
                                            page=page.number + 1, column=column + 1,
                                            x=x, y=y, lines=len(lines)))
-                    y += height
+                    y += len(lines) * LINE_HEIGHT
                 y += 6
         document.set_metadata({"title": "OldTimers Produce Codes"})
         document.save(path, garbage=4, deflate=True)
@@ -135,7 +152,7 @@ def generate(path, rows):
                 vegetable_records=sum(row["section"] == "VEGETABLES" for row in placements),
                 asian_records=sum(row["section"] == ASIAN_SECTION for row in placements),
                 pages=max(row["page"] for row in placements), image_free=True,
-                minimum_font_points=FONT_SIZE)
+                minimum_font_points=FONT_SIZE, groups_kept_on_one_page=True)
 
 
 def validate(path, rows, placements):
@@ -145,6 +162,12 @@ def validate(path, rows, placements):
                      for row in placements)
     if actual != expected:
         raise ValueError("OldTimers list does not match the binder produce entries")
+    group_pages = {}
+    by_id = {row["source_id"]: row for row in rows}
+    for row in placements:
+        key = (row["section"], by_id[row["source_id"]]["sort_product"])
+        if group_pages.setdefault(key, row["page"]) != row["page"]:
+            raise ValueError(f"OldTimers produce group {key[1]!r} is split across pages")
     with pymupdf.open(path) as document:
         for page in document:
             if page.rect != pymupdf.Rect(0, 0, PAGE_WIDTH, PAGE_HEIGHT) or page.get_images():
