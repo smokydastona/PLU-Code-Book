@@ -1,0 +1,628 @@
+{
+  "dataset_repository": "https://github.com/fruits-360/fruits-360-original-size",
+  "dataset_revision": "main (README version 2026.10.26.0)",
+  "dataset_commit": "d08d3d5b1abfdace697870b0f6aeee0a4edb74b4",
+  "dataset_license_declaration": "CC BY-SA 4.0 (repository LICENSE and README)",
+  "rights_note": "Attribution and ShareAlike apply; per-image provenance and license coverage remain unverified.",
+  "working_list_sha256": "38732869b0e7b1c8ccb0b6189a8685a1125595ebcc9ded4e9cc48d18d6ea8727",
+  "method": "Compared the submitted code-search terms with folder names in Training via the GitHub Contents API; no image files were fetched.",
+  "candidate_images_downloaded": false,
+  "results": [
+    {
+      "plu": "4336",
+      "working_list_name": "Santa Claus Melon",
+      "working_list_id": "f0bdfb32e781ad1cecaf89ceb1cfeed2c5a052324ab923b9b20a941d322a9a9f",
+      "working_source_ids": [
+        "df689eba8547b5efcb8e7a5ce0f8f6954b21fb38e3eddf417a27f9f6a407a8c2",
+        "745185b093bdade324313635b0d314b2ef1f6260503b6ac4b3fd6ed5095404ac"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Santa Claus Melon",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Santa%20Claus%20Melon&type=code",
+      "candidate_class_folders": [
+        "Cantaloupe 3"
+      ],
+      "class_match_status": "CATEGORY_ONLY",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "4640",
+      "working_list_name": "Romaine Lettuce",
+      "working_list_id": "770dd6d9e210b73fe9d5d3c565ef120cd14fa9bc6c19ce6b05f4ad48e2f792a5",
+      "working_source_ids": [
+        "dedb5ccbdd83757a6881527d5311d31fd4127b0b8240842f73df00f6d4d42a9b",
+        "85a97a6e62e82198c028d1debf1a0f5dae2508cc534e85e15c15265a707ff776"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Romaine Lettuce",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Romaine%20Lettuce&type=code",
+      "candidate_class_folders": [],
+      "class_match_status": "NO_RELEVANT_CLASS",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "3129",
+      "working_list_name": "Pomelo",
+      "working_list_id": "6f4db4c750341628eb9b96fde6f691e92f88ef716981d1bc6c4c80f6956ed6fa",
+      "working_source_ids": [
+        "3b5933c522e6f3ac6b6e04ad7cab58de17e7de688988844d242d40b6a9568094",
+        "514b0478235beb1cbc5d7b4b6e2355d79540c2d4c3a2eb1277e62eab5a48306d"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Pomelo",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Pomelo&type=code",
+      "candidate_class_folders": [],
+      "class_match_status": "NO_RELEVANT_CLASS",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "4425",
+      "working_list_name": "Shinko (Shingo) Asian Pear",
+      "working_list_id": "fe37e4f92291cb134b96dd8fd3b854fe65880324a751fa5b34c7063877457040",
+      "working_source_ids": [
+        "225ecb5b37338f8579afa8fd03b88f613497858fea0690a63b16064b19f912c1"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Shinko Asian Pear",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Shinko%20Asian%20Pear&type=code",
+      "candidate_class_folders": [
+        "Pear 1",
+        "Pear 10",
+        "Pear 11",
+        "Pear 12",
+        "Pear 13",
+        "Pear 3",
+        "Pear 5",
+        "Pear 6",
+        "Pear 7",
+        "Pear 8",
+        "Pear 9",
+        "Pear common 1"
+      ],
+      "class_match_status": "CATEGORY_ONLY",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "94022",
+      "working_list_name": "Organic Green Seedless Grapes",
+      "working_list_id": "2f12bde7cf6c61f489e67bdfa7602e505568ffb9476f9c79aeb23837af6bdfb0",
+      "working_source_ids": [
+        "c67112294b47e7ba516ee51f164b187c54ed18ab57e63cfbd0fab6ef2591445c",
+        "6d060cb6c01e69c01f43b9f6188eafa3d6f2de7bf1359418b2536cc325405bd6",
+        "7ec18764d11f22640f694405c9b345ebd83a07de28751d87dfdfd987a6422d6c"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Green Seedless Grapes",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Green%20Seedless%20Grapes&type=code",
+      "candidate_class_folders": [
+        "Grape 1",
+        "Grape pink 2",
+        "Grape pink 3"
+      ],
+      "class_match_status": "CATEGORY_ONLY",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "4059",
+      "working_list_name": "Red Prince Apples",
+      "working_list_id": "2691db398e418f597b9a873710acdec756a2463e77a35fceb66e19a2647623ac",
+      "working_source_ids": [
+        "0842e09683c06be8eebe95d2759041fb646144ae4fe11a0680d5839409d28366"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Red Prince Apples",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Red%20Prince%20Apples&type=code",
+      "candidate_class_folders": [
+        "Apple 10",
+        "Apple 11",
+        "Apple 12",
+        "Apple 13",
+        "Apple 14",
+        "Apple 17",
+        "Apple 18",
+        "Apple 19",
+        "Apple 20",
+        "Apple 21",
+        "Apple 22",
+        "Apple 23",
+        "Apple 5",
+        "Apple 6",
+        "Apple 7",
+        "Apple 8",
+        "Apple 9",
+        "Apple Braeburn 1",
+        "Apple Red Yellow 2",
+        "apple_crimson_snow_1",
+        "apple_golden_1",
+        "apple_golden_2",
+        "apple_golden_3",
+        "apple_granny_smith_1",
+        "apple_pink_lady_1",
+        "apple_red_1",
+        "apple_red_2",
+        "apple_red_3",
+        "apple_red_delicios_1",
+        "apple_red_yellow_1"
+      ],
+      "class_match_status": "CATEGORY_ONLY",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "94329",
+      "working_list_name": "Organic Honeydew Melon",
+      "working_list_id": "808eeb35497c5b06d07af85d6df1ed850e1ff91dbea222db272c9ba488afb4ab",
+      "working_source_ids": [
+        "2a9fad986444638acfdeeab2a7acecd34020d954d7004eb50f0dec3c1b653afd",
+        "42a7663d6fca9c182577cbb8165c2c1fabeff5c23bd51a805abdf6bf08a7a126"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Honeydew Melon",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Honeydew%20Melon&type=code",
+      "candidate_class_folders": [
+        "Cantaloupe 3"
+      ],
+      "class_match_status": "CATEGORY_ONLY",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "94342",
+      "working_list_name": "Organic Watermelon",
+      "working_list_id": "8764d9445ce973f9109c8cb02d54274ff2e6b98c13437608a51a8030bff787d5",
+      "working_source_ids": [
+        "0dd7caf0291627a98f4ecf509a590deeb9597e6405f92d75e2dc9815864e20d8",
+        "b90e0281f264eee9107f618c72a3ec9d26e749e15b213a88a7bf48dac79041f7"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Watermelon",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Watermelon&type=code",
+      "candidate_class_folders": [],
+      "class_match_status": "NO_RELEVANT_CLASS",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "94031",
+      "working_list_name": "Organic Watermelon",
+      "working_list_id": "f578175d2a42c92e42f55a9f0eff5620dba4cfd8d4d45aaa44636e415fa9149f",
+      "working_source_ids": [
+        "605efd9a7801449c517074defe0fa5941ad9f07259761fff5cd545db6b37e8d0",
+        "74e8407c60de7058b3ee9607c6ac3c520bf96834f8584eebb09ccfac3ce81f19"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Watermelon",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Watermelon&type=code",
+      "candidate_class_folders": [],
+      "class_match_status": "NO_RELEVANT_CLASS",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "94321",
+      "working_list_name": "Organic Watermelon",
+      "working_list_id": "0288a6e2ffb877ba3a8ec2e1b40b14f0c180c709f28e4b96d7a30cd36f419611",
+      "working_source_ids": [
+        "66ecdc5b2662d1525653415a48f4672e19fed1acb5425725d52eb4ce5debfdcf",
+        "5a296dbb2669439955e5ce63a05b475a64ae4526608dbd7573d6a7b64211ecde"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Watermelon",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Watermelon&type=code",
+      "candidate_class_folders": [],
+      "class_match_status": "NO_RELEVANT_CLASS",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "94648",
+      "working_list_name": "Organic Cremini Mushrooms",
+      "working_list_id": "cc3c4d0e37bde64efcb713174b4286fa8f3bedfcd56568e98cdc384e3b76a78b",
+      "working_source_ids": [
+        "b4f0e40b5e82ab5b60f48da300b0b15aee297404ad7dc2d8ea89292f4262c670",
+        "a2a7fe33b0230ec32674950366966f68fb87c1f12175ea47d73d8d6db582382d"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Cremini Mushrooms",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Cremini%20Mushrooms&type=code",
+      "candidate_class_folders": [
+        "Mushroom champignon 1",
+        "Mushroom champignon 2",
+        "Mushroom champignon 3",
+        "Mushroom champignon 4",
+        "Mushroom champignon 5"
+      ],
+      "class_match_status": "CATEGORY_ONLY",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "94664",
+      "working_list_name": "Organic Red Cluster Tomatoes (On the Vine)",
+      "working_list_id": "7334f2287fa84193819046a3799712cebcbd1d64915c6b8b39c35d60eb17a002",
+      "working_source_ids": [
+        "048912d775258ab20610c28791c4e24a2bb186c47e947ce2e10667d862f9e1e1",
+        "582067cbd95edefa1f001e289216c532a53822c7dea59b9a31ec45c2d11022a9"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Red Cluster Tomatoes",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Red%20Cluster%20Tomatoes&type=code",
+      "candidate_class_folders": [
+        "Tomato 1",
+        "Tomato 10",
+        "Tomato 5",
+        "Tomato 7",
+        "Tomato 8",
+        "Tomato 9",
+        "Tomato Cherry Maroon 1",
+        "Tomato Cherry Orange 1",
+        "Tomato Cherry Red 2",
+        "Tomato Cherry Yellow 1",
+        "Tomato Maroon 2"
+      ],
+      "class_match_status": "CATEGORY_ONLY",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "94023",
+      "working_list_name": "Organic Red Seedless Grapes",
+      "working_list_id": "607d62236733c9417c43a6a4fa79ed5843f558565a57516d368cbee3829e48c0",
+      "working_source_ids": [
+        "0f6ffea493dd42c978df7ac8b0b3d5c77bdc74420f45f29fb9c7547b1ad34f17",
+        "b44dca2bf4d302f2d515dff5d5ce4edc7be5edd8667f617f65f2af592425183f"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Red Seedless Grapes",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Red%20Seedless%20Grapes&type=code",
+      "candidate_class_folders": [
+        "Grape 1",
+        "Grape pink 2",
+        "Grape pink 3"
+      ],
+      "class_match_status": "CATEGORY_ONLY",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "4899",
+      "working_list_name": "Parsley",
+      "working_list_id": "d9a67f725c1823729295b3220cc9e5eb6fc24fb38bec92c31a317f9037cbf3f6",
+      "working_source_ids": [
+        "9d62fc39e1cfbb03b99e797a28363bd795db3f3340e4548363e98756c9d7053f",
+        "141ee4d3131707e5320391420acb097ecd64e5c486fd83c5b93d14f66d437fb3"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Parsley",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Parsley&type=code",
+      "candidate_class_folders": [],
+      "class_match_status": "NO_RELEVANT_CLASS",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "4688",
+      "working_list_name": "Red Sweet Bell Pepper",
+      "working_list_id": "d5d8c38f2cbe261757926dd788950dab55fcadb30b839cd0cfbfc23d426c9142",
+      "working_source_ids": [
+        "67eb5992245e9367906267e65fb3caaf5de9bb8036210833236a98a745fcdf26",
+        "d152c945e02b10c65ceed38f53207a702f13a65fe11c5d2caf2a4c9bab0a7437"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Red Bell Pepper",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Red%20Bell%20Pepper&type=code",
+      "candidate_class_folders": [
+        "Pepper Red 2",
+        "Pepper Red 3",
+        "Pepper Red 4",
+        "Pepper Red 5"
+      ],
+      "class_match_status": "CATEGORY_ONLY",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "4436",
+      "working_list_name": "Italian Prune Plum",
+      "working_list_id": "df07cba84598645e44427aadde161e4b3b1a8252ff9dcc227aeced9bbfe58b28",
+      "working_source_ids": [
+        "c007883c370d9091a564d02403396505b38052114bb7c5944cf7a61da7748587",
+        "f8e5cc78008a26c3709dc6d1f32f2a6a799104652f8131c0974bcf85e20625b6"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Italian Prune Plum",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Italian%20Prune%20Plum&type=code",
+      "candidate_class_folders": [
+        "Plum 4",
+        "Plum 5"
+      ],
+      "class_match_status": "CATEGORY_ONLY",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "4727",
+      "working_list_name": "Yellow Potatoes",
+      "working_list_id": "4516e43c3ebae141d602d639b3d352828fd735f3a7839a9d76b9d5514529141f",
+      "working_source_ids": [
+        "ef9938b470d7274c2139116eb74dab10f2296da85a6b1d7de10a33d49478f224",
+        "4c3b8fc84e4edb9dad13ad8e7f4ae3d5437e8c019e2fc1c570636d22a12318a3"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Yellow Potatoes",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Yellow%20Potatoes&type=code",
+      "candidate_class_folders": [],
+      "class_match_status": "NO_RELEVANT_CLASS",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "94461",
+      "working_list_name": "Organic Shaddock (Pomelo)",
+      "working_list_id": "70302e03e25f7912c941786ccd9d7f260f68dd1a7115af3a617aacada7d21c02",
+      "working_source_ids": [
+        "e7105783128c26e52ad5e13edabb2670f587faccbec4a0fb67d276a12f18c3aa",
+        "22a452eb045d6bdf739074e6ee440f494868fa206b45eb8dc638b98046b558ca"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Shaddock Pomelo",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Shaddock%20Pomelo&type=code",
+      "candidate_class_folders": [],
+      "class_match_status": "NO_RELEVANT_CLASS",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "94317",
+      "working_list_name": "Organic Canary Melon",
+      "working_list_id": "a65f0255d07506602931ccab85fd92c8b507536fe0d3db4bdb820f70c3091488",
+      "working_source_ids": [
+        "2d25bc28835f6861052e3380adcd961d004edeeaaff384ccad5ec2d1ef711829",
+        "974ccce0d7ca031cd445b2d2dfce3300e201405af1b2c64c324b4bffe8903034"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Canary Melon",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Canary%20Melon&type=code",
+      "candidate_class_folders": [
+        "Cantaloupe 3"
+      ],
+      "class_match_status": "CATEGORY_ONLY",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "94049",
+      "working_list_name": "Organic Cantaloupe – Small",
+      "working_list_id": "b976d9a319269bcb613f4553dc49bff6f35890574b0a44c1752022aaef630884",
+      "working_source_ids": [
+        "bd0f0c69ab78a91ce0be0ba1ef7a98f6f0ebfe180ab08646ff47c1f40ffb2e4d",
+        "87aa0cb8b22c2c3f4e679a7a0e08e54cbffc0cc09723d1ec9db65915cddfa48a"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Small Cantaloupe",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Small%20Cantaloupe&type=code",
+      "candidate_class_folders": [
+        "Cantaloupe 3"
+      ],
+      "class_match_status": "CATEGORY_ONLY",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "94657",
+      "working_list_name": "Organic Portobello Mushrooms",
+      "working_list_id": "dea0a4a71f38a53c8a8b8e13a0c8827033f3e202796034e6efa64134f4c1315f",
+      "working_source_ids": [
+        "7222196c4dc7c31541d2e7657186ce82d53ec93fb435cde790200b5293849d95",
+        "c906042574f7f4a4c4b2962f48552e2880929f7f4034d8ef3c6f1404a2dc6504"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Portobello Mushrooms",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Portobello%20Mushrooms&type=code",
+      "candidate_class_folders": [
+        "Mushroom champignon 1",
+        "Mushroom champignon 2",
+        "Mushroom champignon 3",
+        "Mushroom champignon 4",
+        "Mushroom champignon 5"
+      ],
+      "class_match_status": "CATEGORY_ONLY",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "94281",
+      "working_list_name": "Organic Pink Grapefruit",
+      "working_list_id": "5906a249c29cb7ef9da62457ae53041d0cad20bfca1d896523019b8830303f50",
+      "working_source_ids": [
+        "2805c5fc22672cb920ba7a8ea08e704bc15b2fc25dd3ce43ba646613c0799872",
+        "be41dd3c4f98298cb999546cee6b0058f51312a468a0aa2eafb12b4255e8b154"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Pink Grapefruit",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Pink%20Grapefruit&type=code",
+      "candidate_class_folders": [],
+      "class_match_status": "NO_RELEVANT_CLASS",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "94040",
+      "working_list_name": "Organic Black Plums",
+      "working_list_id": "67cb70ea6007543d1930e574c1d31450b95212b5cd87358d702c81935efe0265",
+      "working_source_ids": [
+        "3d25b6817fb490f0fc366b05386714acd24a6169ff9d8e82212750e89388095c"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Black Plums",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Black%20Plums&type=code",
+      "candidate_class_folders": [
+        "Plum 4",
+        "Plum 5"
+      ],
+      "class_match_status": "CATEGORY_ONLY",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "94823",
+      "working_list_name": "Organic White Potatoes",
+      "working_list_id": "db4731facb0144e59ad36628438a235bc62dbfeebb8af180f5dccb73d3c51678",
+      "working_source_ids": [
+        "812bbb4f1965149c97183fed20168925d75b6bcfdcdd03ca12e28a2863906195"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "White Potatoes",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=White%20Potatoes&type=code",
+      "candidate_class_folders": [],
+      "class_match_status": "NO_RELEVANT_CLASS",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "94769",
+      "working_list_name": "Organic Kabocha Squash",
+      "working_list_id": "5b7172292cd1114a3371007cf3b75a0410c73bb04f31183f3abb92cff8aae822",
+      "working_source_ids": [
+        "13b8831b65328f78bf8af5368c7d49907606fa383e645ae94801643dc9e79e02"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Kabocha Squash",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Kabocha%20Squash&type=code",
+      "candidate_class_folders": [],
+      "class_match_status": "NO_RELEVANT_CLASS",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    },
+    {
+      "plu": "4067",
+      "working_list_name": "Zucchini",
+      "working_list_id": "c5cbb1dd75a1094d2123327990fb2aa81ae9c436e36827c2476a9b26462c0119",
+      "working_source_ids": [
+        "9e2c148d5563a26e81e03998a05c321acb08745023bc763d41c82dc316baf9e1",
+        "d33f12fd1e6bec3468d40040c0da84897840a8cfc095222e8b07162070e82d8f",
+        "b316ccd8cb6237ea44979d17ea883a48570ced94104fd9acea1561d733a206ea"
+      ],
+      "identity_status": "ACTIVE_UNIQUE",
+      "query": "Zucchini",
+      "search_url": "https://github.com/fruits-360/fruits-360-original-size/search?q=Zucchini&type=code",
+      "candidate_class_folders": [
+        "Zucchini Green 1",
+        "Zucchini dark 1",
+        "zucchini_1"
+      ],
+      "class_match_status": "CATEGORY_ONLY",
+      "exact_variety_match": false,
+      "organic_identity_established": false,
+      "visual_review_status": "NOT_REVIEWED",
+      "rights_verification_status": "NOT_VERIFIED_PER_IMAGE",
+      "resolution_verification_status": "NOT_CHECKED",
+      "production_assignment_status": "NOT_ASSIGNED"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-11-17",
+  "approval_evidence": "User input: \"I appove Zucchini and red prince\"",
+  "picklist_sha256": "38732869b0e7b1c8ccb0b6189a8685a1125595ebcc9ded4e9cc48d18d6ea8727",
+  "working_list_sha256": "cfcbf54bb3b03a41cb9799ee7f6496eeeb634dca4a35bd691798b7180a06d375",
+  "decisions": [
+    {
+      "plu": "4059",
+      "product": "Red Prince Apples",
+      "working_list_id": "2691db398e418f597b9a873710acdec756a2463e77a35fceb66e19a2647623ac",
+      "working_source_ids": [
+        "0842e09683c06be8eebe95d2759041fb646144ae4fe11a0680d5839409d28366"
+      ],
+      "working_record_sha256": "80181d88618f642b939c4b007aa0fae3bd2c33799a1f9a2e8cc2b6212f3024e6",
+      "working_decision_id": "4059",
+      "candidate": "outputs/reports/wikimedia-candidates-white-background/4059.jpg",
+      "candidate_sha256": "d3a0a5734f6c6c15ab398002bc27dce297b918d1a57cb2f4c029b4a3d9d04e17",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Red_Prince_Aepfel.jpg",
+      "visual_approval_status": "OWNER_APPROVED",
+      "photographic_origin_verification_status": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "production_status": "BLOCKED_PENDING_RIGHTS_ORIGIN_AND_ASSIGNMENT"
+    },
+    {
+      "plu": "4067",
+      "product": "Zucchini",
+      "working_list_id": "c5cbb1dd75a1094d2123327990fb2aa81ae9c436e36827c2476a9b26462c0119",
+      "working_source_ids": [
+        "9e2c148d5563a26e81e03998a05c321acb08745023bc763d41c82dc316baf9e1",
+        "d33f12fd1e6bec3468d40040c0da84897840a8cfc095222e8b07162070e82d8f",
+        "b316ccd8cb6237ea44979d17ea883a48570ced94104fd9acea1561d733a206ea"
+      ],
+      "working_record_sha256": "f6b9df8f097163a18d87737540e6d19aeca00be6b7bafebe0bf58e0e1b2fba9b",
+      "working_decision_id": "4067",
+      "candidate": "outputs/reports/wikimedia-candidates-white-background/4067.jpg",
+      "candidate_sha256": "ffa0b951dfa4e6cb9c4a57dcbc8c6106fe770529adce73174b45eb2dbae88b62",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Zucchini-Whole.jpg",
+      "visual_approval_status": "OWNER_APPROVED",
+      "photographic_origin_verification_status": "NOT_VERIFIED",
+      "rights_verification_status": "NOT_VERIFIED",
+      "production_status": "BLOCKED_PENDING_RIGHTS_ORIGIN_AND_ASSIGNMENT"
+    }
+  ]
+}

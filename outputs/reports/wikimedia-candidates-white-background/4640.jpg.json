@@ -1,0 +1,100 @@
+{
+  "plu": "4640",
+  "product": "Romaine Lettuce",
+  "creator": "Tiia Monto",
+  "license": "CC BY-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source_page_url": "https://commons.wikimedia.org/wiki/File:Cosmopolitan_salad.jpg",
+  "original_image_url": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Cosmopolitan_salad.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+  "width": 3736,
+  "height": 1984,
+  "attribution": "Tiia Monto / File:Cosmopolitan salad.jpg / CC BY-SA 4.0",
+  "approval_status": "CANDIDATE",
+  "visual_verification": "NOT REVIEWED",
+  "description": "Cosmopolitan salad by Grönsaksmästarna. Cosmopolitan is combination of iceberg lettuce and Romaine lettuce.",
+  "sha256": "da393278d16c42d8c7c65c3f65858e411d034c36e86ea6515edeabe9f21d890f",
+  "commons_metadata": {
+    "size": 1541943,
+    "width": 3736,
+    "height": 1984,
+    "url": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Cosmopolitan_salad.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "descriptionurl": "https://commons.wikimedia.org/wiki/File:Cosmopolitan_salad.jpg",
+    "descriptionshorturl": "https://commons.wikimedia.org/wiki/Special:Redirect/page/47485181",
+    "extmetadata": {
+      "DateTime": {
+        "value": "2016-03-12 17:43:58",
+        "source": "mediawiki-metadata",
+        "hidden": ""
+      },
+      "ObjectName": {
+        "value": "Cosmopolitan salad",
+        "source": "mediawiki-metadata"
+      },
+      "CommonsMetadataExtension": {
+        "value": 1.2,
+        "source": "extension",
+        "hidden": ""
+      },
+      "Categories": {
+        "value": "Lettuce|Taken with Sony ILCE-5000|Taken with Sony ILCE-5000 and Sony E 16-50mm F3.5-5.6 OSS PZ|Self-published work|Food on white background|Plants on white background",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "Assessments": {
+        "value": "",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "ImageDescription": {
+        "value": "Cosmopolitan salad by Grönsaksmästarna. Cosmopolitan is combination of iceberg lettuce and Romaine lettuce.",
+        "source": "commons-desc-page"
+      },
+      "DateTimeOriginal": {
+        "value": "2016-03-12 17:12:12",
+        "source": "commons-desc-page"
+      },
+      "Credit": {
+        "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+        "source": "commons-desc-page"
+      },
+      "Artist": {
+        "value": "<a href=\"//commons.wikimedia.org/wiki/User:Kulmalukko\" title=\"User:Kulmalukko\">Tiia Monto</a>",
+        "source": "commons-desc-page"
+      },
+      "LicenseShortName": {
+        "value": "CC BY-SA 4.0",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "UsageTerms": {
+        "value": "Creative Commons Attribution-Share Alike 4.0",
+        "source": "commons-desc-page"
+      },
+      "AttributionRequired": {
+        "value": "true",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "LicenseUrl": {
+        "value": "https://creativecommons.org/licenses/by-sa/4.0",
+        "source": "commons-desc-page"
+      },
+      "Copyrighted": {
+        "value": "True",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "Restrictions": {
+        "value": "",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "License": {
+        "value": "cc-by-sa-4.0",
+        "source": "commons-templates",
+        "hidden": ""
+      }
+    },
+    "mime": "image/jpeg"
+  }
+}

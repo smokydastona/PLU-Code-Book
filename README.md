@@ -41,6 +41,8 @@ The owner-supplied sheets are retained for review; suitable crops are references
 
 `data/review-references/lettuce_image_exact.pdf` is a lettuce-identification guide only. Its sidecar records the source checksum and reference-only authorization; the labelled chart is not assigned to cashier entries and grants no image approvals.
 
+The individual `santaclaus-1.jpg` and `Romaine.jpg` references supersede their earlier sheet crops for PLUs 4336 and 4640. Their manifests record owner-confirmed permission; native sizes of 480 x 352 and 488 x 488 remain below the production resolution requirement.
+
 ## Half-fold booklet printing
 
 The imposed PDF arranges the complete binder in saddle-stitch order: the first and last pages share the outside sheet, with inner pages paired toward the center fold. It includes every page in the full binder, including wide landscape sections. Pages are fitted proportionally into portrait half-page panels on landscape US Letter sheets. Produce, Bulk and Store Directory pages are rotated 90° counterclockwise within their panels to make better use of the panel area; turn the guide sideways to read those sections. If the binder page count is not divisible by four, blank panels are added to complete the final signature; the page map records those blanks and rotations.

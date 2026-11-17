@@ -1,0 +1,101 @@
+{
+  "plu": "94329",
+  "product": "Organic Honeydew Melon",
+  "creator": "Yotoen",
+  "license": "Public domain",
+  "license_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "source_page_url": "https://commons.wikimedia.org/wiki/File:Honeydew.jpg",
+  "original_image_url": "https://upload.wikimedia.org/wikipedia/commons/f/f5/Honeydew.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+  "width": 1024,
+  "height": 657,
+  "attribution": "Yotoen / File:Honeydew.jpg / Public domain",
+  "approval_status": "CANDIDATE",
+  "visual_verification": "NOT REVIEWED",
+  "description": "Studio shot of an organic Honeydew melon grown by delbosque farms USA",
+  "sha256": "84d57bbf8060e5021cfd7437028d54c74e8e2a35fa61efd971db8b9f705d15b5",
+  "commons_metadata": {
+    "size": 144701,
+    "width": 1024,
+    "height": 657,
+    "url": "https://upload.wikimedia.org/wikipedia/commons/f/f5/Honeydew.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "descriptionurl": "https://commons.wikimedia.org/wiki/File:Honeydew.jpg",
+    "descriptionshorturl": "https://commons.wikimedia.org/wiki/Special:Redirect/page/8288342",
+    "extmetadata": {
+      "DateTime": {
+        "value": "2009-10-28 19:43:26",
+        "source": "mediawiki-metadata",
+        "hidden": ""
+      },
+      "ObjectName": {
+        "value": "Honeydew",
+        "source": "mediawiki-metadata"
+      },
+      "CommonsMetadataExtension": {
+        "value": 1.2,
+        "source": "extension",
+        "hidden": ""
+      },
+      "Categories": {
+        "value": "Honeydew melon|Self-published work|PD-self|Milong lunti|Cross sections of melons|Fruits of Cucurbitaceae on white background",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "Assessments": {
+        "value": "",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "ImageDescription": {
+        "value": "Studio shot of an organic Honeydew melon grown by delbosque farms USA",
+        "source": "commons-desc-page"
+      },
+      "DateTimeOriginal": {
+        "value": "2009-10-28",
+        "source": "commons-desc-page"
+      },
+      "Credit": {
+        "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+        "source": "commons-desc-page"
+      },
+      "Artist": {
+        "value": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Yotoen&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Yotoen (page does not exist)\">Yotoen</a>",
+        "source": "commons-desc-page"
+      },
+      "Permission": {
+        "value": "Roman K., the copyright holder of this work, hereby publishes it under the following license:",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "LicenseShortName": {
+        "value": "Public domain",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "UsageTerms": {
+        "value": "Public domain",
+        "source": "commons-desc-page"
+      },
+      "AttributionRequired": {
+        "value": "false",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "Copyrighted": {
+        "value": "False",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "Restrictions": {
+        "value": "",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "License": {
+        "value": "pd",
+        "source": "commons-templates",
+        "hidden": ""
+      }
+    },
+    "mime": "image/jpeg"
+  }
+}

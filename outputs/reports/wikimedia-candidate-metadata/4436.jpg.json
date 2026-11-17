@@ -1,0 +1,96 @@
+{
+  "plu": "4436",
+  "product": "Italian Prune Plum",
+  "creator": "Alois Lunzer",
+  "license": "Public domain",
+  "license_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "source_page_url": "https://commons.wikimedia.org/wiki/File:Page_13_plum_-_Italian_Prune,_Moores_Arctic,_Hungarian_Prune,_Niagra.jpg",
+  "original_image_url": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Page_13_plum_-_Italian_Prune%2C_Moores_Arctic%2C_Hungarian_Prune%2C_Niagra.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+  "width": 2176,
+  "height": 2920,
+  "attribution": "Alois Lunzer / File:Page 13 plum - Italian Prune, Moores Arctic, Hungarian Prune, Niagra.jpg / Public domain",
+  "approval_status": "CANDIDATE",
+  "visual_verification": "NOT REVIEWED",
+  "description": "1909 illustrations by Alois Lunzer depicting plum cultivars Italian Prune, Moore's Arctic, Hungarian Prune and Niagra",
+  "sha256": "154adf314ee968dde35f04010dafb0825fdc9be4909ddaccdcf01ba8f3da1e14",
+  "commons_metadata": {
+    "size": 9558489,
+    "width": 2176,
+    "height": 2920,
+    "url": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Page_13_plum_-_Italian_Prune%2C_Moores_Arctic%2C_Hungarian_Prune%2C_Niagra.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "descriptionurl": "https://commons.wikimedia.org/wiki/File:Page_13_plum_-_Italian_Prune,_Moores_Arctic,_Hungarian_Prune,_Niagra.jpg",
+    "descriptionshorturl": "https://commons.wikimedia.org/wiki/Special:Redirect/page/18120735",
+    "extmetadata": {
+      "DateTime": {
+        "value": "2012-01-21 18:03:35",
+        "source": "mediawiki-metadata",
+        "hidden": ""
+      },
+      "ObjectName": {
+        "value": "Page 13 plum - Italian Prune, Moores Arctic, Hungarian Prune, Niagra",
+        "source": "mediawiki-metadata"
+      },
+      "CommonsMetadataExtension": {
+        "value": 1.2,
+        "source": "extension",
+        "hidden": ""
+      },
+      "Categories": {
+        "value": "Prunus cultivars|PD US|Plums in art|PD-US missing SDC copyright status|Scanned with HP OfficeJet 6500|Plums - botanical illustrations",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "Assessments": {
+        "value": "",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "ImageDescription": {
+        "value": "1909 illustrations by Alois Lunzer depicting plum cultivars Italian Prune, Moore's Arctic, Hungarian Prune and Niagra",
+        "source": "commons-desc-page"
+      },
+      "DateTimeOriginal": {
+        "value": "2012-01-21",
+        "source": "commons-desc-page"
+      },
+      "Credit": {
+        "value": "Brown Brothers Continental Nurseries Catalog 1909",
+        "source": "commons-desc-page"
+      },
+      "Artist": {
+        "value": "Alois Lunzer",
+        "source": "commons-desc-page"
+      },
+      "LicenseShortName": {
+        "value": "Public domain",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "UsageTerms": {
+        "value": "Public domain",
+        "source": "commons-desc-page"
+      },
+      "AttributionRequired": {
+        "value": "false",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "Copyrighted": {
+        "value": "False",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "Restrictions": {
+        "value": "",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "License": {
+        "value": "pd",
+        "source": "commons-templates",
+        "hidden": ""
+      }
+    },
+    "mime": "image/jpeg"
+  }
+}

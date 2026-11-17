@@ -1,0 +1,108 @@
+{
+  "plu": "4059",
+  "product": "Red Prince Apples",
+  "creator": "Garitzko",
+  "license": "Public domain",
+  "license_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+  "source_page_url": "https://commons.wikimedia.org/wiki/File:Red_Prince_Aepfel.jpg",
+  "original_image_url": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Red_Prince_Aepfel.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+  "width": 1920,
+  "height": 1440,
+  "attribution": "Garitzko / File:Red Prince Aepfel.jpg / Public domain",
+  "approval_status": "CANDIDATE",
+  "visual_verification": "OWNER_APPROVED",
+  "visual_approval_status": "OWNER_APPROVED",
+  "visual_approval_evidence": "User input: \"I appove Zucchini and red prince\"",
+  "visual_approval_date": "2026-11-17",
+  "working_list_id": "2691db398e418f597b9a873710acdec756a2463e77a35fceb66e19a2647623ac",
+  "working_source_ids": [
+    "0842e09683c06be8eebe95d2759041fb646144ae4fe11a0680d5839409d28366"
+  ],
+  "working_decision_id": "4059",
+  "working_list_sha256": "cfcbf54bb3b03a41cb9799ee7f6496eeeb634dca4a35bd691798b7180a06d375",
+  "rights_verification_status": "NOT_VERIFIED",
+  "photographic_origin_verification_status": "NOT_VERIFIED",
+  "production_status": "BLOCKED_PENDING_RIGHTS_ORIGIN_AND_ASSIGNMENT",
+  "description": "Apples of the cultivar Red Prince",
+  "sha256": "d3a0a5734f6c6c15ab398002bc27dce297b918d1a57cb2f4c029b4a3d9d04e17",
+  "commons_metadata": {
+    "size": 850142,
+    "width": 1920,
+    "height": 1440,
+    "url": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Red_Prince_Aepfel.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "descriptionurl": "https://commons.wikimedia.org/wiki/File:Red_Prince_Aepfel.jpg",
+    "descriptionshorturl": "https://commons.wikimedia.org/wiki/Special:Redirect/page/4035870",
+    "extmetadata": {
+      "DateTime": {
+        "value": "2008-05-12 11:22:41",
+        "source": "mediawiki-metadata",
+        "hidden": ""
+      },
+      "ObjectName": {
+        "value": "Red Prince Aepfel",
+        "source": "mediawiki-metadata"
+      },
+      "CommonsMetadataExtension": {
+        "value": 1.2,
+        "source": "extension",
+        "hidden": ""
+      },
+      "Categories": {
+        "value": "Self-published work|PD-self|Apples on white background|Red Prince",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "Assessments": {
+        "value": "",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "ImageDescription": {
+        "value": "Apples of the cultivar Red Prince",
+        "source": "commons-desc-page"
+      },
+      "DateTimeOriginal": {
+        "value": "2008-05-10",
+        "source": "commons-desc-page"
+      },
+      "Credit": {
+        "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+        "source": "commons-desc-page"
+      },
+      "Artist": {
+        "value": "<a href=\"//commons.wikimedia.org/wiki/User:Garitzko\" title=\"User:Garitzko\">Garitzko</a>",
+        "source": "commons-desc-page"
+      },
+      "LicenseShortName": {
+        "value": "Public domain",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "UsageTerms": {
+        "value": "Public domain",
+        "source": "commons-desc-page"
+      },
+      "AttributionRequired": {
+        "value": "false",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "Copyrighted": {
+        "value": "False",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "Restrictions": {
+        "value": "",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "License": {
+        "value": "pd",
+        "source": "commons-templates",
+        "hidden": ""
+      }
+    },
+    "mime": "image/jpeg"
+  }
+}

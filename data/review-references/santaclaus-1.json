@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "source": "data/review-references/santaclaus-1.jpg",
+  "source_sha256": "5d54404428eb98fc64d2dd81465f23655efc867de93dc81871a797d0ebe97290",
+  "source_size": [480, 352],
+  "image_kind": "UNVERIFIED_IMAGE",
+  "origin": "Owner-supplied product image. Owner confirmed: \"Yes, I own them or have permission\" in response to permission for binders and repository use of santaclaus-1.jpg and Romaine.jpg. Creator and photographic origin have not been independently verified.",
+  "review_note": "Review reference only, not a production image approval. Original retained unchanged, with no upscaling. Native resolution is below 500 pixels; production resolution and other image gates remain in force.",
+  "panels": [
+    {
+      "plu": "4336",
+      "product": "Santa Claus Melon",
+      "box": [0, 0, 480, 352],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "f0bdfb32e781ad1cecaf89ceb1cfeed2c5a052324ab923b9b20a941d322a9a9f",
+        "source_ids": [
+          "df689eba8547b5efcb8e7a5ce0f8f6954b21fb38e3eddf417a27f9f6a407a8c2",
+          "745185b093bdade324313635b0d314b2ef1f6260503b6ac4b3fd6ed5095404ac"
+        ],
+        "record_sha256": "2c8019fcc2afcbc1dce74941bab0ddb8bf06eae942f5cf2fa6e3212214478e05"
+      }
+    }
+  ]
+}

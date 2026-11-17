@@ -1,0 +1,100 @@
+{
+  "plu": "94664",
+  "product": "Organic Red Cluster Tomatoes",
+  "creator": "Alabama Extension",
+  "license": "CC0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "source_page_url": "https://commons.wikimedia.org/wiki/File:Cluster_of_Tomatoes_on_Vine.jpg",
+  "original_image_url": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Cluster_of_Tomatoes_on_Vine.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+  "width": 3024,
+  "height": 4032,
+  "attribution": "Alabama Extension / File:Cluster of Tomatoes on Vine.jpg / CC0",
+  "approval_status": "CANDIDATE",
+  "visual_verification": "NOT REVIEWED",
+  "description": "ACES | David Cline\nCluster of tomatoes on a vine grown in a small scale aquaponics system at the AU E.W. Shell Fisheries Research Center.",
+  "sha256": "e6e45f0e9f1dce44472c3cf1a3c71a0c8bbccbb147980dfc0a4ba92a7edeb09b",
+  "commons_metadata": {
+    "size": 5176069,
+    "width": 3024,
+    "height": 4032,
+    "url": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Cluster_of_Tomatoes_on_Vine.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "descriptionurl": "https://commons.wikimedia.org/wiki/File:Cluster_of_Tomatoes_on_Vine.jpg",
+    "descriptionshorturl": "https://commons.wikimedia.org/wiki/Special:Redirect/page/128155150",
+    "extmetadata": {
+      "DateTime": {
+        "value": "2023-01-27 17:21:53",
+        "source": "mediawiki-metadata",
+        "hidden": ""
+      },
+      "ObjectName": {
+        "value": "Cluster of Tomatoes on Vine",
+        "source": "mediawiki-metadata"
+      },
+      "CommonsMetadataExtension": {
+        "value": 1.2,
+        "source": "extension",
+        "hidden": ""
+      },
+      "Categories": {
+        "value": "CC-Zero|Aquaculture in the United States|Flickr images reviewed by FlickreviewR 2",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "Assessments": {
+        "value": "",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "ImageDescription": {
+        "value": "ACES | David Cline\nCluster of tomatoes on a vine grown in a small scale aquaponics system at the AU E.W. Shell Fisheries Research Center.",
+        "source": "commons-desc-page"
+      },
+      "DateTimeOriginal": {
+        "value": "2021-03-05 16:35:32",
+        "source": "commons-desc-page"
+      },
+      "Credit": {
+        "value": "<a rel=\"nofollow\" class=\"external free\" href=\"https://www.flickr.com/photos/184594136@N08/51859296005/\">https://www.flickr.com/photos/184594136@N08/51859296005/</a>",
+        "source": "commons-desc-page"
+      },
+      "Artist": {
+        "value": "Alabama Extension",
+        "source": "commons-desc-page"
+      },
+      "LicenseShortName": {
+        "value": "CC0",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "UsageTerms": {
+        "value": "Creative Commons Zero, Public Domain Dedication",
+        "source": "commons-desc-page"
+      },
+      "AttributionRequired": {
+        "value": "false",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "LicenseUrl": {
+        "value": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "source": "commons-desc-page"
+      },
+      "Copyrighted": {
+        "value": "True",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "Restrictions": {
+        "value": "",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "License": {
+        "value": "cc0",
+        "source": "commons-templates",
+        "hidden": ""
+      }
+    },
+    "mime": "image/jpeg"
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "plu": "94040",
+  "product": "Organic Black Plums",
+  "creator": "Fumikas Sagisavas",
+  "license": "CC0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "source_page_url": "https://commons.wikimedia.org/wiki/File:Black_plums.jpg",
+  "original_image_url": "https://upload.wikimedia.org/wikipedia/commons/9/91/Black_plums.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+  "width": 3000,
+  "height": 3000,
+  "attribution": "Fumikas Sagisavas / File:Black plums.jpg / CC0",
+  "approval_status": "CANDIDATE",
+  "visual_verification": "NOT REVIEWED",
+  "description": "Black plums",
+  "sha256": "8b52894aaf152e234dc33a3768fc751d371bb5718e923ba5a3a9dcd28593ef9d",
+  "commons_metadata": {
+    "size": 3765075,
+    "width": 3000,
+    "height": 3000,
+    "url": "https://upload.wikimedia.org/wikipedia/commons/9/91/Black_plums.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "descriptionurl": "https://commons.wikimedia.org/wiki/File:Black_plums.jpg",
+    "descriptionshorturl": "https://commons.wikimedia.org/wiki/Special:Redirect/page/152486460",
+    "extmetadata": {
+      "DateTime": {
+        "value": "2024-09-10 22:45:16",
+        "source": "mediawiki-metadata",
+        "hidden": ""
+      },
+      "ObjectName": {
+        "value": "Black plums",
+        "source": "mediawiki-metadata"
+      },
+      "CommonsMetadataExtension": {
+        "value": 1.2,
+        "source": "extension",
+        "hidden": ""
+      },
+      "Categories": {
+        "value": "CC-Zero|Self-published work|Plums as food|Fruit textures",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "Assessments": {
+        "value": "",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "ImageDescription": {
+        "value": "Black plums",
+        "source": "commons-desc-page"
+      },
+      "DateTimeOriginal": {
+        "value": "2024-07-09 16:19:20",
+        "source": "commons-desc-page"
+      },
+      "Credit": {
+        "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+        "source": "commons-desc-page"
+      },
+      "Artist": {
+        "value": "<a href=\"//commons.wikimedia.org/wiki/User:Fumikas_Sagisavas\" title=\"User:Fumikas Sagisavas\">Fumikas Sagisavas</a>",
+        "source": "commons-desc-page"
+      },
+      "LicenseShortName": {
+        "value": "CC0",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "UsageTerms": {
+        "value": "Creative Commons Zero, Public Domain Dedication",
+        "source": "commons-desc-page"
+      },
+      "AttributionRequired": {
+        "value": "false",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "LicenseUrl": {
+        "value": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "source": "commons-desc-page"
+      },
+      "Copyrighted": {
+        "value": "True",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "Restrictions": {
+        "value": "",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "License": {
+        "value": "cc0",
+        "source": "commons-templates",
+        "hidden": ""
+      }
+    },
+    "mime": "image/jpeg"
+  }
+}

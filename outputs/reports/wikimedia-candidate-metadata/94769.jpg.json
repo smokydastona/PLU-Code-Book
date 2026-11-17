@@ -1,0 +1,113 @@
+{
+  "plu": "94769",
+  "product": "Organic Kabocha Squash",
+  "creator": "Sdkb",
+  "license": "CC BY-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source_page_url": "https://commons.wikimedia.org/wiki/File:Kabocha_squash_dish.jpg",
+  "original_image_url": "https://upload.wikimedia.org/wikipedia/commons/b/bf/Kabocha_squash_dish.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+  "width": 4080,
+  "height": 3072,
+  "attribution": "Sdkb / File:Kabocha squash dish.jpg / CC BY-SA 4.0",
+  "approval_status": "CANDIDATE",
+  "visual_verification": "NOT REVIEWED",
+  "description": "A dish with kabocha squash, creamy polenta, sage & spiced apple cider gastrique at Little Wolf Restaurant in Edmonton, Alberta, Canada.",
+  "sha256": "64bdc6e88a4401e2cd80c0028fe393e8722df64c80818f24f87a6287a25b60e0",
+  "commons_metadata": {
+    "size": 2403597,
+    "width": 4080,
+    "height": 3072,
+    "url": "https://upload.wikimedia.org/wikipedia/commons/b/bf/Kabocha_squash_dish.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "descriptionurl": "https://commons.wikimedia.org/wiki/File:Kabocha_squash_dish.jpg",
+    "descriptionshorturl": "https://commons.wikimedia.org/wiki/Special:Redirect/page/200715323",
+    "extmetadata": {
+      "DateTime": {
+        "value": "2026-10-01 03:23:30",
+        "source": "mediawiki-metadata",
+        "hidden": ""
+      },
+      "ObjectName": {
+        "value": "Kabocha squash dish",
+        "source": "mediawiki-metadata"
+      },
+      "CommonsMetadataExtension": {
+        "value": 1.2,
+        "source": "extension",
+        "hidden": ""
+      },
+      "Categories": {
+        "value": "Polentas|Self-published work|Files with coordinates missing SDC location of creation|Squash-based food|Images taken by Sdkb|September 2026 in Edmonton|Little Wolf Restaurant",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "Assessments": {
+        "value": "",
+        "source": "commons-categories",
+        "hidden": ""
+      },
+      "GPSLatitude": {
+        "value": "53.520464",
+        "source": "commons-desc-page"
+      },
+      "GPSLongitude": {
+        "value": "-113.511797",
+        "source": "commons-desc-page"
+      },
+      "GPSMapDatum": {
+        "value": "WGS-84",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "ImageDescription": {
+        "value": "A dish with <a href=\"https://en.wikipedia.org/wiki/kabocha_squash\" class=\"extiw\" title=\"w:kabocha squash\">kabocha squash</a>, creamy polenta, sage &amp; spiced apple cider gastrique at Little Wolf Restaurant in <a href=\"https://en.wikipedia.org/wiki/Edmonton,_Alberta,_Canada\" class=\"extiw\" title=\"w:Edmonton, Alberta, Canada\">Edmonton, Alberta, Canada</a>.",
+        "source": "commons-desc-page"
+      },
+      "DateTimeOriginal": {
+        "value": "2026-09-27 17:50:43",
+        "source": "commons-desc-page"
+      },
+      "Credit": {
+        "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+        "source": "commons-desc-page"
+      },
+      "Artist": {
+        "value": "<a href=\"//commons.wikimedia.org/wiki/User:Sdkb\" title=\"User:Sdkb\">Sdkb</a>",
+        "source": "commons-desc-page"
+      },
+      "LicenseShortName": {
+        "value": "CC BY-SA 4.0",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "UsageTerms": {
+        "value": "Creative Commons Attribution-Share Alike 4.0",
+        "source": "commons-desc-page"
+      },
+      "AttributionRequired": {
+        "value": "true",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "LicenseUrl": {
+        "value": "https://creativecommons.org/licenses/by-sa/4.0",
+        "source": "commons-desc-page"
+      },
+      "Copyrighted": {
+        "value": "True",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "Restrictions": {
+        "value": "",
+        "source": "commons-desc-page",
+        "hidden": ""
+      },
+      "License": {
+        "value": "cc-by-sa-4.0",
+        "source": "commons-templates",
+        "hidden": ""
+      }
+    },
+    "mime": "image/jpeg"
+  }
+}
