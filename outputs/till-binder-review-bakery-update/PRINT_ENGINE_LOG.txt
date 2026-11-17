@@ -1,0 +1,3 @@
+convert /workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/outputs/till-binder-review-bakery-update/Complete Till Binder - Updated - Photos.xlsx as a Calc document -> /tmp/till-print-rjckckbm/Complete Till Binder - Updated - Photos.pdf using filter : calc_pdf_Export:{"UseLosslessCompression":{"type":"boolean","value":"true"},"ReduceImageResolution":{"type":"boolean","value":"false"}}
+Warning: failed to launch javaldx - java may not function correctly
+libpng warning: iCCP: known incorrect sRGB profile

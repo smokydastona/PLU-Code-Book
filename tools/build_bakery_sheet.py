@@ -15,7 +15,7 @@ PRODUCT_WIDTH, CODE_WIDTH, GAP_WIDTH = 40, 8, 2
 ROW_HEIGHT = 24
 BODY_POINTS = 12
 FONT = "DejaVu Sans"
-VALID_CATEGORIES = {"Bulk Buns", "Bagels", "Muffins"}
+VALID_CATEGORIES = {"Bulk Buns", "Bagels", "Muffins", "Sweets"}
 
 
 def _read_products(path):

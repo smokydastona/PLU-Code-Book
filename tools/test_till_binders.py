@@ -531,7 +531,7 @@ class TillBinderChecks(unittest.TestCase):
         self.assertEqual(len(list(self.output.glob("*.xlsx"))), 1)
         self.assertFalse((self.output / "booklets").exists())
         self.assertEqual(summary["produce_records_included"], 7)
-        self.assertEqual(summary["bakery_records_included"], 37)
+        self.assertEqual(summary["bakery_records_included"], 31)
         self.assertEqual(summary["total_source_records"], 10)
         self.assertEqual(summary["hidden_or_deleted_records"], 2)
         self.assertEqual(summary["known_non_produce_excluded"], 1)
@@ -574,7 +574,7 @@ class TillBinderChecks(unittest.TestCase):
             self.assertEqual(summary["validations"][edition]["deli_records_verified"], 2)
             _, bakery_coordinates, bakery_products = read_bakery_source(self.root)
             validate_bakery_sheet(workbook["Bakery"], bakery_products, bakery_coordinates)
-            self.assertEqual(summary["validations"][edition]["bakery_records_verified"], 37)
+            self.assertEqual(summary["validations"][edition]["bakery_records_verified"], 31)
             self.assertEqual(workbook["Operational"]["B2"].value, "=SUM(A2:A3)")
             self.assertEqual(workbook["Operational"]["B2"].comment.text, "Keep this comment")
             self.assertEqual(str(workbook["Operational"].merged_cells), "A1:C1")
@@ -604,16 +604,42 @@ class TillBinderChecks(unittest.TestCase):
 
     def test_bakery_sheet_keeps_all_exact_text_entries_in_one_page_theme(self):
         content, coordinates, products = read_bakery_source(self.root)
-        self.assertEqual(len(products), 37)
+        self.assertEqual(len(products), 31)
         self.assertEqual([sum(row["category"] == category for row in products)
-                          for category in ("Bulk Buns", "Bagels", "Muffins")], [11, 8, 18])
+                          for category in ("Bulk Buns", "Bagels", "Muffins", "Sweets")], [10, 8, 6, 7])
         removed = {"55854", "47898", "55935", "55865", "68342", "68343", "55756", "55861"}
         self.assertTrue(removed.isdisjoint(row["plu"] for row in products))
         self.assertEqual([row["plu"] for row in products if row["category"] == "Muffins"], [
-            "76255", "56126", "65873", "92655", "2298", "2349", "66136", "2329",
-            "73798", "65619", "2326", "73799", "2327", "30298", "80228", "40457",
-            "34176", "42103",
+            "65873", "42114", "66136", "2326", "73799", "42103",
         ])
+        self.assertEqual(
+            [(row["category"], row["plu"], row["product"]) for row in products
+             if row["category"] == "Sweets"],
+            [("Sweets", plu, product) for plu, product in (
+                ("16799", "Brioche Swirl Chocolate"),
+                ("63886", "Brioche Swirl Raisin"),
+                ("22835", "Blue Danish"),
+                ("22833", "Apple Danish"),
+                ("60068", "Apple Fritter"),
+                ("40302", "Glazed Donut Ring"),
+                ("40457", "Chocolate Glazed Croisant"),
+            )],
+        )
+        entries = {(row["category"], row["plu"], row["product"]) for row in products}
+        self.assertTrue({
+            ("Bulk Buns", "67721", "Kaiser/Cheese Kaiser"),
+            ("Bulk Buns", "67721", "Kaisers Buns White Cheese Bulk"),
+            ("Bulk Buns", "77474", "Cheese Swirl Buns"),
+            ("Bulk Buns", "37769", "Cheese Sticks"),
+            ("Muffins", "42114", "Carrot w/ cream cheese"),
+            ("Muffins", "42103", "Blueberry w/ Greek Yogurt"),
+        }.issubset(entries))
+        self.assertEqual([row["plu"] for row in products if row["plu"] == "67721"], ["67721", "67721"])
+        removed_bakery_plus = {
+            "29684", "76255", "56126", "92655", "2298", "2329", "73798",
+            "65619", "2327", "30298", "80228", "34176",
+        }
+        self.assertTrue(removed_bakery_plus.isdisjoint(row["plu"] for row in products))
         self.assertTrue(all("1X1EA" not in row["product"] for row in products))
         destination = self.root / "bakery-replaced.xlsx"
         replace_sheet(self.binder, content, destination, "Bakery")
@@ -622,8 +648,8 @@ class TillBinderChecks(unittest.TestCase):
         try:
             validate_bakery_sheet(result["Bakery"], products, coordinates)
             headings = [cell.value for row in result["Bakery"] for cell in row
-                        if cell.value in ("Bulk Buns", "Bagels", "Muffins")]
-            self.assertCountEqual(headings, ["Bulk Buns", "Bagels", "Muffins"])
+                        if cell.value in ("Bulk Buns", "Bagels", "Muffins", "Sweets")]
+            self.assertCountEqual(headings, ["Bulk Buns", "Bagels", "Muffins", "Sweets"])
             self.assertEqual(result["Produce"]["B3"].value, original["Produce"]["B3"].value)
             self.assertEqual(result["Deli"]["A1"].value, original["Deli"]["A1"].value)
             self.assertEqual(result.sheetnames, original.sheetnames)
@@ -637,8 +663,8 @@ class TillBinderChecks(unittest.TestCase):
         workbook = load_workbook(io.BytesIO(content))
         try:
             headings = [cell.value for row in workbook["Bakery"] for cell in row
-                        if cell.value in ("Bulk Buns", "Bagels", "Muffins")]
-            self.assertCountEqual(headings, ["Bulk Buns", "Bagels", "Muffins"])
+                        if cell.value in ("Bulk Buns", "Bagels", "Muffins", "Sweets")]
+            self.assertCountEqual(headings, ["Bulk Buns", "Bagels", "Muffins", "Sweets"])
             validate_bakery_sheet(workbook["Bakery"], products[:-1], coordinates)
         finally:
             workbook.close()
