@@ -209,7 +209,7 @@ class TillBinderChecks(unittest.TestCase):
         can_verify_print = bool(shutil.which("soffice"))
         first = generate(self.root, source, self.output, verify_print=can_verify_print)
         self.assertEqual(first["validations"]["photos"]["bulk_records_verified"], 399)
-        booklet = self.output / "Complete Till Binder - Half-Fold Booklet.pdf"
+        booklet = self.output / "Pocket Guide.pdf"
         if can_verify_print:
             self.assertTrue(booklet.is_file())
             self.assertEqual(

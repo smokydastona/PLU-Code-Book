@@ -10,7 +10,7 @@ Build artifacts are kept in `outputs/till-binder-review/`:
 | --- | --- |
 | `Complete Till Binder - Updated - Photos.xlsx` | Editable complete binder |
 | `Complete Till Binder - Updated - Photos.pdf` | Full binder in reading order |
-| `Complete Till Binder - Half-Fold Booklet.pdf` | Imposed 2-up, duplex booklet for folding and saddle-stitching |
+| `Pocket Guide.pdf` | Imposed 2-up, duplex binder guide for folding and saddle-stitching |
 | `BINDER_BOOKLET_IMPOSITION.csv` | Source-page placement for each physical sheet side |
 | `VALIDATION.json`, `AUDIT_REPORT.json`, and CSV reports | Build, print-layout, image and production-readiness evidence |
 

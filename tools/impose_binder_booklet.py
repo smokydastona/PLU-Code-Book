@@ -8,7 +8,7 @@ import pymupdf
 SHEET_WIDTH = 792
 SHEET_HEIGHT = 612
 PANEL_WIDTH = SHEET_WIDTH / 2
-OUTPUT_NAME = "Complete Till Binder - Half-Fold Booklet.pdf"
+OUTPUT_NAME = "Pocket Guide.pdf"
 MAP_NAME = "BINDER_BOOKLET_IMPOSITION.csv"
 
 
@@ -67,7 +67,7 @@ def impose_binder_pdf(source_path, output_path, map_path):
         output = Path(output_path)
         output.parent.mkdir(parents=True, exist_ok=True)
         imposed.set_metadata({
-            "title": "Complete Till Binder - Half-Fold Booklet",
+            "title": "Pocket Guide",
             "subject": "2-up duplex imposition for half-fold saddle-stitch printing",
         })
         imposed.save(output, garbage=4, deflate=True)

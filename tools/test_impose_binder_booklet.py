@@ -13,7 +13,7 @@ class BinderBookletImpositionChecks(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             source_path = root / "binder.pdf"
-            booklet_path = root / "booklet.pdf"
+            booklet_path = root / "Pocket Guide.pdf"
             map_path = root / "imposition.csv"
             source = pymupdf.open()
             sizes = [(612, 792), (792, 612), (612, 792), (792, 612), (612, 792)]
@@ -52,7 +52,7 @@ class BinderBookletImpositionChecks(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             source_path, booklet_path, map_path = (
-                root / "source.pdf", root / "booklet.pdf", root / "map.csv")
+                root / "source.pdf", root / "Pocket Guide.pdf", root / "map.csv")
             source = pymupdf.open()
             for number in range(1, 5):
                 page = source.new_page(width=612, height=792)
