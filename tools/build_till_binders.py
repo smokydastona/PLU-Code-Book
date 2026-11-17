@@ -2716,9 +2716,12 @@ def bulk_print_pages(path):
             if not isinstance(heading, str) or not heading.strip():
                 raise ValueError("themed Bulk page must have a section subtitle")
             codes = Counter(str(sheet.cell(row, col).value) for row in range(start, end)
-                            for col in (2, 5, 8) if sheet.cell(row, col).value not in (None, "PLU"))
-            products = [sheet.cell(row, col).value for row in range(start, end) for col in (1, 4, 7)
-                        if sheet.cell(row, col + 1).value not in (None, "PLU")]
+                            for col in (1, 4, 7)
+                            if sheet.cell(row, col + 1).value is not None and
+                            sheet.cell(row, col).value != "PLU")
+            products = [sheet.cell(row, col).value for row in range(start, end)
+                        for col in (2, 5, 8) if sheet.cell(row, col).value is not None and
+                        sheet.cell(row, col - 1).value not in (None, "PLU")]
             pages.append(dict(heading=" ".join(heading.split()), codes=codes, products=products))
         return pages
     finally:
@@ -2826,8 +2829,8 @@ def generate(root, binder, output, verify_print=False):
         stretch_size = image.size
     deli_document = root / "sources/binders/Deli.docx"
     deli_document_checksum = sha(deli_document.read_bytes())
-    deli_content, deli_coordinates = read_deli_source(root)
-    deli_checksum = sha(deli_content)
+    deli_content, deli_coordinates = read_deli_source(root, plu_first=True)
+    deli_checksum = sha((root / DELI_SOURCE).read_bytes())
     bakery_content, bakery_coordinates, bakery_rows = read_bakery_source(root)
     deli_content = theme_product_table(deli_content, "Deli", deli_coordinates)
     bakery_content = theme_product_table(bakery_content, "Bakery", bakery_coordinates)

@@ -54,7 +54,7 @@ def _read_products(path):
 def _group_panel(rows, column_start, sheet, coordinates):
     if not rows:
         return
-    product_column, code_column = column_start, column_start + 1
+    code_column, product_column = column_start, column_start + 1
     row_number = 3
     groups = []
     for product in rows:
@@ -63,16 +63,16 @@ def _group_panel(rows, column_start, sheet, coordinates):
         groups[-1][1].append(product)
     border = Border(bottom=Side(style="hair", color="CCCCCC"))
     for category, products in groups:
-        sheet.merge_cells(start_row=row_number, start_column=product_column,
-                          end_row=row_number, end_column=code_column)
-        heading = sheet.cell(row_number, product_column, category)
+        sheet.merge_cells(start_row=row_number, start_column=code_column,
+                          end_row=row_number, end_column=product_column)
+        heading = sheet.cell(row_number, code_column, category)
         heading.data_type = "s"
         heading.font = Font(name=FONT, size=BODY_POINTS + 1, bold=True, color="FFFFFF")
         heading.fill = PatternFill("solid", fgColor="375623")
         sheet.row_dimensions[row_number].height = max(
             sheet.row_dimensions[row_number].height or 0, 24)
         row_number += 1
-        for column, label in ((product_column, "Product"), (code_column, "PLU")):
+        for column, label in ((code_column, "PLU"), (product_column, "Product")):
             cell = sheet.cell(row_number, column, label)
             cell.font = Font(name=FONT, size=BODY_POINTS, bold=True, color="375623")
             cell.border = Border(bottom=Side(style="thin", color="375623"))
@@ -109,8 +109,8 @@ def workbook_bytes(rows):
     sheet["A1"].font = Font(name=FONT, size=16, bold=True, color="375623")
     sheet["A1"].alignment = Alignment(horizontal="center")
     sheet.row_dimensions[1].height = 30
-    for column, width in (("A", PRODUCT_WIDTH), ("B", CODE_WIDTH), ("C", GAP_WIDTH),
-                          ("D", PRODUCT_WIDTH), ("E", CODE_WIDTH)):
+    for column, width in (("A", CODE_WIDTH), ("B", PRODUCT_WIDTH), ("C", GAP_WIDTH),
+                          ("D", CODE_WIDTH), ("E", PRODUCT_WIDTH)):
         sheet.column_dimensions[column].width = width
 
     boundaries = [index for index in range(1, len(rows))
@@ -154,6 +154,8 @@ def validate_sheet(sheet, expected, coordinates):
             raise ValueError(f"Bakery product changed at {entry['product_cell']}")
         if code.value != entry["plu"] or code.data_type != "s" or code.number_format != "@":
             raise ValueError(f"Bakery PLU changed or lost its text format at {entry['code_cell']}")
+        if code.column >= product.column:
+            raise ValueError(f"Bakery PLU must be left of its product at {entry['code_cell']}")
 
 
 def read_source(root):

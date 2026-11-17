@@ -38,6 +38,18 @@ class DeliSheetChecks(unittest.TestCase):
             self.assertEqual(workbook["Deli"]["A5"].data_type, "s")
             self.assertEqual(workbook["Deli"]["B5"].value, "00012")
             self.assertEqual(workbook["Deli"]["E5"].value, "00345")
+            binder_content, binder_coordinates = read_source(root, plu_first=True)
+            binder = load_workbook(io.BytesIO(binder_content))
+            try:
+                self.assertEqual(binder["Deli"]["A5"].value, "00012")
+                self.assertEqual(binder["Deli"]["B5"].value, "=Exact product")
+                self.assertTrue(all(
+                    binder["Deli"][entry["code_cell"]].column <
+                    binder["Deli"][entry["product_cell"]].column
+                    for entry in binder_coordinates
+                ))
+            finally:
+                binder.close()
             workbook["Deli"]["E5"] = "99999"
             workbook.save(output / "Updated_Deli_Two_Columns.xlsx")
             workbook.close()

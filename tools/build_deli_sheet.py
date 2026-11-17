@@ -50,7 +50,7 @@ def read_sections(path):
     return title, sections
 
 
-def workbook_bytes(title, sections):
+def workbook_bytes(title, sections, plu_first=False):
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = "Deli"
@@ -61,7 +61,9 @@ def workbook_bytes(title, sections):
     sheet["A1"].font = Font(name="Calibri", size=14, bold=True)
     sheet["A1"].alignment = Alignment(horizontal="center")
     sheet.row_dimensions[1].height = 26
-    for column, width in (("A", 33), ("B", 10), ("C", 3), ("D", 33), ("E", 10)):
+    widths = (("A", 10), ("B", 33), ("C", 3), ("D", 10), ("E", 33)) if plu_first else (
+        ("A", 33), ("B", 10), ("C", 3), ("D", 33), ("E", 10))
+    for column, width in widths:
         sheet.column_dimensions[column].width = width
     weights = [len(values) + 3 for _, values in sections]
     split = min(range(1, len(sections)), key=lambda i: abs(sum(weights[:i]) - sum(weights[i:]))) \
@@ -78,24 +80,26 @@ def workbook_bytes(title, sections):
             cell.fill = PatternFill("solid", fgColor="375623")
             sheet.row_dimensions[row].height = 20
             row += 1
-            for column, text in ((start, "Product"), (start + 1, "PLU")):
+            product_column = start + int(plu_first)
+            code_column = start + int(not plu_first)
+            for column, text in ((code_column, "PLU"), (product_column, "Product")):
                 sheet.cell(row, column, text).font = Font(name="Calibri", size=10, bold=True)
             sheet.row_dimensions[row].height = 16
             row += 1
             for product, plu in values:
-                for column, value in ((start, product), (start + 1, plu)):
+                for column, value in ((product_column, product), (code_column, plu)):
                     cell = sheet.cell(row, column, value)
                     cell.data_type = "s"
                     cell.font = Font(name="Calibri", size=11)
                     cell.alignment = Alignment(wrap_text=True, vertical="center",
-                                               horizontal="left" if column == start else "center")
+                                               horizontal="left" if column == product_column else "center")
                     cell.border = border
-                sheet.cell(row, start + 1).number_format = "@"
+                sheet.cell(row, code_column).number_format = "@"
                 sheet.row_dimensions[row].height = max(
                     sheet.row_dimensions[row].height or 0, 16 * ((len(product) + 29) // 30))
                 coordinates.append(dict(category=category, product=product, plu=plu,
-                                        product_cell=sheet.cell(row, start).coordinate,
-                                        code_cell=sheet.cell(row, start + 1).coordinate))
+                                        product_cell=sheet.cell(row, product_column).coordinate,
+                                        code_cell=sheet.cell(row, code_column).coordinate))
                 row += 1
             row += 1
     sheet.print_area = f"A1:E{sheet.max_row}"
@@ -121,7 +125,7 @@ def validate_sheet(sheet, coordinates):
             raise ValueError(f"deli PLU changed at {entry['code_cell']}")
 
 
-def read_source(root):
+def read_source(root, plu_first=False):
     path = Path(root) / DELI_SOURCE
     title, sections = read_sections(Path(root) / "sources/binders/Deli.docx")
     expected, coordinates = workbook_bytes(title, sections)
@@ -140,6 +144,16 @@ def read_source(root):
     finally:
         source.close()
         rebuilt.close()
+    if plu_first:
+        content, coordinates = workbook_bytes(title, sections, plu_first=True)
+        generated = load_workbook(io.BytesIO(content))
+        try:
+            validate_sheet(generated["Deli"], coordinates)
+            if any(generated["Deli"][entry["code_cell"]].column >=
+                   generated["Deli"][entry["product_cell"]].column for entry in coordinates):
+                raise ValueError("binder Deli PLUs must be left of their product descriptions")
+        finally:
+            generated.close()
     return content, coordinates
 
 

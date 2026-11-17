@@ -1,32 +1,32 @@
 ﻿category,product,plu,product_cell,code_cell
-Bulk Buns,Hamburger Bun Bulk,17702,A5,B5
-Bulk Buns,Hot Dog Bun Bulk,57728,A6,B6
-Bulk Buns,Kaiser/Cheese Kaiser,67721,A7,B7
-Bulk Buns,Kaisers Buns White Cheese Bulk,67721,A8,B8
-Bulk Buns,Bun Dinner Whole Wheat 100% Bulk,57738,A9,B9
-Bulk Buns,Bun Dinner White Bulk,67717,A10,B10
-Bulk Buns,Panini Buns Bulk,77693,A11,B11
-Bulk Buns,Cheese Swirl Buns,77474,A12,B12
-Bulk Buns,Cheese Sticks,37769,A13,B13
-Bulk Buns,Pepperoni Stick Bulk,2922,A14,B14
-Bagels,Plain,37803,A18,B18
-Bagels,Blueberry,37831,A19,B19
-Bagels,Cheese,27899,A20,B20
-Bagels,Cinnamon Raisin,37842,A21,B21
-Bagels,Everything,37850,A22,B22
-Bagels,Jalapeno Cheese,37845,A23,B23
-Bagels,Multigrain,37843,A24,B24
-Bagels,Sesame Seed,27898,A25,B25
-Muffins,BRAN,65873,D5,E5
-Muffins,Carrot w/ cream cheese,42114,D6,E6
-Muffins,CHOCOLATE CHUNK,66136,D7,E7
-Muffins,CRAN ORANGE,2326,D8,E8
-Muffins,WEST COAST,73799,D9,E9
-Muffins,Blueberry w/ Greek Yogurt,42103,D10,E10
-Sweets,Brioche Swirl Chocolate,16799,D14,E14
-Sweets,Brioche Swirl Raisin,63886,D15,E15
-Sweets,Blue Danish,22835,D16,E16
-Sweets,Apple Danish,22833,D17,E17
-Sweets,Apple Fritter,60068,D18,E18
-Sweets,Glazed Donut Ring,40302,D19,E19
-Sweets,Chocolate Glazed Croisant,40457,D20,E20
+Bulk Buns,Hamburger Bun Bulk,17702,B5,A5
+Bulk Buns,Hot Dog Bun Bulk,57728,B6,A6
+Bulk Buns,Kaiser/Cheese Kaiser,67721,B7,A7
+Bulk Buns,Kaisers Buns White Cheese Bulk,67721,B8,A8
+Bulk Buns,Bun Dinner Whole Wheat 100% Bulk,57738,B9,A9
+Bulk Buns,Bun Dinner White Bulk,67717,B10,A10
+Bulk Buns,Panini Buns Bulk,77693,B11,A11
+Bulk Buns,Cheese Swirl Buns,77474,B12,A12
+Bulk Buns,Cheese Sticks,37769,B13,A13
+Bulk Buns,Pepperoni Stick Bulk,2922,B14,A14
+Bagels,Plain,37803,B18,A18
+Bagels,Blueberry,37831,B19,A19
+Bagels,Cheese,27899,B20,A20
+Bagels,Cinnamon Raisin,37842,B21,A21
+Bagels,Everything,37850,B22,A22
+Bagels,Jalapeno Cheese,37845,B23,A23
+Bagels,Multigrain,37843,B24,A24
+Bagels,Sesame Seed,27898,B25,A25
+Muffins,BRAN,65873,E5,D5
+Muffins,Carrot w/ cream cheese,42114,E6,D6
+Muffins,CHOCOLATE CHUNK,66136,E7,D7
+Muffins,CRAN ORANGE,2326,E8,D8
+Muffins,WEST COAST,73799,E9,D9
+Muffins,Blueberry w/ Greek Yogurt,42103,E10,D10
+Sweets,Brioche Swirl Chocolate,16799,E14,D14
+Sweets,Brioche Swirl Raisin,63886,E15,D15
+Sweets,Blue Danish,22835,E16,D16
+Sweets,Apple Danish,22833,E17,D17
+Sweets,Apple Fritter,60068,E18,D18
+Sweets,Glazed Donut Ring,40302,E19,D19
+Sweets,Chocolate Glazed Croisant,40457,E20,D20

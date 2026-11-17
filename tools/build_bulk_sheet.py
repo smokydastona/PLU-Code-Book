@@ -27,6 +27,7 @@ COLUMN_MIDPOINT = (PRODUCT_WIDTH + CODE_WIDTH) * DIGIT_PIXELS * .75 / 2
 def read_bulk(sheet):
     themed = sheet["A1"].value == TITLE
     bases = BASES if themed else (2, 5, 8)
+    code_first = themed and sheet.cell(3, BASES[0]).value == "PLU"
     starts = [1 if themed else 4, *(b.id + 1 for b in sheet.row_breaks.brk if b.man)]
     expected = {category for page in PAGE_CATEGORIES for category in page}
     columns = {column for base in bases for column in (base, base + 1)}
@@ -38,13 +39,22 @@ def read_bulk(sheet):
         for base in bases:
             category = None
             for row in range(start, end):
-                name, code = sheet.cell(row, base).value, sheet.cell(row, base + 1).value
+                if code_first:
+                    code, name = sheet.cell(row, base).value, sheet.cell(row, base + 1).value
+                else:
+                    name, code = sheet.cell(row, base).value, sheet.cell(row, base + 1).value
                 if name is not None and code is None:
                     if name in {TITLE, "PRODUCT"} or (themed and row == start + 1 and base == 1):
                         continue
                     if name not in expected:
                         raise ValueError("Bulk categories have changed; review the six-page grouping")
                     category = name
+                    continue
+                if code_first and name is None and code is not None:
+                    if code in expected:
+                        category = code
+                    elif code != TITLE and not (row == start + 1 and base == BASES[0]):
+                        raise ValueError("Bulk categories have changed; review the six-page grouping")
                     continue
                 if not themed and name is None and code is None:
                     for left in reversed([col for col in bases if col < base]):
@@ -60,9 +70,11 @@ def read_bulk(sheet):
                     raise ValueError(f"Bulk: missing product/category at {sheet.cell(row, base).coordinate}")
                 if sheet.cell(row, base).data_type == "f" or sheet.cell(row, base + 1).data_type == "f":
                     raise ValueError("Bulk formulas require manual review")
+                product_column, code_column = ((base + 1, base) if code_first else
+                                              (base, base + 1))
                 sections.append(dict(category=category, product=name, plu=str(code),
-                                     source_product_cell=sheet.cell(row, base).coordinate,
-                                     source_code_cell=sheet.cell(row, base + 1).coordinate))
+                                     source_product_cell=sheet.cell(row, product_column).coordinate,
+                                     source_code_cell=sheet.cell(row, code_column).coordinate))
     if {entry["category"] for entry in sections} != expected:
         raise ValueError("Bulk categories have changed; review the six-page grouping")
     return sections
@@ -84,8 +96,8 @@ def bulk_sheet(entries, continuation_labels=None):
     sheet.oddFooter.center.size = 8
     sheet.oddFooter.center.font = "DejaVu Sans"
     for base in BASES:
-        sheet.column_dimensions[sheet.cell(1, base).column_letter].width = PRODUCT_WIDTH
-        sheet.column_dimensions[sheet.cell(1, base + 1).column_letter].width = CODE_WIDTH
+        sheet.column_dimensions[sheet.cell(1, base).column_letter].width = CODE_WIDTH
+        sheet.column_dimensions[sheet.cell(1, base + 1).column_letter].width = PRODUCT_WIDTH
     for column in ("C", "F"):
         sheet.column_dimensions[column].width = 1.5
     coordinates = []
@@ -127,7 +139,7 @@ def bulk_sheet(entries, continuation_labels=None):
         sheet.cell(start + 1, 1).alignment = Alignment(horizontal="center", vertical="center")
         sheet.row_dimensions[start + 1].height = 20
         for base in BASES:
-            for offset, text in enumerate(("PRODUCT", "PLU")):
+            for offset, text in enumerate(("PLU", "PRODUCT")):
                 cell = sheet.cell(start + 2, base + offset, text)
                 cell.font = Font(name="DejaVu Sans", size=10, bold=True, color="FFFFFF")
                 cell.fill = PatternFill("solid", fgColor=DARK_GREEN)
@@ -164,7 +176,7 @@ def bulk_sheet(entries, continuation_labels=None):
                     seen_categories.add(category)
                     row += units
                     continue
-                for column, value in ((base, entry["product"]), (base + 1, entry["plu"])):
+                for column, value in ((base, entry["plu"]), (base + 1, entry["product"])):
                     if units > 1:
                         sheet.merge_cells(start_row=row, start_column=column,
                                           end_row=row + units - 1, end_column=column)
@@ -173,12 +185,12 @@ def bulk_sheet(entries, continuation_labels=None):
                     cell = sheet.cell(row, column, value)
                     cell.data_type = "s"
                     cell.number_format = "@"
-                    cell.font = Font(name="DejaVu Sans", size=11, bold=column == base + 1)
+                    cell.font = Font(name="DejaVu Sans", size=11, bold=column == base)
                     cell.alignment = Alignment(vertical="center", wrap_text=True,
-                                               horizontal="left" if column == base else "center")
+                                               horizontal="center" if column == base else "left")
                     cell.border = Border(bottom=Side(style="hair", color="D0D0D0"))
-                coordinates.append(dict(entry, product_cell=sheet.cell(row, base).coordinate,
-                                        code_cell=sheet.cell(row, base + 1).coordinate, page=page))
+                coordinates.append(dict(entry, code_cell=sheet.cell(row, base).coordinate,
+                                        product_cell=sheet.cell(row, base + 1).coordinate, page=page))
                 product_index += 1
                 row += units
         page_end = start + 2 + max(sum(line[2] // 16 for line in column) for column in columns)
@@ -196,6 +208,8 @@ def validate_bulk(sheet, coordinates):
     if len(sheet.row_breaks.brk) != 5 or sheet.page_setup.scale != 100:
         raise ValueError("Bulk must have six unscaled print pages")
     for entry in coordinates:
+        if sheet[entry["code_cell"]].column >= sheet[entry["product_cell"]].column:
+            raise ValueError(f"Bulk PLU must be left of its product at {entry['code_cell']}")
         for key, value in (("product_cell", entry["product"]), ("code_cell", entry["plu"])):
             cell = sheet[entry[key]]
             if cell.value != value or cell.data_type != "s" or cell.font.sz != 11:

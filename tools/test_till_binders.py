@@ -84,6 +84,11 @@ class TillBinderChecks(unittest.TestCase):
             finally:
                 workbook.close()
             content, coordinates = bulk_sheet(entries)
+            bulk_path = Path(directory) / "bulk.xlsx"
+            bulk_path.write_bytes(content)
+            bulk_pages = bulk_print_pages(bulk_path)
+            self.assertEqual(sum(sum(page["codes"].values()) for page in bulk_pages), 400)
+            self.assertEqual(sum(len(page["products"]) for page in bulk_pages), 400)
             themed = load_workbook(io.BytesIO(content))
             try:
                 validate_bulk(themed["Bulk"], coordinates)
@@ -569,8 +574,10 @@ class TillBinderChecks(unittest.TestCase):
             self.assertEqual(stretch.page_setup.fitToWidth, 1)
             self.assertEqual(stretch.page_setup.fitToHeight, 1)
             self.assertEqual(summary["stretch_source_sha256"], sha((self.root / STRETCH_SOURCE).read_bytes()))
-            self.assertEqual(workbook["Deli"]["B5"].value, "00012")
-            self.assertEqual(workbook["Deli"]["E5"].value, "00013")
+            self.assertEqual(workbook["Deli"]["A5"].value, "00012")
+            self.assertEqual(workbook["Deli"]["B5"].value, "Updated meal")
+            self.assertEqual(workbook["Deli"]["D5"].value, "00013")
+            self.assertEqual(workbook["Deli"]["E5"].value, "Updated salad")
             self.assertEqual(summary["validations"][edition]["deli_records_verified"], 2)
             _, bakery_coordinates, bakery_products = read_bakery_source(self.root)
             validate_bakery_sheet(workbook["Bakery"], bakery_products, bakery_coordinates)
@@ -611,6 +618,7 @@ class TillBinderChecks(unittest.TestCase):
             "Plain", "Blueberry", "Cheese", "Cinnamon Raisin", "Everything",
             "Jalapeno Cheese", "Multigrain", "Sesame Seed",
         ])
+        self.assertTrue(all(entry["code_cell"][0] < entry["product_cell"][0] for entry in coordinates))
         removed = {"55854", "47898", "55935", "55865", "68342", "68343", "55756", "55861"}
         self.assertTrue(removed.isdisjoint(row["plu"] for row in products))
         self.assertEqual([row["plu"] for row in products if row["category"] == "Muffins"], [

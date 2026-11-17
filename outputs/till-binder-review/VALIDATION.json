@@ -469,8 +469,8 @@
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "a8a42c09c12936191aa1c6a4464bcdc02fdd841e4e9ae5501dc87b1b9379bc66",
-      "file_size_bytes": 25873392,
+      "file_sha256": "6bf55e1d18ed84c8e6da9343248df393de05c6dad43feb72c5bc827c690db7c8",
+      "file_size_bytes": 25873385,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 400,
       "output_sheet_names": [
