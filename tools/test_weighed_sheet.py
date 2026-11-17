@@ -102,7 +102,7 @@ class WeighedGuideTests(unittest.TestCase):
         generated = load_workbook(io.BytesIO(content))
         try:
             sheet = generated[guide.SHEET]
-            sheet._images[1].anchor._from.row = 0
+            sheet._images[1].anchor._from.colOff = sheet._images[0].anchor._from.colOff
             with self.assertRaisesRegex(ValueError, "two-page"):
                 guide.validate_sheet(sheet, self.themed, self.rain)
         finally:

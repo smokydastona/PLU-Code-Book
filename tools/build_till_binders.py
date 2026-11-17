@@ -2562,9 +2562,12 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                     if (abs(page.rect.width - 612) > 1 or abs(page.rect.height - 792) > 1 or
                             not page.rect.contains(bounds) or bounds.width < 350 or bounds.height < 500):
                         raise ValueError(f"{edition}: {guide_name} image is clipped or too small")
-                    if (guide_name == "Rain Check" and
-                            abs(bounds.width / bounds.height - expected_size[0] / expected_size[1]) > .01):
-                        raise ValueError(f"{edition}: Rain Check poster is distorted in print")
+                    if guide_name == "Rain Check":
+                        if abs(bounds.width / bounds.height - expected_size[0] / expected_size[1]) > .01:
+                            raise ValueError(f"{edition}: Rain Check poster is distorted in print")
+                        if (abs(bounds.x0 + bounds.x1 - page.rect.width) > 4 or
+                                abs(bounds.y0 + bounds.y1 - page.rect.height) > 4):
+                            raise ValueError(f"{edition}: Rain Check poster is not centered in print")
             if rain_check_image is not None and guide_pages["Rain Check"] != guide_pages["Weighed"] + 1:
                 raise ValueError(f"{edition}: Rain Check must immediately follow the Weighed guide")
             if stretch_size is not None:

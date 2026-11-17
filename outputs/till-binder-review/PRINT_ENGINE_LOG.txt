@@ -1,3 +1,3 @@
-convert /tmp/plu-raincheck-review-2026-11-17-corner/Complete Till Binder - Updated - Photos.xlsx as a Calc document -> /tmp/till-print-huj95x3y/Complete Till Binder - Updated - Photos.pdf using filter : calc_pdf_Export:{"UseLosslessCompression":{"type":"boolean","value":"true"},"ReduceImageResolution":{"type":"boolean","value":"false"}}
+convert /tmp/plu-raincheck-centered-4a64632/Complete Till Binder - Updated - Photos.xlsx as a Calc document -> /tmp/till-print-p2w9j725/Complete Till Binder - Updated - Photos.pdf using filter : calc_pdf_Export:{"UseLosslessCompression":{"type":"boolean","value":"true"},"ReduceImageResolution":{"type":"boolean","value":"false"}}
 Warning: failed to launch javaldx - java may not function correctly
 libpng warning: iCCP: known incorrect sRGB profile

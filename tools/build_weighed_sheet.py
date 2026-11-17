@@ -23,6 +23,8 @@ RAIN_CHECK_UPLOAD = Path("sources/binders/Rain_Check_Instructions_Upload.png")
 RAIN_CHECK_UPLOAD_SHA256 = "8377569b18af0d783745f4a8fc0336a66b6baac2ca0fb20a8598f25e725baa44"
 RAIN_CHECK_ORIGINAL_PDF = Path("sources/binders/Rain_Check.pdf")
 RAIN_CHECK_ORIGINAL_PDF_SHA256 = "9aeb587f43b8022735666e04dd771c89d7d08f15150964f7f095e6dc762af777"
+# Letter PDF placement: center the 420 x 630 pt poster without moving page one's guide.
+RAIN_CHECK_ANCHOR = dict(col=0, row=58, colOff=pixels_to_EMU(187), rowOff=pixels_to_EMU(13))
 RAIN_CHECK_ACCURACY_REVIEW = (
     "Compared the owner upload with the original Rain Check PDF. Updated the sample date to the form's "
     "mm/dd/yy format, matched the sample product description and PLU 3181 to Strawberries BC 1 Pound, "
@@ -118,10 +120,13 @@ def workbook_bytes(source, image, rain_check):
     sheet.sheet_format.defaultRowHeight = 14
     sheet.print_area = "A1:A106"
     sheet.row_breaks.append(Break(id=53))
-    for content, row, width, height in ((image, 0, 650, 975), (rain_check, 55, 560, 840)):
+    for content, anchor, width, height in (
+        (image, dict(col=0, row=0, colOff=pixels_to_EMU(100)), 650, 975),
+        (rain_check, RAIN_CHECK_ANCHOR, 560, 840),
+    ):
         picture = ExcelImage(io.BytesIO(content))
         picture.anchor = OneCellAnchor(
-            _from=AnchorMarker(col=0, row=row, colOff=pixels_to_EMU(100)),
+            _from=AnchorMarker(**anchor),
             ext=XDRPositiveSize2D(cx=pixels_to_EMU(width), cy=pixels_to_EMU(height)))
         sheet.add_image(picture)
     result = io.BytesIO()
@@ -134,7 +139,8 @@ def validate_sheet(sheet, image, rain_check):
     if (sheet.sheet_properties.codeName != "UpdatedWeighedImage" or len(sheet._images) != 2 or
             [digest(picture._data()) for picture in sheet._images] !=
             [digest(image), digest(rain_check)] or
-            [picture.anchor._from.row for picture in sheet._images] != [0, 55] or
+            sheet._images[0].anchor._from.row != 0 or
+            sheet._images[1].anchor._from != AnchorMarker(**RAIN_CHECK_ANCHOR) or
             (sheet._images[1].anchor.ext.cx, sheet._images[1].anchor.ext.cy) !=
             (pixels_to_EMU(560), pixels_to_EMU(840)) or
             [page_break.id for page_break in sheet.row_breaks.brk] != [53] or sheet._charts or
