@@ -23,6 +23,11 @@ PAGE_CATEGORIES = (
 BASES = (1, 4, 7)
 PRODUCT_WIDTH, CODE_WIDTH = 26, 7
 COLUMN_MIDPOINT = (PRODUCT_WIDTH + CODE_WIDTH) * DIGIT_PIXELS * .75 / 2
+DISCONTINUED_BULK_RECORDS = (
+    dict(category="Chocolate/Yogurt", product="Almonds Roasted Dark Chocolate", plu="DC",
+         source_sheet="Bulk", source_product_cell="H11", source_code_cell="I11",
+         reason="DC is the discontinued marker"),
+)
 
 
 def read_bulk(sheet):
@@ -79,6 +84,36 @@ def read_bulk(sheet):
     if {entry["category"] for entry in sections} != expected:
         raise ValueError("Bulk categories have changed; review the six-page grouping")
     return sections
+
+
+def remove_discontinued_bulk_entries(entries, already_themed=False):
+    remaining = list(entries)
+    audit = []
+    for decision in DISCONTINUED_BULK_RECORDS:
+        matches = [entry for entry in remaining
+                   if (entry["category"], entry["product"], entry["plu"]) ==
+                   (decision["category"], decision["product"], decision["plu"])]
+        if len(matches) > 1:
+            raise ValueError(f"Bulk discontinued record is ambiguous: {decision['product']}")
+        if not matches and not already_themed:
+            raise ValueError(f"Bulk discontinued record is missing from its source: {decision['product']}")
+        if matches:
+            match = matches[0]
+            if (not already_themed and
+                    (match["source_product_cell"], match["source_code_cell"]) !=
+                    (decision["source_product_cell"], decision["source_code_cell"])):
+                raise ValueError(f"Bulk discontinued record source identity changed: {decision['product']}")
+            remaining.remove(match)
+            status = "EXCLUDED"
+            observed_product_cell = match["source_product_cell"]
+            observed_code_cell = match["source_code_cell"]
+        else:
+            status = "ALREADY_ABSENT"
+            observed_product_cell = observed_code_cell = ""
+        audit.append(dict(decision, status=status,
+                          observed_product_cell=observed_product_cell,
+                          observed_code_cell=observed_code_cell))
+    return remaining, audit
 
 
 def bulk_sheet(entries, continuation_labels=None):

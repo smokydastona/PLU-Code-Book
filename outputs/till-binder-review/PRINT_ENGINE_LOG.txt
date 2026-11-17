@@ -1,3 +1,3 @@
-convert /workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/outputs/till-binder-review/Complete Till Binder - Updated - Photos.xlsx as a Calc document -> /tmp/till-print-rz5eh1co/Complete Till Binder - Updated - Photos.pdf using filter : calc_pdf_Export:{"UseLosslessCompression":{"type":"boolean","value":"true"},"ReduceImageResolution":{"type":"boolean","value":"false"}}
+convert /workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/outputs/till-binder-review/Complete Till Binder - Updated - Photos.xlsx as a Calc document -> /tmp/till-print-_7_5t5ur/Complete Till Binder - Updated - Photos.pdf using filter : calc_pdf_Export:{"UseLosslessCompression":{"type":"boolean","value":"true"},"ReduceImageResolution":{"type":"boolean","value":"false"}}
 Warning: failed to launch javaldx - java may not function correctly
 libpng warning: iCCP: known incorrect sRGB profile

@@ -49,7 +49,8 @@ from sync_picklist import (booklet_order, csv_output, organic, organic_display_s
                            reconcile)
 from working_list import read_working_list
 from build_deli_sheet import DELI_SOURCE, read_source as read_deli_source, validate_sheet as validate_deli_sheet
-from build_bulk_sheet import TITLE as BULK_TITLE, bulk_sheet, read_bulk, validate_bulk
+from build_bulk_sheet import (TITLE as BULK_TITLE, bulk_sheet, read_bulk,
+                              remove_discontinued_bulk_entries, validate_bulk)
 import build_weighed_sheet as weighed_guide
 from binder_theme import DARK_GREEN, PALE_GREEN, display_product_name, row_fill
 from text_fit import text_points
@@ -2794,6 +2795,7 @@ def report_text(summary):
         "  DELI_LAYOUT.csv: exact owner-supplied deli names, PLUs and two-column cell locations",
         "  BAKERY_LAYOUT.csv: exact Bakery source names, PLUs and one-page cell locations",
         "  BULK_LAYOUT.csv: original bulk names/PLUs and their six-page cell mapping",
+        "  BULK_EXCLUDED_RECORDS.csv: discontinued Bulk record, decision and exact source identity",
         "  ORIGINAL_PRODUCE_CHANGES.csv: every original entry and current-source candidates",
         "  UPDATED_PRODUCE_RECORDS.csv: every included source record versus the original sheet",
         "  DUPLICATE_PLU_RECORDS.csv: all included records with ambiguous/repeated codes",
@@ -2895,6 +2897,7 @@ def generate(root, binder, output, verify_print=False):
     old = old_entries(binder)
     changes, additions = comparisons(old, items, rows)
     validations, coordinates = {}, None
+    bulk_exclusions = None
     for edition, filename in FILENAMES.items():
         edition_images = photo_images if edition == "photos" else images
         donor, edition_coordinates, pages = quick_sheet(displayed, edition_images, edition == "photos")
@@ -2928,7 +2931,12 @@ def generate(root, binder, output, verify_print=False):
                 bulk_coordinates = None
                 if "Bulk" in template:
                     bulk_continuations = []
-                    bulk_content, bulk_coordinates = bulk_sheet(read_bulk(template["Bulk"]), bulk_continuations)
+                    bulk_entries, current_exclusions = remove_discontinued_bulk_entries(
+                        read_bulk(template["Bulk"]), already_themed=template["Bulk"]["A1"].value == BULK_TITLE)
+                    if bulk_exclusions is not None and current_exclusions != bulk_exclusions:
+                        raise ValueError("Bulk exclusions differ between binder editions")
+                    bulk_exclusions = current_exclusions
+                    bulk_content, bulk_coordinates = bulk_sheet(bulk_entries, bulk_continuations)
                     bulk_content = add_continuation_labels(bulk_content, bulk_continuations, "Bulk")
                 directory_content, directory_images = directory_sheet(template[DIRECTORY_SHEET], directory_originals)
                 delivery_content, delivery_images = delivery_sheet(template[DELIVERY_SHEET])
@@ -3059,6 +3067,11 @@ def generate(root, binder, output, verify_print=False):
         csv_output(output / "BULK_LAYOUT.csv", bulk_coordinates,
                    ["category", "product", "plu", "source_product_cell", "source_code_cell",
                     "product_cell", "code_cell", "page"])
+        csv_output(output / "BULK_EXCLUDED_RECORDS.csv", bulk_exclusions, [
+            "category", "product", "plu", "source_sheet", "source_product_cell",
+            "source_code_cell", "reason", "status", "observed_product_cell",
+            "observed_code_cell",
+        ])
     csv_output(output / "PHOTO_MAPPING.csv", image_report, [
         "source_id", "source_identity_ids", "plu", "product", "image_status", "embedded", "image_source",
         "source_document", "source_member", "original_sha256", "embedded_sha256",

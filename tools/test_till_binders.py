@@ -32,7 +32,8 @@ from review_image_references import load_references
 from review_booklets import build_review_booklets, build_working_list_review
 from organic_watermarks import render_watermark
 from build_deli_sheet import convert
-from build_bulk_sheet import bulk_sheet, read_bulk, validate_bulk
+from build_bulk_sheet import (bulk_sheet, read_bulk, remove_discontinued_bulk_entries,
+                              validate_bulk)
 from build_bakery_sheet import (BAKERY_SOURCE, read_source as read_bakery_source,
                                 validate_sheet as validate_bakery_sheet, workbook_bytes as bakery_workbook_bytes)
 from binder_theme import PALE_GREEN, display_product_name
@@ -204,17 +205,55 @@ class TillBinderChecks(unittest.TestCase):
 
     def test_complete_build_keeps_six_bulk_pages_with_original_and_updated_templates(self):
         source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
+        source_checksum = sha(source.read_bytes())
         first = generate(self.root, source, self.output)
-        self.assertEqual(first["validations"]["photos"]["bulk_records_verified"], 400)
+        self.assertEqual(first["validations"]["photos"]["bulk_records_verified"], 399)
         updated = self.output / FILENAMES["photos"]
+        book = load_workbook(updated)
+        try:
+            entries = read_bulk(book["Bulk"])
+            self.assertEqual(len(entries), 399)
+            self.assertFalse(any(
+                (entry["category"], entry["product"], entry["plu"]) ==
+                ("Chocolate/Yogurt", "Almonds Roasted Dark Chocolate", "DC")
+                for entry in entries))
+        finally:
+            book.close()
+        with (self.output / "BULK_EXCLUDED_RECORDS.csv").open(newline="", encoding="utf-8-sig") as file:
+            exclusion, = csv.DictReader(file)
+        self.assertEqual((exclusion["category"], exclusion["product"], exclusion["plu"],
+                          exclusion["source_sheet"], exclusion["source_product_cell"],
+                          exclusion["source_code_cell"], exclusion["status"]),
+                         ("Chocolate/Yogurt", "Almonds Roasted Dark Chocolate", "DC",
+                          "Bulk", "H11", "I11", "EXCLUDED"))
         second_output = self.root / "second-bulk"
         second = generate(self.root, updated, second_output)
-        self.assertEqual(second["validations"]["photos"]["bulk_records_verified"], 400)
+        self.assertEqual(second["validations"]["photos"]["bulk_records_verified"], 399)
         self.assertFalse(second["validations"]["photos"]["bulk_sheets_combined"])
         first_pages = bulk_print_pages(updated)
         second_pages = bulk_print_pages(second_output / FILENAMES["photos"])
         self.assertEqual(len(first_pages), 6)
         self.assertEqual(first_pages, second_pages)
+        with (second_output / "BULK_EXCLUDED_RECORDS.csv").open(newline="", encoding="utf-8-sig") as file:
+            repeated_exclusion, = csv.DictReader(file)
+        self.assertEqual(repeated_exclusion["status"], "ALREADY_ABSENT")
+        self.assertEqual(sha(source.read_bytes()), source_checksum)
+
+    def test_bulk_discontinuation_requires_unique_matching_source_identity(self):
+        source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
+        combined = Path(self.root) / "bulk-discontinued-source.xlsx"
+        combine_bulk(source, combined)
+        workbook = load_workbook(combined)
+        try:
+            entries = read_bulk(workbook["Bulk"])
+        finally:
+            workbook.close()
+        filtered, audit = remove_discontinued_bulk_entries(entries)
+        self.assertEqual(len(filtered), 399)
+        self.assertEqual(audit[0]["status"], "EXCLUDED")
+        self.assertEqual((audit[0]["source_product_cell"], audit[0]["source_code_cell"]), ("H11", "I11"))
+        with self.assertRaisesRegex(ValueError, "source identity changed"):
+            remove_discontinued_bulk_entries([dict(audit[0], source_product_cell="H12")])
 
     @unittest.skipUnless(shutil.which("soffice"), "LibreOffice Calc is required")
     def test_store_directory_prints_two_complete_original_images(self):

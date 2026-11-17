@@ -52,6 +52,7 @@ Detailed reports:
   DELI_LAYOUT.csv: exact owner-supplied deli names, PLUs and two-column cell locations
   BAKERY_LAYOUT.csv: exact Bakery source names, PLUs and one-page cell locations
   BULK_LAYOUT.csv: original bulk names/PLUs and their six-page cell mapping
+  BULK_EXCLUDED_RECORDS.csv: discontinued Bulk record, decision and exact source identity
   ORIGINAL_PRODUCE_CHANGES.csv: every original entry and current-source candidates
   UPDATED_PRODUCE_RECORDS.csv: every included source record versus the original sheet
   DUPLICATE_PLU_RECORDS.csv: all included records with ambiguous/repeated codes
