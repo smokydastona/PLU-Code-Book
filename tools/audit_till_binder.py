@@ -16,6 +16,8 @@ from pathlib import Path
 import pymupdf
 from openpyxl import load_workbook
 
+from impose_binder_booklet import MAP_NAME as BOOKLET_MAP, OUTPUT_NAME as BOOKLET_PDF, audit_imposed_booklet
+
 WORKBOOK = "Complete Till Binder - Updated - Photos.xlsx"
 PDF = "Complete Till Binder - Updated - Photos.pdf"
 MARGIN_POINTS = 14
@@ -175,6 +177,12 @@ def main(argv=None):
         failures.append("original media parts were removed or changed")
     layout, _ = audit_pdf(output / PDF, validation, output)
     failures.extend(layout["findings"])
+    booklet = {}
+    try:
+        booklet = audit_imposed_booklet(
+            output / PDF, output / BOOKLET_PDF, output / BOOKLET_MAP)
+    except (OSError, ValueError) as error:
+        failures.append(f"binder booklet imposition: {error}")
     images, small, shared = audit_images(output)
     blockers = write_blockers(validation, output)
     if validation.get("production_publication") != "BLOCKED" and blockers:
@@ -183,7 +191,8 @@ def main(argv=None):
         technical_checks="PASS" if not failures else "FAIL", failures=failures,
         operational_status="REVIEW ONLY — NOT APPROVED FOR OPERATIONAL USE" if blockers
         else "TECHNICAL CHECKS ONLY",
-        original_binder_sha256=original_sha, package=package, print_layout=layout, images=images,
+        original_binder_sha256=original_sha, package=package, print_layout=layout,
+        booklet_imposition=booklet, images=images,
         open_blockers={row["blocker"]: row["records"] for row in blockers})
     (output / "AUDIT_REPORT.json").write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n",
                                               encoding="utf-8")

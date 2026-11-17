@@ -206,8 +206,16 @@ class TillBinderChecks(unittest.TestCase):
     def test_complete_build_keeps_six_bulk_pages_with_original_and_updated_templates(self):
         source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
         source_checksum = sha(source.read_bytes())
-        first = generate(self.root, source, self.output)
+        can_verify_print = bool(shutil.which("soffice"))
+        first = generate(self.root, source, self.output, verify_print=can_verify_print)
         self.assertEqual(first["validations"]["photos"]["bulk_records_verified"], 399)
+        booklet = self.output / "Complete Till Binder - Half-Fold Booklet.pdf"
+        if can_verify_print:
+            self.assertTrue(booklet.is_file())
+            self.assertEqual(
+                first["print_validation"]["photos"]["booklet_imposition"]["physical_sheets"] * 2,
+                first["print_validation"]["photos"]["booklet_imposition"]["imposed_pdf_pages"],
+            )
         updated = self.output / FILENAMES["photos"]
         book = load_workbook(updated)
         try:

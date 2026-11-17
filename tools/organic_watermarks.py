@@ -158,7 +158,7 @@ def verify_booklets(root, rows):
 
     index = 0
     for book, filename in BOOKS.items():
-        document = docx.Document(root / "outputs/booklets" / filename)
+        document = docx.Document(root / "archive/legacy-booklets" / filename)
         for cell in document.element.body.iter(qn("w:tc")):
             texts = ["".join(node.text or "" for node in p.iter(qn("w:t")))
                      for p in cell.iter(qn("w:p"))]
@@ -247,7 +247,7 @@ def apply(root):
     documents = {}
     index = 0
     for book, filename in BOOKS.items():
-        document = docx.Document(root / "outputs/booklets" / filename)
+        document = docx.Document(root / "archive/legacy-booklets" / filename)
         for cell in document.element.body.iter(qn("w:tc")):
             texts = ["".join(node.text or "" for node in p.iter(qn("w:t")))
                      for p in cell.iter(qn("w:p"))]
@@ -281,7 +281,7 @@ def apply(root):
         if row["idx"] in rendered:
             (data / row["image"]).write_bytes(rendered[row["idx"]])
     for filename, document in documents.items():
-        document.save(root / "outputs/booklets" / filename)
+        document.save(root / "archive/legacy-booklets" / filename)
     (data / "branding").mkdir(exist_ok=True)
     (data / "branding/pink-organic-badge.png").write_bytes(badge_artwork())
     write_csv(data / "entries.csv", rows, encoding="utf-8")

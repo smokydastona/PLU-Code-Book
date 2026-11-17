@@ -94,6 +94,16 @@
     },
     "findings": []
   },
+  "booklet_imposition": {
+    "technical_checks": "PASS",
+    "source_pages": 30,
+    "padded_pages": 32,
+    "blank_padding_pages": 2,
+    "physical_sheets": 8,
+    "imposed_pdf_pages": 16,
+    "all_source_pages_preserved_once": true,
+    "all_panels_fit_without_text_clipping": true
+  },
   "images": {
     "records": 548,
     "embedded": 548,

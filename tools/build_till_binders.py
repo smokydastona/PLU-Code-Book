@@ -53,6 +53,8 @@ from build_bulk_sheet import (TITLE as BULK_TITLE, bulk_sheet, read_bulk,
                               remove_discontinued_bulk_entries, validate_bulk)
 import build_weighed_sheet as weighed_guide
 from binder_theme import DARK_GREEN, PALE_GREEN, display_product_name, row_fill
+from impose_binder_booklet import (MAP_NAME as BOOKLET_MAP, OUTPUT_NAME as BOOKLET_PDF,
+                                   impose_binder_pdf)
 from text_fit import text_points
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -2697,6 +2699,11 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 complete_pdf=complete.name,
                 visual_review="REQUIRED; automated text/geometry checks are not a visual print approval",
             )
+            if edition == "photos":
+                booklet_summary = impose_binder_pdf(
+                    complete, output / BOOKLET_PDF, output / BOOKLET_MAP)
+                result[edition]["imposed_booklet_pdf"] = BOOKLET_PDF
+                result[edition]["booklet_imposition"] = booklet_summary
     return result
 
 

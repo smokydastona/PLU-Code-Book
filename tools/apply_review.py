@@ -1,7 +1,7 @@
 """Apply legacy pre-approval while preserving historical image-review verdicts.
 
 Run after tools/extract_entries.py. Rewrites each entry's Verification Status line
-in outputs/booklets/*_PRODUCTION.docx (the PDFs must then be re-exported) and writes
+in archive/legacy-booklets/*_PRODUCTION.docx (the PDFs must then be re-exported) and writes
 data/image_review.csv plus outputs/reports/{MASTER_IMAGE_LIBRARY,IMAGE_MATCH_REPORT}.csv.
 Original verdicts remain in the audit data; all legacy entries use the owner's
 pre-approval policy for their effective image-approval status.
@@ -53,7 +53,7 @@ def main():
     by_plu = {}
     for r in rows: by_plu.setdefault((r["book"], r["plu"], r["name"]), r)
     for book, fn in BOOKS.items():
-        d = docx.Document(ROOT / "outputs/booklets" / fn)
+        d = docx.Document(ROOT / "archive/legacy-booklets" / fn)
         for tc in d.element.body.iter(qn("w:tc")):
             paras = list(tc.iter(qn("w:p")))
             texts = ["".join(t.text or "" for t in p.iter(qn("w:t"))) for p in paras]
@@ -78,7 +78,7 @@ def main():
             st = clone("Verification Status: " + r["status"], "2E7D32", True)
             paras[si].addnext(st); paras[si].getparent().remove(paras[si])
             if r["verdict"] != "Approved": st.addnext(clone("Review note: " + r["note"]))
-        d.save(ROOT / "outputs/booklets" / fn)
+        d.save(ROOT / "archive/legacy-booklets" / fn)
 
     def w(path, header, out):
         with open(path, "w", newline="", encoding="utf-8-sig") as f:
