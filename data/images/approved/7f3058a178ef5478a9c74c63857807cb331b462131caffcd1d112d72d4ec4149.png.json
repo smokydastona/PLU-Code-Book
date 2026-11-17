@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "plu": "4598",
+  "product": "Daikon Radish",
+  "working_list_id": "1f65455622a6184d58ffb38dbca7ee0d98d4ceced5d2dcd2137ff0f27b4b9420",
+  "source_identity_ids": [
+    "b6686bc3587d19e48a34e0f83efe152775952a30e45bf52b4471bc1b96c5412d",
+    "54ce776a715e2e1406601558642dec757d4d5bd9856ba6f13f3fbc086c80b95d"
+  ],
+  "source_reference": "Owner-uploaded chat attachment Daikon.png (2026-11-15)",
+  "creator": "Owner-provided; original creator not separately identified",
+  "source_page_url": "",
+  "original_image_url": "",
+  "width": 1080,
+  "height": 1080,
+  "sha256": "7f3058a178ef5478a9c74c63857807cb331b462131caffcd1d112d72d4ec4149",
+  "license": "OWNER_CONFIRMED_PERMISSION",
+  "rights_status": "OWNER_CONFIRMED_PERMISSION",
+  "attribution": "Owner-provided photograph; owner-confirmed permission. No public reuse licence is asserted.",
+  "changes": "Original image unchanged",
+  "approval_status": "CANDIDATE",
+  "visual_approval_status": "APPROVED",
+  "photographic_origin": "OWNER_CONFIRMED_PHOTO",
+  "rights_verification_status": "VERIFIED",
+  "rights_evidence": "Owner stated: \"Here is another photograph I own and fully approve.\" (2026-11-15). Owner-confirmed, not independently documented.",
+  "photographic_origin_evidence": "Owner explicitly identified the uploaded image as a photograph (2026-11-15).",
+  "visual_approval_evidence": "Owner fully approved this photo and selected PLU 4598 / Daikon Radish rather than PLU 4834 / Daikon Korean (2026-11-15).",
+  "preapproval_status": "APPROVED_FOR_EXACT_PLU_PRODUCT",
+  "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+  "note": "Approved library photo for the pinned WorkingList identity only; not a production assignment or permission for another product.",
+  "production_approved_source_id": "1f65455622a6184d58ffb38dbca7ee0d98d4ceced5d2dcd2137ff0f27b4b9420"
+}

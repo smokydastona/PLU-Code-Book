@@ -1,0 +1,44 @@
+{
+  "plu": "94657",
+  "product": "Organic Portobello Mushrooms",
+  "width": 500,
+  "height": 500,
+  "sha256": "7965b4b37ef4bd46d6bc976bcc94d06500cd98d1d1bf543a3d09cdfebf6ddb9e",
+  "approval_status": "CANDIDATE",
+  "image_approval_status": "APPROVED",
+  "approval_basis": "EXACT_WORKINGLIST_APPROVAL",
+  "recorded_visual_approval_status": "APPROVED",
+  "photographic_origin": "NOT_VERIFIED",
+  "visual_approval_status": "APPROVED",
+  "rights_verification_status": "NOT_VERIFIED",
+  "original_image_sha256": "6640a043f98ac708d7662b66a87b614c152052da1ec40a475247d595bffd7183",
+  "original_image_path": "sources/visual/VEGETABLE_VISUAL_PLU_BOOKLET_CORRECTED.docx#word/media/image159.jpg",
+  "original_width": 253,
+  "original_height": 253,
+  "assigned_image_path": "data/images/Vegetable/0534_94657.png",
+  "legacy_organic_original": {
+    "source_document": "sources/visual/VEGETABLE_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+    "source_member": "word/media/image159.jpg",
+    "original_sha256": "6640a043f98ac708d7662b66a87b614c152052da1ec40a475247d595bffd7183"
+  },
+  "working_source_id": "dea0a4a71f38a53c8a8b8e13a0c8827033f3e202796034e6efa64134f4c1315f",
+  "working_source_ids": [
+    "7222196c4dc7c31541d2e7657186ce82d53ec93fb435cde790200b5293849d95",
+    "c906042574f7f4a4c4b2962f48552e2880929f7f4034d8ef3c6f1404a2dc6504"
+  ],
+  "production_status": "BLOCKED",
+  "production_blockers": [
+    "BELOW_500_PX",
+    "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED",
+    "IMAGE_RIGHTS_NOT_VERIFIED",
+    "SUPPORTED_IMAGE_LICENCE_REQUIRED",
+    "MISSING_PROVENANCE_CREATOR",
+    "MISSING_PROVENANCE_LICENSE_URL",
+    "MISSING_PROVENANCE_SOURCE_PAGE_URL",
+    "MISSING_PROVENANCE_ORIGINAL_IMAGE_URL",
+    "MISSING_PROVENANCE_ATTRIBUTION",
+    "MISSING_PROVENANCE_CHANGES",
+    "MISSING_PROVENANCE_RIGHTS_EVIDENCE"
+  ],
+  "transformation": "Aspect-ratio-preserving resize and centered solid white padding to 500x500 JPEG (quality 90, optimized, progressive); standard pink organic badge added"
+}

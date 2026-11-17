@@ -1,0 +1,39 @@
+{
+  "plu": "4059",
+  "product": "Red Prince Apples",
+  "width": 500,
+  "height": 500,
+  "sha256": "7779cd0da45869f2e77ab77626e487aa9482afff560f547ed67e7e6d58b8ae50",
+  "approval_status": "CANDIDATE",
+  "image_approval_status": "APPROVED",
+  "approval_basis": "EXACT_WORKINGLIST_APPROVAL",
+  "recorded_visual_approval_status": "APPROVED",
+  "photographic_origin": "NOT_VERIFIED",
+  "visual_approval_status": "APPROVED",
+  "rights_verification_status": "NOT_VERIFIED",
+  "original_image_sha256": "023f70802c48c44fac225fc6c75e157ff832688df98c0e3e144a0f65d08807ac",
+  "original_image_path": "data/images/Fruit/0016_4059.jpg",
+  "original_width": 292,
+  "original_height": 292,
+  "assigned_image_path": "data/images/Fruit/0016_4059.jpg",
+  "legacy_organic_original": null,
+  "working_source_id": "2691db398e418f597b9a873710acdec756a2463e77a35fceb66e19a2647623ac",
+  "working_source_ids": [
+    "0842e09683c06be8eebe95d2759041fb646144ae4fe11a0680d5839409d28366"
+  ],
+  "production_status": "BLOCKED",
+  "production_blockers": [
+    "BELOW_500_PX",
+    "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED",
+    "IMAGE_RIGHTS_NOT_VERIFIED",
+    "SUPPORTED_IMAGE_LICENCE_REQUIRED",
+    "MISSING_PROVENANCE_CREATOR",
+    "MISSING_PROVENANCE_LICENSE_URL",
+    "MISSING_PROVENANCE_SOURCE_PAGE_URL",
+    "MISSING_PROVENANCE_ORIGINAL_IMAGE_URL",
+    "MISSING_PROVENANCE_ATTRIBUTION",
+    "MISSING_PROVENANCE_CHANGES",
+    "MISSING_PROVENANCE_RIGHTS_EVIDENCE"
+  ],
+  "transformation": "Aspect-ratio-preserving resize and centered solid white padding to 500x500 JPEG (quality 90, optimized, progressive)"
+}

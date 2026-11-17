@@ -1670,6 +1670,73 @@ class TillBinderChecks(unittest.TestCase):
         self.assertEqual(references, {})
         self.assertEqual(audit[0]["status"], "REJECTED")
 
+    def test_owner_sheet_supersedes_only_matching_current_reference_and_keeps_audit(self):
+        original = self.items[3]
+        changed = dict(original, source_ids=[original["source_id"]],
+                       record_sha256="reviewed-record", identity_changed=True)
+        snapshot = {key: changed[key] for key in ("source_id", "source_ids", "record_sha256")}
+        old_path = self.write_ai_manifest([self.ai_panel(3, working_identity=snapshot)])
+        newer = json.loads(old_path.read_text())
+        newer["panels"][0]["box"] = [20, 20, 200, 160]
+        newer["image_kind"] = "UNVERIFIED_IMAGE"
+        newer_path = old_path.parent / "owner-26-review.json"
+        newer_path.write_text(json.dumps(newer))
+        refs, audit = load_references(self.root, [changed])
+        self.assertEqual(refs[changed["source_id"]]["crop_box"], "[20, 20, 200, 160]")
+        self.assertEqual([row["status"] for row in audit],
+                         ["SUPERSEDED_REVIEW_REFERENCE", "REVIEW_REFERENCE"])
+        larger = json.loads(newer_path.read_text())
+        larger["panels"][0]["box"] = [30, 30, 210, 170]
+        larger_path = old_path.parent / "owner-large-1.json"
+        larger_path.write_text(json.dumps(larger))
+        refs, audit = load_references(self.root, [changed])
+        self.assertEqual(refs[changed["source_id"]]["crop_box"], "[30, 30, 210, 170]")
+        self.assertEqual([row["status"] for row in audit],
+                         ["SUPERSEDED_REVIEW_REFERENCE", "SUPERSEDED_REVIEW_REFERENCE",
+                          "REVIEW_REFERENCE"])
+        larger["panels"][0]["working_identity"]["record_sha256"] = "stale"
+        larger_path.write_text(json.dumps(larger))
+        refs, audit = load_references(self.root, [changed])
+        self.assertEqual(refs[changed["source_id"]]["crop_box"], "[20, 20, 200, 160]")
+        self.assertEqual([row["status"] for row in audit],
+                         ["SUPERSEDED_REVIEW_REFERENCE", "REVIEW_REFERENCE",
+                          "WORKING_IDENTITY_REVIEW_REQUIRED"])
+        larger_path.unlink()
+        newer["panels"][0]["working_identity"]["record_sha256"] = "stale"
+        newer_path.write_text(json.dumps(newer))
+        refs, audit = load_references(self.root, [changed])
+        self.assertEqual(refs[changed["source_id"]]["crop_box"], "[10, 10, 190, 160]")
+        self.assertEqual([row["status"] for row in audit],
+                         ["REVIEW_REFERENCE", "WORKING_IDENTITY_REVIEW_REQUIRED"])
+        refs, audit = load_references(self.root, [dict(changed, record_sha256="new-record")])
+        self.assertFalse(refs)
+        self.assertTrue(all(row["status"] == "WORKING_IDENTITY_REVIEW_REQUIRED" for row in audit))
+
+    def test_invalid_changed_assignment_can_use_review_reference_without_approval(self):
+        assignments = read_assignments(self.root / "data/picklist_assignments.json")
+        rows, _ = produce_catalog(self.items, assignments)
+        original = next(row for row in rows if row["source_id"] == self.items[3]["source_id"])
+        changed = dict(original, name="Reviewed canonical name", source_id="working-id",
+                       source_ids=[original["source_id"]], record_sha256="reviewed-record",
+                       identity_changed=True)
+        snapshot = {key: changed[key] for key in ("source_id", "source_ids", "record_sha256")}
+        panel = self.ai_panel(3, working_identity=snapshot)
+        panel["product"] = changed["name"]
+        path = self.write_ai_manifest([panel])
+        manifest = json.loads(path.read_text())
+        manifest["image_kind"] = "UNVERIFIED_IMAGE"
+        path.write_text(json.dumps(manifest))
+        assignments[changed["source_id"]] = dict(
+            visual_approval_status="APPROVED", image="data/reference.png",
+            image_sha256="invalid", reviewed_plu=changed["plu"],
+            reviewed_product=changed["name"])
+        images, report = map_images(self.root, [changed], assignments, {})
+        self.assertIn(changed["source_id"], images)
+        self.assertEqual(report[0]["image_status"], "SUPPLIED_IMAGE_REVIEW")
+        self.assertEqual(report[0]["image_approval_status"], "NOT_APPROVED")
+        self.assertEqual(report[0]["rights_status"], "NOT_VERIFIED")
+        self.assertIn("assignment failed validation", report[0]["details"])
+
     def test_ai_crop_checksums_bounds_and_exact_text_are_enforced(self):
         path = self.write_ai_manifest([self.ai_panel(3)])
         original = json.loads(path.read_text())

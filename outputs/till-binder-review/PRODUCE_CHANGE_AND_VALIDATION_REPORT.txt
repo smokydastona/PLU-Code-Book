@@ -15,10 +15,10 @@ Cashier entries displayed: 548; exact duplicates suppressed: 0
 Known non-produce records excluded from Produce: 46
 Original Produce entries compared: 579
 Embedded supplied references: 548; missing/uncertain images left blank: 0
-AI illustrations included as visual references: 164
-New owner-supplied AI crops: 33
+AI illustrations included as visual references: 132
+New owner-supplied AI crops: 1
 AI illustrations omitted (if rejected or invalid association): 0
-Classification review: 5; organic placement review: 94; main-item sorting review: 0
+Classification review: 0; organic placement review: 0; main-item sorting review: 0
 
 Produce, Bakery, Deli, Bulk and Misc Codes use alternating white and pale-green rows.
 Floral Codes appear on Misc Codes; Soil keeps its product artwork in an enlarged, numbered guide.
@@ -40,10 +40,10 @@ Original-sheet comparison outcomes (no uncertain mapping silently resolved):
   NOT_IN_CURRENT_SOURCE_UNRESOLVED: 1
 
 Image outcomes:
-  LEGACY_PREAPPROVED_IMAGE: 495
-  SUPPLIED_AI_CROP_REVIEW: 33
-  APPROVED_WORKINGLIST_IMAGE: 18
-  SUPPLIED_IMAGE_REVIEW: 2
+  LEGACY_PREAPPROVED_IMAGE: 494
+  APPROVED_WORKINGLIST_IMAGE: 28
+  SUPPLIED_IMAGE_REVIEW: 25
+  SUPPLIED_AI_CROP_REVIEW: 1
 
 Print validation: {"photos": {"status": "PASS", "pages": 13, "landscape_us_letter": true, "complete_workbook_opened_and_exported_by_calc": true, "complete_binder_pdf_pages": 31, "every_page_code_count_verified": true, "every_description_found": true, "drawn_images": 548, "deli_print_records_verified": 52, "bakery_print_records_verified": 31, "bakery_print_page_verified": true, "bulk_print_pages_verified": 6, "bulk_print_font_points": 11, "stretch_print_page_verified": true, "misc_print_page_verified": true, "conversions_print_image_verified": true, "directory_print_pages_verified": 2, "directory_print_pixels_losslessly_verified": true, "delivery_print_pages_verified": 2, "delivery_page_split_verified": true, "soil_print_images_verified": 24, "soil_uniform_product_images_verified": 8, "soil_barcodes_decoded_at_dpi": [150, 300], "weighed_print_text_verified": false, "weighed_print_image_verified": true, "rain_check_print_image_verified": true, "complete_pdf": "Complete Till Binder - Updated - Photos.pdf", "visual_review": "REQUIRED; automated text/geometry checks are not a visual print approval", "imposed_booklet_pdf": "Pocket Guide.pdf", "booklet_imposition": {"source_pages": 31, "padded_pages": 32, "blank_padding_pages": 1, "physical_sheets": 8, "imposed_pdf_pages": 16, "paper": "US Letter landscape", "print_mode": "2-up duplex, flip on short edge, 100% scale", "fold": "half-fold, saddle-stitch", "rotated_sections": ["Produce", "Bulk", "Store Directory"], "rotated_source_pages": [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 30, 31]}}}
 

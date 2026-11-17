@@ -15,7 +15,20 @@ MANIFESTS = (
     "data/review-references/corrected-five-ai.json",
     "data/review-references/working-missing-33.json",
     "data/review-references/yellow-spanish-onion.json",
+    "data/review-references/owner-26-review.json",
+    "data/review-references/owner-large-1.json",
+    "data/review-references/owner-large-2.json",
+    "data/review-references/owner-large-3.json",
+    "data/review-references/owner-large-4.json",
 )
+
+SUPERSEDING_MANIFESTS = frozenset((
+    "data/review-references/owner-26-review.json",
+    "data/review-references/owner-large-1.json",
+    "data/review-references/owner-large-2.json",
+    "data/review-references/owner-large-3.json",
+    "data/review-references/owner-large-4.json",
+))
 
 
 def load_references(root, rows):
@@ -23,8 +36,13 @@ def load_references(root, rows):
     source_items, _ = read_picklist(root / "sources/plu/PickList.xml")
     for name in MANIFESTS:
         selected, records = load_manifest(root, rows, root / name, source_items)
-        if references.keys() & selected.keys():
+        overlap = references.keys() & selected.keys()
+        if overlap and name not in SUPERSEDING_MANIFESTS:
             raise ValueError("multiple AI references for the same source identity")
+        for record in audit:
+            if record["source_id"] in overlap and record["status"] == "REVIEW_REFERENCE":
+                record["status"] = "SUPERSEDED_REVIEW_REFERENCE"
+                record["details"] += " Superseded by the owner's newer review sheet."
         references.update(selected)
         audit.extend(records)
     supplier, records = load_supplier(root, rows, source_items)

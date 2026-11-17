@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "source": "data/review-references/owner-large-2.png",
+  "source_sha256": "117903c2ebdfd89ad0055713e1b44944162a9d98a0b8b6d94c77699d149d01d8",
+  "source_size": [
+    1080,
+    1080
+  ],
+  "image_kind": "UNVERIFIED_IMAGE",
+  "origin": "Owner-supplied contact sheet; owner stated \"I own those too\". Image creation method and photographic origin are unverified.",
+  "review_note": "Review reference only; not a production image approval. This sheet is unlabelled; product identities follow the order and appearance of the previously supplied labelled 26-panel sheet. Varieties, image origin, production rights evidence and approvals remain subject to review. Selected crops do not upscale the source; organic references receive the standard pink badge.",
+  "panels": [
+    {
+      "plu": "94031",
+      "product": "Organic Watermelon",
+      "box": [
+        0,
+        0,
+        540,
+        282
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "f578175d2a42c92e42f55a9f0eff5620dba4cfd8d4d45aaa44636e415fa9149f",
+        "source_ids": [
+          "605efd9a7801449c517074defe0fa5941ad9f07259761fff5cd545db6b37e8d0",
+          "74e8407c60de7058b3ee9607c6ac3c520bf96834f8584eebb09ccfac3ce81f19"
+        ],
+        "record_sha256": "ef0c35872a1e91b348eb0dcf6ff6851d333e8dfde51e21ab8a4c0b016d839848"
+      },
+      "note": "Selected as a larger, separable review reference."
+    },
+    {
+      "plu": "94648",
+      "product": "Organic Cremini Mushrooms",
+      "box": [
+        540,
+        0,
+        1080,
+        274
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "cc3c4d0e37bde64efcb713174b4286fa8f3bedfcd56568e98cdc384e3b76a78b",
+        "source_ids": [
+          "b4f0e40b5e82ab5b60f48da300b0b15aee297404ad7dc2d8ea89292f4262c670",
+          "a2a7fe33b0230ec32674950366966f68fb87c1f12175ea47d73d8d6db582382d"
+        ],
+        "record_sha256": "23e245074aadd24766f2fd1cd7f7580aff1115de56058d67de489f51d8c99dd3"
+      },
+      "note": "Selected as a larger, separable review reference."
+    },
+    {
+      "plu": "94664",
+      "product": "Organic Red Cluster Tomatoes (On the Vine)",
+      "box": [
+        0,
+        285,
+        540,
+        540
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "7334f2287fa84193819046a3799712cebcbd1d64915c6b8b39c35d60eb17a002",
+        "source_ids": [
+          "048912d775258ab20610c28791c4e24a2bb186c47e947ce2e10667d862f9e1e1",
+          "582067cbd95edefa1f001e289216c532a53822c7dea59b9a31ec45c2d11022a9"
+        ],
+        "record_sha256": "cc7594202f2bb80607cbcf2feb9f454c4bb681853aa1c6f3b53ddc88ce2a4bea"
+      },
+      "note": "Selected as a larger, separable review reference."
+    },
+    {
+      "plu": "94023",
+      "product": "Organic Red Seedless Grapes",
+      "box": [
+        540,
+        274,
+        1080,
+        540
+      ],
+      "decision": "REJECTED",
+      "working_identity": {
+        "source_id": "607d62236733c9417c43a6a4fa79ed5843f558565a57516d368cbee3829e48c0",
+        "source_ids": [
+          "0f6ffea493dd42c978df7ac8b0b3d5c77bdc74420f45f29fb9c7547b1ad34f17",
+          "b44dca2bf4d302f2d515dff5d5ce4edc7be5edd8667f617f65f2af592425183f"
+        ],
+        "record_sha256": "ae078883e4c423f1586cd06eca11171eeaf4a8562f991264fe8e811a27c0b78a"
+      },
+      "note": "Not selected: product overlaps or touches a neighboring product; the earlier review reference remains."
+    },
+    {
+      "plu": "4899",
+      "product": "Parsley",
+      "box": [
+        0,
+        542,
+        540,
+        813
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "d9a67f725c1823729295b3220cc9e5eb6fc24fb38bec92c31a317f9037cbf3f6",
+        "source_ids": [
+          "9d62fc39e1cfbb03b99e797a28363bd795db3f3340e4548363e98756c9d7053f",
+          "141ee4d3131707e5320391420acb097ecd64e5c486fd83c5b93d14f66d437fb3"
+        ],
+        "record_sha256": "b48442067f8eaa4e0f4a768ab1bd6f4bbc46bd752eb035f326a9a89499cf979c"
+      },
+      "note": "Selected as a larger, separable review reference."
+    },
+    {
+      "plu": "4688",
+      "product": "Red Sweet Bell Pepper",
+      "box": [
+        540,
+        540,
+        1080,
+        812
+      ],
+      "decision": "REJECTED",
+      "working_identity": {
+        "source_id": "d5d8c38f2cbe261757926dd788950dab55fcadb30b839cd0cfbfc23d426c9142",
+        "source_ids": [
+          "67eb5992245e9367906267e65fb3caaf5de9bb8036210833236a98a745fcdf26",
+          "d152c945e02b10c65ceed38f53207a702f13a65fe11c5d2caf2a4c9bab0a7437"
+        ],
+        "record_sha256": "125429e13ca711342eea4a0b4c3d87e2bb68d906f8add16f646bbbdbfe2c9bfb"
+      },
+      "note": "Not selected: product overlaps or touches a neighboring product; the earlier review reference remains."
+    },
+    {
+      "plu": "4436",
+      "product": "Italian Prune Plum",
+      "box": [
+        0,
+        813,
+        540,
+        1080
+      ],
+      "decision": "REJECTED",
+      "working_identity": {
+        "source_id": "df07cba84598645e44427aadde161e4b3b1a8252ff9dcc227aeced9bbfe58b28",
+        "source_ids": [
+          "c007883c370d9091a564d02403396505b38052114bb7c5944cf7a61da7748587",
+          "f8e5cc78008a26c3709dc6d1f32f2a6a799104652f8131c0974bcf85e20625b6"
+        ],
+        "record_sha256": "d910bffdedc6c16bfc647e1fdc39ab76ea798acbf8b242d388e436c832c46b8b"
+      },
+      "note": "Not selected: Italian prune plum variety remains uncertain."
+    },
+    {
+      "plu": "4727",
+      "product": "Yellow Potatoes",
+      "box": [
+        540,
+        813,
+        1080,
+        1080
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "4516e43c3ebae141d602d639b3d352828fd735f3a7839a9d76b9d5514529141f",
+        "source_ids": [
+          "ef9938b470d7274c2139116eb74dab10f2296da85a6b1d7de10a33d49478f224",
+          "4c3b8fc84e4edb9dad13ad8e7f4ae3d5437e8c019e2fc1c570636d22a12318a3"
+        ],
+        "record_sha256": "def3070ca891e45382433c0cd29e9860f72e0617c8d0a90be00cbd175aa856a5"
+      },
+      "note": "Selected as a larger, separable review reference."
+    }
+  ]
+}

@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "source": "data/review-references/owner-large-1.png",
+  "source_sha256": "a3421fe1d7d211c368798be2038c27ce3fabbc722d4645160e1f788455ee5153",
+  "source_size": [
+    1080,
+    1080
+  ],
+  "image_kind": "UNVERIFIED_IMAGE",
+  "origin": "Owner-supplied contact sheet; owner stated \"I own those too\". Image creation method and photographic origin are unverified.",
+  "review_note": "Review reference only; not a production image approval. This sheet is unlabelled; product identities follow the order and appearance of the previously supplied labelled 26-panel sheet. Varieties, image origin, production rights evidence and approvals remain subject to review. Selected crops do not upscale the source; organic references receive the standard pink badge.",
+  "panels": [
+    {
+      "plu": "4336",
+      "product": "Santa Claus Melon",
+      "box": [
+        0,
+        0,
+        540,
+        280
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "f0bdfb32e781ad1cecaf89ceb1cfeed2c5a052324ab923b9b20a941d322a9a9f",
+        "source_ids": [
+          "df689eba8547b5efcb8e7a5ce0f8f6954b21fb38e3eddf417a27f9f6a407a8c2",
+          "745185b093bdade324313635b0d314b2ef1f6260503b6ac4b3fd6ed5095404ac"
+        ],
+        "record_sha256": "2c8019fcc2afcbc1dce74941bab0ddb8bf06eae942f5cf2fa6e3212214478e05"
+      },
+      "note": "Selected as a larger, separable review reference."
+    },
+    {
+      "plu": "4640",
+      "product": "Romaine Lettuce",
+      "box": [
+        540,
+        0,
+        1080,
+        295
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "770dd6d9e210b73fe9d5d3c565ef120cd14fa9bc6c19ce6b05f4ad48e2f792a5",
+        "source_ids": [
+          "dedb5ccbdd83757a6881527d5311d31fd4127b0b8240842f73df00f6d4d42a9b",
+          "85a97a6e62e82198c028d1debf1a0f5dae2508cc534e85e15c15265a707ff776"
+        ],
+        "record_sha256": "943deb3a0b2dc17fc60d9e39cdf5d2ed5e56711925ed600adc5de7380c94f4ea"
+      },
+      "note": "Selected as a larger, separable review reference."
+    },
+    {
+      "plu": "3129",
+      "product": "Pomelo",
+      "box": [
+        0,
+        280,
+        540,
+        542
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "6f4db4c750341628eb9b96fde6f691e92f88ef716981d1bc6c4c80f6956ed6fa",
+        "source_ids": [
+          "3b5933c522e6f3ac6b6e04ad7cab58de17e7de688988844d242d40b6a9568094",
+          "514b0478235beb1cbc5d7b4b6e2355d79540c2d4c3a2eb1277e62eab5a48306d"
+        ],
+        "record_sha256": "69ea438ad06795486af6bd98b5b42b73e3ad7957e15a9ea9fe572e366a077733"
+      },
+      "note": "Selected as a larger, separable review reference."
+    },
+    {
+      "plu": "4425",
+      "product": "Shinko (Shingo) Asian Pear",
+      "box": [
+        540,
+        295,
+        1080,
+        541
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "fe37e4f92291cb134b96dd8fd3b854fe65880324a751fa5b34c7063877457040",
+        "source_ids": [
+          "225ecb5b37338f8579afa8fd03b88f613497858fea0690a63b16064b19f912c1"
+        ],
+        "record_sha256": "4e3c5e6949dcc36e9fd2af0f17462ee571c6c126d9d045f99f253ab1ee4a19e5"
+      },
+      "note": "Selected as a larger, separable review reference."
+    },
+    {
+      "plu": "94022",
+      "product": "Organic Green Seedless Grapes",
+      "box": [
+        0,
+        542,
+        540,
+        794
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "2f12bde7cf6c61f489e67bdfa7602e505568ffb9476f9c79aeb23837af6bdfb0",
+        "source_ids": [
+          "c67112294b47e7ba516ee51f164b187c54ed18ab57e63cfbd0fab6ef2591445c",
+          "6d060cb6c01e69c01f43b9f6188eafa3d6f2de7bf1359418b2536cc325405bd6",
+          "7ec18764d11f22640f694405c9b345ebd83a07de28751d87dfdfd987a6422d6c"
+        ],
+        "record_sha256": "2627bec5bfef85334299c2ff8f6f3f3810f03dc1f61152dc9ec71f80a28c6772"
+      },
+      "note": "Selected as a larger, separable review reference."
+    },
+    {
+      "plu": "4059",
+      "product": "Red Prince Apples",
+      "box": [
+        540,
+        541,
+        1080,
+        802
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "2691db398e418f597b9a873710acdec756a2463e77a35fceb66e19a2647623ac",
+        "source_ids": [
+          "0842e09683c06be8eebe95d2759041fb646144ae4fe11a0680d5839409d28366"
+        ],
+        "record_sha256": "b3873bbc481fae199e63d536a14f62f6c3e80752d947145068bc106063460deb"
+      },
+      "note": "Selected as a larger, separable review reference."
+    },
+    {
+      "plu": "94329",
+      "product": "Organic Honeydew Melon",
+      "box": [
+        0,
+        794,
+        540,
+        1080
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "808eeb35497c5b06d07af85d6df1ed850e1ff91dbea222db272c9ba488afb4ab",
+        "source_ids": [
+          "2a9fad986444638acfdeeab2a7acecd34020d954d7004eb50f0dec3c1b653afd",
+          "42a7663d6fca9c182577cbb8165c2c1fabeff5c23bd51a805abdf6bf08a7a126"
+        ],
+        "record_sha256": "1e9e9edf1e675ed2b0d2add670d7d3e3d339b62ae7deb7f89380d86d00651689"
+      },
+      "note": "Selected as a larger, separable review reference."
+    },
+    {
+      "plu": "94342",
+      "product": "Organic Watermelon",
+      "box": [
+        540,
+        802,
+        1080,
+        1080
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "8764d9445ce973f9109c8cb02d54274ff2e6b98c13437608a51a8030bff787d5",
+        "source_ids": [
+          "0dd7caf0291627a98f4ecf509a590deeb9597e6405f92d75e2dc9815864e20d8",
+          "b90e0281f264eee9107f618c72a3ec9d26e749e15b213a88a7bf48dac79041f7"
+        ],
+        "record_sha256": "985fb9ebb72402080aac7bc80e82fd79c1d0e938d2f1d60e42c6e8d4e905968f"
+      },
+      "note": "Selected as a larger, separable review reference."
+    }
+  ]
+}

@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       scope:
-        description: Entries to acquire (working-list-rejected uses the current identity-pinned visual review)
+        description: Entries to acquire or inspect (review scopes use current identity-pinned records)
         type: choice
-        options: [rejected, working-list-rejected, all, owner-urls]
+        options: [rejected, working-list-rejected, all, owner-urls, commons-leads, external-leads]
         default: rejected
       per_entry:
         description: Candidate limit per entry (1 to 5)
@@ -39,7 +39,7 @@ permissions:
 
 jobs:
   fetch:
-    if: inputs.scope != 'owner-urls'
+    if: inputs.scope != 'owner-urls' && inputs.scope != 'commons-leads' && inputs.scope != 'external-leads'
     runs-on: ubuntu-latest
     timeout-minutes: 90
     strategy:
@@ -185,4 +185,59 @@ jobs:
           name: owner-alternatives-unverified
           path: ${{ runner.temp }}/owner-alternatives/
           if-no-files-found: error
+          retention-days: 7
+  commons-leads:
+    if: inputs.scope == 'commons-leads'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - run: python -m pip install -r requirements.txt
+      - name: Examine Commons leads and white-background categories
+        run: |
+          python tools/examine_commons_leads.py \
+            --leads outputs/reports/WIKIMEDIA_IMAGE_LEADS.csv \
+            --output "$RUNNER_TEMP/commons-leads" \
+            --user-agent "ProducePLUReview/1.0 (https://github.com/smokydastona/produce-plu-code-book)"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: commons-leads-unapproved
+          path: ${{ runner.temp }}/commons-leads/
+          if-no-files-found: error
+          retention-days: 7
+  external-source-leads:
+    if: inputs.scope == 'external-leads'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - run: python -m pip install -r requirements.txt
+      - run: python -m unittest discover -s tools -p 'test_examine_external_image_leads.py'
+      - run: python -m unittest discover -s tools -p 'test_network_fetch.py'
+      - name: Fetch metadata from external source pages
+        run: |
+          python tools/examine_external_image_leads.py \
+            --manifest data/review-references/external-image-source-leads.json \
+            --output "$RUNNER_TEMP/external-source-leads"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: external-image-source-leads
+          path: ${{ runner.temp }}/external-source-leads/
+          if-no-files-found: warn
           retention-days: 7

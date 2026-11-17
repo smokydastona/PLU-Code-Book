@@ -7,13 +7,13 @@
     "fruit_records": 272,
     "vegetable_records": 276,
     "asian_records": 15,
-    "pages": 11,
+    "pages": 10,
     "image_free": true,
     "minimum_font_points": 12,
     "groups_kept_on_one_page": true,
     "source": "sources/binders/OldTimers_Produce_codes.pdf",
     "source_sha256": "6846210817a7f7bffe84bb5f30db75ef1276b203fda53c0256cb77cf037e0672",
-    "sha256": "adaf3f696512592936faa984ea1bde4853a5b14e9bc651dfa8f34108c891e0d3"
+    "sha256": "ecf2809f37c76335419879ea8b871bdb74114816205a4ba4bab8c2fa34384f4a"
   },
   "original_binder": "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx",
   "original_binder_sha256": "6b0aeaa153233c5f4917811a3f7a5b2212f7a946a0abede372a31db556ab0f63",
@@ -68,15 +68,15 @@
     }
   ],
   "soil_product_identities_sha256": "ed99f2abc048a372dab740bc7049b657e33584c2cd9bc10fa55585772a632bab",
-  "deli_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Updated_Deli_Two_Columns.xlsx",
+  "deli_source": "/workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/congenial-parakeet/sources/binders/Updated_Deli_Two_Columns.xlsx",
   "deli_source_sha256": "a26ab6cf98d72d656e5cfd7a5c8928a7938ae1d965934a597c047f8eb37438f3",
-  "bakery_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Bakery_Products.csv",
+  "bakery_source": "/workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/congenial-parakeet/sources/binders/Bakery_Products.csv",
   "bakery_source_sha256": "d863f9410b7b33ee1979b224b3b64bcb0c4ad944c5d998dcc297ca337297eee3",
   "bakery_records_included": 31,
-  "stretch_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Time_To_Stretch.jpg",
+  "stretch_source": "/workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/congenial-parakeet/sources/binders/Time_To_Stretch.jpg",
   "stretch_source_sha256": "b96e6cbecc167c31e77235b6b02171fc0e94b63aa1f76860fb22258d25f088ed",
   "conversions_source": "owner-uploaded image",
-  "conversions_source_image": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Conversions_Updated.jpg",
+  "conversions_source_image": "/workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/congenial-parakeet/sources/binders/Conversions_Updated.jpg",
   "conversions_source_image_sha256": "e3a51d715ee020604a65041c046dbd4092ebe043c390c82c3f427e98775ae504",
   "conversions_original_chart_source_sha256": [
     "61982efebf133df82dff82c7cdd0851cbba7bc15dd40ea7279c1b6f9027b03ec",
@@ -85,10 +85,10 @@
   ],
   "conversions_accuracy_review": "Owner-uploaded image visually checked against all three original chart images: volume values, weight values, kilograms-to-pounds values, price tiers and rounding note match. The $4.99 price converts to $11.00/kg in both the original chart and uploaded image; a prior editable draft's $11.02 value was incorrect and is not used.",
   "weighed_guide": {
-    "source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Weighed_Items_Over_100_Updated.jpg",
+    "source": "/workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/congenial-parakeet/sources/binders/Weighed_Items_Over_100_Updated.jpg",
     "source_sha256": "bd2689fd49f13d5050753e30d850e3c89001e9db98bcf3ff9930bddd374d3604",
     "derivative_sha256": "88d7ec5bddd8788531e68cebe46fb92d9efb7771d5bbf9bb1cb04c3a99d45832",
-    "rain_check_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Rain_Check.pdf",
+    "rain_check_source": "/workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/congenial-parakeet/sources/binders/Rain_Check.pdf",
     "rain_check_source_sha256": "9aeb587f43b8022735666e04dd771c89d7d08f15150964f7f095e6dc762af777",
     "rain_check_derivative_sha256": "6539b098b0b7913cac3f1d329f3ca15fa9bc19d6cb5635b1ef2f312e0c19b1d9",
     "original_cells_sha256": "e8e096a7650e27f8e67382de3f894e4083fa269230cca9f117fe9a2621be0b21",
@@ -97,12 +97,12 @@
   },
   "directory_images": [
     {
-      "source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Store_Directory_Original_1.png",
+      "source": "/workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/congenial-parakeet/sources/binders/Store_Directory_Original_1.png",
       "source_sha256": "c5beab3173c87b3ab5876bcad374bb85e5cefc57ba616edb749791852cc3bc69",
       "derivative_sha256": "b6380172d5c4a787da7fede67a1841aec24ccbe74e9dc50bef39564b044cad26"
     },
     {
-      "source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Store_Directory_Original_2.png",
+      "source": "/workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/congenial-parakeet/sources/binders/Store_Directory_Original_2.png",
       "source_sha256": "0274edd4cd7893d0f087f73e380295bf562ac80c0e10a4022ae7f69b686418a3",
       "derivative_sha256": "fcce4b14be6dddd9136ece540036526ddc8ba7306a7a9e2090f0ea4c43529310"
     }
@@ -145,18 +145,18 @@
     "CODE_NOT_IN_ORIGINAL": 269
   },
   "image_status_counts": {
-    "LEGACY_PREAPPROVED_IMAGE": 495,
-    "SUPPLIED_AI_CROP_REVIEW": 33,
-    "APPROVED_WORKINGLIST_IMAGE": 18,
-    "SUPPLIED_IMAGE_REVIEW": 2
+    "LEGACY_PREAPPROVED_IMAGE": 494,
+    "APPROVED_WORKINGLIST_IMAGE": 28,
+    "SUPPLIED_IMAGE_REVIEW": 25,
+    "SUPPLIED_AI_CROP_REVIEW": 1
   },
   "embedded_references": 548,
   "missing_or_uncertain_images": 0,
-  "ai_illustrations_embedded": 164,
+  "ai_illustrations_embedded": 132,
   "ai_illustrations_omitted": 0,
-  "new_ai_crops_embedded": 33,
-  "classification_review_required": 5,
-  "placement_review_required": 94,
+  "new_ai_crops_embedded": 1,
+  "classification_review_required": 0,
+  "placement_review_required": 0,
   "planned_produce_print_pages": 13,
   "source_reconciliation": {
     "source": "sources/plu/PickList.xml",
@@ -168,27 +168,34 @@
     "included_records": 594,
     "excluded_records": 324,
     "status": "BLOCKED",
-    "records_needing_review": 358,
-    "missing_image_requests": 35,
+    "records_needing_review": 232,
+    "missing_image_requests": 0,
     "inactive_assignments": 100,
-    "organic_placements_needing_review": 90,
-    "working_list_review_records": 248,
-    "reconciliation_review_records": 248,
+    "organic_placements_needing_review": 0,
+    "working_list_review_records": 0,
+    "reconciliation_review_records": 0,
     "reconciliation_review_decisions": 0,
     "identity_changed_entries": 50,
     "blocker_counts": {
-      "APPROVED_IMAGE_REQUIRED": 35,
-      "CLASSIFICATION_REQUIRED": 5,
-      "PRODUCT_IMAGE_REVIEW_REQUIRED": 35,
-      "PROHIBITED_IMAGE_REUSE": 323,
-      "SECTION_REQUIRED": 5
+      "BELOW_500_PX": 26,
+      "IMAGE_RIGHTS_NOT_VERIFIED": 26,
+      "MISSING_PROVENANCE_ATTRIBUTION": 26,
+      "MISSING_PROVENANCE_CHANGES": 26,
+      "MISSING_PROVENANCE_CREATOR": 26,
+      "MISSING_PROVENANCE_LICENSE_URL": 26,
+      "MISSING_PROVENANCE_ORIGINAL_IMAGE_URL": 26,
+      "MISSING_PROVENANCE_RIGHTS_EVIDENCE": 26,
+      "MISSING_PROVENANCE_SOURCE_PAGE_URL": 26,
+      "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED": 26,
+      "PROHIBITED_IMAGE_REUSE": 219,
+      "SUPPORTED_IMAGE_LICENCE_REQUIRED": 26
     }
   },
   "working_list_reconciliation": {
     "source": "sources/plu/PickList.xml",
     "working_list": "sources/plu/WorkingList.xml",
     "source_sha256": "38732869b0e7b1c8ccb0b6189a8685a1125595ebcc9ded4e9cc48d18d6ea8727",
-    "decision_registry_sha256": "3c8b787ec1a4b23b4dcaaaf34b9052245c2eb4529a17c2d191253d6011b3bac0",
+    "decision_registry_sha256": "c5a2040dc5f51d5122706c6dcb58866dce032b656def931945228e854af81bf7",
     "record_baseline_sha256": "b3638bd03e75eaa1651f566fee5c9437f73394b17dd07d02f427178fa3303168",
     "source_records_with_changed_fingerprints": 0,
     "orphaned_record_baseline_identities": 0,
@@ -198,7 +205,7 @@
     "excluded_conflicting_source_records": 6,
     "excluded_unconfirmed_equivalence_records": 1,
     "hidden_or_deleted_source_records": 324,
-    "review_required_records": 248,
+    "review_required_records": 0,
     "decisions": [
       {
         "decision_id": "3038",
@@ -486,8 +493,8 @@
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "957b44f3d1e5cdabe9aaf00d0f45168cbcbb2efc4c072e1d539f26945027be48",
-      "file_size_bytes": 26479455,
+      "file_sha256": "f55e7fd0d83a36565462d9e2e1b9e128f07f571d7bc4ab8f0e6bbc708e47a5ed",
+      "file_size_bytes": 26195899,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 399,
       "output_sheet_names": [

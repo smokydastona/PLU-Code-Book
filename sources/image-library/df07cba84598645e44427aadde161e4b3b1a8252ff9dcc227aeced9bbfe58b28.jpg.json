@@ -1,0 +1,41 @@
+{
+  "plu": "4436",
+  "product": "Italian Prune Plum",
+  "width": 500,
+  "height": 500,
+  "sha256": "1497d1165215674d898bb9a200ffb77cd1ed50f039f5a11288bc8fe71d591a68",
+  "approval_status": "CANDIDATE",
+  "image_approval_status": "APPROVED",
+  "approval_basis": "EXACT_WORKINGLIST_APPROVAL",
+  "recorded_visual_approval_status": "APPROVED",
+  "photographic_origin": "NOT_VERIFIED",
+  "visual_approval_status": "APPROVED",
+  "rights_verification_status": "NOT_VERIFIED",
+  "original_image_sha256": "84bbc9d21ed6e3c47c5b77479f3b77d48808bdf90da528420de1e2014eaf1b09",
+  "original_image_path": "data/images/Fruit/0134_4436.jpg",
+  "original_width": 294,
+  "original_height": 294,
+  "assigned_image_path": "data/images/Fruit/0134_4436.jpg",
+  "legacy_organic_original": null,
+  "working_source_id": "df07cba84598645e44427aadde161e4b3b1a8252ff9dcc227aeced9bbfe58b28",
+  "working_source_ids": [
+    "c007883c370d9091a564d02403396505b38052114bb7c5944cf7a61da7748587",
+    "f8e5cc78008a26c3709dc6d1f32f2a6a799104652f8131c0974bcf85e20625b6"
+  ],
+  "production_status": "BLOCKED",
+  "production_blockers": [
+    "BELOW_500_PX",
+    "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED",
+    "IMAGE_RIGHTS_NOT_VERIFIED",
+    "SUPPORTED_IMAGE_LICENCE_REQUIRED",
+    "MISSING_PROVENANCE_CREATOR",
+    "MISSING_PROVENANCE_LICENSE_URL",
+    "MISSING_PROVENANCE_SOURCE_PAGE_URL",
+    "MISSING_PROVENANCE_ORIGINAL_IMAGE_URL",
+    "MISSING_PROVENANCE_ATTRIBUTION",
+    "MISSING_PROVENANCE_CHANGES",
+    "MISSING_PROVENANCE_RIGHTS_EVIDENCE",
+    "PROHIBITED_IMAGE_REUSE"
+  ],
+  "transformation": "Aspect-ratio-preserving resize and centered solid white padding to 500x500 JPEG (quality 90, optimized, progressive)"
+}

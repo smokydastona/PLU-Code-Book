@@ -342,7 +342,7 @@ class PickListSyncChecks(unittest.TestCase):
         self.assertEqual([row["booklet_position"] for row in result], list(range(1, 7)))
         self.assertEqual(json.dumps(rows), before)
 
-    def test_unmatched_and_ambiguous_organics_stay_in_normal_category_and_are_flagged(self):
+    def test_unmatched_and_ambiguous_organics_follow_owner_placement_policy(self):
         rows = self.placement_rows([
             ("94769", "Organic Squash Stripetti", "Vegetable", "Organic Vegetables"),
             ("4769", "Kabocha", "Vegetable", "Squash"),
@@ -353,9 +353,9 @@ class PickListSyncChecks(unittest.TestCase):
         result = booklet_order(rows, {})
         self.assertEqual({row["source_id"] for row in result}, {"1", "2", "3", "4", "5"})
         organic_rows = [row for row in result if row["organic"]]
-        self.assertTrue(all(row["placement_status"] == "PLACEMENT_REVIEW_REQUIRED" for row in organic_rows))
+        self.assertEqual({row["plu"]: row["placement_status"] for row in organic_rows},
+                         {"94769": "OWNER_POLICY_SECTION_END", "3": "OWNER_POLICY_NEAREST_COUNTERPART"})
         self.assertEqual({row["display_section"] for row in organic_rows}, {"Squash", "Lettuce"})
-        self.assertTrue(all(not row["counterpart_source_ids"] for row in organic_rows))
         self.assertEqual([row["plu"] for row in result[:2]], ["4769", "94769"])
 
     def test_reviewed_placement_is_independent_of_photo_reuse_and_never_crosses_books(self):
@@ -474,6 +474,10 @@ class PickListSyncChecks(unittest.TestCase):
         assignment = dict(self.assignment, legacy_entry_idx="1")
         changed = dict(self.items[0], name="Different Apple")
         self.assertIsNone(legacy_approval(self.root, changed, assignment, {"1": entry}))
+        reapproved = dict(assignment, reapproved_from_source_id=self.items[0]["source_id"],
+                          reviewed_product="Different Apple")
+        self.assertIsNone(legacy_approval(self.root, dict(changed, identity_changed=True),
+                                          reapproved, {"1": entry}))
 
     def test_single_library_retains_unapproved_usage_copies_when_approved_index_refreshes(self):
         from used_image_library import check_used_library, record_images
@@ -988,11 +992,13 @@ class PickListSyncChecks(unittest.TestCase):
         evidence = 'User attestation: "I own this image and all the rights to it so I approve it completely"'
         metadata = dict(
             plu=self.items[0]["plu"], product=self.items[0]["name"],
+            working_list_id=self.items[0]["source_id"],
             creator="Not separately identified by the owner",
             license="OWNER_CONFIRMED_PERMISSION",
             rights_status="OWNER_CONFIRMED_PERMISSION",
             source_reference="Owner-uploaded image attachment",
             rights_evidence=evidence,
+            rights_verification_status="OWNER_CONFIRMED_PERMISSION",
             photographic_origin="OWNER_CONFIRMED_PHOTO",
             photographic_origin_evidence="User confirmed this is an actual photograph",
             visual_approval_evidence=evidence,

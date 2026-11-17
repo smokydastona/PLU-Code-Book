@@ -8,6 +8,8 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
+from network_fetch import is_dns_error, open_with_dns_retry
+
 SOURCES = {
     "commons": "https://commons.wikimedia.org/wiki/Main_Page",
     "flickr": "https://www.flickr.com/creativecommons/",
@@ -71,7 +73,7 @@ def probe(output, user_agent):
             row.update(source=source, idx=idx, query=query, requested_url=url)
             try:
                 request = Request(url, headers={"User-Agent": user_agent})
-                with urlopen(request, timeout=30) as response:
+                with open_with_dns_retry(urlopen, request, timeout=30) as response:
                     row.update(final_url=response.url, http_status=response.status,
                                content_type=response.headers.get("Content-Type", ""))
                     data = response.read(25 * 1024 * 1024 + 1)
@@ -99,7 +101,8 @@ def probe(output, user_agent):
                 row.update(status="ERROR", http_status=exc.code, details=str(exc))
             except (URLError, OSError, ValueError) as exc:
                 failures += 1
-                row.update(status="ERROR", details=str(exc))
+                row.update(status="DNS_ERROR" if is_dns_error(exc) else "ERROR",
+                           details=str(exc))
             writer.writerow(row)
             file.flush()
             print(f"{source} {idx}: {row['status']} {row['details']}", flush=True)

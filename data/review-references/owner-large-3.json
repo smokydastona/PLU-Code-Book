@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "source": "data/review-references/owner-large-3.png",
+  "source_sha256": "09e3bcb9efe333ea707bdf38afebaf193399e74f8a442d9990222d0f789b8387",
+  "source_size": [
+    1080,
+    1080
+  ],
+  "image_kind": "UNVERIFIED_IMAGE",
+  "origin": "Owner-supplied contact sheet; owner stated \"I own those too\". Image creation method and photographic origin are unverified.",
+  "review_note": "Review reference only; not a production image approval. This sheet is unlabelled; product identities follow the order and appearance of the previously supplied labelled 26-panel sheet. Varieties, image origin, production rights evidence and approvals remain subject to review. Selected crops do not upscale the source; organic references receive the standard pink badge.",
+  "panels": [
+    {
+      "plu": "94769",
+      "product": "Organic Kabocha Squash",
+      "box": [
+        0,
+        0,
+        1080,
+        594
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "5b7172292cd1114a3371007cf3b75a0410c73bb04f31183f3abb92cff8aae822",
+        "source_ids": [
+          "13b8831b65328f78bf8af5368c7d49907606fa383e645ae94801643dc9e79e02"
+        ],
+        "record_sha256": "e8ec1947272852dba171b077e1b5bd09ecc753206fd6501d5cd64fc30f1e147c"
+      },
+      "note": "Selected as a larger, separable review reference."
+    },
+    {
+      "plu": "4067",
+      "product": "Zucchini",
+      "box": [
+        0,
+        594,
+        1080,
+        1080
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "c5cbb1dd75a1094d2123327990fb2aa81ae9c436e36827c2476a9b26462c0119",
+        "source_ids": [
+          "9e2c148d5563a26e81e03998a05c321acb08745023bc763d41c82dc316baf9e1",
+          "d33f12fd1e6bec3468d40040c0da84897840a8cfc095222e8b07162070e82d8f",
+          "b316ccd8cb6237ea44979d17ea883a48570ced94104fd9acea1561d733a206ea"
+        ],
+        "record_sha256": "d732add679cbf079ac4aa2596e51045dafbac83e2c3876ed2487894ef4381599"
+      },
+      "note": "Selected as a larger, separable review reference."
+    }
+  ]
+}

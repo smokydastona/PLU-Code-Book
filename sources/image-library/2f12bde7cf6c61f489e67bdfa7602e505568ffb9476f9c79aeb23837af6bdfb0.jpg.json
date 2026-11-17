@@ -1,0 +1,46 @@
+{
+  "plu": "94022",
+  "product": "Organic Green Seedless Grapes",
+  "width": 500,
+  "height": 500,
+  "sha256": "a577088d13587d50e7a57261306dda2feb38a18d8d7fa9b6fe8e969a36c4ea80",
+  "approval_status": "CANDIDATE",
+  "image_approval_status": "APPROVED",
+  "approval_basis": "EXACT_WORKINGLIST_APPROVAL",
+  "recorded_visual_approval_status": "APPROVED",
+  "photographic_origin": "NOT_VERIFIED",
+  "visual_approval_status": "APPROVED",
+  "rights_verification_status": "NOT_VERIFIED",
+  "original_image_sha256": "17f4a6d23639d4cd091c7897bd3dc4ed003e0d79ee62c0ae6f65c1f53ce0960c",
+  "original_image_path": "sources/visual/FRUIT_VISUAL_PLU_BOOKLET_CORRECTED.docx#word/media/image46.jpg",
+  "original_width": 271,
+  "original_height": 271,
+  "assigned_image_path": "data/images/Fruit/0226_94022.png",
+  "legacy_organic_original": {
+    "source_document": "sources/visual/FRUIT_VISUAL_PLU_BOOKLET_CORRECTED.docx",
+    "source_member": "word/media/image46.jpg",
+    "original_sha256": "17f4a6d23639d4cd091c7897bd3dc4ed003e0d79ee62c0ae6f65c1f53ce0960c"
+  },
+  "working_source_id": "2f12bde7cf6c61f489e67bdfa7602e505568ffb9476f9c79aeb23837af6bdfb0",
+  "working_source_ids": [
+    "c67112294b47e7ba516ee51f164b187c54ed18ab57e63cfbd0fab6ef2591445c",
+    "6d060cb6c01e69c01f43b9f6188eafa3d6f2de7bf1359418b2536cc325405bd6",
+    "7ec18764d11f22640f694405c9b345ebd83a07de28751d87dfdfd987a6422d6c"
+  ],
+  "production_status": "BLOCKED",
+  "production_blockers": [
+    "BELOW_500_PX",
+    "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED",
+    "IMAGE_RIGHTS_NOT_VERIFIED",
+    "SUPPORTED_IMAGE_LICENCE_REQUIRED",
+    "MISSING_PROVENANCE_CREATOR",
+    "MISSING_PROVENANCE_LICENSE_URL",
+    "MISSING_PROVENANCE_SOURCE_PAGE_URL",
+    "MISSING_PROVENANCE_ORIGINAL_IMAGE_URL",
+    "MISSING_PROVENANCE_ATTRIBUTION",
+    "MISSING_PROVENANCE_CHANGES",
+    "MISSING_PROVENANCE_RIGHTS_EVIDENCE",
+    "PROHIBITED_IMAGE_REUSE"
+  ],
+  "transformation": "Aspect-ratio-preserving resize and centered solid white padding to 500x500 JPEG (quality 90, optimized, progressive); standard pink organic badge added"
+}

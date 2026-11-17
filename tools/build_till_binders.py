@@ -1568,16 +1568,18 @@ def map_images(root, rows, assignments, visuals, update_library=True):
             )
             report.append(record)
             continue
+        invalid_assignment_details = ""
         if assignment.get("visual_approval_status") == "APPROVED":
             from sync_picklist import reviewed_image
 
             content, width, height, errors = reviewed_image(root, row, assignment)
             if errors:
-                if row.get("identity_changed"):
+                invalid_assignment_details = (
+                    " Explicit WorkingList image assignment failed validation: " + "; ".join(errors))
+                if row.get("identity_changed") and row["source_id"] not in references:
                     record.update(
                         image_status="APPROVED_ASSIGNMENT_INVALID",
-                        details="Explicit WorkingList image assignment failed validation: " +
-                                "; ".join(errors),
+                        details=invalid_assignment_details.strip(),
                     )
                     report.append(record)
                     continue
@@ -1623,6 +1625,7 @@ def map_images(root, rows, assignments, visuals, update_library=True):
                 width=reference["width"], height=reference["height"],
                 visual_verdict="REVIEW_REFERENCE_NOT_APPROVED",
                 visual_review_note=reference["details"], organic_badge=row["organic"],
+                image_approval_status="NOT_APPROVED", approval_basis="",
                 photograph_status="SUPPLIER_PUBLISHED_PHOTO" if supplier else reference["photograph_status"],
                 rights_status=reference["rights_status"] if supplier else "NOT_VERIFIED",
                 details=reference["details"] if supplier or not illustration else
@@ -1630,6 +1633,7 @@ def map_images(root, rows, assignments, visuals, update_library=True):
                         "Variety, rights and production approval remain unverified.",
                 fingerprint=image_fingerprint(io.BytesIO(content)),
             )
+            record["details"] += invalid_assignment_details
             report.append(record)
             continue
         candidates = visuals.get((row["plu"], row["name"]), [])

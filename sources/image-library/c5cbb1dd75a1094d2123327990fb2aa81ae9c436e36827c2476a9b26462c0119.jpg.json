@@ -1,0 +1,41 @@
+{
+  "plu": "4067",
+  "product": "Zucchini",
+  "width": 500,
+  "height": 500,
+  "sha256": "2697d7970d10ed57ebadcec14c0e2f1c6269b7943838cb422895aa149754f1f3",
+  "approval_status": "CANDIDATE",
+  "image_approval_status": "APPROVED",
+  "approval_basis": "EXACT_WORKINGLIST_APPROVAL",
+  "recorded_visual_approval_status": "APPROVED",
+  "photographic_origin": "NOT_VERIFIED",
+  "visual_approval_status": "APPROVED",
+  "rights_verification_status": "NOT_VERIFIED",
+  "original_image_sha256": "5a1fc412fea58b7aba0af82764e564e4f4ee86819420fbe4809a6fb5ffca6173",
+  "original_image_path": "data/images/Vegetable/0456_4067.jpg",
+  "original_width": 276,
+  "original_height": 276,
+  "assigned_image_path": "data/images/Vegetable/0456_4067.jpg",
+  "legacy_organic_original": null,
+  "working_source_id": "c5cbb1dd75a1094d2123327990fb2aa81ae9c436e36827c2476a9b26462c0119",
+  "working_source_ids": [
+    "9e2c148d5563a26e81e03998a05c321acb08745023bc763d41c82dc316baf9e1",
+    "d33f12fd1e6bec3468d40040c0da84897840a8cfc095222e8b07162070e82d8f",
+    "b316ccd8cb6237ea44979d17ea883a48570ced94104fd9acea1561d733a206ea"
+  ],
+  "production_status": "BLOCKED",
+  "production_blockers": [
+    "BELOW_500_PX",
+    "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED",
+    "IMAGE_RIGHTS_NOT_VERIFIED",
+    "SUPPORTED_IMAGE_LICENCE_REQUIRED",
+    "MISSING_PROVENANCE_CREATOR",
+    "MISSING_PROVENANCE_LICENSE_URL",
+    "MISSING_PROVENANCE_SOURCE_PAGE_URL",
+    "MISSING_PROVENANCE_ORIGINAL_IMAGE_URL",
+    "MISSING_PROVENANCE_ATTRIBUTION",
+    "MISSING_PROVENANCE_CHANGES",
+    "MISSING_PROVENANCE_RIGHTS_EVIDENCE"
+  ],
+  "transformation": "Aspect-ratio-preserving resize and centered solid white padding to 500x500 JPEG (quality 90, optimized, progressive)"
+}

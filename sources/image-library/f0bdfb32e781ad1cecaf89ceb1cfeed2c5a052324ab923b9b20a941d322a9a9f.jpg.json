@@ -1,0 +1,41 @@
+{
+  "plu": "4336",
+  "product": "Santa Claus Melon",
+  "width": 500,
+  "height": 500,
+  "sha256": "4246c2298e74caf950edf386fad4da9ccf95148f5a0c0bb5f6c073e7a9aef0e4",
+  "approval_status": "CANDIDATE",
+  "image_approval_status": "APPROVED",
+  "approval_basis": "EXACT_WORKINGLIST_APPROVAL",
+  "recorded_visual_approval_status": "APPROVED",
+  "photographic_origin": "NOT_VERIFIED",
+  "visual_approval_status": "APPROVED",
+  "rights_verification_status": "NOT_VERIFIED",
+  "original_image_sha256": "3efa032df1bf5984132a9b87e11d92bd6f778d7947597f534a3e7293f2082381",
+  "original_image_path": "data/images/Fruit/0123_4336.jpg",
+  "original_width": 179,
+  "original_height": 179,
+  "assigned_image_path": "data/images/Fruit/0123_4336.jpg",
+  "legacy_organic_original": null,
+  "working_source_id": "f0bdfb32e781ad1cecaf89ceb1cfeed2c5a052324ab923b9b20a941d322a9a9f",
+  "working_source_ids": [
+    "df689eba8547b5efcb8e7a5ce0f8f6954b21fb38e3eddf417a27f9f6a407a8c2",
+    "745185b093bdade324313635b0d314b2ef1f6260503b6ac4b3fd6ed5095404ac"
+  ],
+  "production_status": "BLOCKED",
+  "production_blockers": [
+    "BELOW_500_PX",
+    "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED",
+    "IMAGE_RIGHTS_NOT_VERIFIED",
+    "SUPPORTED_IMAGE_LICENCE_REQUIRED",
+    "MISSING_PROVENANCE_CREATOR",
+    "MISSING_PROVENANCE_LICENSE_URL",
+    "MISSING_PROVENANCE_SOURCE_PAGE_URL",
+    "MISSING_PROVENANCE_ORIGINAL_IMAGE_URL",
+    "MISSING_PROVENANCE_ATTRIBUTION",
+    "MISSING_PROVENANCE_CHANGES",
+    "MISSING_PROVENANCE_RIGHTS_EVIDENCE",
+    "PROHIBITED_IMAGE_REUSE"
+  ],
+  "transformation": "Aspect-ratio-preserving resize and centered solid white padding to 500x500 JPEG (quality 90, optimized, progressive)"
+}
