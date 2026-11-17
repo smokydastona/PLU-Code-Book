@@ -607,6 +607,10 @@ class TillBinderChecks(unittest.TestCase):
         self.assertEqual(len(products), 31)
         self.assertEqual([sum(row["category"] == category for row in products)
                           for category in ("Bulk Buns", "Bagels", "Muffins", "Sweets")], [10, 8, 6, 7])
+        self.assertEqual([row["product"] for row in products if row["category"] == "Bagels"], [
+            "Plain", "Blueberry", "Cheese", "Cinnamon Raisin", "Everything",
+            "Jalapeno Cheese", "Multigrain", "Sesame Seed",
+        ])
         removed = {"55854", "47898", "55935", "55865", "68342", "68343", "55756", "55861"}
         self.assertTrue(removed.isdisjoint(row["plu"] for row in products))
         self.assertEqual([row["plu"] for row in products if row["category"] == "Muffins"], [
