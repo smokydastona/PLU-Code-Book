@@ -4,7 +4,7 @@ REVIEW COPY ONLY - NOT RELEASED FOR OPERATIONAL TILL USE
 Source XML SHA-256: 38732869b0e7b1c8ccb0b6189a8685a1125595ebcc9ded4e9cc48d18d6ea8727
 Original workbook SHA-256: 6b0aeaa153233c5f4917811a3f7a5b2212f7a946a0abede372a31db556ab0f63
 Updated Deli source SHA-256: a26ab6cf98d72d656e5cfd7a5c8928a7938ae1d965934a597c047f8eb37438f3; entries: 52
-Updated Bakery source SHA-256: c9ee6248b2f1ecec772bdb38a0be9ae580a07e9c4ed7b9dcfd5da40737e125a6; entries: 37
+Updated Bakery source SHA-256: b2e00226ab8ca1514e3ecfa3e33e72f97a9fd76aaeecc514182563c829ec13d3; entries: 31
 Time To Stretch image SHA-256: b96e6cbecc167c31e77235b6b02171fc0e94b63aa1f76860fb22258d25f088ed
 Conversions image SHA-256: e3a51d715ee020604a65041c046dbd4092ebe043c390c82c3f427e98775ae504
 Conversions accuracy review: Owner-uploaded image visually checked against all three original chart images: volume values, weight values, kilograms-to-pounds values, price tiers and rounding note match. The $4.99 price converts to $11.00/kg in both the original chart and uploaded image; a prior editable draft's $11.02 value was incorrect and is not used.
@@ -45,7 +45,7 @@ Image outcomes:
   APPROVED_WORKINGLIST_IMAGE: 18
   SUPPLIED_IMAGE_REVIEW: 2
 
-Print validation: {"photos": {"status": "PASS", "pages": 13, "landscape_us_letter": true, "complete_workbook_opened_and_exported_by_calc": true, "complete_binder_pdf_pages": 30, "every_page_code_count_verified": true, "every_description_found": true, "drawn_images": 548, "deli_print_records_verified": 52, "bakery_print_records_verified": 37, "bakery_print_page_verified": true, "bulk_print_pages_verified": 6, "bulk_print_font_points": 11, "stretch_print_page_verified": true, "misc_print_page_verified": true, "conversions_print_image_verified": true, "directory_print_pages_verified": 2, "directory_print_pixels_losslessly_verified": true, "delivery_print_pages_verified": 2, "delivery_page_split_verified": true, "soil_print_images_verified": 24, "soil_uniform_product_images_verified": 8, "soil_barcodes_decoded_at_dpi": [150, 300], "weighed_print_text_verified": false, "weighed_print_image_verified": true, "complete_pdf": "Complete Till Binder - Updated - Photos.pdf", "visual_review": "REQUIRED; automated text/geometry checks are not a visual print approval"}}
+Print validation: {"photos": {"status": "PASS", "pages": 13, "landscape_us_letter": true, "complete_workbook_opened_and_exported_by_calc": true, "complete_binder_pdf_pages": 30, "every_page_code_count_verified": true, "every_description_found": true, "drawn_images": 548, "deli_print_records_verified": 52, "bakery_print_records_verified": 31, "bakery_print_page_verified": true, "bulk_print_pages_verified": 6, "bulk_print_font_points": 11, "stretch_print_page_verified": true, "misc_print_page_verified": true, "conversions_print_image_verified": true, "directory_print_pages_verified": 2, "directory_print_pixels_losslessly_verified": true, "delivery_print_pages_verified": 2, "delivery_page_split_verified": true, "soil_print_images_verified": 24, "soil_uniform_product_images_verified": 8, "soil_barcodes_decoded_at_dpi": [150, 300], "weighed_print_text_verified": false, "weighed_print_image_verified": true, "complete_pdf": "Complete Till Binder - Updated - Photos.pdf", "visual_review": "REQUIRED; automated text/geometry checks are not a visual print approval"}}
 
 Detailed reports:
   VALIDATION.json: checks, hashes, counts and publication blockers

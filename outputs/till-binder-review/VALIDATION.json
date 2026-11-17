@@ -54,15 +54,15 @@
     }
   ],
   "soil_product_identities_sha256": "ed99f2abc048a372dab740bc7049b657e33584c2cd9bc10fa55585772a632bab",
-  "deli_source": "/workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/reimagined-system/sources/binders/Updated_Deli_Two_Columns.xlsx",
+  "deli_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Updated_Deli_Two_Columns.xlsx",
   "deli_source_sha256": "a26ab6cf98d72d656e5cfd7a5c8928a7938ae1d965934a597c047f8eb37438f3",
-  "bakery_source": "/workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/reimagined-system/sources/binders/Bakery_Products.csv",
-  "bakery_source_sha256": "c9ee6248b2f1ecec772bdb38a0be9ae580a07e9c4ed7b9dcfd5da40737e125a6",
-  "bakery_records_included": 37,
-  "stretch_source": "/workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/reimagined-system/sources/binders/Time_To_Stretch.jpg",
+  "bakery_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Bakery_Products.csv",
+  "bakery_source_sha256": "b2e00226ab8ca1514e3ecfa3e33e72f97a9fd76aaeecc514182563c829ec13d3",
+  "bakery_records_included": 31,
+  "stretch_source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Time_To_Stretch.jpg",
   "stretch_source_sha256": "b96e6cbecc167c31e77235b6b02171fc0e94b63aa1f76860fb22258d25f088ed",
   "conversions_source": "owner-uploaded image",
-  "conversions_source_image": "/workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/reimagined-system/sources/binders/Conversions_Updated.jpg",
+  "conversions_source_image": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Conversions_Updated.jpg",
   "conversions_source_image_sha256": "e3a51d715ee020604a65041c046dbd4092ebe043c390c82c3f427e98775ae504",
   "conversions_original_chart_source_sha256": [
     "61982efebf133df82dff82c7cdd0851cbba7bc15dd40ea7279c1b6f9027b03ec",
@@ -71,7 +71,7 @@
   ],
   "conversions_accuracy_review": "Owner-uploaded image visually checked against all three original chart images: volume values, weight values, kilograms-to-pounds values, price tiers and rounding note match. The $4.99 price converts to $11.00/kg in both the original chart and uploaded image; a prior editable draft's $11.02 value was incorrect and is not used.",
   "weighed_guide": {
-    "source": "/workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/reimagined-system/sources/binders/Weighed_Items_Over_100_Updated.jpg",
+    "source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Weighed_Items_Over_100_Updated.jpg",
     "source_sha256": "bd2689fd49f13d5050753e30d850e3c89001e9db98bcf3ff9930bddd374d3604",
     "derivative_sha256": "88d7ec5bddd8788531e68cebe46fb92d9efb7771d5bbf9bb1cb04c3a99d45832",
     "original_cells_sha256": "e8e096a7650e27f8e67382de3f894e4083fa269230cca9f117fe9a2621be0b21",
@@ -80,12 +80,12 @@
   },
   "directory_images": [
     {
-      "source": "/workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/reimagined-system/sources/binders/Store_Directory_Original_1.png",
+      "source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Store_Directory_Original_1.png",
       "source_sha256": "c5beab3173c87b3ab5876bcad374bb85e5cefc57ba616edb749791852cc3bc69",
       "derivative_sha256": "b6380172d5c4a787da7fede67a1841aec24ccbe74e9dc50bef39564b044cad26"
     },
     {
-      "source": "/workspaces/produce-plu-code-book/copilot-worktrees/produce-plu-code-book/reimagined-system/sources/binders/Store_Directory_Original_2.png",
+      "source": "/workspaces/produce-plu-code-book/smokydastona/produce-plu-code-book/sources/binders/Store_Directory_Original_2.png",
       "source_sha256": "0274edd4cd7893d0f087f73e380295bf562ac80c0e10a4022ae7f69b686418a3",
       "derivative_sha256": "fcce4b14be6dddd9136ece540036526ddc8ba7306a7a9e2090f0ea4c43529310"
     }
@@ -458,7 +458,7 @@
       "worksheets_preserved": 11,
       "produce_records_verified": 548,
       "deli_records_verified": 52,
-      "bakery_records_verified": 37,
+      "bakery_records_verified": 31,
       "delivery_pages_verified": 2,
       "produce_images_verified": 548,
       "original_parts_checked": 104,
@@ -469,8 +469,8 @@
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "3815426aaf35ea4978033d448f9d2292dc4e355cba821b5d8bff638a8a51ba52",
-      "file_size_bytes": 25873496,
+      "file_sha256": "afd37b45094283d6827112fb889560ef4283def7045238044a462919d256a83f",
+      "file_size_bytes": 25873421,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 400,
       "output_sheet_names": [
@@ -499,7 +499,7 @@
       "every_description_found": true,
       "drawn_images": 548,
       "deli_print_records_verified": 52,
-      "bakery_print_records_verified": 37,
+      "bakery_print_records_verified": 31,
       "bakery_print_page_verified": true,
       "bulk_print_pages_verified": 6,
       "bulk_print_font_points": 11,

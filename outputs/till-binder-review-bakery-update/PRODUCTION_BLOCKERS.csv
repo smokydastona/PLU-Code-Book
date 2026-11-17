@@ -1,8 +1,0 @@
-﻿blocker,records,required_owner_action,status
-APPROVED_IMAGE_REQUIRED,35,Owner supplies or approves an exact-identity image for each listed PLU (MISSING_IMAGES.csv).,OPEN
-CLASSIFICATION_REQUIRED,5,Owner classifies the listed products (PLACEMENT_REVIEW.csv).,OPEN
-PRODUCT_IMAGE_REVIEW_REQUIRED,35,Fresh product-specific image review after identity change (MISSING_IMAGES.csv).,OPEN
-PROHIBITED_IMAGE_REUSE,323,Owner resolves image reuse between different product identities (reconciliation/IMAGE_REQUESTS.csv).,OPEN
-SECTION_REQUIRED,5,Owner assigns the listed products to a display section (PLACEMENT_REVIEW.csv).,OPEN
-WORKING_LIST_RECONCILIATION,248,Owner records reviewed decisions for each flagged WorkingList record (reconciliation/WORKING_LIST_RECONCILIATION.csv); decisions recorded: 0.,OPEN
-ORGANIC_PLACEMENT,90,Owner confirms organic counterpart placement (PLACEMENT_REVIEW.csv).,OPEN
