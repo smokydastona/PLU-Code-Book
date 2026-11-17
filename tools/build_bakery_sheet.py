@@ -7,6 +7,7 @@ from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.worksheet.page import PageMargins
 
+from binder_theme import display_product_name
 from text_fit import line_count
 
 BAKERY_SOURCE = Path("sources/binders/Bakery_Products.csv")
@@ -79,7 +80,8 @@ def _group_panel(rows, column_start, sheet, coordinates):
         sheet.row_dimensions[row_number].height = 20
         row_number += 1
         for entry in products:
-            product = sheet.cell(row_number, product_column, entry["product"])
+            product_name = display_product_name(entry["product"])
+            product = sheet.cell(row_number, product_column, product_name)
             code = sheet.cell(row_number, code_column, entry["plu"])
             for cell in (product, code):
                 cell.data_type = "s"
@@ -88,11 +90,11 @@ def _group_panel(rows, column_start, sheet, coordinates):
                                            horizontal="left" if cell.column == product_column else "center")
                 cell.border = border
             code.number_format = "@"
-            lines = line_count(entry["product"], BODY_POINTS, PRODUCT_WIDTH)
+            lines = line_count(product_name, BODY_POINTS, PRODUCT_WIDTH)
             sheet.row_dimensions[row_number].height = max(
                 sheet.row_dimensions[row_number].height or 0, ROW_HEIGHT + 15 * (lines - 1))
             coordinates.append(dict(
-                category=category, product=entry["product"], plu=entry["plu"],
+                category=category, product=product_name, plu=entry["plu"],
                 product_cell=product.coordinate, code_cell=code.coordinate))
             row_number += 1
         row_number += 1
@@ -147,7 +149,7 @@ def validate_sheet(sheet, expected, coordinates):
         raise ValueError("Bakery entry count differs from the source list")
     for entry, source in zip(coordinates, expected):
         if (entry["category"], entry["product"], entry["plu"]) != (
-                source["category"], source["product"], source["plu"]):
+                source["category"], display_product_name(source["product"]), source["plu"]):
             raise ValueError("Bakery layout order differs from the source list")
         product, code = sheet[entry["product_cell"]], sheet[entry["code_cell"]]
         if product.value != entry["product"] or product.data_type != "s":

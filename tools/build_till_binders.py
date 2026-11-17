@@ -51,7 +51,7 @@ from working_list import read_working_list
 from build_deli_sheet import DELI_SOURCE, read_source as read_deli_source, validate_sheet as validate_deli_sheet
 from build_bulk_sheet import TITLE as BULK_TITLE, bulk_sheet, read_bulk, validate_bulk
 import build_weighed_sheet as weighed_guide
-from binder_theme import DARK_GREEN, PALE_GREEN, row_fill
+from binder_theme import DARK_GREEN, PALE_GREEN, display_product_name, row_fill
 from text_fit import text_points
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -1476,6 +1476,8 @@ def produce_catalog(items, assignments):
             row["section"] = "Unclassified PickList entries - REVIEW"
         rows.append(row)
     ordered = order_produce(booklet_order(rows, assignments))
+    for row in ordered:
+        row["display_name"] = display_product_name(row.get("display_name", row["name"].upper()))
     descriptions = defaultdict(set)
     for item in items:
         if item["included"]:
@@ -2065,6 +2067,11 @@ def theme_product_table(content, sheet_name, coordinates):
         indices = defaultdict(int)
         for entry in coordinates:
             product, code = sheet[entry["product_cell"]], sheet[entry["code_cell"]]
+            display_name = display_product_name(product.value)
+            if display_name != product.value:
+                product.value = display_name
+                product.data_type = "s"
+                entry["product"] = display_name
             fill = row_fill(indices[product.column])
             indices[product.column] += 1
             product.fill = code.fill = fill

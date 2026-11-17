@@ -8,6 +8,7 @@ from openpyxl.worksheet.page import PageMargins
 from openpyxl.worksheet.pagebreak import Break
 
 from binder_theme import DARK_GREEN, row_fill
+from binder_theme import display_product_name
 from text_fit import DIGIT_PIXELS, line_count, text_points
 
 TITLE = "BULK PLU QUICK GUIDE"
@@ -112,7 +113,8 @@ def bulk_sheet(entries, continuation_labels=None):
                 if entry["category"] != category:
                     category = entry["category"]
                     lines.append((category, None, 16))
-                height = 16 * line_count(entry["product"], 11, PRODUCT_WIDTH)
+                height = 16 * line_count(
+                    display_product_name(entry["product"]), 11, PRODUCT_WIDTH)
                 lines.append((None, entry, height))
             return lines
 
@@ -176,7 +178,10 @@ def bulk_sheet(entries, continuation_labels=None):
                     seen_categories.add(category)
                     row += units
                     continue
+                product_name = display_product_name(entry["product"])
                 for column, value in ((base, entry["plu"]), (base + 1, entry["product"])):
+                    if column == base + 1:
+                        value = product_name
                     if units > 1:
                         sheet.merge_cells(start_row=row, start_column=column,
                                           end_row=row + units - 1, end_column=column)
@@ -189,7 +194,8 @@ def bulk_sheet(entries, continuation_labels=None):
                     cell.alignment = Alignment(vertical="center", wrap_text=True,
                                                horizontal="center" if column == base else "left")
                     cell.border = Border(bottom=Side(style="hair", color="D0D0D0"))
-                coordinates.append(dict(entry, code_cell=sheet.cell(row, base).coordinate,
+                coordinates.append(dict(entry, product=product_name,
+                                        code_cell=sheet.cell(row, base).coordinate,
                                         product_cell=sheet.cell(row, base + 1).coordinate, page=page))
                 product_index += 1
                 row += units

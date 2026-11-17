@@ -28,6 +28,7 @@ class TillBinderAuditChecks(unittest.TestCase):
                 reconciliation_review_decisions=0, organic_placements_needing_review=1)), output)
             self.assertTrue(rows and all(row["status"] == "OPEN" for row in rows))
             self.assertEqual(len(read_csv(output / "PRODUCTION_BLOCKERS.csv")), 3)
+            self.assertNotIn(b"\r", (output / "PRODUCTION_BLOCKERS.csv").read_bytes())
 
     def test_package_audit_flags_removed_media(self):
         from openpyxl import Workbook

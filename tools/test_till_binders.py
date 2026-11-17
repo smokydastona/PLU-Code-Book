@@ -35,7 +35,7 @@ from build_deli_sheet import convert
 from build_bulk_sheet import bulk_sheet, read_bulk, validate_bulk
 from build_bakery_sheet import (BAKERY_SOURCE, read_source as read_bakery_source,
                                 validate_sheet as validate_bakery_sheet, workbook_bytes as bakery_workbook_bytes)
-from binder_theme import PALE_GREEN
+from binder_theme import PALE_GREEN, display_product_name
 from build_weighed_sheet import SOURCE as WEIGHED_SOURCE
 
 
@@ -450,7 +450,8 @@ class TillBinderChecks(unittest.TestCase):
         original.save(self.binder)
         deli_document = Document()
         deli_document.add_heading("DELI PRODUCT & PLU REFERENCE GUIDE", 0)
-        for category, product, plu in (("Meals", "Updated meal", "00012"), ("Salads", "Updated salad", "00013")):
+        for category, product, plu in (("Meals", "Updated meal Organic", "00012"),
+                                       ("Salads", "Updated salad", "00013")):
             deli_document.add_heading(category, 1)
             table = deli_document.add_table(rows=2, cols=2)
             table.cell(0, 0).text, table.cell(0, 1).text = "Product", "PLU"
@@ -575,9 +576,17 @@ class TillBinderChecks(unittest.TestCase):
             self.assertEqual(stretch.page_setup.fitToHeight, 1)
             self.assertEqual(summary["stretch_source_sha256"], sha((self.root / STRETCH_SOURCE).read_bytes()))
             self.assertEqual(workbook["Deli"]["A5"].value, "00012")
-            self.assertEqual(workbook["Deli"]["B5"].value, "Updated meal")
+            self.assertEqual(workbook["Deli"]["B5"].value, "Updated meal Org.")
             self.assertEqual(workbook["Deli"]["D5"].value, "00013")
             self.assertEqual(workbook["Deli"]["E5"].value, "Updated salad")
+            for name in ("Bakery", "Bulk", "Deli", "Produce", "Misc Codes"):
+                if name in workbook.sheetnames:
+                    self.assertTrue(all(
+                        display_product_name(cell.value) == cell.value
+                        for row in workbook[name]
+                        for cell in row
+                        if isinstance(cell.value, str)
+                    ))
             self.assertEqual(summary["validations"][edition]["deli_records_verified"], 2)
             _, bakery_coordinates, bakery_products = read_bakery_source(self.root)
             validate_bakery_sheet(workbook["Bakery"], bakery_products, bakery_coordinates)
@@ -668,6 +677,12 @@ class TillBinderChecks(unittest.TestCase):
         finally:
             result.close()
             original.close()
+
+    def test_organic_product_word_is_abbreviated_case_insensitively(self):
+        self.assertEqual(display_product_name("ORGANIC APPLES"), "Org. APPLES")
+        self.assertEqual(display_product_name("Whole Roasted Chicken Organic"),
+                         "Whole Roasted Chicken Org.")
+        self.assertEqual(display_product_name("Organics"), "Organics")
 
     def test_bakery_groups_are_not_split_when_source_count_changes(self):
         _, _, products = read_bakery_source(self.root)

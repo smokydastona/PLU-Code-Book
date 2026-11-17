@@ -40,7 +40,7 @@ def read_csv(path):
 
 def write_csv(path, rows, fields):
     with Path(path).open("w", encoding="utf-8-sig", newline="") as file:
-        writer = csv.DictWriter(file, fieldnames=fields)
+        writer = csv.DictWriter(file, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
