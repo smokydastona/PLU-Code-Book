@@ -1,0 +1,561 @@
+{
+  "schema_version": 1,
+  "source": "data/review-references/owner-26-review.png",
+  "source_sha256": "7c2ee63011d30bd04d49814b951842d3e7ed6b897fbefd0067e0b862056ab835",
+  "source_size": [
+    1080,
+    1080
+  ],
+  "image_kind": "UNVERIFIED_IMAGE",
+  "origin": "Owner-supplied contact sheet uploaded 2026-11-17; owner stated they own the image. Image creation method and photographic origin are unverified.",
+  "review_note": "Owner authorized suitable crops as review references only and asked for comparison with the second sheet. Its corresponding panels were smaller; the larger first-sheet crops were selected for usable products. Both sheets are retained unchanged; crops omit labels, have no upscaling, and organic displays receive the standard pink badge. Product variety, photograph origin, rights evidence for production, image resolution and production approval remain subject to review.",
+  "comparison_source": "data/review-references/owner-26-comparison.png",
+  "comparison_source_sha256": "d320c4d8562790e5513c1347f2b5b09a9428f901dfba2a255751b524496ea8f2",
+  "comparison_source_size": [1080, 720],
+  "panels": [
+    {
+      "plu": "4336",
+      "product": "Santa Claus Melon",
+      "label_plu": "4336",
+      "label_product": "Santa Claus Melon",
+      "box": [
+        0,
+        0,
+        180,
+        167
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "f0bdfb32e781ad1cecaf89ceb1cfeed2c5a052324ab923b9b20a941d322a9a9f",
+        "source_ids": [
+          "df689eba8547b5efcb8e7a5ce0f8f6954b21fb38e3eddf417a27f9f6a407a8c2",
+          "745185b093bdade324313635b0d314b2ef1f6260503b6ac4b3fd6ed5095404ac"
+        ],
+        "record_sha256": "2c8019fcc2afcbc1dce74941bab0ddb8bf06eae942f5cf2fa6e3212214478e05"
+      }
+    },
+    {
+      "plu": "4640",
+      "product": "Romaine Lettuce",
+      "label_plu": "4640",
+      "label_product": "Romaine Lettuce",
+      "box": [
+        180,
+        0,
+        345,
+        167
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "770dd6d9e210b73fe9d5d3c565ef120cd14fa9bc6c19ce6b05f4ad48e2f792a5",
+        "source_ids": [
+          "dedb5ccbdd83757a6881527d5311d31fd4127b0b8240842f73df00f6d4d42a9b",
+          "85a97a6e62e82198c028d1debf1a0f5dae2508cc534e85e15c15265a707ff776"
+        ],
+        "record_sha256": "943deb3a0b2dc17fc60d9e39cdf5d2ed5e56711925ed600adc5de7380c94f4ea"
+      }
+    },
+    {
+      "plu": "3129",
+      "product": "Pomelo",
+      "label_plu": "3129",
+      "label_product": "Pomelo",
+      "box": [
+        345,
+        0,
+        540,
+        167
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "6f4db4c750341628eb9b96fde6f691e92f88ef716981d1bc6c4c80f6956ed6fa",
+        "source_ids": [
+          "3b5933c522e6f3ac6b6e04ad7cab58de17e7de688988844d242d40b6a9568094",
+          "514b0478235beb1cbc5d7b4b6e2355d79540c2d4c3a2eb1277e62eab5a48306d"
+        ],
+        "record_sha256": "69ea438ad06795486af6bd98b5b42b73e3ad7957e15a9ea9fe572e366a077733"
+      }
+    },
+    {
+      "plu": "4425",
+      "product": "Shinko (Shingo) Asian Pear",
+      "label_plu": "4425",
+      "label_product": "Shinko (Shingo) Asian Pear",
+      "box": [
+        540,
+        0,
+        720,
+        167
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "fe37e4f92291cb134b96dd8fd3b854fe65880324a751fa5b34c7063877457040",
+        "source_ids": [
+          "225ecb5b37338f8579afa8fd03b88f613497858fea0690a63b16064b19f912c1"
+        ],
+        "record_sha256": "4e3c5e6949dcc36e9fd2af0f17462ee571c6c126d9d045f99f253ab1ee4a19e5"
+      }
+    },
+    {
+      "plu": "94022",
+      "product": "Organic Green Seedless Grapes",
+      "label_plu": "94022",
+      "label_product": "Organic Green Seedless Grapes",
+      "box": [
+        720,
+        0,
+        900,
+        167
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "2f12bde7cf6c61f489e67bdfa7602e505568ffb9476f9c79aeb23837af6bdfb0",
+        "source_ids": [
+          "c67112294b47e7ba516ee51f164b187c54ed18ab57e63cfbd0fab6ef2591445c",
+          "6d060cb6c01e69c01f43b9f6188eafa3d6f2de7bf1359418b2536cc325405bd6",
+          "7ec18764d11f22640f694405c9b345ebd83a07de28751d87dfdfd987a6422d6c"
+        ],
+        "record_sha256": "2627bec5bfef85334299c2ff8f6f3f3810f03dc1f61152dc9ec71f80a28c6772"
+      }
+    },
+    {
+      "plu": "4059",
+      "product": "Red Prince Apples",
+      "label_plu": "4059",
+      "label_product": "Red Prince Apples",
+      "box": [
+        900,
+        0,
+        1080,
+        167
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "2691db398e418f597b9a873710acdec756a2463e77a35fceb66e19a2647623ac",
+        "source_ids": [
+          "0842e09683c06be8eebe95d2759041fb646144ae4fe11a0680d5839409d28366"
+        ],
+        "record_sha256": "b3873bbc481fae199e63d536a14f62f6c3e80752d947145068bc106063460deb"
+      }
+    },
+    {
+      "plu": "94329",
+      "product": "Organic Honeydew Melon",
+      "label_plu": "94329",
+      "label_product": "Organic Honeydew Melon",
+      "box": [
+        0,
+        225,
+        180,
+        383
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "808eeb35497c5b06d07af85d6df1ed850e1ff91dbea222db272c9ba488afb4ab",
+        "source_ids": [
+          "2a9fad986444638acfdeeab2a7acecd34020d954d7004eb50f0dec3c1b653afd",
+          "42a7663d6fca9c182577cbb8165c2c1fabeff5c23bd51a805abdf6bf08a7a126"
+        ],
+        "record_sha256": "1e9e9edf1e675ed2b0d2add670d7d3e3d339b62ae7deb7f89380d86d00651689"
+      }
+    },
+    {
+      "plu": "94342",
+      "product": "Organic Watermelon",
+      "label_plu": "94342",
+      "label_product": "Organic Watermelon",
+      "box": [
+        180,
+        225,
+        360,
+        383
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "8764d9445ce973f9109c8cb02d54274ff2e6b98c13437608a51a8030bff787d5",
+        "source_ids": [
+          "0dd7caf0291627a98f4ecf509a590deeb9597e6405f92d75e2dc9815864e20d8",
+          "b90e0281f264eee9107f618c72a3ec9d26e749e15b213a88a7bf48dac79041f7"
+        ],
+        "record_sha256": "985fb9ebb72402080aac7bc80e82fd79c1d0e938d2f1d60e42c6e8d4e905968f"
+      }
+    },
+    {
+      "plu": "94031",
+      "product": "Organic Watermelon",
+      "label_plu": "94031",
+      "label_product": "Organic Watermelon",
+      "box": [
+        360,
+        225,
+        540,
+        383
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "f578175d2a42c92e42f55a9f0eff5620dba4cfd8d4d45aaa44636e415fa9149f",
+        "source_ids": [
+          "605efd9a7801449c517074defe0fa5941ad9f07259761fff5cd545db6b37e8d0",
+          "74e8407c60de7058b3ee9607c6ac3c520bf96834f8584eebb09ccfac3ce81f19"
+        ],
+        "record_sha256": "ef0c35872a1e91b348eb0dcf6ff6851d333e8dfde51e21ab8a4c0b016d839848"
+      }
+    },
+    {
+      "plu": "94648",
+      "product": "Organic Cremini Mushrooms",
+      "label_plu": "94648",
+      "label_product": "Organic Cremini Mushrooms",
+      "box": [
+        540,
+        225,
+        720,
+        383
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "cc3c4d0e37bde64efcb713174b4286fa8f3bedfcd56568e98cdc384e3b76a78b",
+        "source_ids": [
+          "b4f0e40b5e82ab5b60f48da300b0b15aee297404ad7dc2d8ea89292f4262c670",
+          "a2a7fe33b0230ec32674950366966f68fb87c1f12175ea47d73d8d6db582382d"
+        ],
+        "record_sha256": "23e245074aadd24766f2fd1cd7f7580aff1115de56058d67de489f51d8c99dd3"
+      }
+    },
+    {
+      "plu": "94664",
+      "product": "Organic Red Cluster Tomatoes (On the Vine)",
+      "label_plu": "94664",
+      "label_product": "Organic Red Cluster Tomatoes (On the Vine)",
+      "box": [
+        720,
+        225,
+        900,
+        383
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "7334f2287fa84193819046a3799712cebcbd1d64915c6b8b39c35d60eb17a002",
+        "source_ids": [
+          "048912d775258ab20610c28791c4e24a2bb186c47e947ce2e10667d862f9e1e1",
+          "582067cbd95edefa1f001e289216c532a53822c7dea59b9a31ec45c2d11022a9"
+        ],
+        "record_sha256": "cc7594202f2bb80607cbcf2feb9f454c4bb681853aa1c6f3b53ddc88ce2a4bea"
+      }
+    },
+    {
+      "plu": "94023",
+      "product": "Organic Red Seedless Grapes",
+      "label_plu": "94023",
+      "label_product": "Organic Red Seedless Grapes",
+      "box": [
+        900,
+        225,
+        1080,
+        383
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "607d62236733c9417c43a6a4fa79ed5843f558565a57516d368cbee3829e48c0",
+        "source_ids": [
+          "0f6ffea493dd42c978df7ac8b0b3d5c77bdc74420f45f29fb9c7547b1ad34f17",
+          "b44dca2bf4d302f2d515dff5d5ce4edc7be5edd8667f617f65f2af592425183f"
+        ],
+        "record_sha256": "ae078883e4c423f1586cd06eca11171eeaf4a8562f991264fe8e811a27c0b78a"
+      }
+    },
+    {
+      "plu": "4899",
+      "product": "Parsley",
+      "label_plu": "4899",
+      "label_product": "Parsley",
+      "box": [
+        0,
+        448,
+        180,
+        604
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "d9a67f725c1823729295b3220cc9e5eb6fc24fb38bec92c31a317f9037cbf3f6",
+        "source_ids": [
+          "9d62fc39e1cfbb03b99e797a28363bd795db3f3340e4548363e98756c9d7053f",
+          "141ee4d3131707e5320391420acb097ecd64e5c486fd83c5b93d14f66d437fb3"
+        ],
+        "record_sha256": "b48442067f8eaa4e0f4a768ab1bd6f4bbc46bd752eb035f326a9a89499cf979c"
+      }
+    },
+    {
+      "plu": "4688",
+      "product": "Red Sweet Bell Pepper",
+      "label_plu": "4688",
+      "label_product": "Red Sweet Bell Pepper",
+      "box": [
+        180,
+        448,
+        360,
+        604
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "d5d8c38f2cbe261757926dd788950dab55fcadb30b839cd0cfbfc23d426c9142",
+        "source_ids": [
+          "67eb5992245e9367906267e65fb3caaf5de9bb8036210833236a98a745fcdf26",
+          "d152c945e02b10c65ceed38f53207a702f13a65fe11c5d2caf2a4c9bab0a7437"
+        ],
+        "record_sha256": "125429e13ca711342eea4a0b4c3d87e2bb68d906f8add16f646bbbdbfe2c9bfb"
+      }
+    },
+    {
+      "plu": "4436",
+      "product": "Italian Prune Plum",
+      "label_plu": "4436",
+      "label_product": "Italian Prune Plum",
+      "box": [
+        360,
+        448,
+        540,
+        604
+      ],
+      "decision": "REJECTED",
+      "working_identity": {
+        "source_id": "df07cba84598645e44427aadde161e4b3b1a8252ff9dcc227aeced9bbfe58b28",
+        "source_ids": [
+          "c007883c370d9091a564d02403396505b38052114bb7c5944cf7a61da7748587",
+          "f8e5cc78008a26c3709dc6d1f32f2a6a799104652f8131c0974bcf85e20625b6"
+        ],
+        "record_sha256": "d910bffdedc6c16bfc647e1fdc39ab76ea798acbf8b242d388e436c832c46b8b"
+      },
+      "note": "Panel depicts rounded plums rather than clearly elongated Italian prune plums; not selected as a suitable reference."
+    },
+    {
+      "plu": "4727",
+      "product": "Yellow Potatoes",
+      "label_plu": "4727",
+      "label_product": "Yellow Potatoes",
+      "box": [
+        540,
+        448,
+        720,
+        604
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "4516e43c3ebae141d602d639b3d352828fd735f3a7839a9d76b9d5514529141f",
+        "source_ids": [
+          "ef9938b470d7274c2139116eb74dab10f2296da85a6b1d7de10a33d49478f224",
+          "4c3b8fc84e4edb9dad13ad8e7f4ae3d5437e8c019e2fc1c570636d22a12318a3"
+        ],
+        "record_sha256": "def3070ca891e45382433c0cd29e9860f72e0617c8d0a90be00cbd175aa856a5"
+      }
+    },
+    {
+      "plu": "94461",
+      "product": "Organic Shaddock (Pomelo)",
+      "label_plu": "94461",
+      "label_product": "Organic Shaddock (Pomelo)",
+      "box": [
+        720,
+        448,
+        900,
+        604
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "70302e03e25f7912c941786ccd9d7f260f68dd1a7115af3a617aacada7d21c02",
+        "source_ids": [
+          "e7105783128c26e52ad5e13edabb2670f587faccbec4a0fb67d276a12f18c3aa",
+          "22a452eb045d6bdf739074e6ee440f494868fa206b45eb8dc638b98046b558ca"
+        ],
+        "record_sha256": "54764ac0b88dabb8b2ed59e4091e4c2cfdcfdece3e203798fb708203b42e3fa9"
+      }
+    },
+    {
+      "plu": "94317",
+      "product": "Organic Canary Melon",
+      "label_plu": "94317",
+      "label_product": "Organic Canary Melon",
+      "box": [
+        900,
+        448,
+        1080,
+        604
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "a65f0255d07506602931ccab85fd92c8b507536fe0d3db4bdb820f70c3091488",
+        "source_ids": [
+          "2d25bc28835f6861052e3380adcd961d004edeeaaff384ccad5ec2d1ef711829",
+          "974ccce0d7ca031cd445b2d2dfce3300e201405af1b2c64c324b4bffe8903034"
+        ],
+        "record_sha256": "c7e75175e059ae7e28c641e2a4932db9f8347f3ac799798d64ab4180d981e4bb"
+      }
+    },
+    {
+      "plu": "94049",
+      "product": "Organic Cantaloupe – Small",
+      "label_plu": "94049",
+      "label_product": "Organic Cantaloupe – Small",
+      "box": [
+        0,
+        668,
+        180,
+        825
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "b976d9a319269bcb613f4553dc49bff6f35890574b0a44c1752022aaef630884",
+        "source_ids": [
+          "bd0f0c69ab78a91ce0be0ba1ef7a98f6f0ebfe180ab08646ff47c1f40ffb2e4d",
+          "87aa0cb8b22c2c3f4e679a7a0e08e54cbffc0cc09723d1ec9db65915cddfa48a"
+        ],
+        "record_sha256": "caa033d7d87ca2455f4132c204313b937bceacda64f5cf244ec9904a75e5c8e1"
+      }
+    },
+    {
+      "plu": "94321",
+      "product": "Organic Watermelon",
+      "label_plu": "94321",
+      "label_product": "Organic Watermelon",
+      "box": [
+        180,
+        668,
+        360,
+        825
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "0288a6e2ffb877ba3a8ec2e1b40b14f0c180c709f28e4b96d7a30cd36f419611",
+        "source_ids": [
+          "66ecdc5b2662d1525653415a48f4672e19fed1acb5425725d52eb4ce5debfdcf",
+          "5a296dbb2669439955e5ce63a05b475a64ae4526608dbd7573d6a7b64211ecde"
+        ],
+        "record_sha256": "6ad796a4a6404f9272712f7295c2b485c7240efe28852578ff3d8d43c3dcca05"
+      }
+    },
+    {
+      "plu": "94657",
+      "product": "Organic Portobello Mushrooms",
+      "label_plu": "94657",
+      "label_product": "Organic Portobello Mushrooms",
+      "box": [
+        360,
+        668,
+        540,
+        825
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "dea0a4a71f38a53c8a8b8e13a0c8827033f3e202796034e6efa64134f4c1315f",
+        "source_ids": [
+          "7222196c4dc7c31541d2e7657186ce82d53ec93fb435cde790200b5293849d95",
+          "c906042574f7f4a4c4b2962f48552e2880929f7f4034d8ef3c6f1404a2dc6504"
+        ],
+        "record_sha256": "6c7874a92f4b11b54ba6756781d8ae7c5f58db5fc207e51d704208333ff697d1"
+      }
+    },
+    {
+      "plu": "94281",
+      "product": "Organic Pink Grapefruit",
+      "label_plu": "94281",
+      "label_product": "Organic Pink Grapefruit",
+      "box": [
+        540,
+        668,
+        720,
+        825
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "5906a249c29cb7ef9da62457ae53041d0cad20bfca1d896523019b8830303f50",
+        "source_ids": [
+          "2805c5fc22672cb920ba7a8ea08e704bc15b2fc25dd3ce43ba646613c0799872",
+          "be41dd3c4f98298cb999546cee6b0058f51312a468a0aa2eafb12b4255e8b154"
+        ],
+        "record_sha256": "db641896fbce687e0dcf5ced308b987c6327e685d096299e78b1a40fd91676aa"
+      }
+    },
+    {
+      "plu": "94040",
+      "product": "Organic Black Plums",
+      "label_plu": "94040",
+      "label_product": "Organic Black Plums",
+      "box": [
+        720,
+        668,
+        900,
+        825
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "67cb70ea6007543d1930e574c1d31450b95212b5cd87358d702c81935efe0265",
+        "source_ids": [
+          "3d25b6817fb490f0fc366b05386714acd24a6169ff9d8e82212750e89388095c"
+        ],
+        "record_sha256": "240ea3d490112dffdb62b21426a2a8cc514eef6f498c39a5299951c45b7b1f1e"
+      }
+    },
+    {
+      "plu": "94823",
+      "product": "Organic White Potatoes",
+      "label_plu": "94823",
+      "label_product": "Organic White Potatoes",
+      "box": [
+        900,
+        668,
+        1080,
+        825
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "db4731facb0144e59ad36628438a235bc62dbfeebb8af180f5dccb73d3c51678",
+        "source_ids": [
+          "812bbb4f1965149c97183fed20168925d75b6bcfdcdd03ca12e28a2863906195"
+        ],
+        "record_sha256": "f3ef83215e481dd7f13c3d9959894ec9826ba2b8eaabfdb5250f5bae326bf686"
+      }
+    },
+    {
+      "plu": "94769",
+      "product": "Organic Kabocha Squash",
+      "label_plu": "94769",
+      "label_product": "Organic Kabocha Squash",
+      "box": [
+        300,
+        874,
+        540,
+        1013
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "5b7172292cd1114a3371007cf3b75a0410c73bb04f31183f3abb92cff8aae822",
+        "source_ids": [
+          "13b8831b65328f78bf8af5368c7d49907606fa383e645ae94801643dc9e79e02"
+        ],
+        "record_sha256": "e8ec1947272852dba171b077e1b5bd09ecc753206fd6501d5cd64fc30f1e147c"
+      }
+    },
+    {
+      "plu": "4067",
+      "product": "Zucchini",
+      "label_plu": "4067",
+      "label_product": "Zucchini",
+      "box": [
+        540,
+        874,
+        790,
+        1013
+      ],
+      "decision": "REVIEW_REFERENCE",
+      "working_identity": {
+        "source_id": "c5cbb1dd75a1094d2123327990fb2aa81ae9c436e36827c2476a9b26462c0119",
+        "source_ids": [
+          "9e2c148d5563a26e81e03998a05c321acb08745023bc763d41c82dc316baf9e1",
+          "d33f12fd1e6bec3468d40040c0da84897840a8cfc095222e8b07162070e82d8f",
+          "b316ccd8cb6237ea44979d17ea883a48570ced94104fd9acea1561d733a206ea"
+        ],
+        "record_sha256": "d732add679cbf079ac4aa2596e51045dafbac83e2c3876ed2487894ef4381599"
+      }
+    }
+  ]
+}

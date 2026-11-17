@@ -10,7 +10,7 @@
     "included_records": 594,
     "excluded_records": 324,
     "status": "BLOCKED",
-    "records_needing_review": 242,
+    "records_needing_review": 232,
     "missing_image_requests": 0,
     "inactive_assignments": 100,
     "organic_placements_needing_review": 0,
@@ -19,36 +19,19 @@
     "reconciliation_review_decisions": 0,
     "identity_changed_entries": 50,
     "blocker_counts": {
-      "BELOW_500_PX": 35,
-      "IMAGE_RIGHTS_NOT_VERIFIED": 35,
-      "MISSING_PROVENANCE_ATTRIBUTION": 35,
-      "MISSING_PROVENANCE_CHANGES": 35,
-      "MISSING_PROVENANCE_CREATOR": 35,
-      "MISSING_PROVENANCE_LICENSE_URL": 35,
-      "MISSING_PROVENANCE_ORIGINAL_IMAGE_URL": 35,
-      "MISSING_PROVENANCE_RIGHTS_EVIDENCE": 35,
-      "MISSING_PROVENANCE_SOURCE_PAGE_URL": 35,
-      "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED": 35,
-      "PROHIBITED_IMAGE_REUSE": 223,
-      "SUPPORTED_IMAGE_LICENCE_REQUIRED": 35
+      "BELOW_500_PX": 26,
+      "IMAGE_RIGHTS_NOT_VERIFIED": 26,
+      "MISSING_PROVENANCE_ATTRIBUTION": 26,
+      "MISSING_PROVENANCE_CHANGES": 26,
+      "MISSING_PROVENANCE_CREATOR": 26,
+      "MISSING_PROVENANCE_LICENSE_URL": 26,
+      "MISSING_PROVENANCE_ORIGINAL_IMAGE_URL": 26,
+      "MISSING_PROVENANCE_RIGHTS_EVIDENCE": 26,
+      "MISSING_PROVENANCE_SOURCE_PAGE_URL": 26,
+      "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED": 26,
+      "PROHIBITED_IMAGE_REUSE": 219,
+      "SUPPORTED_IMAGE_LICENCE_REQUIRED": 26
     }
   },
-  "scope": "Current WorkingList reconciliation and image readiness. Final source, licence, variety and print-layout review is mandatory.",
-  "legacy_image_audit": {
-    "status": "ALL_LEGACY_ENTRIES_APPROVED",
-    "entries": 597,
-    "organic_entries": 206,
-    "prohibited_duplicate_groups": 103,
-    "entries_with_blockers": 0,
-    "historical_finding_counts": {
-      "AI_REFERENCE_NOT_PHOTOGRAPH": 150,
-      "BELOW_500_PX": 595,
-      "MISSING_IMAGE_PROVENANCE_AND_RIGHTS_VERIFICATION": 597,
-      "PROHIBITED_IMAGE_REUSE": 365,
-      "VISUAL_APPROXIMATE": 120,
-      "VISUAL_REJECTED": 31
-    },
-    "approval_basis": "Owner policy: all legacy entries are pre-approved. Original visual verdicts, technical findings and provenance remain recorded as historical evidence.",
-    "scope": "Legacy image approval only. Non-produce remains a code-only supplement."
-  }
+  "scope": "Current WorkingList reconciliation and image readiness. Final source, licence, variety and print-layout review is mandatory."
 }

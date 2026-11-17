@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "source": "data/review-references/lettuce_image_exact.pdf",
+  "source_sha256": "f6c59c4fd41686e16636387c2ab26dbb7d4ee861a1e780b8f5838b2e80c23656",
+  "purpose": "LETTUCE_IDENTIFICATION_REFERENCE",
+  "owner_instruction": "Use as reference",
+  "origin": "User-supplied PDF; creator, rights and image creation method are unverified. Ownership statements for earlier uploads are not applied to this file.",
+  "pages": 1,
+  "embedded_image_size": [730, 913],
+  "visible_labels": [
+    "Little Gem",
+    "Oak Leaf",
+    "Romaine",
+    "Mesclun",
+    "Watercress",
+    "Frisee",
+    "Green Leaf",
+    "Red Leaf",
+    "Butterhead",
+    "Radicchio",
+    "Endive",
+    "Arugula",
+    "Iceberg"
+  ],
+  "cashier_image_assignment": false,
+  "production_approval": false,
+  "note": "Retain the original PDF unchanged as a visual identification guide. Labels are transcribed from the chart, not independently verified taxonomy. The full embedded chart resolution does not establish the resolution of an individual lettuce crop. Existing product identities, image assignments and production gates remain unchanged."
+}

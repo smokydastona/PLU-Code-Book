@@ -37,6 +37,10 @@ sudo apt-get install -y libreoffice-calc libreoffice-writer fonts-dejavu-core fo
 
 The output directory must be empty. `--verify-print` exports and checks the complete workbook, then creates the imposed booklet PDF and its page map. The audit checks workbook package preservation, printed page count and geometry, image coverage, booklet imposition, and open production blockers. Technical success never clears owner-review gates or approves a binder for cashier use.
 
+The owner-supplied sheets are retained for review; suitable crops are references, not production image approvals. Newer suitable crops take precedence over older sheet references only for the same exact WorkingList identity; superseded and unselected panels remain in the reference audit. Invalid approved assignments may fall back to a review reference without clearing their validation errors or production gates.
+
+`data/review-references/lettuce_image_exact.pdf` is a lettuce-identification guide only. Its sidecar records the source checksum and reference-only authorization; the labelled chart is not assigned to cashier entries and grants no image approvals.
+
 ## Half-fold booklet printing
 
 The imposed PDF arranges the complete binder in saddle-stitch order: the first and last pages share the outside sheet, with inner pages paired toward the center fold. It includes every page in the full binder, including wide landscape sections. Pages are fitted proportionally into portrait half-page panels on landscape US Letter sheets. Produce, Bulk and Store Directory pages are rotated 90° counterclockwise within their panels to make better use of the panel area; turn the guide sideways to read those sections. If the binder page count is not divisible by four, blank panels are added to complete the final signature; the page map records those blanks and rotations.
