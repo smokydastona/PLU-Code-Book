@@ -71,3 +71,5 @@ The OldTimers list is generated with every displayed binder produce entry, witho
 | `tools/build_till_binders.py` | Complete binder and print-output builder |
 | `tools/audit_till_binder.py` | Post-build technical and production-readiness audit |
 | `outputs/till-binder-review/` | Latest generated review binder and evidence |
+
+The `Fetch unreviewed produce candidates` Action has an `external-leads` mode for the identity-pinned URLs in `data/review-references/external-image-source-leads.json`. It reads page metadata only; it does not download image previews or PDF bodies, verify license claims, approve images, or change assignments. Search-result URLs are recorded without querying them.
