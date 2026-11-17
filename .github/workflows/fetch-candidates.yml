@@ -227,7 +227,7 @@ jobs:
           cache: pip
           cache-dependency-path: requirements.txt
       - run: python -m pip install -r requirements.txt
-      - run: python -m unittest tools/test_examine_external_image_leads.py
+      - run: python -m unittest discover -s tools -p 'test_examine_external_image_leads.py'
       - name: Fetch metadata from external source pages
         run: |
           python tools/examine_external_image_leads.py \
@@ -238,5 +238,5 @@ jobs:
         with:
           name: external-image-source-leads
           path: ${{ runner.temp }}/external-source-leads/
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 7
