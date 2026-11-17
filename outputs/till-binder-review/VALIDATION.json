@@ -1,6 +1,17 @@
 {
   "status": "REVIEW_ONLY_NOT_RELEASED",
   "production_publication": "BLOCKED",
+  "oldtimers_produce": {
+    "file": "OldTimers_Produce.pdf",
+    "records": 548,
+    "fruit_records": 272,
+    "vegetable_records": 276,
+    "pages": 6,
+    "image_free": true,
+    "source": "sources/binders/OldTimers_Produce_codes.pdf",
+    "source_sha256": "6846210817a7f7bffe84bb5f30db75ef1276b203fda53c0256cb77cf037e0672",
+    "sha256": "7d2792549c8df8f90707220667885475fd17c3276d44dc3bb41cd73efd425d8b"
+  },
   "original_binder": "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx",
   "original_binder_sha256": "6b0aeaa153233c5f4917811a3f7a5b2212f7a946a0abede372a31db556ab0f63",
   "soil_barcodes": [
@@ -472,7 +483,7 @@
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "e5fed752e552aba5f240577fc130fde4249e9e155e5349d78b7f09d15ad5d9d7",
+      "file_sha256": "00f62cb190729dfc93da6da7dc1cb68457f16de083076df7906c239f7aefc657",
       "file_size_bytes": 26479455,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 399,

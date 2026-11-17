@@ -52,6 +52,7 @@ from build_deli_sheet import DELI_SOURCE, read_source as read_deli_source, valid
 from build_bulk_sheet import (TITLE as BULK_TITLE, bulk_sheet, read_bulk,
                               remove_discontinued_bulk_entries, validate_bulk)
 import build_weighed_sheet as weighed_guide
+import build_oldtimers_produce as oldtimers
 from binder_theme import DARK_GREEN, PALE_GREEN, display_product_name, row_fill
 from impose_binder_booklet import (MAP_NAME as BOOKLET_MAP, OUTPUT_NAME as BOOKLET_PDF,
                                    ROTATED_PAGES as BOOKLET_ROTATED_SECTIONS, impose_binder_pdf)
@@ -2904,6 +2905,12 @@ def generate(root, binder, output, verify_print=False):
     visuals = visual_records(root)
     images, image_report = map_images(root, rows, assignments, visuals)
     displayed, duplicate_display_rows = display_unique_rows(rows)
+    oldtimers_source = (root / oldtimers.SOURCE).read_bytes()
+    if sha(oldtimers_source) != oldtimers.SOURCE_SHA256:
+        raise ValueError("Original OldTimers list changed; review it before rebuilding")
+    oldtimers_summary = oldtimers.generate(output / oldtimers.OUTPUT_NAME, displayed)
+    oldtimers_summary.update(source=oldtimers.SOURCE, source_sha256=sha(oldtimers_source),
+                             sha256=sha((output / oldtimers.OUTPUT_NAME).read_bytes()))
     displayed_ids = {row["source_id"] for row in displayed}
     for record in image_report:
         if record["source_id"] not in displayed_ids:
@@ -3129,6 +3136,7 @@ def generate(root, binder, output, verify_print=False):
                 "placement_status", "counterpart_source_ids", "placement_note"])
     summary = dict(
         status="REVIEW_ONLY_NOT_RELEASED", production_publication="BLOCKED",
+        oldtimers_produce=oldtimers_summary,
         original_binder=str(binder), original_binder_sha256=original_checksum,
         soil_barcodes=[dict(source_row=row + 1, code=code, original_image_sha256=digest,
                             generated_image_sha256=sha(soil_barcode_image(code)))
@@ -3252,6 +3260,8 @@ def generate(root, binder, output, verify_print=False):
         raise ValueError("Weighed guide source changed during generation; discard outputs and retry")
     if rain_check_source is not None and (root / weighed_guide.RAIN_CHECK_SOURCE).read_bytes() != rain_check_source:
         raise ValueError("Rain Check source changed during generation; discard outputs and retry")
+    if (root / oldtimers.SOURCE).read_bytes() != oldtimers_source:
+        raise ValueError("OldTimers source changed during generation; discard outputs and retry")
     if any((root / path).read_bytes() != content for path, content in zip(DIRECTORY_SOURCES, directory_originals)):
         raise ValueError("Store Directory originals changed during generation; discard outputs and retry")
     command = [sys.executable, str((ROOT / "tools/build_till_binders.py").resolve()),

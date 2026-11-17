@@ -144,6 +144,19 @@ def audit_images(output):
     ), small, shared
 
 
+def audit_oldtimers(output, validation):
+    info = validation["oldtimers_produce"]
+    path = output / info["file"]
+    if not path.is_file() or sha(path.read_bytes()) != info["sha256"]:
+        raise ValueError("OldTimers PDF is missing or differs from the verified build")
+    if info["records"] != len(read_csv(output / "PRODUCE_LAYOUT.csv")):
+        raise ValueError("OldTimers record count differs from the binder produce layout")
+    with pymupdf.open(path) as document:
+        if len(document) != info["pages"] or any(page.get_images() for page in document):
+            raise ValueError("OldTimers PDF page count changed or contains images")
+    return info
+
+
 def write_blockers(validation, output):
     reconciliation = validation["source_reconciliation"]
     rows = [dict(blocker=name, records=count, required_owner_action=BLOCKER_ACTIONS.get(
@@ -187,6 +200,11 @@ def main(argv=None):
     except (OSError, ValueError) as error:
         failures.append(f"binder booklet imposition: {error}")
     images, small, shared = audit_images(output)
+    oldtimers = {}
+    try:
+        oldtimers = audit_oldtimers(output, validation)
+    except (OSError, ValueError, KeyError) as error:
+        failures.append(f"OldTimers produce list: {error}")
     blockers = write_blockers(validation, output)
     if validation.get("production_publication") != "BLOCKED" and blockers:
         failures.append("open blockers exist but production publication is not BLOCKED")
@@ -195,7 +213,7 @@ def main(argv=None):
         operational_status="REVIEW ONLY — NOT APPROVED FOR OPERATIONAL USE" if blockers
         else "TECHNICAL CHECKS ONLY",
         original_binder_sha256=original_sha, package=package, print_layout=layout,
-        booklet_imposition=booklet, images=images,
+        booklet_imposition=booklet, images=images, oldtimers_produce=oldtimers,
         open_blockers={row["blocker"]: row["records"] for row in blockers})
     (output / "AUDIT_REPORT.json").write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n",
                                               encoding="utf-8")

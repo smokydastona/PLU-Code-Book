@@ -151,6 +151,17 @@
     "embedded_below_200px": 187,
     "smallest_edge": 109
   },
+  "oldtimers_produce": {
+    "file": "OldTimers_Produce.pdf",
+    "records": 548,
+    "fruit_records": 272,
+    "vegetable_records": 276,
+    "pages": 6,
+    "image_free": true,
+    "source": "sources/binders/OldTimers_Produce_codes.pdf",
+    "source_sha256": "6846210817a7f7bffe84bb5f30db75ef1276b203fda53c0256cb77cf037e0672",
+    "sha256": "7d2792549c8df8f90707220667885475fd17c3276d44dc3bb41cd73efd425d8b"
+  },
   "open_blockers": {
     "APPROVED_IMAGE_REQUIRED": 35,
     "CLASSIFICATION_REQUIRED": 5,
