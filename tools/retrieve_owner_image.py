@@ -12,6 +12,7 @@ from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 from PIL import Image
 
+from network_fetch import open_with_dns_retry
 from retrieve_commons import current_review_rejections, select_review_sequence
 from working_list import read_working_list
 
@@ -72,7 +73,7 @@ def fetch_google_url(url, user_agent):
         raise ValueError("image URL must use HTTPS on a Google Photos/Googleusercontent host")
     request = Request(url, headers={"User-Agent": user_agent})
     opener = build_opener(GoogleRedirectHandler())
-    with opener.open(request, timeout=30) as response:
+    with open_with_dns_retry(opener.open, request, timeout=30) as response:
         final_url = response.geturl()
         if not is_google_https_url(final_url):
             raise ValueError("final image URL is outside the allowed Google HTTPS hosts")

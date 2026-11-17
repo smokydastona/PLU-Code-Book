@@ -13,6 +13,8 @@ from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 from PIL import Image, ImageOps
 
+from network_fetch import is_dns_error, open_with_dns_retry
+
 MAX_BYTES = 25 * 1024 * 1024
 ALLOWED_HOSTS = {
     "foxy.com", "media.koelnmesse.io", "media.sobeys.com", "chefsmandala.com",
@@ -78,7 +80,7 @@ def acquire(manifest, output):
                    mirrored_sha256="", rights="NOT_VERIFIED", production_approval="NOT_APPROVED")
         try:
             request = Request(entry["url"], headers={"User-Agent": "ProducePLUReferenceReview/1.0"})
-            with opener.open(request, timeout=30) as response:
+            with open_with_dns_retry(opener.open, request, timeout=30) as response:
                 row["final_url"] = response.url
                 row["content_type"] = response.headers.get("Content-Type", "")
                 content = response.read(MAX_BYTES + 1)
@@ -92,7 +94,8 @@ def acquire(manifest, output):
                 row["mirrored_sha256"] = hashlib.sha256((output / mirrored).read_bytes()).hexdigest()
         except (HTTPError, URLError, OSError, ValueError, Image.DecompressionBombWarning,
                 Image.DecompressionBombError) as exc:
-            row["detail"] = str(exc)
+            row.update(status="DNS_ERROR" if is_dns_error(exc) else "ERROR",
+                       detail=str(exc))
         report.append(row)
         print(f"{entry['plu']} {entry['product']}: {row['status']} {row['detail']}", flush=True)
     with (output / "FETCH_REPORT.csv").open("w", encoding="utf-8", newline="") as file:

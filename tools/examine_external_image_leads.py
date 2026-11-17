@@ -10,6 +10,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
+from network_fetch import is_dns_error, open_with_dns_retry
 from working_list import read_working_list
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -102,7 +103,7 @@ def fetch_page(url):
         "User-Agent": "ProducePLUReview/1.0 (https://github.com/smokydastona/produce-plu-code-book)",
         "Accept": "text/html,application/xhtml+xml,application/pdf;q=0.9",
     })
-    with opener.open(request, timeout=30) as response:
+    with open_with_dns_retry(opener.open, request, timeout=30) as response:
         content_type = response.headers.get("Content-Type", "").split(";", 1)[0].lower()
         result = {
             "http_status": response.status,
@@ -182,7 +183,8 @@ def examine(manifest, output, root=ROOT):
                     row["resolution_verification_status"] = "NOT_VERIFIED"
                     row["production_status"] = "NOT_APPROVED"
             except (HTTPError, URLError, OSError, ValueError) as exc:
-                row.update(status="FETCH_ERROR", details=str(exc)[:500])
+                row.update(status="DNS_ERROR" if is_dns_error(exc) else "FETCH_ERROR",
+                            details=str(exc)[:500])
         results.append(row)
         print(f"{row['plu']} {row['product']}: {row['status']}", flush=True)
 

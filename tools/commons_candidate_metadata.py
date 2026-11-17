@@ -6,6 +6,7 @@ from urllib.parse import unquote, urlencode, urlsplit
 from urllib.request import Request, urlopen
 
 from candidate_manifest import read_manifest
+from network_fetch import is_dns_error, open_with_dns_retry
 
 
 def main(manifest, destination):
@@ -25,7 +26,7 @@ def main(manifest, destination):
         try:
             request = Request("https://commons.wikimedia.org/w/api.php?" + query,
                               headers={"User-Agent": "ProducePLUReview/1.0 (https://github.com/smokydastona/produce-plu-code-book)"})
-            with urlopen(request, timeout=60) as response:
+            with open_with_dns_retry(urlopen, request, timeout=60) as response:
                 data = json.load(response)
             if "error" in data:
                 raise ValueError(f"Commons API error: {data['error']}")
@@ -40,7 +41,8 @@ def main(manifest, destination):
             print(f"Metadata retrieved for {candidate['id']}")
         except (OSError, ValueError, KeyError, StopIteration) as exc:
             failed = True
-            print(f"Metadata error for {candidate['id']}: {exc}", file=sys.stderr)
+            category = "DNS_ERROR" if is_dns_error(exc) else "Metadata error"
+            print(f"{category} for {candidate['id']}: {exc}", file=sys.stderr)
     destination.write_text(json.dumps(results, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return int(failed)
 

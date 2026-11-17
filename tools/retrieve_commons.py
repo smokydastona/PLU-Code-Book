@@ -17,6 +17,7 @@ from urllib.error import HTTPError
 from PIL import Image, ImageDraw, ImageOps
 
 from license_register import write_register
+from network_fetch import open_with_dns_retry
 from verify_images import LICENSES, validate
 from check_image_uniqueness import image_fingerprint
 
@@ -54,7 +55,8 @@ def fetch(url, user_agent):
         time.sleep(max(0, 2 - (time.monotonic() - LAST_REQUEST)))
         LAST_REQUEST = time.monotonic()
         try:
-            with urlopen(Request(url, headers={"User-Agent": user_agent}), timeout=60) as response:
+            with open_with_dns_retry(
+                    urlopen, Request(url, headers={"User-Agent": user_agent}), timeout=60) as response:
                 data = response.read(50 * 1024 * 1024 + 1)
                 if len(data) > 50 * 1024 * 1024:
                     raise ValueError("response exceeds 50 MiB")

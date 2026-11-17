@@ -1,8 +1,10 @@
 import json
+import socket
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+from urllib.error import URLError
 
 from examine_external_image_leads import PageMetadata, examine, read_leads, validate_url
 
@@ -84,6 +86,27 @@ class ExamineExternalImageLeadsTests(unittest.TestCase):
                 rows = examine(manifest, root / "out", root)
             fetch.assert_not_called()
             self.assertEqual(rows[0]["status"], "SEARCH_URL_ONLY")
+
+    def test_dns_failure_is_reported_separately_from_http_errors(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            manifest = root / "leads.json"
+            manifest.write_text(json.dumps([{
+                "plu": "4640", "product": "Romaine Lettuce",
+                "source_url": "https://pixabay.com/photos/lettuce-romaine-greens-vegetable-2468495/"
+            }]))
+            item = dict(
+                plu="4640", name="Romaine Lettuce", source_id="working-id",
+                source_ids=["picklist-id"], record_sha256="record-hash",
+                included=True,
+            )
+            with patch("examine_external_image_leads.read_working_list",
+                       return_value=([item], "picklist-hash")), \
+                    patch("examine_external_image_leads.fetch_page",
+                          side_effect=URLError(socket.gaierror(socket.EAI_NONAME, "no address"))):
+                rows = examine(manifest, root / "out", root)
+            self.assertEqual(rows[0]["status"], "DNS_ERROR")
+            self.assertEqual(rows[0]["production_status"], "NOT_APPROVED")
 
 
 if __name__ == "__main__":
