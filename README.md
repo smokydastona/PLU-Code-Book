@@ -11,7 +11,7 @@ Build artifacts are kept in `outputs/till-binder-review/`:
 | `Complete Till Binder - Updated - Photos.xlsx` | Editable complete binder |
 | `Complete Till Binder - Updated - Photos.pdf` | Full binder in reading order |
 | `Pocket Guide.pdf` | Imposed 2-up, duplex binder guide for folding and saddle-stitching |
-| `OldTimers_Produce.pdf` | Text-only, fruit-then-vegetable produce list in the legacy three-column style |
+| `OldTimers_Produce.pdf` | Large-print, text-only produce list: Fruits, Vegetables, then Asian Produce |
 | `BINDER_BOOKLET_IMPOSITION.csv` | Source-page placement for each physical sheet side |
 | `VALIDATION.json`, `AUDIT_REPORT.json`, and CSV reports | Build, print-layout, image and production-readiness evidence |
 
@@ -54,7 +54,7 @@ The build keeps the original complete workbook in `sources/binders/` unchanged. 
 
 The Weighed more $100 section prints the weighed-items guide followed by the owner-supplied `sources/binders/Rain_Check.pdf` as its second page. The PDF is retained unchanged and rendered into the workbook; changes to it require review before rebuilding.
 
-The OldTimers list is generated with every displayed binder produce entry, without photos. It uses the binder's existing fruit/vegetable classifications and keeps melons together under fruit, in the style of the original `sources/binders/OldTimers_Produce_codes.pdf`. Unclassified products follow the binder's review classification; this presentation does not approve their classifications or release the list for operational use.
+The OldTimers list is generated with every displayed binder produce entry, without photos. All text is at least 12 points in a two-column layout. Fruits come first, Vegetables next, and the binder's Asian Produce section last, starting on its own page. It uses the binder's existing fruit/vegetable classifications and keeps melons together under fruit, in the style of the original `sources/binders/OldTimers_Produce_codes.pdf`. Unclassified products follow the binder's review classification; this presentation does not approve their classifications or release the list for operational use.
 
 ## Repository map
 

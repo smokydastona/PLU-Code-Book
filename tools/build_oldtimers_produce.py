@@ -1,7 +1,9 @@
-"""Generate a text-only, three-column produce list from the binder display rows."""
+"""Generate a large-print, text-only produce list from the binder display rows."""
 from collections import Counter
 
 import pymupdf
+
+from produce_order import ASIAN_SECTION
 
 OUTPUT_NAME = "OldTimers_Produce.pdf"
 SOURCE = "sources/binders/OldTimers_Produce_codes.pdf"
@@ -10,11 +12,12 @@ FRUIT_FAMILIES = {"CANTALOUPE", "HONEYDEW", "MELON", "WATERMELON"}
 PAGE_WIDTH, PAGE_HEIGHT = 612, 792
 LEFT, RIGHT, TOP, BOTTOM = 36, 36, 78, 40
 COLUMN_GAP = 12
-COLUMN_WIDTH = (PAGE_WIDTH - LEFT - RIGHT - 2 * COLUMN_GAP) / 3
-CODE_WIDTH = 56
-FONT_SIZE = 8.5
-LINE_HEIGHT = 11
-HEADING_HEIGHT = 16
+COLUMNS = 2
+COLUMN_WIDTH = (PAGE_WIDTH - LEFT - RIGHT - (COLUMNS - 1) * COLUMN_GAP) / COLUMNS
+CODE_WIDTH = 64
+FONT_SIZE = 12
+LINE_HEIGHT = 16
+HEADING_HEIGHT = 22
 REGULAR_FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 BOLD_FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
 REGULAR = pymupdf.Font(fontfile=REGULAR_FONT)
@@ -22,6 +25,8 @@ BOLD = pymupdf.Font(fontfile=BOLD_FONT)
 
 
 def section(row):
+    if row["display_section"] == ASIAN_SECTION:
+        return ASIAN_SECTION
     if row["sort_product"] in FRUIT_FAMILIES:
         return "FRUITS"
     if row["book"] == "Fruit":
@@ -53,7 +58,7 @@ def wrap_name(text, width):
 
 def generate(path, rows):
     """Write all and only the displayed binder rows, in the legacy category split."""
-    groups = {"FRUITS": {}, "VEGETABLES": {}}
+    groups = {"FRUITS": {}, "VEGETABLES": {}, ASIAN_SECTION: {}}
     for row in rows:
         code = row["plu"]
         if not isinstance(code, str) or not code or not code.isdigit():
@@ -71,13 +76,13 @@ def generate(path, rows):
             if not categories:
                 continue
             page = None
-            column = 2
+            column = COLUMNS - 1
             y = 0
 
             def advance():
                 nonlocal page, column, y
                 column += 1
-                if column == 3:
+                if column == COLUMNS:
                     page = document.new_page(width=PAGE_WIDTH, height=PAGE_HEIGHT)
                     page.insert_font(fontname="regular", fontfile=REGULAR_FONT)
                     page.insert_font(fontname="bold", fontfile=BOLD_FONT)
@@ -128,7 +133,9 @@ def generate(path, rows):
     return dict(file=OUTPUT_NAME, records=len(placements),
                 fruit_records=sum(row["section"] == "FRUITS" for row in placements),
                 vegetable_records=sum(row["section"] == "VEGETABLES" for row in placements),
-                pages=max(row["page"] for row in placements), image_free=True)
+                asian_records=sum(row["section"] == ASIAN_SECTION for row in placements),
+                pages=max(row["page"] for row in placements), image_free=True,
+                minimum_font_points=FONT_SIZE)
 
 
 def validate(path, rows, placements):
@@ -142,6 +149,10 @@ def validate(path, rows, placements):
         for page in document:
             if page.rect != pymupdf.Rect(0, 0, PAGE_WIDTH, PAGE_HEIGHT) or page.get_images():
                 raise ValueError("OldTimers page must be image-free portrait US Letter")
+            for block in page.get_text("dict")["blocks"]:
+                for line in block.get("lines", []):
+                    if any(span["size"] < 12 for span in line["spans"]):
+                        raise ValueError("OldTimers text must be at least 12 points")
             for word in page.get_text("words"):
                 if not pymupdf.Rect(LEFT - 1, 0, PAGE_WIDTH - RIGHT + 1, PAGE_HEIGHT - BOTTOM + 4).contains(
                         pymupdf.Rect(word[:4])):

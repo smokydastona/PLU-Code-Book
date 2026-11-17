@@ -7,11 +7,13 @@ import pymupdf
 
 from build_oldtimers_produce import generate
 from audit_till_binder import audit_oldtimers, write_csv
+from produce_order import display_group
 
 
 def row(source_id, plu, name, product, book, variety=""):
     return dict(source_id=source_id, plu=plu, display_name=name, sort_product=product,
-                sort_variety=variety, organic=False, book=book)
+                sort_variety=variety, organic=False, book=book,
+                display_section=display_group(name, product)[0])
 
 
 class OldTimersProduceTests(unittest.TestCase):
@@ -43,6 +45,33 @@ class OldTimersProduceTests(unittest.TestCase):
                 generate(path, [row("1", 123, "APPLE", "APPLE", "Fruit")])
             with self.assertRaisesRegex(ValueError, "classification"):
                 generate(path, [row("1", "123", "APPLE", "APPLE", "Other")])
+
+    def test_asian_section_follows_vegetables_and_all_text_is_large_print(self):
+        rows = [
+            row("1", "4545", "BOK CHOY", "BOK CHOY", "Vegetable"),
+            row("2", "4011", "BANANAS", "BANANA", "Fruit"),
+            row("3", "4060", "BROCCOLI BUNCH", "BROCCOLI", "Vegetable"),
+            row("4", "94555", "Org. NAPA CABBAGE", "CABBAGE", "Vegetable"),
+            row("5", "4814", "WATER CHESTNUTS", "WATER CHESTNUTS", "Vegetable"),
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "oldtimers.pdf"
+            summary = generate(path, rows)
+            self.assertEqual((summary["records"], summary["asian_records"]), (5, 3))
+            with pymupdf.open(path) as document:
+                texts = [page.get_text() for page in document]
+                self.assertEqual(len(texts), 3)
+                self.assertIn("FRUITS", texts[0])
+                self.assertIn("VEGETABLES", texts[1])
+                self.assertIn("ASIAN PRODUCE", texts[2])
+                for code in ("4545", "94555", "4814"):
+                    self.assertNotIn(code, texts[1])
+                    self.assertEqual(texts[2].count(code), 1)
+                sizes = [span["size"] for page in document
+                         for block in page.get_text("dict")["blocks"]
+                         for line in block.get("lines", []) for span in line["spans"]]
+                self.assertTrue(sizes)
+                self.assertGreaterEqual(min(sizes), 12)
 
     def test_audit_rejects_modified_pdf_or_mismatched_binder(self):
         with tempfile.TemporaryDirectory() as directory:

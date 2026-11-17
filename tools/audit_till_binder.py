@@ -154,6 +154,10 @@ def audit_oldtimers(output, validation):
     with pymupdf.open(path) as document:
         if len(document) != info["pages"] or any(page.get_images() for page in document):
             raise ValueError("OldTimers PDF page count changed or contains images")
+        if any(span["size"] < 12 for page in document
+               for block in page.get_text("dict")["blocks"]
+               for line in block.get("lines", []) for span in line["spans"]):
+            raise ValueError("OldTimers text must be at least 12 points")
     return info
 
 

@@ -155,12 +155,14 @@
     "file": "OldTimers_Produce.pdf",
     "records": 548,
     "fruit_records": 272,
-    "vegetable_records": 276,
-    "pages": 6,
+    "vegetable_records": 261,
+    "asian_records": 15,
+    "pages": 11,
     "image_free": true,
+    "minimum_font_points": 12,
     "source": "sources/binders/OldTimers_Produce_codes.pdf",
     "source_sha256": "6846210817a7f7bffe84bb5f30db75ef1276b203fda53c0256cb77cf037e0672",
-    "sha256": "7d2792549c8df8f90707220667885475fd17c3276d44dc3bb41cd73efd425d8b"
+    "sha256": "2d8c33f1afc84d59423b88385e1e1549f97eaf4394ef44e85574b138fee54593"
   },
   "open_blockers": {
     "APPROVED_IMAGE_REQUIRED": 35,
