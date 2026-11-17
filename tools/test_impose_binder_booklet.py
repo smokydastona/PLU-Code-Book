@@ -23,7 +23,8 @@ class BinderBookletImpositionChecks(unittest.TestCase):
             source.save(source_path)
             source.close()
 
-            summary = impose_binder_pdf(source_path, booklet_path, map_path)
+            summary = impose_binder_pdf(
+                source_path, booklet_path, map_path, rotate_pages={2, 4})
             self.assertEqual(summary, dict(
                 source_pages=5, padded_pages=8, blank_padding_pages=3, physical_sheets=2,
                 imposed_pdf_pages=4, paper="US Letter landscape",
@@ -36,7 +37,19 @@ class BinderBookletImpositionChecks(unittest.TestCase):
                 [(row["left_source_page"], row["right_source_page"]) for row in rows],
                 [("", "1"), ("2", ""), ("", "3"), ("4", "5")],
             )
-            audit = audit_imposed_booklet(source_path, booklet_path, map_path)
+            self.assertEqual((rows[1]["left_rotation"], rows[1]["right_rotation"]),
+                             ("CCW_90", ""))
+            booklet = pymupdf.open(booklet_path)
+            try:
+                vertical = [line["dir"] for block in booklet[1].get_text("dict")["blocks"]
+                            for line in block.get("lines", [])]
+                self.assertIn((0.0, -1.0), vertical)
+                upright = [line["dir"] for block in booklet[0].get_text("dict")["blocks"]
+                           for line in block.get("lines", [])]
+                self.assertIn((1.0, 0.0), upright)
+            finally:
+                booklet.close()
+            audit = audit_imposed_booklet(source_path, booklet_path, map_path, rotate_pages={2, 4})
             self.assertTrue(audit["all_source_pages_preserved_once"])
             self.assertTrue(audit["all_panels_fit_without_text_clipping"])
             rows[0]["right_source_page"], rows[-1]["right_source_page"] = (
@@ -46,7 +59,7 @@ class BinderBookletImpositionChecks(unittest.TestCase):
                 writer.writeheader()
                 writer.writerows(rows)
             with self.assertRaisesRegex(ValueError, "saddle-stitch page order"):
-                audit_imposed_booklet(source_path, booklet_path, map_path)
+                audit_imposed_booklet(source_path, booklet_path, map_path, rotate_pages={2, 4})
 
     def test_four_page_signature_places_first_and_last_on_outer_sheet(self):
         with tempfile.TemporaryDirectory() as directory:

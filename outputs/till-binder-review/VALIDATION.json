@@ -469,7 +469,7 @@
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "793b36780fe2756aeb3799ad920d2e62b8f2d35cf77aa4c43dde5328bc29b6cf",
+      "file_sha256": "cd83001be7546db729fecf44372393784ee254ee2f69d9bf4f136eb36c221caf",
       "file_size_bytes": 25873340,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 399,
@@ -529,7 +529,35 @@
         "imposed_pdf_pages": 16,
         "paper": "US Letter landscape",
         "print_mode": "2-up duplex, flip on short edge, 100% scale",
-        "fold": "half-fold, saddle-stitch"
+        "fold": "half-fold, saddle-stitch",
+        "rotated_sections": [
+          "Produce",
+          "Bulk",
+          "Store Directory"
+        ],
+        "rotated_source_pages": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          29,
+          30
+        ]
       }
     }
   },

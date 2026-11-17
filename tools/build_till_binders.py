@@ -54,7 +54,7 @@ from build_bulk_sheet import (TITLE as BULK_TITLE, bulk_sheet, read_bulk,
 import build_weighed_sheet as weighed_guide
 from binder_theme import DARK_GREEN, PALE_GREEN, display_product_name, row_fill
 from impose_binder_booklet import (MAP_NAME as BOOKLET_MAP, OUTPUT_NAME as BOOKLET_PDF,
-                                   impose_binder_pdf)
+                                   ROTATED_PAGES as BOOKLET_ROTATED_SECTIONS, impose_binder_pdf)
 from text_fit import text_points
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -2363,6 +2363,11 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 raise ValueError("Calc did not open/export the complete binder; check PRINT_ENGINE_LOG.txt "
                                  "and install libreoffice-calc")
             full_pdf = PdfReader(complete)
+            booklet_rotate_pages = {
+                number for number, page in enumerate(full_pdf.pages, 1)
+                if any(section in (page.extract_text() or "")
+                       for section in ("PRODUCE PLU QUICK GUIDE", "BULK PLU QUICK GUIDE"))
+            }
             if soil_images is not None:
                 import pymupdf
 
@@ -2460,6 +2465,7 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                              if second[0] == first[0] + 1]
                     if len(pairs) != 1 or any(number not in pairs[0] for group in matches for number, _ in group):
                         raise ValueError(f"{edition}: Store Directory must print exactly two consecutive ordered pages")
+                    booklet_rotate_pages.update(number + 1 for number in pairs[0])
             if delivery_images is not None:
                 import pymupdf
 
@@ -2701,9 +2707,14 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
             )
             if edition == "photos":
                 booklet_summary = impose_binder_pdf(
-                    complete, output / BOOKLET_PDF, output / BOOKLET_MAP)
+                    complete, output / BOOKLET_PDF, output / BOOKLET_MAP,
+                    rotate_pages=booklet_rotate_pages)
                 result[edition]["imposed_booklet_pdf"] = BOOKLET_PDF
                 result[edition]["booklet_imposition"] = booklet_summary
+                result[edition]["booklet_imposition"]["rotated_sections"] = list(
+                    BOOKLET_ROTATED_SECTIONS)
+                result[edition]["booklet_imposition"]["rotated_source_pages"] = sorted(
+                    booklet_rotate_pages)
     return result
 
 

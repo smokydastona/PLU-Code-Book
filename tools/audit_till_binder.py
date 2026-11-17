@@ -16,7 +16,8 @@ from pathlib import Path
 import pymupdf
 from openpyxl import load_workbook
 
-from impose_binder_booklet import MAP_NAME as BOOKLET_MAP, OUTPUT_NAME as BOOKLET_PDF, audit_imposed_booklet
+from impose_binder_booklet import (MAP_NAME as BOOKLET_MAP, OUTPUT_NAME as BOOKLET_PDF,
+                                   ROTATED_PAGES as BOOKLET_ROTATED_SECTIONS, audit_imposed_booklet)
 
 WORKBOOK = "Complete Till Binder - Updated - Photos.xlsx"
 PDF = "Complete Till Binder - Updated - Photos.pdf"
@@ -175,12 +176,14 @@ def main(argv=None):
         failures.append("workbook package is corrupt")
     if package["original_media_removed"] or package["original_media_changed"]:
         failures.append("original media parts were removed or changed")
-    layout, _ = audit_pdf(output / PDF, validation, output)
+    layout, layout_rows = audit_pdf(output / PDF, validation, output)
     failures.extend(layout["findings"])
     booklet = {}
     try:
         booklet = audit_imposed_booklet(
-            output / PDF, output / BOOKLET_PDF, output / BOOKLET_MAP)
+            output / PDF, output / BOOKLET_PDF, output / BOOKLET_MAP,
+            rotate_pages={int(row["page"]) for row in layout_rows
+                          if row["section"] in BOOKLET_ROTATED_SECTIONS})
     except (OSError, ValueError) as error:
         failures.append(f"binder booklet imposition: {error}")
     images, small, shared = audit_images(output)

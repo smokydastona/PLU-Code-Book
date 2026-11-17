@@ -1,6 +1,7 @@
 """Impose a complete binder PDF as a half-fold, saddle-stitched booklet."""
 import csv
 import math
+from collections import Counter
 from pathlib import Path
 
 import pymupdf
@@ -10,11 +11,16 @@ SHEET_HEIGHT = 612
 PANEL_WIDTH = SHEET_WIDTH / 2
 OUTPUT_NAME = "Pocket Guide.pdf"
 MAP_NAME = "BINDER_BOOKLET_IMPOSITION.csv"
+ROTATED_PAGES = ("Produce", "Bulk", "Store Directory")
 
 
 def _slot_text(page, slot):
     rect = pymupdf.Rect(slot * PANEL_WIDTH, 0, (slot + 1) * PANEL_WIDTH, SHEET_HEIGHT)
     return " ".join(page.get_text(clip=rect).split())
+
+
+def _same_text(first, second):
+    return Counter(first.split()) == Counter(second.split())
 
 
 def _sheet_sides(page_count):
@@ -26,7 +32,7 @@ def _sheet_sides(page_count):
         )
 
 
-def impose_binder_pdf(source_path, output_path, map_path):
+def impose_binder_pdf(source_path, output_path, map_path, rotate_pages=()):
     source = pymupdf.open(source_path)
     if source.is_closed or len(source) == 0:
         raise ValueError("the complete binder PDF has no pages")
@@ -42,22 +48,34 @@ def impose_binder_pdf(source_path, output_path, map_path):
         page = imposed.new_page(width=SHEET_WIDTH, height=SHEET_HEIGHT)
         output_page_number += 1
         scales = []
+        rotations = []
         for slot, source_number in enumerate((left, right)):
             scale = ""
             if source_number <= page_count:
                 original = source[source_number - 1]
                 rect = pymupdf.Rect(slot * PANEL_WIDTH, 0, (slot + 1) * PANEL_WIDTH, SHEET_HEIGHT)
-                scale = min(rect.width / original.rect.width, rect.height / original.rect.height)
-                page.show_pdf_page(rect, source, source_number - 1, keep_proportion=True)
-                if _slot_text(page, slot) != " ".join(original.get_text().split()):
+                rotation = 90 if source_number in rotate_pages else 0
+                width, height = ((original.rect.height, original.rect.width) if rotation else
+                                 (original.rect.width, original.rect.height))
+                scale = min(rect.width / width, rect.height / height)
+                page.show_pdf_page(rect, source, source_number - 1, keep_proportion=True,
+                                   rotate=rotation)
+                if not _same_text(_slot_text(page, slot), original.get_text()):
                     raise ValueError(
                         f"imposed sheet {sheet_number} {side} clips text from binder page {source_number}")
+            else:
+                rotation = ""
             scales.append(f"{scale:.6f}" if scale else "")
+            rotations.append(rotation)
         mapping.append(dict(
             sheet=sheet_number, side=side, imposed_page=output_page_number,
             left_source_page=left if left <= page_count else "",
             right_source_page=right if right <= page_count else "",
             left_scale=scales[0], right_scale=scales[1],
+            left_rotation="CCW_90" if rotations[0] == 90 else
+            ("0" if rotations[0] == 0 else ""),
+            right_rotation="CCW_90" if rotations[1] == 90 else
+            ("0" if rotations[1] == 0 else ""),
         ))
 
     try:
@@ -77,7 +95,7 @@ def impose_binder_pdf(source_path, output_path, map_path):
     with Path(map_path).open("w", newline="", encoding="utf-8-sig") as file:
         writer = csv.DictWriter(file, fieldnames=[
             "sheet", "side", "imposed_page", "left_source_page", "right_source_page",
-            "left_scale", "right_scale",
+            "left_scale", "right_scale", "left_rotation", "right_rotation",
         ], lineterminator="\n")
         writer.writeheader()
         writer.writerows(mapping)
@@ -90,7 +108,7 @@ def impose_binder_pdf(source_path, output_path, map_path):
     )
 
 
-def audit_imposed_booklet(source_path, booklet_path, map_path):
+def audit_imposed_booklet(source_path, booklet_path, map_path, rotate_pages=()):
     source = pymupdf.open(source_path)
     booklet = pymupdf.open(booklet_path)
     try:
@@ -111,7 +129,9 @@ def audit_imposed_booklet(source_path, booklet_path, map_path):
                         str(left) if left <= source_count else "",
                         str(right) if right <= source_count else "")
             observed = (row["sheet"], row["side"], row["left_source_page"], row["right_source_page"])
-            if observed != expected:
+            if (observed != expected or
+                    any(rotation not in {"", "0", "CCW_90"}
+                        for rotation in (row["left_rotation"], row["right_rotation"]))):
                 raise ValueError("imposition map does not follow saddle-stitch page order")
         observed_source_pages = []
         for index, row in enumerate(rows):
@@ -121,15 +141,32 @@ def audit_imposed_booklet(source_path, booklet_path, map_path):
                 raise ValueError(f"imposed page {index + 1} is not landscape US Letter")
             for slot, column in enumerate(("left_source_page", "right_source_page")):
                 value = row[column]
+                rotation_column = f"{'left' if slot == 0 else 'right'}_rotation"
                 if not value:
-                    if _slot_text(page, slot):
+                    if _slot_text(page, slot) or row[rotation_column]:
                         raise ValueError(f"imposed page {index + 1} has content in its padding panel")
                     continue
                 source_number = int(value)
                 if not 1 <= source_number <= source_count:
                     raise ValueError(f"imposition map references invalid source page {source_number}")
+                expected_rotation = "CCW_90" if source_number in rotate_pages else "0"
+                if row[rotation_column] != expected_rotation:
+                    raise ValueError(f"source page {source_number} has an incorrect booklet rotation")
+                source_images = source[source_number - 1].get_image_info()
+                panel_rect = pymupdf.Rect(slot * PANEL_WIDTH, 0,
+                                          (slot + 1) * PANEL_WIDTH, SHEET_HEIGHT)
+                panel_images = [
+                    image for image in page.get_image_info()
+                    if pymupdf.Rect(image["bbox"]).intersects(panel_rect)
+                ]
+                if (len(panel_images) != len(source_images) or
+                        any(not panel_rect.contains(pymupdf.Rect(image["bbox"]))
+                            for image in panel_images)):
+                    raise ValueError(f"imposed page {index + 1} does not preserve source page "
+                                     f"{source_number} images within its panel")
                 observed_source_pages.append(source_number)
-                if _slot_text(page, slot) != " ".join(source[source_number - 1].get_text().split()):
+                if not _same_text(_slot_text(page, slot),
+                                  source[source_number - 1].get_text()):
                     raise ValueError(f"imposed page {index + 1} does not preserve source page {source_number}")
         if sorted(observed_source_pages) != list(range(1, source_count + 1)):
             raise ValueError("imposed booklet does not contain every source page exactly once")
@@ -138,6 +175,7 @@ def audit_imposed_booklet(source_path, booklet_path, map_path):
             blank_padding_pages=padded_count - source_count, physical_sheets=sheets,
             imposed_pdf_pages=len(booklet), all_source_pages_preserved_once=True,
             all_panels_fit_without_text_clipping=True,
+            rotated_source_pages=sorted(rotate_pages),
         )
     finally:
         source.close()

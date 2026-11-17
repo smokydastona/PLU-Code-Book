@@ -38,7 +38,7 @@ The output directory must be empty. `--verify-print` exports and checks the comp
 
 ## Half-fold booklet printing
 
-The imposed PDF arranges the complete binder in saddle-stitch order: the first and last pages share the outside sheet, with inner pages paired toward the center fold. It includes every page in the full binder, including wide landscape sections. Pages are fitted proportionally into portrait half-page panels on landscape US Letter sheets. If the binder page count is not divisible by four, blank panels are added to complete the final signature; the page map records those blanks.
+The imposed PDF arranges the complete binder in saddle-stitch order: the first and last pages share the outside sheet, with inner pages paired toward the center fold. It includes every page in the full binder, including wide landscape sections. Pages are fitted proportionally into portrait half-page panels on landscape US Letter sheets. Produce, Bulk and Store Directory pages are rotated 90° counterclockwise within their panels to make better use of the panel area; turn the guide sideways to read those sections. If the binder page count is not divisible by four, blank panels are added to complete the final signature; the page map records those blanks and rotations.
 
 Print the imposed PDF on US Letter paper in landscape orientation, 2-up duplex, flip on the short edge, at 100% scale. Fold each sheet once down the center and nest the sheets in order; saddle-stitch through the center fold. Wide pages are reduced to fit their half-page panels, so verify their legibility on a physical proof before printing a full run. Do not use the printer driver's booklet/imposition feature on this already-imposed PDF.
 
