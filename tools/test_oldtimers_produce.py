@@ -72,32 +72,51 @@ class OldTimersProduceTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "classification"):
                 generate(path, [row("1", "123", "APPLE", "APPLE", "Other")])
 
-    def test_asian_section_follows_vegetables_and_all_text_is_large_print(self):
+    def test_asian_produce_is_last_vegetable_group_and_all_text_is_large_print(self):
         rows = [
             row("1", "4545", "BOK CHOY", "BOK CHOY", "Vegetable"),
             row("2", "4011", "BANANAS", "BANANA", "Fruit"),
             row("3", "4060", "BROCCOLI BUNCH", "BROCCOLI", "Vegetable"),
             row("4", "94555", "Org. NAPA CABBAGE", "CABBAGE", "Vegetable"),
             row("5", "4814", "WATER CHESTNUTS", "WATER CHESTNUTS", "Vegetable"),
+            row("6", "4067", "ZUCCHINI GREEN", "ZUCCHINI", "Vegetable"),
         ]
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "oldtimers.pdf"
             summary = generate(path, rows)
-            self.assertEqual((summary["records"], summary["asian_records"]), (5, 3))
+            self.assertEqual((summary["records"], summary["vegetable_records"],
+                              summary["asian_records"]), (6, 5, 3))
             with pymupdf.open(path) as document:
                 texts = [page.get_text() for page in document]
-                self.assertEqual(len(texts), 3)
+                self.assertEqual(len(texts), 2)
                 self.assertIn("FRUITS", texts[0])
                 self.assertIn("VEGETABLES", texts[1])
-                self.assertIn("ASIAN PRODUCE", texts[2])
+                self.assertIn("ASIAN PRODUCE", texts[1])
+                self.assertLess(texts[1].index("ZUCCHINI GREEN"), texts[1].index("ASIAN PRODUCE"))
                 for code in ("4545", "94555", "4814"):
-                    self.assertNotIn(code, texts[1])
-                    self.assertEqual(texts[2].count(code), 1)
+                    self.assertEqual(texts[1].count(code), 1)
                 sizes = [span["size"] for page in document
                          for block in page.get_text("dict")["blocks"]
                          for line in block.get("lines", []) for span in line["spans"]]
                 self.assertTrue(sizes)
                 self.assertGreaterEqual(min(sizes), 12)
+
+    def test_asian_group_moves_together_when_it_cannot_fit_after_other_vegetables(self):
+        rows = [row(f"zucchini-{i}", str(4000 + i), "ZUCCHINI", "ZUCCHINI", "Vegetable", str(i))
+                for i in range(60)]
+        rows.extend(row(f"bok-choy-{i}", str(5000 + i), "BOK CHOY", "BOK CHOY", "Vegetable", str(i))
+                    for i in range(25))
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "oldtimers.pdf"
+            generate(path, rows)
+            with pymupdf.open(path) as document:
+                self.assertEqual(len(document), 2)
+                self.assertNotIn("ASIAN PRODUCE", document[0].get_text())
+                text = document[1].get_text()
+                self.assertIn("VEGETABLES", text)
+                self.assertIn("ASIAN PRODUCE", text)
+                for i in range(25):
+                    self.assertIn(str(5000 + i), text)
 
     def test_audit_rejects_modified_pdf_or_mismatched_binder(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -26,7 +26,7 @@ BOLD = pymupdf.Font(fontfile=BOLD_FONT)
 
 def section(row):
     if row["display_section"] == ASIAN_SECTION:
-        return ASIAN_SECTION
+        return "VEGETABLES"
     if row["sort_product"] in FRUIT_FAMILIES:
         return "FRUITS"
     if row["book"] == "Fruit":
@@ -34,6 +34,10 @@ def section(row):
     if row["book"] == "Vegetable":
         return "VEGETABLES"
     raise ValueError(f"{row['source_id']}: invalid produce classification {row['book']!r}")
+
+
+def group(row):
+    return ASIAN_SECTION if row["display_section"] == ASIAN_SECTION else row["sort_product"]
 
 
 def wrap_name(text, width):
@@ -78,14 +82,14 @@ def group_layout(entries, column, y):
 
 def generate(path, rows):
     """Write all and only the displayed binder rows, in the legacy category split."""
-    groups = {"FRUITS": {}, "VEGETABLES": {}, ASIAN_SECTION: {}}
+    groups = {"FRUITS": {}, "VEGETABLES": {}}
     for row in rows:
         code = row["plu"]
         if not isinstance(code, str) or not code or not code.isdigit():
             raise ValueError(f"{row['source_id']}: PLU must be a non-empty digit string")
         if REGULAR.text_length(code, fontsize=FONT_SIZE) > CODE_WIDTH - 4:
             raise ValueError(f"{row['source_id']}: PLU is too wide to print")
-        groups[section(row)].setdefault(row["sort_product"], []).append(row)
+        groups[section(row)].setdefault(group(row), []).append(row)
     if not rows:
         raise ValueError("No produce records for OldTimers list")
 
@@ -110,8 +114,9 @@ def generate(path, rows):
                 column = 0
                 y = TOP
 
-            for category, entries in sorted(categories.items()):
-                entries.sort(key=lambda row: (row["sort_variety"], row["organic"],
+            for category, entries in sorted(categories.items(),
+                                            key=lambda item: (item[0] == ASIAN_SECTION, item[0])):
+                entries.sort(key=lambda row: (row["sort_product"], row["sort_variety"], row["organic"],
                                               row["display_name"], row["plu"], row["source_id"]))
                 prepared = [(row, wrap_name(row["display_name"], COLUMN_WIDTH - CODE_WIDTH))
                             for row in entries]
@@ -137,7 +142,7 @@ def generate(path, rows):
                         page.insert_text((x + CODE_WIDTH, y + index * LINE_HEIGHT), line,
                                          fontname="regular", fontsize=FONT_SIZE)
                     placements.append(dict(source_id=row["source_id"], plu=row["plu"],
-                                           product=row["display_name"], section=title,
+                                           product=row["display_name"], section=title, group=category,
                                            page=page.number + 1, column=column + 1,
                                            x=x, y=y, lines=len(lines)))
                     y += len(lines) * LINE_HEIGHT
@@ -150,22 +155,21 @@ def generate(path, rows):
     return dict(file=OUTPUT_NAME, records=len(placements),
                 fruit_records=sum(row["section"] == "FRUITS" for row in placements),
                 vegetable_records=sum(row["section"] == "VEGETABLES" for row in placements),
-                asian_records=sum(row["section"] == ASIAN_SECTION for row in placements),
+                asian_records=sum(row["group"] == ASIAN_SECTION for row in placements),
                 pages=max(row["page"] for row in placements), image_free=True,
                 minimum_font_points=FONT_SIZE, groups_kept_on_one_page=True)
 
 
 def validate(path, rows, placements):
-    expected = Counter((row["source_id"], row["plu"], row["display_name"], section(row))
+    expected = Counter((row["source_id"], row["plu"], row["display_name"], section(row), group(row))
                        for row in rows)
-    actual = Counter((row["source_id"], row["plu"], row["product"], row["section"])
+    actual = Counter((row["source_id"], row["plu"], row["product"], row["section"], row["group"])
                      for row in placements)
     if actual != expected:
         raise ValueError("OldTimers list does not match the binder produce entries")
     group_pages = {}
-    by_id = {row["source_id"]: row for row in rows}
     for row in placements:
-        key = (row["section"], by_id[row["source_id"]]["sort_product"])
+        key = (row["section"], row["group"])
         if group_pages.setdefault(key, row["page"]) != row["page"]:
             raise ValueError(f"OldTimers produce group {key[1]!r} is split across pages")
     with pymupdf.open(path) as document:
