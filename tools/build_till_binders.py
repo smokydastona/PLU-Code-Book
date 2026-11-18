@@ -134,6 +134,15 @@ DIRECTORY_SOURCE_HASHES = (
     "0274edd4cd7893d0f087f73e380295bf562ac80c0e10a4022ae7f69b686418a3",
 )
 DIRECTORY_SOURCES = tuple(Path(f"sources/binders/Store_Directory_Original_{i}.png") for i in (1, 2))
+DIRECTORY_INTERCOM_BOX = (20, 16, 1630, 135)
+DIRECTORY_INTERCOM_PAGES = (
+    ("Code Adam", "Missing child reported. WIC: Monitor exits; keep emergency egress clear. "
+     "Search the premises, give instructions, and coordinate the response."),
+    ("Cashier 20", "Employee needs urgent assistance. WIC: Go immediately to the location, "
+     "take charge of the incident, and assist the employee as needed."),
+    ("Code Zero", "First aid needed. All first aid-certified employees: Go immediately to the "
+     "location, take charge of first aid, and assist as needed."),
+)
 DELIVERY_SHEET = "Delivery Charges"
 DELIVERY_SOURCE_HASHES = (
     "f17f10fad1443053096d9de47c49c5e3f031fc47d1e91101b1a989c3b575c77a",
@@ -1166,6 +1175,42 @@ def themed_directory_image(content, index, emergency_highlights=True, parking_la
     return output.getvalue()
 
 
+def add_directory_intercom_panel(content):
+    with Image.open(io.BytesIO(content)) as source:
+        artwork = source.convert("RGB")
+    left, top, right, bottom = DIRECTORY_INTERCOM_BOX
+    panel = artwork.crop(DIRECTORY_INTERCOM_BOX)
+    if panel.getextrema() != ((255, 255),) * 3:
+        raise ValueError("Emergency Intercom Pages would cover existing map content")
+    draw = ImageDraw.Draw(panel)
+    bold = ImageFont.truetype("DejaVuSans-Bold.ttf", 22)
+    body = ImageFont.truetype("DejaVuSans.ttf", 20)
+    draw.rectangle((0, 0, right - left - 1, 23), fill="#" + DARK_GREEN)
+    draw.text(((right - left) / 2, 11), "Emergency Intercom Pages",
+              font=bold, anchor="mm", fill="white")
+    for column, (code, response) in enumerate(DIRECTORY_INTERCOM_PAGES):
+        x = 10 + column * 540
+        draw.text((x, 26), code, font=bold, anchor="lt", fill="#" + DARK_GREEN)
+        lines = [""]
+        for word in response.split():
+            candidate = f"{lines[-1]} {word}".lstrip()
+            if body.getlength(candidate) > 510:
+                lines.append(word)
+            else:
+                lines[-1] = candidate
+        for row, line in enumerate(lines):
+            position = (x, 47 + row * 21)
+            if draw.textbbox(position, line, font=body, anchor="lt")[3] > bottom - top:
+                raise ValueError(f"{code} does not fit the emergency intercom panel")
+            draw.text(position, line, font=body, anchor="lt", fill="black")
+    artwork.paste(panel, (left, top))
+    metadata = PngImagePlugin.PngInfo()
+    metadata.add_text("store_directory_source_sha256", DIRECTORY_SOURCE_HASHES[1])
+    output = io.BytesIO()
+    artwork.save(output, format="PNG", pnginfo=metadata, optimize=True)
+    return output.getvalue()
+
+
 def themed_delivery_image(content, index):
     if not 0 <= index < len(DELIVERY_SOURCE_HASHES):
         raise ValueError(f"Delivery Charges page index is invalid: {index}")
@@ -1268,7 +1313,11 @@ def directory_sheet(sheet, originals=None):
     if len(originals) != 2:
         raise ValueError("Store Directory needs two original page images")
     images = [themed_directory_image(content, index) for index, content in enumerate(originals)]
+    previous_map = images[1]
+    images[1] = add_directory_intercom_panel(previous_map)
     for index, content in enumerate(supplied):
+        if index == 1 and content == previous_map:
+            continue
         if content not in (originals[index], images[index],
                            themed_directory_image(originals[index], index, parking_labels=False),
                            themed_directory_image(originals[index], index, emergency_highlights=False,
@@ -3284,6 +3333,7 @@ def generate(root, binder, output, verify_print=False):
             dict(source=str(root / path), source_sha256=sha(original), derivative_sha256=sha(derivative))
             for path, original, derivative in zip(DIRECTORY_SOURCES, directory_originals, directory_images)
         ],
+        directory_intercom_pages=[code for code, _ in DIRECTORY_INTERCOM_PAGES],
         directory_owner_labels=[
             dict(text="Front Parking Lot", position="bottom beside muster statement", highlight="green"),
             dict(text="Back Parking Lot", position="right side", highlight="red"),

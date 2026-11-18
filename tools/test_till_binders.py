@@ -40,6 +40,7 @@ from binder_theme import PALE_GREEN, display_product_name
 from build_weighed_sheet import (RAIN_CHECK_SOURCE, RAIN_CHECK_UPLOAD,
                                  SOURCE as WEIGHED_SOURCE)
 from build_till_binders import enlarge_weight_table
+from build_till_binders import DIRECTORY_INTERCOM_BOX, add_directory_intercom_panel
 import misc_no_purchase
 
 
@@ -351,6 +352,27 @@ class TillBinderChecks(unittest.TestCase):
         finally:
             workbook.close()
 
+    def test_intercom_panel_upgrades_previous_map_without_covering_markings(self):
+        previous_map = themed_directory_image(self.directory_originals[1], 1)
+        workbook = load_workbook(self.binder)
+        try:
+            sheet = workbook["Store Directory"]
+            replacement = ExcelImage(io.BytesIO(previous_map))
+            replacement.anchor = sheet._images[1].anchor
+            sheet._images[1] = replacement
+            _, images = directory_sheet(sheet)
+        finally:
+            workbook.close()
+        with Image.open(io.BytesIO(previous_map)) as before, Image.open(io.BytesIO(images[1])) as after:
+            difference = ImageChops.difference(before, after)
+            for col in range(3):
+                x = DIRECTORY_INTERCOM_BOX[0] + col * 540
+                self.assertIsNotNone(difference.crop((x, 70, x + 510, DIRECTORY_INTERCOM_BOX[3])).getbbox())
+            difference.paste((0, 0, 0), DIRECTORY_INTERCOM_BOX)
+            self.assertIsNone(difference.getbbox())
+        with self.assertRaisesRegex(ValueError, "cover existing map content"):
+            add_directory_intercom_panel(images[1])
+
     def test_directory_owner_parking_labels_use_green_front_and_red_back(self):
         content = (self.root / DIRECTORY_SOURCES[1]).read_bytes()
         with Image.open(io.BytesIO(themed_directory_image(content, 1))) as image:
@@ -497,6 +519,7 @@ class TillBinderChecks(unittest.TestCase):
         self.directory_originals = [(self.root / path).read_bytes() for path in DIRECTORY_SOURCES]
         self.directory_content = [themed_directory_image(content, i)
                                   for i, content in enumerate(self.directory_originals)]
+        self.directory_content[1] = add_directory_intercom_panel(self.directory_content[1])
         directory.add_image(ExcelImage(io.BytesIO(self.directory_originals[0])), "A1")
         directory.add_image(ExcelImage(io.BytesIO(self.directory_originals[1])), "A30")
         last = original.create_sheet("Hidden operations")

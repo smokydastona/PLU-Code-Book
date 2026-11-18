@@ -13,7 +13,7 @@
     "groups_kept_on_one_page": true,
     "source": "sources/binders/OldTimers_Produce_codes.pdf",
     "source_sha256": "6846210817a7f7bffe84bb5f30db75ef1276b203fda53c0256cb77cf037e0672",
-    "sha256": "1459654e8e855e2d4a406c2ca9143f6564e86b4e7d217b257499afc3f746bc1a"
+    "sha256": "ab4794358ddc55412a4cde0a9132d119c5db4cd1423550ecb336b7473e845794"
   },
   "original_binder": "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx",
   "original_binder_sha256": "6b0aeaa153233c5f4917811a3f7a5b2212f7a946a0abede372a31db556ab0f63",
@@ -123,8 +123,13 @@
     {
       "source": "/workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book/sources/binders/Store_Directory_Original_2.png",
       "source_sha256": "0274edd4cd7893d0f087f73e380295bf562ac80c0e10a4022ae7f69b686418a3",
-      "derivative_sha256": "fcce4b14be6dddd9136ece540036526ddc8ba7306a7a9e2090f0ea4c43529310"
+      "derivative_sha256": "0667380291b4f2ea16f505ed875613ca1a39785aedd7da64b7d9838ec5ec0332"
     }
+  ],
+  "directory_intercom_pages": [
+    "Code Adam",
+    "Cashier 20",
+    "Code Zero"
   ],
   "directory_owner_labels": [
     {
@@ -4441,8 +4446,8 @@
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "b0a46e3e57c3e43bb58df4e808ae6f25b4a8f90393032413282bfd0a9288012b",
-      "file_size_bytes": 27281203,
+      "file_sha256": "407142ae82ef6861d89477d51b228e994ee44a81fb28fe0998cd312c25785d60",
+      "file_size_bytes": 27304986,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 399,
       "output_sheet_names": [
