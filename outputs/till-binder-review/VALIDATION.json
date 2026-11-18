@@ -13,7 +13,7 @@
     "groups_kept_on_one_page": true,
     "source": "sources/binders/OldTimers_Produce_codes.pdf",
     "source_sha256": "6846210817a7f7bffe84bb5f30db75ef1276b203fda53c0256cb77cf037e0672",
-    "sha256": "06df91f39f4c9147ff80a32e56a3b888e0d9a40df774a722b9ec1931c42aedd4"
+    "sha256": "1d8dc997b434d38aa992923e348e2c9532fe1593acaeb44dcd6146d492dc6c58"
   },
   "original_binder": "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx",
   "original_binder_sha256": "6b0aeaa153233c5f4917811a3f7a5b2212f7a946a0abede372a31db556ab0f63",
@@ -84,6 +84,18 @@
     "f9d0fa1844873f90904a105d56ec2b0d514fc0fb263c8557f24b9dfdc6bfe56b"
   ],
   "conversions_accuracy_review": "Owner-uploaded image visually checked against all three original chart images: volume values, weight values, kilograms-to-pounds values, price tiers and rounding note match. The $4.99 price converts to $11.00/kg in both the original chart and uploaded image; a prior editable draft's $11.02 value was incorrect and is not used.",
+  "misc_no_purchase": {
+    "source": "sources/binders/Misc_Codes_No_Purchase_Upload.jpg",
+    "source_sha256": "769aab1c558d98513b3f5469f2489095f74ac118d584167353676ec4db858a90",
+    "crop": [
+      194,
+      1161,
+      1104,
+      1450
+    ],
+    "panel_sha256": "43f557f86fae18793fabff7fc677431e6c9088a1a632fc286e676b6c6e2c4a51",
+    "decoded_value": "0770974140186"
+  },
   "weighed_guide": {
     "source": "sources/binders/Weighed_Items_Over_100_Updated.jpg",
     "source_sha256": "bd2689fd49f13d5050753e30d850e3c89001e9db98bcf3ff9930bddd374d3604",
@@ -4420,15 +4432,15 @@
       "delivery_pages_verified": 2,
       "produce_images_verified": 548,
       "original_parts_checked": 104,
-      "original_parts_byte_identical": 79,
+      "original_parts_byte_identical": 78,
       "unrelated_package_parts_byte_identical": true,
       "existing_styles_preserved": true,
       "unrelated_workbook_settings_preserved": true,
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "908f190f28767273eb73841ac334930de06ad4c1156a6030a9a72061d90ea60d",
-      "file_size_bytes": 26718489,
+      "file_sha256": "3c903e0c7d0178087a04f4f7a2213049ae14590fe4ca2970a456ca797d5ba611",
+      "file_size_bytes": 26848834,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 399,
       "output_sheet_names": [
@@ -4477,6 +4489,10 @@
       "weighed_print_text_verified": false,
       "weighed_print_image_verified": true,
       "rain_check_print_image_verified": true,
+      "misc_no_purchase_decoded_at_dpi": [
+        150,
+        300
+      ],
       "complete_pdf": "Complete Till Binder - Updated - Photos.pdf",
       "visual_review": "REQUIRED; automated text/geometry checks are not a visual print approval",
       "imposed_booklet_pdf": "Pocket Guide.pdf",

@@ -39,6 +39,7 @@ from build_bakery_sheet import (BAKERY_SOURCE, read_source as read_bakery_source
 from binder_theme import PALE_GREEN, display_product_name
 from build_weighed_sheet import (RAIN_CHECK_SOURCE, RAIN_CHECK_UPLOAD,
                                  SOURCE as WEIGHED_SOURCE)
+import misc_no_purchase
 
 
 class TillBinderChecks(unittest.TestCase):
@@ -416,7 +417,8 @@ class TillBinderChecks(unittest.TestCase):
         shutil.copyfile(bakery_source, self.root / BAKERY_SOURCE)
         repository_root = Path(__file__).resolve().parents[1]
         for path in ("sources/binders/OldTimers_Produce_codes.pdf",
-                     "sources/binders/Rain_Check.pdf", RAIN_CHECK_SOURCE, RAIN_CHECK_UPLOAD):
+                     "sources/binders/Rain_Check.pdf", RAIN_CHECK_SOURCE, RAIN_CHECK_UPLOAD,
+                     misc_no_purchase.SOURCE):
             shutil.copyfile(repository_root / path, self.root / path)
         (self.root / STRETCH_SOURCE).write_bytes(
             (Path(__file__).resolve().parents[1] / STRETCH_SOURCE).read_bytes())
@@ -778,11 +780,16 @@ class TillBinderChecks(unittest.TestCase):
 
     @unittest.skipUnless(shutil.which("soffice"), "LibreOffice Calc is required")
     def test_misc_codes_prints_as_one_page_with_all_original_entries(self):
+        import pymupdf
         from pypdf import PdfReader
 
         source = Path(__file__).resolve().parents[1] / "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx"
         combined = self.root / "misc-only.xlsx"
-        fit_misc_sheet(source, combined)
+        scan = (self.root / misc_no_purchase.SOURCE).read_bytes()
+        with self.assertRaisesRegex(ValueError, "scan changed"):
+            misc_no_purchase.crop_panel(scan + b"changed")
+        panel = misc_no_purchase.crop_panel(scan)
+        fit_misc_sheet(source, combined, panel)
         expected = misc_print_text(combined)
         subprocess.run(["soffice", "-env:UserInstallation=" + (self.root / "lo-misc").as_uri(),
                         "--headless", "--convert-to", "pdf", "--outdir", str(self.root),
@@ -793,10 +800,20 @@ class TillBinderChecks(unittest.TestCase):
         self.assertIn(MISC_TITLE, pages[0].extract_text())
         self.assertEqual((round(float(pages[0].mediabox.width)), round(float(pages[0].mediabox.height))),
                          (612, 792))
+        with pymupdf.open(self.root / "misc-only.pdf") as document:
+            page = document[pages[0].page_number]
+            image, = page.get_image_info()
+            box = pymupdf.Rect(image["bbox"])
+            self.assertGreater(box.y0, max(block[3] for block in page.get_text("blocks")
+                                          if block[6] == 0))
+            pix = page.get_pixmap(dpi=150, clip=box)
+            misc_no_purchase.verify_barcode(Image.frombytes("RGB", (pix.width, pix.height), pix.samples))
         original = load_workbook(source)
         updated = load_workbook(combined)
         try:
             self.assertEqual(list(original["Misc Codes"].values), list(updated["Misc Codes"].values))
+            picture, = updated["Misc Codes"]._images
+            self.assertEqual(picture._data(), panel)
             self.assertEqual([updated["Misc Codes"].cell(27, col).fill.fgColor.rgb
                               for col in range(1, 5)], ["00305040"] * 4)
         finally:

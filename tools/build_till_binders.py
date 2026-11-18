@@ -53,6 +53,7 @@ from build_bulk_sheet import (TITLE as BULK_TITLE, bulk_sheet, read_bulk,
                               remove_discontinued_bulk_entries, validate_bulk)
 import build_weighed_sheet as weighed_guide
 import build_oldtimers_produce as oldtimers
+import misc_no_purchase
 from binder_theme import DARK_GREEN, PALE_GREEN, display_product_name, row_fill
 from impose_binder_booklet import (MAP_NAME as BOOKLET_MAP, OUTPUT_NAME as BOOKLET_PDF,
                                    ROTATED_PAGES as BOOKLET_ROTATED_SECTIONS, impose_binder_pdf)
@@ -797,13 +798,29 @@ def style_soil_guide(binder, destination):
                 output.writestr(entry, changes.get(entry.filename, original.read(entry.filename)))
 
 
-def fit_misc_sheet(binder, destination):
+def fit_misc_sheet(binder, destination, no_purchase_panel=None):
     workbook = load_workbook(binder)
     donor = Workbook()
     themed = donor.active
     styled = {}
+    add_panel = False
     try:
         source = workbook[MISC_SHEET]
+        if no_purchase_panel is not None:
+            if source._charts or (source._images and (
+                    len(source._images) != 1 or source._images[0]._data() != no_purchase_panel)):
+                raise ValueError("Misc Codes has an unexpected drawing; review before adding the barcode")
+            if any(cell.value is not None for row in source.iter_rows(min_row=33) for cell in row):
+                raise ValueError("Misc Codes has entries in the No Purchase Entry panel area")
+            add_panel = not source._images
+            if add_panel:
+                picture = ExcelImage(io.BytesIO(no_purchase_panel))
+                width = 560
+                picture.anchor = OneCellAnchor(
+                    _from=AnchorMarker(col=0, row=32),
+                    ext=XDRPositiveSize2D(cx=pixels_to_EMU(width),
+                                          cy=pixels_to_EMU(width * picture.height / picture.width)))
+                themed.add_image(picture)
         indices = {1: 0, 3: 0}
         for row in source.iter_rows():
             number = row[0].row
@@ -850,8 +867,35 @@ def fit_misc_sheet(binder, destination):
     with zipfile.ZipFile(binder) as original:
         path, _ = sheet_info(original, MISC_SHEET)
         sheet = xml(original.read(path))
+        changes = {}
         with zipfile.ZipFile(io.BytesIO(content.getvalue())) as styles_source:
             styles, style_ids = merge_styles(original.read("xl/styles.xml"), styles_source.read("xl/styles.xml"))
+            if add_panel:
+                if sheet.find(f"{{{S}}}drawing") is not None:
+                    raise ValueError("Misc Codes has existing drawing content")
+                drawing = "xl/drawings/misc-no-purchase.xml"
+                media = "xl/media/misc-no-purchase.png"
+                sheet_rels = rels_part(path)
+                rels = (xml(original.read(sheet_rels)) if sheet_rels in original.namelist()
+                        else ET.Element(f"{{{P}}}Relationships"))
+                ET.SubElement(rels, f"{{{P}}}Relationship", Id="rIdNoPurchase",
+                              Type=R + "/drawing", Target="/" + drawing)
+                ET.SubElement(sheet, f"{{{S}}}drawing", {f"{{{R}}}id": "rIdNoPurchase"})
+                drawing_rels = xml(styles_source.read("xl/drawings/_rels/drawing1.xml.rels"))
+                drawing_rels[0].set("Target", "/" + media)
+                types = xml(original.read("[Content_Types].xml"))
+                ET.SubElement(types, f"{{{CT}}}Override", PartName="/" + drawing,
+                              ContentType="application/vnd.openxmlformats-officedocument.drawing+xml")
+                for part in (drawing, rels_part(drawing), media):
+                    if part in original.namelist():
+                        raise ValueError(f"Misc Codes barcode part already exists: {part}")
+                changes.update({
+                    sheet_rels: serialize(rels),
+                    drawing: styles_source.read("xl/drawings/drawing1.xml"),
+                    rels_part(drawing): serialize(drawing_rels),
+                    media: no_purchase_panel,
+                    "[Content_Types].xml": serialize(types),
+                })
         for row in sheet.findall(f"{{{S}}}sheetData/{{{S}}}row"):
             number = int(row.get("r"))
             for column in range(1, 5):
@@ -906,11 +950,13 @@ def fit_misc_sheet(binder, destination):
             breaks = sheet.find(f"{{{S}}}{tag}")
             if breaks is not None:
                 sheet.remove(breaks)
+        changes.update({path: serialize(sheet), "xl/styles.xml": styles})
         with zipfile.ZipFile(destination, "x", compression=zipfile.ZIP_DEFLATED) as output:
             output.comment = original.comment
             for entry in original.infolist():
-                output.writestr(entry, serialize(sheet) if entry.filename == path else
-                                styles if entry.filename == "xl/styles.xml" else original.read(entry.filename))
+                output.writestr(entry, changes.pop(entry.filename, original.read(entry.filename)))
+            for name, data in changes.items():
+                output.writestr(name, data)
 
 
 def theme_conversions_sheet(binder, destination, conversion_image):
@@ -2347,7 +2393,7 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                    bulk_pages=None, stretch_size=None, misc_text=None, directory_images=None,
                    conversions_image=None, stretch_image=None, bakery_coordinates=None,
                    delivery_images=None, soil_images=None, weighed_text=None, floral_entries=None,
-                   weighed_image=None, rain_check_image=None):
+                   weighed_image=None, rain_check_image=None, no_purchase_panel=None):
     from pypdf import PdfReader
 
     if not shutil.which("soffice"):
@@ -2509,6 +2555,21 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 if (abs(float(matches[0].mediabox.width) - 612) > 1 or
                         abs(float(matches[0].mediabox.height) - 792) > 1):
                     raise ValueError(f"{edition}: Misc Codes is not portrait US Letter")
+                if no_purchase_panel is not None:
+                    import pymupdf
+
+                    with Image.open(io.BytesIO(no_purchase_panel)) as panel:
+                        size = panel.size
+                    with pymupdf.open(complete) as document:
+                        page = document[matches[0].page_number]
+                        boxes = [pymupdf.Rect(image["bbox"]) for image in page.get_image_info()
+                                 if (image["width"], image["height"]) == size]
+                        if len(boxes) != 1 or not page.rect.contains(boxes[0]):
+                            raise ValueError("No Purchase Entry panel is missing, duplicated, or clipped")
+                        for dpi in (150, 300):
+                            pix = page.get_pixmap(dpi=dpi, clip=boxes[0], alpha=False)
+                            misc_no_purchase.verify_barcode(
+                                Image.frombytes("RGB", (pix.width, pix.height), pix.samples))
                 if floral_entries:
                     import pymupdf
 
@@ -2719,6 +2780,7 @@ def validate_print(output, coordinates, expected_pages, deli_coordinates=None, d
                 weighed_print_text_verified=weighed_text is not None,
                 weighed_print_image_verified=weighed_image is not None,
                 rain_check_print_image_verified=rain_check_image is not None,
+                misc_no_purchase_decoded_at_dpi=[150, 300] if no_purchase_panel is not None else [],
                 complete_pdf=complete.name,
                 visual_review="REQUIRED; automated text/geometry checks are not a visual print approval",
             )
@@ -2858,6 +2920,8 @@ def report_text(summary):
 def generate(root, binder, output, verify_print=False):
     if not binder.is_file():
         raise ValueError(f"missing original till binder: {binder}")
+    misc_scan = (root / misc_no_purchase.SOURCE).read_bytes()
+    no_purchase_panel = misc_no_purchase.crop_panel(misc_scan)
     output.mkdir(parents=True, exist_ok=True)
     if any(output.iterdir()):
         raise ValueError("output must be empty; the original and previous outputs are never overwritten")
@@ -3013,7 +3077,7 @@ def generate(root, binder, output, verify_print=False):
                 style_soil_guide(floral_binder, soil_guide_binder)
             else:
                 shutil.copyfile(floral_binder, soil_guide_binder)
-            fit_misc_sheet(soil_guide_binder, misc_binder)
+            fit_misc_sheet(soil_guide_binder, misc_binder, no_purchase_panel)
             replace_sheet(misc_binder, delivery_content, delivery_binder, DELIVERY_SHEET)
             with zipfile.ZipFile(misc_binder) as archive:
                 sheet_names = [sheet.get("name") for sheet in
@@ -3035,6 +3099,9 @@ def generate(root, binder, output, verify_print=False):
         try:
             validate_stretch(result[STRETCH_SHEET], stretch_source)
             validate_directory(result[DIRECTORY_SHEET], directory_images)
+            misc_images = result[MISC_SHEET]._images
+            if len(misc_images) != 1 or misc_images[0]._data() != no_purchase_panel:
+                raise ValueError("Misc Codes workbook barcode differs from the verified crop")
             if floral_entries:
                 soil, misc = result[SOIL_SHEET], result[MISC_SHEET]
                 for entry in floral_entries:
@@ -3090,7 +3157,7 @@ def generate(root, binder, output, verify_print=False):
                 before, after = original.read(name), generated.read(name)
                 part.update(sha256_before=sha(before), sha256_after=sha(after),
                             byte_identical=before == after)
-                if name not in bulk_parts | conversions_parts | operational_parts | soil_drawing_parts | {misc_part, stretch_part, rels_part(stretch_part),
+                if name not in bulk_parts | conversions_parts | operational_parts | soil_drawing_parts | {misc_part, rels_part(misc_part), stretch_part, rels_part(stretch_part),
                                              directory_part, rels_part(directory_part), delivery_part,
                                              rels_part(delivery_part), "xl/workbook.xml"} and name not in {
                         sheet_info(original, "Produce")[0], rels_part(sheet_info(original, "Produce")[0]),
@@ -3167,6 +3234,9 @@ def generate(root, binder, output, verify_print=False):
         conversions_source_image_sha256=sha(conversions_source_image),
         conversions_original_chart_source_sha256=list(CONVERSION_IMAGE_HASHES),
         conversions_accuracy_review=CONVERSIONS_ACCURACY_REVIEW,
+        misc_no_purchase=dict(source=misc_no_purchase.SOURCE.as_posix(),
+                              source_sha256=sha(misc_scan), crop=list(misc_no_purchase.CROP),
+                              panel_sha256=sha(no_purchase_panel), decoded_value=misc_no_purchase.CODE),
         weighed_guide=(dict(
             source=str(root / weighed_guide.SOURCE), source_sha256=sha(weighed_source),
             derivative_sha256=sha(weighed_image),
@@ -3261,7 +3331,8 @@ def generate(root, binder, output, verify_print=False):
             conversions_image=conversions_source_image if conversion_source != "not present" else None,
             stretch_image=stretch_source, bakery_coordinates=bakery_coordinates,
             delivery_images=delivery_images, soil_images=soil_images, weighed_text=weighed_text,
-            floral_entries=floral_entries, weighed_image=weighed_image, rain_check_image=rain_check_image)
+            floral_entries=floral_entries, weighed_image=weighed_image, rain_check_image=rain_check_image,
+            no_purchase_panel=no_purchase_panel)
         if summary["print_validation"]["photos"]["drawn_images"] != len(images):
             raise ValueError("printed reference count differs from the exact image mapping")
         (output / "VALIDATION.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
@@ -3278,6 +3349,8 @@ def generate(root, binder, output, verify_print=False):
         raise ValueError("Time To Stretch source changed during generation; discard outputs and retry")
     if sha((root / CONVERSIONS_SOURCE).read_bytes()) != CONVERSIONS_SOURCE_SHA256:
         raise ValueError("Conversions source changed during generation; discard outputs and retry")
+    if (root / misc_no_purchase.SOURCE).read_bytes() != misc_scan:
+        raise ValueError("No Purchase Entry scan changed during generation; discard outputs and retry")
     if weighed_source is not None and (root / weighed_guide.SOURCE).read_bytes() != weighed_source:
         raise ValueError("Weighed guide source changed during generation; discard outputs and retry")
     if rain_check_source is not None and (root / weighed_guide.RAIN_CHECK_SOURCE).read_bytes() != rain_check_source:

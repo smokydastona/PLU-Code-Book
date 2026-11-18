@@ -1,3 +1,3 @@
 Exact generation command (output must be empty; use a new directory when rerunning):
 
-/tmp/plu-code-book-venv/bin/python /workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book/tools/build_till_binders.py --root /workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book --binder /workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book/sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx --output /tmp/plu-raincheck-centered-4a64632 --verify-print
+/tmp/plu-code-book-venv/bin/python /workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book/tools/build_till_binders.py --root /workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book --binder /workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book/sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx --output /tmp/plu-misc-review.HUVNst --verify-print
