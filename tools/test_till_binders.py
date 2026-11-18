@@ -787,8 +787,11 @@ class TillBinderChecks(unittest.TestCase):
         combined = self.root / "misc-only.xlsx"
         scan = (self.root / misc_no_purchase.SOURCE).read_bytes()
         with self.assertRaisesRegex(ValueError, "scan changed"):
-            misc_no_purchase.crop_panel(scan + b"changed")
-        panel = misc_no_purchase.crop_panel(scan)
+            misc_no_purchase.generate_panel(scan + b"changed")
+        panel = misc_no_purchase.generate_panel(scan)
+        with Image.open(io.BytesIO(panel)) as artwork:
+            self.assertEqual(artwork.getpixel((850, 200)), (255, 255, 255))
+            misc_no_purchase.verify_barcode(artwork)
         fit_misc_sheet(source, combined, panel)
         expected = misc_print_text(combined)
         subprocess.run(["soffice", "-env:UserInstallation=" + (self.root / "lo-misc").as_uri(),

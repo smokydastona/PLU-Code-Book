@@ -804,12 +804,17 @@ def fit_misc_sheet(binder, destination, no_purchase_panel=None):
     themed = donor.active
     styled = {}
     add_panel = False
+    replace_legacy_panel = False
     try:
         source = workbook[MISC_SHEET]
         if no_purchase_panel is not None:
-            if source._charts or (source._images and (
-                    len(source._images) != 1 or source._images[0]._data() != no_purchase_panel)):
+            if source._charts or len(source._images) > 1:
                 raise ValueError("Misc Codes has an unexpected drawing; review before adding the barcode")
+            if source._images:
+                existing = source._images[0]._data()
+                replace_legacy_panel = sha(existing) == misc_no_purchase.LEGACY_PANEL_SHA256
+                if existing != no_purchase_panel and not replace_legacy_panel:
+                    raise ValueError("Misc Codes has an unexpected image; review before replacing the barcode")
             if any(cell.value is not None for row in source.iter_rows(min_row=33) for cell in row):
                 raise ValueError("Misc Codes has entries in the No Purchase Entry panel area")
             add_panel = not source._images
@@ -868,13 +873,17 @@ def fit_misc_sheet(binder, destination, no_purchase_panel=None):
         path, _ = sheet_info(original, MISC_SHEET)
         sheet = xml(original.read(path))
         changes = {}
+        media = "xl/media/misc-no-purchase.png"
+        if replace_legacy_panel:
+            if media not in original.namelist() or sha(original.read(media)) != misc_no_purchase.LEGACY_PANEL_SHA256:
+                raise ValueError("Misc Codes legacy barcode is not in the expected workbook part")
+            changes[media] = no_purchase_panel
         with zipfile.ZipFile(io.BytesIO(content.getvalue())) as styles_source:
             styles, style_ids = merge_styles(original.read("xl/styles.xml"), styles_source.read("xl/styles.xml"))
             if add_panel:
                 if sheet.find(f"{{{S}}}drawing") is not None:
                     raise ValueError("Misc Codes has existing drawing content")
                 drawing = "xl/drawings/misc-no-purchase.xml"
-                media = "xl/media/misc-no-purchase.png"
                 sheet_rels = rels_part(path)
                 rels = (xml(original.read(sheet_rels)) if sheet_rels in original.namelist()
                         else ET.Element(f"{{{P}}}Relationships"))
@@ -2921,7 +2930,7 @@ def generate(root, binder, output, verify_print=False):
     if not binder.is_file():
         raise ValueError(f"missing original till binder: {binder}")
     misc_scan = (root / misc_no_purchase.SOURCE).read_bytes()
-    no_purchase_panel = misc_no_purchase.crop_panel(misc_scan)
+    no_purchase_panel = misc_no_purchase.generate_panel(misc_scan)
     output.mkdir(parents=True, exist_ok=True)
     if any(output.iterdir()):
         raise ValueError("output must be empty; the original and previous outputs are never overwritten")
@@ -3101,7 +3110,7 @@ def generate(root, binder, output, verify_print=False):
             validate_directory(result[DIRECTORY_SHEET], directory_images)
             misc_images = result[MISC_SHEET]._images
             if len(misc_images) != 1 or misc_images[0]._data() != no_purchase_panel:
-                raise ValueError("Misc Codes workbook barcode differs from the verified crop")
+                raise ValueError("Misc Codes workbook barcode differs from the generated panel")
             if floral_entries:
                 soil, misc = result[SOIL_SHEET], result[MISC_SHEET]
                 for entry in floral_entries:
@@ -3157,7 +3166,7 @@ def generate(root, binder, output, verify_print=False):
                 before, after = original.read(name), generated.read(name)
                 part.update(sha256_before=sha(before), sha256_after=sha(after),
                             byte_identical=before == after)
-                if name not in bulk_parts | conversions_parts | operational_parts | soil_drawing_parts | {misc_part, rels_part(misc_part), stretch_part, rels_part(stretch_part),
+                if name not in bulk_parts | conversions_parts | operational_parts | soil_drawing_parts | {misc_part, rels_part(misc_part), "xl/media/misc-no-purchase.png", stretch_part, rels_part(stretch_part),
                                              directory_part, rels_part(directory_part), delivery_part,
                                              rels_part(delivery_part), "xl/workbook.xml"} and name not in {
                         sheet_info(original, "Produce")[0], rels_part(sheet_info(original, "Produce")[0]),
@@ -3235,7 +3244,8 @@ def generate(root, binder, output, verify_print=False):
         conversions_original_chart_source_sha256=list(CONVERSION_IMAGE_HASHES),
         conversions_accuracy_review=CONVERSIONS_ACCURACY_REVIEW,
         misc_no_purchase=dict(source=misc_no_purchase.SOURCE.as_posix(),
-                              source_sha256=sha(misc_scan), crop=list(misc_no_purchase.CROP),
+                              source_sha256=sha(misc_scan), source_barcode_crop=list(misc_no_purchase.CROP),
+                              panel_origin="GENERATED",
                               panel_sha256=sha(no_purchase_panel), decoded_value=misc_no_purchase.CODE),
         weighed_guide=(dict(
             source=str(root / weighed_guide.SOURCE), source_sha256=sha(weighed_source),

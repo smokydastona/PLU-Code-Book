@@ -13,7 +13,7 @@
     "groups_kept_on_one_page": true,
     "source": "sources/binders/OldTimers_Produce_codes.pdf",
     "source_sha256": "6846210817a7f7bffe84bb5f30db75ef1276b203fda53c0256cb77cf037e0672",
-    "sha256": "1d8dc997b434d38aa992923e348e2c9532fe1593acaeb44dcd6146d492dc6c58"
+    "sha256": "434aaebe3932c48e97f1e4138052df942ff8f73f95ea7e23b00f539673ef6f01"
   },
   "original_binder": "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx",
   "original_binder_sha256": "6b0aeaa153233c5f4917811a3f7a5b2212f7a946a0abede372a31db556ab0f63",
@@ -87,13 +87,14 @@
   "misc_no_purchase": {
     "source": "sources/binders/Misc_Codes_No_Purchase_Upload.jpg",
     "source_sha256": "769aab1c558d98513b3f5469f2489095f74ac118d584167353676ec4db858a90",
-    "crop": [
+    "source_barcode_crop": [
       194,
       1161,
       1104,
       1450
     ],
-    "panel_sha256": "43f557f86fae18793fabff7fc677431e6c9088a1a632fc286e676b6c6e2c4a51",
+    "panel_origin": "GENERATED",
+    "panel_sha256": "3e0f3307d63306b0b34c5d5293b857a613ee8fe2d788f4bc8b75fa42d926cf29",
     "decoded_value": "0770974140186"
   },
   "weighed_guide": {
@@ -4439,8 +4440,8 @@
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "3c903e0c7d0178087a04f4f7a2213049ae14590fe4ca2970a456ca797d5ba611",
-      "file_size_bytes": 26848834,
+      "file_sha256": "39008ea8b906c64d3b55dde11ae23374f392a3d77f4ec7072916f5e2dcb0c4c0",
+      "file_size_bytes": 26735889,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 399,
       "output_sheet_names": [
