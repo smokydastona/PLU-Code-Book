@@ -39,6 +39,7 @@ from build_bakery_sheet import (BAKERY_SOURCE, read_source as read_bakery_source
 from binder_theme import PALE_GREEN, display_product_name
 from build_weighed_sheet import (RAIN_CHECK_SOURCE, RAIN_CHECK_UPLOAD,
                                  SOURCE as WEIGHED_SOURCE)
+from build_till_binders import enlarge_weight_table
 import misc_no_purchase
 
 
@@ -1158,7 +1159,18 @@ class TillBinderChecks(unittest.TestCase):
         try:
             original, themed = before["Conversions"], after["Conversions"]
             self.assertEqual(len(themed._images), 1)
-            self.assertEqual(themed._images[0]._data(), image)
+            artwork = themed._images[0]._data()
+            self.assertEqual(artwork, enlarge_weight_table(image))
+            with Image.open(io.BytesIO(image)) as upload, Image.open(io.BytesIO(artwork)) as enlarged:
+                self.assertEqual(enlarged.size, upload.size)
+                diff = ImageChops.difference(upload.convert("RGB"), enlarged.convert("RGB"))
+                left, top, right, bottom = diff.getbbox()
+                self.assertGreaterEqual(left, 44)
+                self.assertGreaterEqual(top, 748)
+                self.assertGreater(right, 570)
+                self.assertLess(right, 620)  # Adjacent kilograms-to-pounds table.
+                self.assertGreater(bottom, 1085)
+                self.assertLess(bottom, 1132)  # Price tables below.
             self.assertEqual(themed.sheet_properties.codeName, "UpdatedConversionsImage")
             self.assertEqual((themed.page_setup.orientation, str(themed.page_setup.paperSize)), ("portrait", "1"))
             self.assertTrue(themed.sheet_properties.pageSetUpPr.fitToPage)
@@ -1190,7 +1202,7 @@ class TillBinderChecks(unittest.TestCase):
         theme_conversions_sheet(old_draft, upgraded, image)
         upgraded_workbook = load_workbook(upgraded)
         try:
-            self.assertEqual(upgraded_workbook["Conversions"]._images[0]._data(), image)
+            self.assertEqual(upgraded_workbook["Conversions"]._images[0]._data(), artwork)
         finally:
             upgraded_workbook.close()
 

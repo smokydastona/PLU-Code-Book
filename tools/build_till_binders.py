@@ -115,6 +115,8 @@ WEIGHED_SHEET = "Weighed more $100"
 CONVERSIONS_SHEET = "Conversions"
 CONVERSIONS_SOURCE = Path("sources/binders/Conversions_Updated.jpg")
 CONVERSIONS_SOURCE_SHA256 = "e3a51d715ee020604a65041c046dbd4092ebe043c390c82c3f427e98775ae504"
+WEIGHT_TABLE_CROP = (44, 748, 562, 1071)
+WEIGHT_TABLE_SCALE = 1.08
 CONVERSIONS_ACCURACY_REVIEW = (
     "Owner-uploaded image visually checked against all three original chart images: volume values, "
     "weight values, kilograms-to-pounds values, price tiers and rounding note match. The $4.99 price "
@@ -968,31 +970,43 @@ def fit_misc_sheet(binder, destination, no_purchase_panel=None):
                 output.writestr(name, data)
 
 
-def theme_conversions_sheet(binder, destination, conversion_image):
+def enlarge_weight_table(conversion_image):
     if sha(conversion_image) != CONVERSIONS_SOURCE_SHA256:
         raise ValueError("Uploaded Conversions source changed; review its accuracy before rebuilding")
     with Image.open(io.BytesIO(conversion_image)) as image:
         if image.format != "JPEG" or image.size != (1024, 1536):
             raise ValueError("Uploaded Conversions image dimensions or format changed; review before rebuilding")
+        artwork = image.convert("RGB")
+    table = artwork.crop(WEIGHT_TABLE_CROP)
+    size = tuple(round(dimension * WEIGHT_TABLE_SCALE) for dimension in table.size)
+    artwork.paste(table.resize(size, Image.Resampling.LANCZOS), WEIGHT_TABLE_CROP[:2])
+    output = io.BytesIO()
+    artwork.save(output, format="PNG")
+    return output.getvalue()
+
+
+def theme_conversions_sheet(binder, destination, conversion_image):
+    artwork = enlarge_weight_table(conversion_image)
     workbook = load_workbook(binder)
     try:
         source = workbook[CONVERSIONS_SHEET]
-        if (len(source._images) == 1 and
-                sha(source._images[0]._data()) == CONVERSIONS_SOURCE_SHA256):
-            if any(cell.value is not None for row in source for cell in row) or source._charts:
+        image_hashes = tuple(sha(image._data()) for image in source._images)
+        if image_hashes in ((CONVERSIONS_SOURCE_SHA256,), (sha(artwork),)):
+            if (any(cell.value is not None or cell.comment or cell.hyperlink for row in source for cell in row)
+                    or source._charts or source.merged_cells.ranges):
                 raise ValueError("Updated Conversions image sheet has unexpected data; review before rebuilding")
-            shutil.copyfile(binder, destination)
-            return
-        if not source._images and source.sheet_properties.codeName == "UpdatedConversionsImage":
+            if image_hashes == (sha(artwork),):
+                shutil.copyfile(binder, destination)
+                return artwork
+        elif not source._images and source.sheet_properties.codeName == "UpdatedConversionsImage":
             raise ValueError("Updated Conversions image is missing; review the template")
-        if not source._images and source.sheet_properties.codeName != "EditableConversions":
+        elif not source._images and source.sheet_properties.codeName != "EditableConversions":
             raise ValueError("Conversions sheet is not a recognized source or generated image sheet")
-        if source._images and (len(source._images) != 3 or
-                               tuple(sha(image._data()) for image in source._images) != CONVERSION_IMAGE_HASHES):
+        elif source._images and image_hashes != CONVERSION_IMAGE_HASHES:
             raise ValueError("Conversions source charts changed; review their accuracy before replacing")
         if source._charts or source.merged_cells.ranges:
             raise ValueError("Conversions source contains unsupported content; review before conversion")
-        if source._images:
+        if image_hashes == CONVERSION_IMAGE_HASHES:
             if any(cell.comment or cell.hyperlink or
                    (cell.value is not None and not (cell.column in (8, 9) and 22 <= cell.row <= 33))
                    for row in source for cell in row):
@@ -1018,7 +1032,7 @@ def theme_conversions_sheet(binder, destination, conversion_image):
     sheet.page_margins = PageMargins(left=.25, right=.25, top=.25, bottom=.25, header=.1, footer=.1)
     sheet.print_options.horizontalCentered = True
     sheet.print_area = "A1:A52"
-    picture = ExcelImage(io.BytesIO(conversion_image))
+    picture = ExcelImage(io.BytesIO(artwork))
     picture.width, picture.height = 700, 1050
     picture.anchor = OneCellAnchor(
         _from=AnchorMarker(col=0, row=0, colOff=pixels_to_EMU(100)),
@@ -1028,6 +1042,7 @@ def theme_conversions_sheet(binder, destination, conversion_image):
     donor.save(content)
     donor.close()
     replace_sheet(binder, content.getvalue(), destination, CONVERSIONS_SHEET)
+    return artwork
 
 
 def misc_print_text(path):
@@ -3092,9 +3107,11 @@ def generate(root, binder, output, verify_print=False):
                 sheet_names = [sheet.get("name") for sheet in
                                xml(archive.read("xl/workbook.xml")).find(f"{{{S}}}sheets")]
             if CONVERSIONS_SHEET in sheet_names:
-                theme_conversions_sheet(delivery_binder, conversions_binder, conversions_source_image)
+                conversions_artwork = theme_conversions_sheet(
+                    delivery_binder, conversions_binder, conversions_source_image)
             else:
                 shutil.copyfile(delivery_binder, conversions_binder)
+                conversions_artwork = None
             replace_sheet(conversions_binder, directory_content, directory_binder, DIRECTORY_SHEET)
             replace_sheet(directory_binder, stretch_content, stretch_binder, STRETCH_SHEET)
             replace_produce(stretch_binder, donor, produce_binder)
@@ -3102,7 +3119,7 @@ def generate(root, binder, output, verify_print=False):
             replace_sheet(bakery_binder, deli_content, path, "Deli")
             validations[edition] = validate_package(
                 stretch_binder, path, coordinates, edition_images, edition == "photos", deli_coordinates,
-                conversions_source_image if CONVERSIONS_SHEET in sheet_names else None,
+                conversions_artwork,
                 bakery_rows, bakery_coordinates, delivery_images)
         result = load_workbook(path)
         try:
@@ -3241,6 +3258,7 @@ def generate(root, binder, output, verify_print=False):
         conversions_source=conversion_source,
         conversions_source_image=str(root / CONVERSIONS_SOURCE),
         conversions_source_image_sha256=sha(conversions_source_image),
+        conversions_artwork_sha256=sha(conversions_artwork) if conversions_artwork else None,
         conversions_original_chart_source_sha256=list(CONVERSION_IMAGE_HASHES),
         conversions_accuracy_review=CONVERSIONS_ACCURACY_REVIEW,
         misc_no_purchase=dict(source=misc_no_purchase.SOURCE.as_posix(),
@@ -3338,7 +3356,7 @@ def generate(root, binder, output, verify_print=False):
             output, coordinates, pages, deli_coordinates=deli_coordinates, deli_title=deli_title,
             bulk_pages=bulk_print_pages(output / FILENAMES["photos"]), stretch_size=stretch_size,
             misc_text=misc_text, directory_images=directory_images,
-            conversions_image=conversions_source_image if conversion_source != "not present" else None,
+            conversions_image=conversions_artwork,
             stretch_image=stretch_source, bakery_coordinates=bakery_coordinates,
             delivery_images=delivery_images, soil_images=soil_images, weighed_text=weighed_text,
             floral_entries=floral_entries, weighed_image=weighed_image, rain_check_image=rain_check_image,

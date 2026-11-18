@@ -13,7 +13,7 @@
     "groups_kept_on_one_page": true,
     "source": "sources/binders/OldTimers_Produce_codes.pdf",
     "source_sha256": "6846210817a7f7bffe84bb5f30db75ef1276b203fda53c0256cb77cf037e0672",
-    "sha256": "434aaebe3932c48e97f1e4138052df942ff8f73f95ea7e23b00f539673ef6f01"
+    "sha256": "1459654e8e855e2d4a406c2ca9143f6564e86b4e7d217b257499afc3f746bc1a"
   },
   "original_binder": "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx",
   "original_binder_sha256": "6b0aeaa153233c5f4917811a3f7a5b2212f7a946a0abede372a31db556ab0f63",
@@ -68,16 +68,17 @@
     }
   ],
   "soil_product_identities_sha256": "ed99f2abc048a372dab740bc7049b657e33584c2cd9bc10fa55585772a632bab",
-  "deli_source": "sources/binders/Updated_Deli_Two_Columns.xlsx",
+  "deli_source": "/workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book/sources/binders/Updated_Deli_Two_Columns.xlsx",
   "deli_source_sha256": "a26ab6cf98d72d656e5cfd7a5c8928a7938ae1d965934a597c047f8eb37438f3",
-  "bakery_source": "sources/binders/Bakery_Products.csv",
+  "bakery_source": "/workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book/sources/binders/Bakery_Products.csv",
   "bakery_source_sha256": "d863f9410b7b33ee1979b224b3b64bcb0c4ad944c5d998dcc297ca337297eee3",
   "bakery_records_included": 31,
-  "stretch_source": "sources/binders/Time_To_Stretch.jpg",
+  "stretch_source": "/workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book/sources/binders/Time_To_Stretch.jpg",
   "stretch_source_sha256": "b96e6cbecc167c31e77235b6b02171fc0e94b63aa1f76860fb22258d25f088ed",
   "conversions_source": "owner-uploaded image",
-  "conversions_source_image": "sources/binders/Conversions_Updated.jpg",
+  "conversions_source_image": "/workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book/sources/binders/Conversions_Updated.jpg",
   "conversions_source_image_sha256": "e3a51d715ee020604a65041c046dbd4092ebe043c390c82c3f427e98775ae504",
+  "conversions_artwork_sha256": "75a04d0e5797fddb15f6558624afe822359d179ab3e9f726bca5fc6499432ff6",
   "conversions_original_chart_source_sha256": [
     "61982efebf133df82dff82c7cdd0851cbba7bc15dd40ea7279c1b6f9027b03ec",
     "6430fafaf191a266ba30d6de7fe66aac4a27ff5d0b0645168d70d9476b9b9fd1",
@@ -98,14 +99,14 @@
     "decoded_value": "0770974140186"
   },
   "weighed_guide": {
-    "source": "sources/binders/Weighed_Items_Over_100_Updated.jpg",
+    "source": "/workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book/sources/binders/Weighed_Items_Over_100_Updated.jpg",
     "source_sha256": "bd2689fd49f13d5050753e30d850e3c89001e9db98bcf3ff9930bddd374d3604",
     "derivative_sha256": "88d7ec5bddd8788531e68cebe46fb92d9efb7771d5bbf9bb1cb04c3a99d45832",
-    "rain_check_source": "sources/binders/Rain_Check_Instructions_Updated.png",
+    "rain_check_source": "/workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book/sources/binders/Rain_Check_Instructions_Updated.png",
     "rain_check_source_sha256": "c211ff2d648e93fd4663ae6f5183023b173c46e9c892416c42125614e6745f3a",
-    "rain_check_upload": "sources/binders/Rain_Check_Instructions_Upload.png",
+    "rain_check_upload": "/workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book/sources/binders/Rain_Check_Instructions_Upload.png",
     "rain_check_upload_sha256": "8377569b18af0d783745f4a8fc0336a66b6baac2ca0fb20a8598f25e725baa44",
-    "rain_check_original_pdf": "sources/binders/Rain_Check.pdf",
+    "rain_check_original_pdf": "/workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book/sources/binders/Rain_Check.pdf",
     "rain_check_original_pdf_sha256": "9aeb587f43b8022735666e04dd771c89d7d08f15150964f7f095e6dc762af777",
     "rain_check_derivative_sha256": "c211ff2d648e93fd4663ae6f5183023b173c46e9c892416c42125614e6745f3a",
     "rain_check_accuracy_review": "Compared the owner upload with the original Rain Check PDF. Updated the sample date to the form's mm/dd/yy format, matched the sample product description and PLU 3181 to Strawberries BC 1 Pound, and added the store number, banner, and store name fields to step 1. The original form, 30-day validity, quantity-in-words, size, price-per-unit, and SCENE+ instructions remain present. Removed the confusing accuracy claim from the corner and enlarged the remaining instruction to 'Follow these steps to complete the raincheck/voucher correctly.' The 1 lb sample is 454 g; $4.99/lb converts to $11.00/kg rounded to cents.",
@@ -115,12 +116,12 @@
   },
   "directory_images": [
     {
-      "source": "sources/binders/Store_Directory_Original_1.png",
+      "source": "/workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book/sources/binders/Store_Directory_Original_1.png",
       "source_sha256": "c5beab3173c87b3ab5876bcad374bb85e5cefc57ba616edb749791852cc3bc69",
       "derivative_sha256": "b6380172d5c4a787da7fede67a1841aec24ccbe74e9dc50bef39564b044cad26"
     },
     {
-      "source": "sources/binders/Store_Directory_Original_2.png",
+      "source": "/workspaces/PLU-Code-Book/smokydastona/PLU-Code-Book/sources/binders/Store_Directory_Original_2.png",
       "source_sha256": "0274edd4cd7893d0f087f73e380295bf562ac80c0e10a4022ae7f69b686418a3",
       "derivative_sha256": "fcce4b14be6dddd9136ece540036526ddc8ba7306a7a9e2090f0ea4c43529310"
     }
@@ -4440,8 +4441,8 @@
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "39008ea8b906c64d3b55dde11ae23374f392a3d77f4ec7072916f5e2dcb0c4c0",
-      "file_size_bytes": 26735889,
+      "file_sha256": "b0a46e3e57c3e43bb58df4e808ae6f25b4a8f90393032413282bfd0a9288012b",
+      "file_size_bytes": 27281203,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 399,
       "output_sheet_names": [
