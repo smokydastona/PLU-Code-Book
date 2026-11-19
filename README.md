@@ -12,6 +12,7 @@ Build artifacts are kept in `outputs/till-binder-review/`:
 | `Complete Till Binder - Updated - Photos.pdf` | Full binder in reading order |
 | `Pocket Guide.pdf` | Imposed 2-up, duplex binder guide for folding and saddle-stitching |
 | `OldTimers_Produce.pdf` | Large-print, text-only list: Fruits, then Vegetables ending with the Asian Produce group |
+| `Sprinkler Room Map.pdf` | Standalone map with A/B divider and sprinkler-room locations; no emergency intercom codes |
 | `BINDER_BOOKLET_IMPOSITION.csv` | Source-page placement for each physical sheet side |
 | `VALIDATION.json`, `AUDIT_REPORT.json`, `PRODUCTION_BLOCKERS.csv`, `OWNER_REVIEW_FINDINGS.csv`, and CSV reports | Separate build, technical, data, image, rights and release evidence |
 
@@ -38,6 +39,14 @@ sudo apt-get install -y libreoffice-calc libreoffice-writer fonts-dejavu-core fo
 ```
 
 The output directory must be empty. `--verify-print` exports and checks the complete workbook, then creates the imposed booklet PDF and its page map. The audit checks workbook package preservation, printed page count and geometry, image coverage, booklet imposition, and open production blockers. Technical success never clears owner-review gates or approves a binder for cashier use.
+
+Regenerate the standalone sprinkler map separately with
+`.venv/bin/python tools/build_sprinkler_map.py`. It uses the unchanged original
+directory artwork and the owner's markings in
+`sources/binders/Sprinkler_Room_Map_Reference.pdf`: side A is left of the divider,
+side B is right, room A is at the front-left wall, and room B is outside the
+upper-right angled wall. This replaces the former `Store_Directory_Map.pdf`
+deliverable; the binder's Store Directory and emergency intercom panel are unchanged.
 
 ## Management app
 
