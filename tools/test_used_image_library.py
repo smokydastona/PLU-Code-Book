@@ -167,6 +167,22 @@ class UsedImageLibraryChecks(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "stale local working image identity"):
                 local_inventory(self.root)
 
+    def test_rejected_legacy_image_is_not_offered_even_in_old_index(self):
+        record_images(self.root, "LEGACY_BOOKLET_IMAGES.json", {"legacy:1": self.content}, [
+            dict(source_id="legacy:1", plu="00042", name="Apple",
+                 image_status="LEGACY_PREAPPROVED_IMAGE",
+                 legacy_review={"verdict": "Rejected"})
+        ])
+        self.assertEqual(local_inventory(self.root), [])
+
+    def test_rejected_working_assignment_is_not_offered_even_in_old_index(self):
+        record_images(self.root, "WORKING_LIST_IMAGES.json", {"identity": self.content}, [
+            dict(source_id="identity", plu="00042", product="Apple",
+                 library_approval_status="APPROVED",
+                 assignment={"visual_approval_status": "REVOKED"})
+        ])
+        self.assertEqual(local_inventory(self.root), [])
+
     def previous_library(self):
         record_images(self.root, "WORKING_LIST_IMAGES.json", {"identity": self.content}, [
             dict(source_id="identity", plu="00042", rights_status="NOT_VERIFIED")

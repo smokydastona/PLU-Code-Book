@@ -1617,6 +1617,7 @@ def map_images(root, rows, assignments, visuals, update_library=True):
     rejected_references = {row["source_id"]: row for row in reference_audit
                            if row["status"] == "REJECTED"}
     from legacy_approval import legacy_approval, legacy_entries
+    from release_policy import explicit_image_rejection
 
     legacy_records = legacy_entries(root)
     images, report = {}, []
@@ -1654,6 +1655,13 @@ def map_images(root, rows, assignments, visuals, update_library=True):
             legacy_original_verdict=legacy_record["historical_review"]["verdict"]
             if legacy_record else "",
         )
+        if explicit_image_rejection(assignment, legacy_record):
+            record.update(
+                image_status="REJECTED", image_approval_status="NOT_APPROVED",
+                approval_basis="", details="Explicitly rejected or superseded image; left blank pending review.",
+            )
+            report.append(record)
+            continue
         if legacy_record:
             from sync_picklist import reviewed_image
 

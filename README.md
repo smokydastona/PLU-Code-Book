@@ -122,4 +122,18 @@ The OldTimers list is generated with every displayed binder produce entry, witho
 | `tools/audit_till_binder.py` | Post-build technical and production-readiness audit |
 | `outputs/till-binder-review/` | Latest generated review binder and evidence |
 
+The single `sources/image-library/` directory holds approved WorkingList images,
+owner candidates and separately indexed legacy and review copies. Run
+`python tools/build_image_library.py --check` and
+`python tools/used_image_library.py --check` to verify its approved inventory
+and cached assets. `python tools/used_image_library.py` refreshes the binder
+and legacy associations without changing source images or granting approval.
+Explicitly rejected or superseded images remain in the audit history, are not
+offered as approved choices, and are left blank in newly built binders.
+
+The owner-uploaded `data/review-references/2011-PLU-Listing1.pdf` is a historical
+reference for future image-library coverage. Its checksummed sidecar records
+reference-only status; future-PLU coverage review is still pending. It does not
+update PickList or WorkingList, assign images, or grant image approvals.
+
 The `Fetch unreviewed produce candidates` Action has an `external-leads` mode for the identity-pinned URLs in `data/review-references/external-image-source-leads.json`. It reads page metadata only; it does not download image previews or PDF bodies, verify license claims, approve images, or change assignments. Search-result URLs are recorded without querying them. Fetchers retry DNS lookup failures up to three times with bounded backoff and report persistent failures as `DNS_ERROR`; HTTP errors such as 403 are not retried or bypassed. The Action runs on a GitHub-hosted runner, so it does not depend on the local machine's DNS configuration.

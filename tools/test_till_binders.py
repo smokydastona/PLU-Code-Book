@@ -1448,6 +1448,17 @@ class TillBinderChecks(unittest.TestCase):
         self.assertEqual(record["image_status"], "APPROVED_ASSIGNMENT_INVALID")
         self.assertNotIn(row["source_id"], images)
 
+    def test_explicit_revocation_leaves_even_an_approved_assignment_blank(self):
+        assignments = read_assignments(self.root / "data/picklist_assignments.json")
+        rows, _ = produce_catalog(self.items, assignments)
+        row = next(item for item in rows if item["name"] == "Apple Gala")
+        assignments[row["source_id"]].update(
+            visual_approval_status="APPROVED", production_status="REVOKED")
+        images, report = map_images(self.root, [row], assignments, visual_records(self.root))
+        self.assertNotIn(row["source_id"], images)
+        self.assertEqual(report[0]["image_status"], "REJECTED")
+        self.assertEqual(report[0]["image_approval_status"], "NOT_APPROVED")
+
     def test_uncertain_old_mappings_are_reported_without_guessing(self):
         original = [
             dict(original_code="00042", original_description="Old name", cell="A1", heading="Apple", issue=""),
@@ -1492,6 +1503,12 @@ class TillBinderChecks(unittest.TestCase):
                 rows, _ = produce_catalog(self.items, assignments)
                 images, report = map_images(self.root, rows, assignments, visual_records(self.root))
                 record = next(row for row in report if row["plu"] == "00045")
+                if verdict == "Rejected":
+                    self.assertFalse(record["embedded"])
+                    self.assertEqual(record["image_status"], "REJECTED")
+                    self.assertEqual(record["image_approval_status"], "NOT_APPROVED")
+                    self.assertNotIn(record["source_id"], images)
+                    continue
                 self.assertTrue(record["embedded"])
                 self.assertEqual(record["image_status"], "LEGACY_PREAPPROVED_IMAGE")
                 self.assertEqual(record["image_approval_status"], "APPROVED_LEGACY")

@@ -201,11 +201,15 @@ def managed_cache_names(root):
 
 
 def local_inventory(root):
+    from legacy_approval import legacy_approval, legacy_entries
+    from release_policy import explicit_image_rejection
+
     root = Path(root)
     library = root / "sources/image-library"
     if not library.exists():
         return []
     check_used_library(root)
+    legacy = legacy_entries(root)
     options = []
     current = None
     index = library / "IMAGE_LIBRARY.csv"
@@ -237,8 +241,8 @@ def local_inventory(root):
             }
         for row in json.loads(working_index.read_text()):
             identity = row["source_id"]
+            item = current.get(identity) if current is not None else None
             if current is not None:
-                item = current.get(identity)
                 if item is None or (item["plu"], item["name"]) != (row["plu"], row["product"]):
                     raise ValueError(f"stale local working image identity: {identity}")
             if assignments is not None:
@@ -250,7 +254,13 @@ def local_inventory(root):
 
                     if digest(original_image(root, assignment)) != assignment.get("image_sha256"):
                         raise ValueError(f"changed local working image: {identity}")
+            assignment = row.get("assignment") or {}
+            legacy_record = legacy_approval(root, item, assignment, legacy) if item else None
+            if explicit_image_rejection(assignment, legacy_record):
+                continue
             status = row.get("library_approval_status")
+            if status == "APPROVED_LEGACY" and current is not None and legacy_record is None:
+                raise ValueError(f"stale legacy image approval: {identity}")
             tier = {"APPROVED": "APPROVED", "APPROVED_LEGACY": "LEGACY"}.get(status, "REVIEWED")
             if row.get("image_status") in {"REJECTED", "WORKING_IDENTITY_REVIEW_REQUIRED"}:
                 continue
@@ -258,6 +268,13 @@ def local_inventory(root):
     legacy_index = library / "LEGACY_BOOKLET_IMAGES.json"
     if legacy_index.exists():
         for row in json.loads(legacy_index.read_text()):
+            if legacy:
+                source = legacy.get(row["idx"])
+                if not source or row.get("legacy_review") != source["historical_review"]:
+                    raise ValueError(f"stale legacy image review: {row.get('idx')}")
+            if row.get("image_status") == "REJECTED" or (
+                    row.get("legacy_review", {}).get("verdict", "").strip().casefold() == "rejected"):
+                continue
             options.append(dict(row, tier="LEGACY", path=root / row["library_image"], provenance=row))
     if owner_index.exists() and current is not None:
         for row in json.loads(owner_index.read_text()):
@@ -356,6 +373,7 @@ def refresh_used_library(root):
     from build_till_binders import map_images, produce_catalog, visual_records
     from picklist_catalog import read_assignments
     from sync_picklist import safe_asset
+    from release_policy import explicit_image_rejection
     from working_list import read_working_list, rebuild_working_list
 
     root = Path(root)
@@ -379,12 +397,14 @@ def refresh_used_library(root):
     for row in legacy:
         identity = "legacy:" + row["idx"]
         images[identity] = safe_asset(root, "data/" + row["image"]).read_bytes()
+        review = reviews.get(row["idx"], {})
+        rejected = explicit_image_rejection({}, {"historical_review": review})
         records.append(dict(
-            row, source_id=identity, legacy_review=reviews.get(row["idx"], {}),
-            image_status="LEGACY_PREAPPROVED_IMAGE",
-            image_approval_status="APPROVED_LEGACY",
-            approval_basis="OWNER_LEGACY_PREAPPROVED_POLICY",
-            library_approval_status="APPROVED_LEGACY",
+            row, source_id=identity, legacy_review=review,
+            image_status="REJECTED" if rejected else "LEGACY_PREAPPROVED_IMAGE",
+            image_approval_status="NOT_APPROVED" if rejected else "APPROVED_LEGACY",
+            approval_basis="" if rejected else "OWNER_LEGACY_PREAPPROVED_POLICY",
+            library_approval_status="NOT_APPROVED" if rejected else "APPROVED_LEGACY",
         ))
     result["legacy"] = record_images(root, "LEGACY_BOOKLET_IMAGES.json", images, records)
     return result

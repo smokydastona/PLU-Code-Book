@@ -342,10 +342,10 @@
       "below_500": "1",
       "shared_image_entries": "1"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/2f147f729fdff647a18424eb475b297956cdd3836043cf6885e12ca02ca01057.jpg",
     "library_sha256": "f79fafb9073fb6ef213fbe53f994587bb4f32a40b82611a67e6e21485ba385a1",
     "library_source_sha256": "6ad347c2ff15eec09d96e2a4ce13da56bf682d452e0cd5b6200e389a5805b0a4"
@@ -1044,10 +1044,10 @@
       "below_500": "1",
       "shared_image_entries": "2"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/be06c402e4a9f1fad2ada5dd102a71d4fe21aa42710b133540386faa2015d25e.jpg",
     "library_sha256": "cc8d72b3c5aa45f65afd6353ef3a5d3d5b41ebb4a0704342a408bd728d26300d",
     "library_source_sha256": "fe81d9fbf72c4b9b0b3f49c925aaec7cf5d32f88d8aa3342ed707ed13e41d042"
@@ -1941,10 +1941,10 @@
       "below_500": "1",
       "shared_image_entries": "8"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/fd9d4f4d0291b79422b459ca149727999fd46efda9795f02b6b88db84858afd5.jpg",
     "library_sha256": "96cc69dad3d3ff902afe127c732d825a2b2fb3614731ea314fb65fef907714c1",
     "library_source_sha256": "31c9d102d7f9775213b57d056588c1dcf4737055205c05dffc5eef2ed87931e7"
@@ -5763,10 +5763,10 @@
       "below_500": "1",
       "shared_image_entries": "1"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/0c8c790eca17d219f703c16936ea9913b0ee71f2e338c1ac6254b67311cb688c.jpg",
     "library_sha256": "d9932e96c276138b6d536dbc6cd9e6be202c67e5658af7562e31177ce994497f",
     "library_source_sha256": "d809fe63fb46046334f2aba0a466adb8fa1afafcc29d18cad214220bc370e888"
@@ -5997,10 +5997,10 @@
       "below_500": "1",
       "shared_image_entries": "1"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/035af32953f23a300bc6018c85cc513c6d5c4ff7aed7db924f577839a44bd1c9.jpg",
     "library_sha256": "1db894b7e890421ef88995ae8e63a3432383b02f1f49aac0511a52caf32bdb80",
     "library_source_sha256": "c6f9f3f52de4996719ff67b3f3fecc062ad6c80fc5dc4a712c26c6181f57ff11"
@@ -6816,10 +6816,10 @@
       "below_500": "1",
       "shared_image_entries": "1"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/a51f53d47696475d0dc786fba97b74b545eab465e2c26ceb0da94da41c6b3340.jpg",
     "library_sha256": "37574017794310296c0a21c507029bd3882e1145ab6a73cc87757e2bff8e516e",
     "library_source_sha256": "02d5398fc86c2e88925c34e8cc86049f83ff4c5e3e7e1a8b96d1686a4c009060"
@@ -9156,10 +9156,10 @@
       "below_500": "1",
       "shared_image_entries": "1"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/a5ea58b983aae25412ac81c5f0ee2264c2bcae814043ebc96d3a9199bc9bf0e1.jpg",
     "library_sha256": "e69268d8ae01b547b79553b46721236127757cbad6bc02a95f30acba57dcd63b",
     "library_source_sha256": "c187375655c492a6481e04038ba39c4911a48be2fe7f449b3ad64da4d2305da3"
@@ -9975,10 +9975,10 @@
       "below_500": "1",
       "shared_image_entries": "5"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/96be924536806827eb7395d523f894e8be9d94a4b5a4aea058416c02d06500d8.jpg",
     "library_sha256": "97e1bfc2210ea88fc009060aa30043c77b262793bf27a0dc614cefc477e6492f",
     "library_source_sha256": "68ca37e099eca3900162750425e0904f81a4e3d725b66ffbe7a91721f939f044"
@@ -10677,10 +10677,10 @@
       "below_500": "1",
       "shared_image_entries": "2"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/54d3fbdfa6509a877f14e04cf725dd7bdf58f4ca4f1ae95218726a629d4168ec.jpg",
     "library_sha256": "2f28c176e66c451cd051cb52913fa7d78a3a04048140e97af6f8365e11a7c54e",
     "library_source_sha256": "c42dc8d7212aa5c6ee93f647aa6b308f1f0b65e3538e22be5ac65e1d5f42af01"
@@ -13017,10 +13017,10 @@
       "below_500": "1",
       "shared_image_entries": "1"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/6da5399153304835f342affe40f5713367aafa754c32a8b98c8f4b58cef196ff.jpg",
     "library_sha256": "f6edce92c35c0ed3362bc2a739664be639295f6b2604305cb79088b65e0d94b5",
     "library_source_sha256": "703eefcc8c216eec1ec143f485b549b52d9ff8c3cf3c1c232cfc9b098f6a12de"
@@ -13407,10 +13407,10 @@
       "below_500": "1",
       "shared_image_entries": "1"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/c5a03eb1b4da24ac6f643fd00570a0b9fa8f3adf7304d6a38305bf218a7ee049.jpg",
     "library_sha256": "c961483638b4eb63489ef6b129be05651fc23fd00207a158a9dc4a360ebe8185",
     "library_source_sha256": "7188666c9e3530b9e6dcc8aa1f3a8767c808b5194dee52b2b53ea60113c36bf0"
@@ -14070,10 +14070,10 @@
       "below_500": "1",
       "shared_image_entries": "6"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/d5efd5f1940c0a7dec7a028e6f17cbb4cac703350cd3506b0fc818d8468cff20.jpg",
     "library_sha256": "79e6e6ca472908f382b9887d3efe07b3f2af6c944c753dbf12ea1ec55be95739",
     "library_source_sha256": "dfb9bed7b554687862067161274640252a91c8c14621793dd80e9252bde0e681"
@@ -14343,10 +14343,10 @@
       "below_500": "1",
       "shared_image_entries": "6"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/d5efd5f1940c0a7dec7a028e6f17cbb4cac703350cd3506b0fc818d8468cff20.jpg",
     "library_sha256": "79e6e6ca472908f382b9887d3efe07b3f2af6c944c753dbf12ea1ec55be95739",
     "library_source_sha256": "dfb9bed7b554687862067161274640252a91c8c14621793dd80e9252bde0e681"
@@ -14421,10 +14421,10 @@
       "below_500": "1",
       "shared_image_entries": "6"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/d5efd5f1940c0a7dec7a028e6f17cbb4cac703350cd3506b0fc818d8468cff20.jpg",
     "library_sha256": "79e6e6ca472908f382b9887d3efe07b3f2af6c944c753dbf12ea1ec55be95739",
     "library_source_sha256": "dfb9bed7b554687862067161274640252a91c8c14621793dd80e9252bde0e681"
@@ -14538,10 +14538,10 @@
       "below_500": "1",
       "shared_image_entries": "1"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/3b7786044187610c6fa4f4d0b3e7506f31d8f726657a42c7263867e9c6ce4570.jpg",
     "library_sha256": "90d64bc55306260186766f9fa7aa39bcdef308baba631cbcbec4ea5fdff809b2",
     "library_source_sha256": "ed7092dfb29fe0618f69a550ba12954f1b408bc8450d9a3fa0d0438aa04a2389"
@@ -15240,10 +15240,10 @@
       "below_500": "1",
       "shared_image_entries": "1"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/2991788b1cff30fc42292c2932d456bacf41d1444fc0e248cd4a45230d611e99.jpg",
     "library_sha256": "06ab43286a9d3a3ed182d8aa60fe866b2686e7237f01e6db63e8df6c9a367108",
     "library_source_sha256": "c3193e00e33b816272566052b8e098f6a396196c033788da24c0c6a7d714054a"
@@ -15552,10 +15552,10 @@
       "below_500": "1",
       "shared_image_entries": "1"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/543f6cf01f0d9970f8aace91c794d83e878055e0d49952af5cc9862ea4baf1c8.jpg",
     "library_sha256": "80db5b616ea170fb8973fcf4a321ccf7c44a60e1ba1b9d15e53a14af52a177c2",
     "library_source_sha256": "e3e788e8aa89974921f668a39b2e533374d3e13e380e22e1d250f3753fbb11cf"
@@ -15708,10 +15708,10 @@
       "below_500": "1",
       "shared_image_entries": "2"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/499769fcd8cfbe19cae610eeb23540d7fefc6d3d2456d67ba54242bb8134e8c3.jpg",
     "library_sha256": "7a845f63f3fe7c5139f2c2ac5c9398db0ddc05b69b620c4da367251068b93fa2",
     "library_source_sha256": "75e44f2f2e1628a2d8462b4a8b3897f17a6e5c06f93b222e1d64b414299357c1"
@@ -16059,10 +16059,10 @@
       "below_500": "1",
       "shared_image_entries": "2"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/499769fcd8cfbe19cae610eeb23540d7fefc6d3d2456d67ba54242bb8134e8c3.jpg",
     "library_sha256": "7a845f63f3fe7c5139f2c2ac5c9398db0ddc05b69b620c4da367251068b93fa2",
     "library_source_sha256": "75e44f2f2e1628a2d8462b4a8b3897f17a6e5c06f93b222e1d64b414299357c1"
@@ -16176,10 +16176,10 @@
       "below_500": "1",
       "shared_image_entries": "1"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/4e46ca482a29eba595ac60e742a63af671ee6e397d3d306bf32d0d33e1fa735d.jpg",
     "library_sha256": "103ff3a6a8eb88aaa51d19022590aa98948dab7755ed85ca61ac770a0dec6588",
     "library_source_sha256": "2e87557ed00cd90c553df5f077d9aa1bde7cf7c9e640754ac13eb33825b2c7df"
@@ -16527,10 +16527,10 @@
       "below_500": "1",
       "shared_image_entries": "1"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/0cb030cd4d50831422a9587ceb022f05fada0525604a3cb0f9bfe65ac8f733d0.jpg",
     "library_sha256": "962eb69c272b9b2f8d89d477bbd700448c9b0d0278855fb33634a26a7d691a73",
     "library_source_sha256": "3a93d3fd8d8ef6773f2ab1086e3917bee5cf88cd12304be5ea488d4db94107c2"
@@ -16839,10 +16839,10 @@
       "below_500": "1",
       "shared_image_entries": "5"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/01b20a7bbae2f8da5e928701386e2300e632019ca3eae273815feb7dae63435a.jpg",
     "library_sha256": "954c92c8a39414150dd79243ac6bac7a63b8f63975f4021860ce388ecd74b5b3",
     "library_source_sha256": "3888e8387f191d93f67b00837fdeb2dcac1c4761b41debc270c8a474f90af6af"
@@ -16878,10 +16878,10 @@
       "below_500": "1",
       "shared_image_entries": "5"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/01b20a7bbae2f8da5e928701386e2300e632019ca3eae273815feb7dae63435a.jpg",
     "library_sha256": "954c92c8a39414150dd79243ac6bac7a63b8f63975f4021860ce388ecd74b5b3",
     "library_source_sha256": "3888e8387f191d93f67b00837fdeb2dcac1c4761b41debc270c8a474f90af6af"
@@ -17814,10 +17814,10 @@
       "below_500": "1",
       "shared_image_entries": "1"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/657469f79d5f0688b500b315bca6118bb009e372101fca8f775ffd0b8571c70a.jpg",
     "library_sha256": "4d62bfe64d31b99121f3100b70a01266349cd275b0079b9a26f4143de6e13774",
     "library_source_sha256": "3a7b3a3710d10078c081bc3862db789a6611b3fcd17a0fe094cf0b1689ee4ca1"
@@ -18126,10 +18126,10 @@
       "below_500": "1",
       "shared_image_entries": "3"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/a81f6be786ec1281d6f17c33012ec9f5c9dc2eae5fd65e9411cd96cbae57a2fd.jpg",
     "library_sha256": "5e420ca7886d584f20c4de6a5117a199a1ddbf3c01f5e780966ec453cd0edcfc",
     "library_source_sha256": "25d7e9d3e54811683c29725d38516bde6b94f5e69b329985669c15484531c954"
@@ -18165,10 +18165,10 @@
       "below_500": "1",
       "shared_image_entries": "3"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/a81f6be786ec1281d6f17c33012ec9f5c9dc2eae5fd65e9411cd96cbae57a2fd.jpg",
     "library_sha256": "5e420ca7886d584f20c4de6a5117a199a1ddbf3c01f5e780966ec453cd0edcfc",
     "library_source_sha256": "25d7e9d3e54811683c29725d38516bde6b94f5e69b329985669c15484531c954"
@@ -18399,10 +18399,10 @@
       "below_500": "1",
       "shared_image_entries": "3"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/a81f6be786ec1281d6f17c33012ec9f5c9dc2eae5fd65e9411cd96cbae57a2fd.jpg",
     "library_sha256": "5e420ca7886d584f20c4de6a5117a199a1ddbf3c01f5e780966ec453cd0edcfc",
     "library_source_sha256": "25d7e9d3e54811683c29725d38516bde6b94f5e69b329985669c15484531c954"
@@ -18516,10 +18516,10 @@
       "below_500": "1",
       "shared_image_entries": "1"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/d10894f72e9a4aa5507f45053818da3d790df4cdd9309b17c0adea878ee28595.jpg",
     "library_sha256": "48d18b1da720380964093debfcf65e1a26d4e9d3b525b9e86224610384c26044",
     "library_source_sha256": "794353d805e4786ad7677fa21d9efa796efc213f2e559a56f4e776e412eba3f9"
@@ -20544,10 +20544,10 @@
       "below_500": "1",
       "shared_image_entries": "3"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/f54a94c0779b589e932523a40862128328b0a986b7d64fcbcfece174b1b63bdd.jpg",
     "library_sha256": "f383d792df2896e7c19173823e75bceb5a0d966d0f30896c794c4bd2365e80a4",
     "library_source_sha256": "8acda661f57447642bf329dd151c6cc25a9d02e1f9a2ac67e4f49e382b14b908"
@@ -22221,10 +22221,10 @@
       "below_500": "1",
       "shared_image_entries": "3"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/1ecfe49755e4512f31ea85a602ea62ef6875785d76c284aea921da5fd35d3fea.jpg",
     "library_sha256": "2645c6c31f59658806c4f8aae558fd7b489ee512f68fc294ee28cd20b9f726d9",
     "library_source_sha256": "fca9d07d7d3594fc99883b77198680792fc1c427036d471b3a5f2369a9560a33"
@@ -22260,10 +22260,10 @@
       "below_500": "1",
       "shared_image_entries": "3"
     },
-    "image_status": "LEGACY_PREAPPROVED_IMAGE",
-    "image_approval_status": "APPROVED_LEGACY",
-    "approval_basis": "OWNER_LEGACY_PREAPPROVED_POLICY",
-    "library_approval_status": "APPROVED_LEGACY",
+    "image_status": "REJECTED",
+    "image_approval_status": "NOT_APPROVED",
+    "approval_basis": "",
+    "library_approval_status": "NOT_APPROVED",
     "library_image": "sources/image-library/1ecfe49755e4512f31ea85a602ea62ef6875785d76c284aea921da5fd35d3fea.jpg",
     "library_sha256": "2645c6c31f59658806c4f8aae558fd7b489ee512f68fc294ee28cd20b9f726d9",
     "library_source_sha256": "fca9d07d7d3594fc99883b77198680792fc1c427036d471b3a5f2369a9560a33"
