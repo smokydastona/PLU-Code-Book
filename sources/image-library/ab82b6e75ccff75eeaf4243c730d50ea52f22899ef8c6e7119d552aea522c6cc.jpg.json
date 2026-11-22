@@ -25,7 +25,9 @@
   "working_source_ids": [
     "ab82b6e75ccff75eeaf4243c730d50ea52f22899ef8c6e7119d552aea522c6cc"
   ],
-  "production_status": "IMAGE_CHECKS_PASSED",
+  "production_status": "NO_RELEASE_BLOCKERS_NOT_AUTHORIZED",
+  "production_authorization": "NOT_AUTHORIZED",
   "production_blockers": [],
+  "review_findings": [],
   "transformation": "Aspect-ratio-preserving resize and centered solid white padding to 500x500 JPEG (quality 90, optimized, progressive); standard pink organic badge added"
 }

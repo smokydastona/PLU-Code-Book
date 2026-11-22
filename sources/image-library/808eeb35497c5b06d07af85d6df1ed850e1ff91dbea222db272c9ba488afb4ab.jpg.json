@@ -26,8 +26,10 @@
     "2a9fad986444638acfdeeab2a7acecd34020d954d7004eb50f0dec3c1b653afd",
     "42a7663d6fca9c182577cbb8165c2c1fabeff5c23bd51a805abdf6bf08a7a126"
   ],
-  "production_status": "BLOCKED",
-  "production_blockers": [
+  "production_status": "REVIEW_FINDINGS_PRESENT",
+  "production_authorization": "NOT_AUTHORIZED",
+  "production_blockers": [],
+  "review_findings": [
     "BELOW_500_PX",
     "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED",
     "IMAGE_RIGHTS_NOT_VERIFIED",
@@ -39,7 +41,7 @@
     "MISSING_PROVENANCE_ATTRIBUTION",
     "MISSING_PROVENANCE_CHANGES",
     "MISSING_PROVENANCE_RIGHTS_EVIDENCE",
-    "PROHIBITED_IMAGE_REUSE"
+    "DUPLICATE_IMAGE_REUSE_REVIEW"
   ],
   "transformation": "Aspect-ratio-preserving resize and centered solid white padding to 500x500 JPEG (quality 90, optimized, progressive); standard pink organic badge added"
 }

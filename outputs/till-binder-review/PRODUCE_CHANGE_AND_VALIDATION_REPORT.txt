@@ -15,7 +15,7 @@ Cashier entries displayed: 548; exact duplicates suppressed: 0
 Known non-produce records excluded from Produce: 46
 Original Produce entries compared: 579
 Embedded supplied references: 548; missing/uncertain images left blank: 0
-AI illustrations included as visual references: 132
+AI illustrations included as visual references: 131
 New owner-supplied AI crops: 1
 AI illustrations omitted (if rejected or invalid association): 0
 Classification review: 0; organic placement review: 0; main-item sorting review: 0
@@ -40,8 +40,8 @@ Original-sheet comparison outcomes (no uncertain mapping silently resolved):
   NOT_IN_CURRENT_SOURCE_UNRESOLVED: 1
 
 Image outcomes:
-  LEGACY_PREAPPROVED_IMAGE: 494
-  APPROVED_WORKINGLIST_IMAGE: 28
+  LEGACY_PREAPPROVED_IMAGE: 477
+  APPROVED_WORKINGLIST_IMAGE: 45
   SUPPLIED_IMAGE_REVIEW: 25
   SUPPLIED_AI_CROP_REVIEW: 1
 

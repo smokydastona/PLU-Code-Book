@@ -1,32 +1,32 @@
 ﻿page,section,width_pt,height_pt,orientation,words,ink_percent,images,flags
-1,Time To Stretch,612,792,portrait,0,18.79,458,none
-2,Conversions,612,792,portrait,0,46.23,458,none
-3,Weighed Items Over $100,612,792,portrait,0,42.02,458,none
-4,Weighed Items Over $100,612,792,portrait,0,34.14,458,none
-5,Misc Codes,612,792,portrait,159,30.47,458,none
-6,Soil,612,792,portrait,15,33.08,458,none
-7,Bakery,612,792,portrait,129,25.68,458,none
-8,Deli,612,792,portrait,233,38.17,458,none
-9,Produce,792,612,landscape,239,51.25,458,none
-10,Produce,792,612,landscape,183,56.5,458,none
-11,Produce,792,612,landscape,184,56.45,458,none
-12,Produce,792,612,landscape,186,54.78,458,none
-13,Produce,792,612,landscape,189,55.19,458,none
-14,Produce,792,612,landscape,208,49.51,458,none
-15,Produce,792,612,landscape,216,51.03,458,none
-16,Produce,792,612,landscape,222,51.66,458,none
-17,Produce,792,612,landscape,230,51.03,458,none
-18,Produce,792,612,landscape,181,57.88,458,none
-19,Produce,792,612,landscape,228,51.27,458,none
-20,Produce,792,612,landscape,195,53.04,458,none
-21,Produce,792,612,landscape,80,14.25,458,none
-22,Bulk,792,612,landscape,271,35.46,458,none
-23,Bulk,792,612,landscape,306,39.53,458,none
-24,Bulk,792,612,landscape,337,44.26,458,none
-25,Bulk,792,612,landscape,315,44.98,458,none
-26,Bulk,792,612,landscape,182,27.57,458,none
-27,Bulk,792,612,landscape,292,39.0,458,none
-28,Delivery Charges,612,792,portrait,0,7.33,458,none
-29,Delivery Charges,612,792,portrait,0,7.98,458,none
-30,Store Directory,792,612,landscape,0,24.81,458,none
-31,Store Directory,792,612,landscape,0,21.38,458,none
+1,Time To Stretch,612,792,portrait,0,18.79,460,none
+2,Conversions,612,792,portrait,0,46.23,460,none
+3,Weighed Items Over $100,612,792,portrait,0,42.02,460,none
+4,Weighed Items Over $100,612,792,portrait,0,34.14,460,none
+5,Misc Codes,612,792,portrait,159,30.47,460,none
+6,Soil,612,792,portrait,15,33.08,460,none
+7,Bakery,612,792,portrait,129,25.68,460,none
+8,Deli,612,792,portrait,233,38.17,460,none
+9,Produce,792,612,landscape,239,51.25,460,none
+10,Produce,792,612,landscape,183,56.54,460,none
+11,Produce,792,612,landscape,184,56.42,460,none
+12,Produce,792,612,landscape,186,54.78,460,none
+13,Produce,792,612,landscape,189,55.17,460,none
+14,Produce,792,612,landscape,208,49.48,460,none
+15,Produce,792,612,landscape,216,51.03,460,none
+16,Produce,792,612,landscape,222,51.61,460,none
+17,Produce,792,612,landscape,230,50.93,460,none
+18,Produce,792,612,landscape,181,57.89,460,none
+19,Produce,792,612,landscape,228,51.27,460,none
+20,Produce,792,612,landscape,195,53.04,460,none
+21,Produce,792,612,landscape,80,14.25,460,none
+22,Bulk,792,612,landscape,271,35.46,460,none
+23,Bulk,792,612,landscape,306,39.53,460,none
+24,Bulk,792,612,landscape,337,44.26,460,none
+25,Bulk,792,612,landscape,315,44.98,460,none
+26,Bulk,792,612,landscape,182,27.57,460,none
+27,Bulk,792,612,landscape,292,39.0,460,none
+28,Delivery Charges,612,792,portrait,0,7.33,460,none
+29,Delivery Charges,612,792,portrait,0,7.98,460,none
+30,Store Directory,792,612,landscape,0,24.81,460,none
+31,Store Directory,792,612,landscape,0,21.38,460,none

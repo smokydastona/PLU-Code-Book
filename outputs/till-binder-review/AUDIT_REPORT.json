@@ -133,23 +133,23 @@
     "embedded": 548,
     "missing_or_uncertain": 0,
     "status_counts": {
-      "LEGACY_PREAPPROVED_IMAGE": 494,
-      "APPROVED_WORKINGLIST_IMAGE": 28,
+      "LEGACY_PREAPPROVED_IMAGE": 477,
+      "APPROVED_WORKINGLIST_IMAGE": 45,
       "SUPPLIED_IMAGE_REVIEW": 25,
       "SUPPLIED_AI_CROP_REVIEW": 1
     },
     "sources": {
-      "Code Booklet": 334,
-      "AI Generated": 132,
-      "": 27,
+      "Code Booklet": 331,
+      "AI Generated": 131,
+      "": 44,
       "Owner Supplied": 25,
       "Produce Sheets": 2,
-      "Produce Guide": 27,
+      "Produce Guide": 14,
       "https://www.fsproduce.com/wp-content/uploads/2015/05/BUCK-BRAND-SPECIALTY-CITRUS-INFOGRAPHIC-1.pdf": 1
     },
     "organic_badge_embedded": 191,
-    "images_shared_by_multiple_plus": 70,
-    "embedded_below_200px": 165,
+    "images_shared_by_multiple_plus": 68,
+    "embedded_below_200px": 164,
     "smallest_edge": 114
   },
   "oldtimers_produce": {
@@ -164,14 +164,14 @@
     "groups_kept_on_one_page": true,
     "source": "sources/binders/OldTimers_Produce_codes.pdf",
     "source_sha256": "6846210817a7f7bffe84bb5f30db75ef1276b203fda53c0256cb77cf037e0672",
-    "sha256": "ab4794358ddc55412a4cde0a9132d119c5db4cd1423550ecb336b7473e845794"
+    "sha256": "5e1e86c7b66277e76789553de645833b6132834eb83fdc0054dd70ccdba4d4af"
   },
   "open_blockers": {
-    "EXPLICIT_IMAGE_REJECTION": 24
+    "EXPLICIT_IMAGE_REJECTION": 15
   },
   "owner_review_findings": {
     "BELOW_500_PX": 26,
-    "DUPLICATE_IMAGE_REUSE_REVIEW": 219,
+    "DUPLICATE_IMAGE_REUSE_REVIEW": 215,
     "IMAGE_RIGHTS_NOT_VERIFIED": 26,
     "MISSING_PROVENANCE_ATTRIBUTION": 26,
     "MISSING_PROVENANCE_CHANGES": 26,

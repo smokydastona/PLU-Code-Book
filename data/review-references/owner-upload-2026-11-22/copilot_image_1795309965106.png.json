@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "source": "owner_chat_upload",
+  "original_path": "data/review-references/owner-upload-2026-11-22/copilot_image_1795309965106.png",
+  "sha256": "fd9a83d59b1af233e6580c75adce7e20a5293c3b8b0535f12c181256459a51d0",
+  "rights_status": "OWNER_CONFIRMED_PERMISSION",
+  "rights_evidence": "Owner uploaded the 5x4 produce grid and selected it for the shown exact PLUs.",
+  "photographic_origin": "OWNER_CONFIRMED_PHOTO",
+  "visual_approval_status": "APPROVED",
+  "authorization": "Review reference and exact-image production approval for shown identities only"
+}

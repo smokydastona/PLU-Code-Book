@@ -26,8 +26,10 @@
     "66ecdc5b2662d1525653415a48f4672e19fed1acb5425725d52eb4ce5debfdcf",
     "5a296dbb2669439955e5ce63a05b475a64ae4526608dbd7573d6a7b64211ecde"
   ],
-  "production_status": "BLOCKED",
-  "production_blockers": [
+  "production_status": "REVIEW_FINDINGS_PRESENT",
+  "production_authorization": "NOT_AUTHORIZED",
+  "production_blockers": [],
+  "review_findings": [
     "BELOW_500_PX",
     "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED",
     "IMAGE_RIGHTS_NOT_VERIFIED",

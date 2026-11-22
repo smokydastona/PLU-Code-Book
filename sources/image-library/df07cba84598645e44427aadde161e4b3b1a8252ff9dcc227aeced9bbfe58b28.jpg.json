@@ -22,8 +22,10 @@
     "c007883c370d9091a564d02403396505b38052114bb7c5944cf7a61da7748587",
     "f8e5cc78008a26c3709dc6d1f32f2a6a799104652f8131c0974bcf85e20625b6"
   ],
-  "production_status": "BLOCKED",
-  "production_blockers": [
+  "production_status": "REVIEW_FINDINGS_PRESENT",
+  "production_authorization": "NOT_AUTHORIZED",
+  "production_blockers": [],
+  "review_findings": [
     "BELOW_500_PX",
     "PHOTOGRAPHIC_ORIGIN_NOT_VERIFIED",
     "IMAGE_RIGHTS_NOT_VERIFIED",
@@ -35,7 +37,7 @@
     "MISSING_PROVENANCE_ATTRIBUTION",
     "MISSING_PROVENANCE_CHANGES",
     "MISSING_PROVENANCE_RIGHTS_EVIDENCE",
-    "PROHIBITED_IMAGE_REUSE"
+    "DUPLICATE_IMAGE_REUSE_REVIEW"
   ],
   "transformation": "Aspect-ratio-preserving resize and centered solid white padding to 500x500 JPEG (quality 90, optimized, progressive)"
 }

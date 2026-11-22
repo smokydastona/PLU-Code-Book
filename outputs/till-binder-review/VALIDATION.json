@@ -13,7 +13,7 @@
     "groups_kept_on_one_page": true,
     "source": "sources/binders/OldTimers_Produce_codes.pdf",
     "source_sha256": "6846210817a7f7bffe84bb5f30db75ef1276b203fda53c0256cb77cf037e0672",
-    "sha256": "ab4794358ddc55412a4cde0a9132d119c5db4cd1423550ecb336b7473e845794"
+    "sha256": "5e1e86c7b66277e76789553de645833b6132834eb83fdc0054dd70ccdba4d4af"
   },
   "original_binder": "sources/binders/Complete_Till_Binder_-_Nov_2025.xlsx",
   "original_binder_sha256": "6b0aeaa153233c5f4917811a3f7a5b2212f7a946a0abede372a31db556ab0f63",
@@ -169,14 +169,14 @@
     "CODE_NOT_IN_ORIGINAL": 269
   },
   "image_status_counts": {
-    "LEGACY_PREAPPROVED_IMAGE": 494,
-    "APPROVED_WORKINGLIST_IMAGE": 28,
+    "LEGACY_PREAPPROVED_IMAGE": 477,
+    "APPROVED_WORKINGLIST_IMAGE": 45,
     "SUPPLIED_IMAGE_REVIEW": 25,
     "SUPPLIED_AI_CROP_REVIEW": 1
   },
   "embedded_references": 548,
   "missing_or_uncertain_images": 0,
-  "ai_illustrations_embedded": 132,
+  "ai_illustrations_embedded": 131,
   "ai_illustrations_omitted": 0,
   "new_ai_crops_embedded": 1,
   "classification_review_required": 0,
@@ -192,7 +192,7 @@
     "included_records": 594,
     "excluded_records": 324,
     "status": "BLOCKED",
-    "rows_with_release_blockers": 24,
+    "rows_with_release_blockers": 15,
     "missing_image_requests": 0,
     "inactive_assignments": 100,
     "organic_placements_needing_review": 0,
@@ -202,11 +202,11 @@
     "identity_changed_entries": 50,
     "reconciled_identity_changes": 50,
     "release_blocker_counts": {
-      "EXPLICIT_IMAGE_REJECTION": 24
+      "EXPLICIT_IMAGE_REJECTION": 15
     },
     "owner_review_finding_counts": {
       "BELOW_500_PX": 26,
-      "DUPLICATE_IMAGE_REUSE_REVIEW": 219,
+      "DUPLICATE_IMAGE_REUSE_REVIEW": 215,
       "IMAGE_RIGHTS_NOT_VERIFIED": 26,
       "MISSING_PROVENANCE_ATTRIBUTION": 26,
       "MISSING_PROVENANCE_CHANGES": 26,
@@ -221,11 +221,11 @@
     "counters": {
       "unresolved_source_record_reconciliation": 0,
       "unresolved_product_identity": 0,
-      "unresolved_image_selection": 24,
+      "unresolved_image_selection": 15,
       "image_quality_warnings": 26,
       "rights_permission_findings": 52,
       "provenance_documentation_gaps": 208,
-      "duplicate_image_reuse_reviews": 59,
+      "duplicate_image_reuse_reviews": 57,
       "classification_section_reviews": 0
     },
     "counter_definitions": {
@@ -240,11 +240,11 @@
     },
     "legacy_232_count_explanation": {
       "reported_value": 232,
-      "recomputed_pre_m1_rows": 232,
+      "recomputed_pre_m1_rows": 228,
       "included_catalogue_rows": 594,
       "meaning": "Distinct included catalogue rows with at least one pre-M1 image or release finding; it was not a count of unresolved source records.",
       "inputs": {
-        "duplicate_image_reuse_rows": 219,
+        "duplicate_image_reuse_rows": 215,
         "non_duplicate_finding_rows": 26,
         "rows_in_both_groups": 13
       },
@@ -697,29 +697,6 @@
             ],
             "plu": "3047",
             "product": "Dates Medjool"
-          }
-        ],
-        "rationale": []
-      },
-      {
-        "fingerprint": "06742ba17d30aa31a950790474652b8bf00b431339c4754c3173189f28e470c6",
-        "status": "OWNER_REVIEW_REQUIRED",
-        "members": [
-          {
-            "source_id": "607500166e89679b37280aaae819d45635d04014fcda29fe817362cc47772d98",
-            "source_ids": [
-              "607500166e89679b37280aaae819d45635d04014fcda29fe817362cc47772d98"
-            ],
-            "plu": "4543",
-            "product": "Endive Belgian (White)"
-          },
-          {
-            "source_id": "274c3ef3e85980e9a5b3fd00a7511ff5d71371390e24410ba8f3192d50f28c46",
-            "source_ids": [
-              "274c3ef3e85980e9a5b3fd00a7511ff5d71371390e24410ba8f3192d50f28c46"
-            ],
-            "plu": "4604",
-            "product": "Endive"
           }
         ],
         "rationale": []
@@ -2285,29 +2262,6 @@
         "rationale": []
       },
       {
-        "fingerprint": "e8e7a696b149f668c90097dff57a0ac80d00ba921818ffd840a51a937b5b68dd",
-        "status": "OWNER_REVIEW_REQUIRED",
-        "members": [
-          {
-            "source_id": "1a4e6b60f54d1e5ef7f4fe1318067ab50134a3e66c190d55de8d2dcf77ad21cc",
-            "source_ids": [
-              "1a4e6b60f54d1e5ef7f4fe1318067ab50134a3e66c190d55de8d2dcf77ad21cc"
-            ],
-            "plu": "4705",
-            "product": "Peppers Poblano"
-          },
-          {
-            "source_id": "b2d62bf76b90687da2c1965fe78ed4c932de23ed4dc1993c49c7828e29a34ee8",
-            "source_ids": [
-              "b2d62bf76b90687da2c1965fe78ed4c932de23ed4dc1993c49c7828e29a34ee8"
-            ],
-            "plu": "4706",
-            "product": "Pepper Poblano"
-          }
-        ],
-        "rationale": []
-      },
-      {
         "fingerprint": "97886b14645ccd75897ef040e463372b3f4e347706615f387aff63423b6728c1",
         "status": "OWNER_REVIEW_REQUIRED",
         "members": [
@@ -3732,31 +3686,6 @@
         ]
       },
       {
-        "fingerprint": "e7023b6689a3142794b7f30097cd8b09ab72e44709ab070f40c96fd56c1db8fb",
-        "status": "INTENTIONAL_REUSE_RECORDED",
-        "members": [
-          {
-            "source_id": "8192c7942abb0111220f2c6c40acb92025fbc16b0b46452bddaa71315cae51f2",
-            "source_ids": [
-              "8192c7942abb0111220f2c6c40acb92025fbc16b0b46452bddaa71315cae51f2"
-            ],
-            "plu": "94629",
-            "product": "Organic Leeks"
-          },
-          {
-            "source_id": "6d342c8b2e6243776cfaccdc337622951d531dd8dab8f35acef3865be6311e53",
-            "source_ids": [
-              "6d342c8b2e6243776cfaccdc337622951d531dd8dab8f35acef3865be6311e53"
-            ],
-            "plu": "3339",
-            "product": "Leeks"
-          }
-        ],
-        "rationale": [
-          ""
-        ]
-      },
-      {
         "fingerprint": "0925664b12b19c10a62ac050e3296fa8eee30e128b2a2c4e8beefc0dc4fde2fd",
         "status": "INTENTIONAL_REUSE_RECORDED",
         "members": [
@@ -3959,31 +3888,6 @@
             ],
             "plu": "4764",
             "product": "Squash Sweet Dumpling"
-          }
-        ],
-        "rationale": [
-          ""
-        ]
-      },
-      {
-        "fingerprint": "0142fd5726b609f8843ec291208cd82f33816743c726f342602f2e0377f60dec",
-        "status": "INTENTIONAL_REUSE_RECORDED",
-        "members": [
-          {
-            "source_id": "811c28b9451b55f047a421cc17fa461e129f46318377b242b000110d148d5fac",
-            "source_ids": [
-              "811c28b9451b55f047a421cc17fa461e129f46318377b242b000110d148d5fac"
-            ],
-            "plu": "94773",
-            "product": "Organic Squash Patty Pan"
-          },
-          {
-            "source_id": "fa99f7d31d1f9e5f251c432e6d97420b0911f9acd759698678f2940191bf5c26",
-            "source_ids": [
-              "fa99f7d31d1f9e5f251c432e6d97420b0911f9acd759698678f2940191bf5c26"
-            ],
-            "plu": "4773",
-            "product": "Squash Patty Pan"
           }
         ],
         "rationale": [
@@ -4446,8 +4350,8 @@
       "internal_relationships_valid": true,
       "exact_text_codes_and_descriptions": true,
       "duplicate_highlights_verified": true,
-      "file_sha256": "407142ae82ef6861d89477d51b228e994ee44a81fb28fe0998cd312c25785d60",
-      "file_size_bytes": 27304986,
+      "file_sha256": "a5ff18b7545dfd0a272861e149170d993259ae911fdfdb0fd2dad301153540d5",
+      "file_size_bytes": 27422025,
       "bulk_sheets_combined": true,
       "bulk_records_verified": 399,
       "output_sheet_names": [

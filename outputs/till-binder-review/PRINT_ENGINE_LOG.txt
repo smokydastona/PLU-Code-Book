@@ -1,3 +1,3 @@
-convert /tmp/plu-intercom-final.M5rUP0/Complete Till Binder - Updated - Photos.xlsx as a Calc document -> /tmp/till-print-nn9mena7/Complete Till Binder - Updated - Photos.pdf using filter : calc_pdf_Export:{"UseLosslessCompression":{"type":"boolean","value":"true"},"ReduceImageResolution":{"type":"boolean","value":"false"}}
+convert /tmp/plu-binder-review-20261122/Complete Till Binder - Updated - Photos.xlsx as a Calc document -> /tmp/till-print-el6y2bhf/Complete Till Binder - Updated - Photos.pdf using filter : calc_pdf_Export:{"UseLosslessCompression":{"type":"boolean","value":"true"},"ReduceImageResolution":{"type":"boolean","value":"false"}}
 Warning: failed to launch javaldx - java may not function correctly
 libpng warning: iCCP: known incorrect sRGB profile

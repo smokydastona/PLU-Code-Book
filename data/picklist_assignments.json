@@ -707,20 +707,37 @@
       "source_id": "ae0c7acec24bae97f22fe1f1a4c9ab180d2ae1ed8cd65f7c6a00cca96d0f85f8"
     },
     {
+      "source_id": "607500166e89679b37280aaae819d45635d04014fcda29fe817362cc47772d98",
       "book": "Vegetable",
       "section": "Leafy Greens",
-      "image": "data/images/Vegetable/0303_4543.jpg",
+      "image": "data/images/approved/90bf8e04b8441d6f152aa1cc2d66c36c400ae5778dc7870efca429e28e9bdf65.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "4543",
       "reviewed_product": "Endive Belgian (White)",
+      "working_source_ids": [
+        "607500166e89679b37280aaae819d45635d04014fcda29fe817362cc47772d98"
+      ],
+      "working_decision_id": "",
+      "image_sha256": "90bf8e04b8441d6f152aa1cc2d66c36c400ae5778dc7870efca429e28e9bdf65",
+      "photographic_origin": "VERIFIED_PHOTO",
       "visual_approval_status": "APPROVED",
-      "photographic_origin": "NOT_VERIFIED",
-      "rights_verification_status": "NOT_VERIFIED",
-      "provenance": {},
-      "legacy_entry_idx": "303",
-      "migration_note": "Existing visual verdict preserved; original source/rights not verified.",
-      "image_sha256": "4d82a581cc53beeb04dc6b1ebe5bb200b264713341b2716b6a56e48dc6607145",
-      "source_id": "607500166e89679b37280aaae819d45635d04014fcda29fe817362cc47772d98"
+      "rights_verification_status": "VERIFIED",
+      "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+      "provenance": {
+        "creator": "Owner",
+        "license": "OWNER_CONFIRMED_PERMISSION",
+        "license_url": "",
+        "source_page_url": "",
+        "original_image_url": "",
+        "source_reference": "data/review-references/owner-upload-2026-11-22/copilot_image_1795309965106.png",
+        "rights_status": "OWNER_CONFIRMED_PERMISSION",
+        "photographic_origin_evidence": "Owner-uploaded photograph from the displayed produce grid.",
+        "visual_approval_evidence": "Owner selected this shown exact image and identity in the uploaded grid.",
+        "attribution": "Owner-provided produce image grid",
+        "changes": "Cropped from the owner grid and resized/padded to a 500x500 JPEG with a white background.",
+        "rights_evidence": "Owner uploaded the 5x4 produce grid and selected this exact image for the displayed PLU and product."
+      },
+      "reuse_from_source_id": ""
     },
     {
       "book": "Fruit",
@@ -1705,20 +1722,37 @@
       "source_id": "c9e3892215c342d85386af63bee5340fad860089c1c4c36290f6b58945f89204"
     },
     {
+      "source_id": "6a497a8e13f4a78dd7dc22b7dd1e8d2e10861e36ebb7b0e0cb87b4a31390be18",
       "book": "Vegetable",
       "section": "Brassicas",
-      "image": "data/images/Vegetable/0334_4555.jpg",
+      "image": "data/images/approved/3dc844340fd2d859854fe752589f2953b8a651171527e47c0c53d06dbf783028.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "4555",
       "reviewed_product": "Cabbage Savoy",
-      "visual_approval_status": "NOT_APPROVED",
-      "photographic_origin": "NOT_VERIFIED",
-      "rights_verification_status": "NOT_VERIFIED",
-      "provenance": {},
-      "legacy_entry_idx": "334",
-      "migration_note": "Existing visual verdict preserved; original source/rights not verified.",
-      "image_sha256": "703eefcc8c216eec1ec143f485b549b52d9ff8c3cf3c1c232cfc9b098f6a12de",
-      "source_id": "6a497a8e13f4a78dd7dc22b7dd1e8d2e10861e36ebb7b0e0cb87b4a31390be18"
+      "working_source_ids": [
+        "6a497a8e13f4a78dd7dc22b7dd1e8d2e10861e36ebb7b0e0cb87b4a31390be18"
+      ],
+      "working_decision_id": "",
+      "image_sha256": "3dc844340fd2d859854fe752589f2953b8a651171527e47c0c53d06dbf783028",
+      "photographic_origin": "VERIFIED_PHOTO",
+      "visual_approval_status": "APPROVED",
+      "rights_verification_status": "VERIFIED",
+      "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+      "provenance": {
+        "creator": "Owner",
+        "license": "OWNER_CONFIRMED_PERMISSION",
+        "license_url": "",
+        "source_page_url": "",
+        "original_image_url": "",
+        "source_reference": "data/review-references/owner-upload-2026-11-22/copilot_image_1795309965106.png",
+        "rights_status": "OWNER_CONFIRMED_PERMISSION",
+        "photographic_origin_evidence": "Owner-uploaded photograph from the displayed produce grid.",
+        "visual_approval_evidence": "Owner selected this shown exact image and identity in the uploaded grid.",
+        "attribution": "Owner-provided produce image grid",
+        "changes": "Cropped from the owner grid and resized/padded to a 500x500 JPEG with a white background.",
+        "rights_evidence": "Owner uploaded the 5x4 produce grid and selected this exact image for the displayed PLU and product."
+      },
+      "reuse_from_source_id": ""
     },
     {
       "book": "Fruit",
@@ -1993,20 +2027,37 @@
       "source_id": "cdb41e85cec0c597d8c4f95c73c7d4894e739e84885c37e25791349cd3148968"
     },
     {
+      "source_id": "90f79adf815ea1d7144bf3bef82a60b3e786c9f7d85b5c57c8b98bd8a0aed864",
       "book": "Vegetable",
       "section": "Specialty Vegetables",
-      "image": "data/images/Vegetable/0490_3089.jpg",
+      "image": "data/images/approved/986c443f6a3c7fce599bd6d2f861c0d81cb6c875412911440c66855f0710c127.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "3089",
       "reviewed_product": "Eggplant Chinese",
+      "working_source_ids": [
+        "90f79adf815ea1d7144bf3bef82a60b3e786c9f7d85b5c57c8b98bd8a0aed864"
+      ],
+      "working_decision_id": "",
+      "image_sha256": "986c443f6a3c7fce599bd6d2f861c0d81cb6c875412911440c66855f0710c127",
+      "photographic_origin": "VERIFIED_PHOTO",
       "visual_approval_status": "APPROVED",
-      "photographic_origin": "NOT_VERIFIED",
-      "rights_verification_status": "NOT_VERIFIED",
-      "provenance": {},
-      "legacy_entry_idx": "490",
-      "migration_note": "Existing visual verdict preserved; original source/rights not verified.",
-      "image_sha256": "b676f0b223ad3e6fd808a4136b1ac89ca641800e2f2c1ee0752f5547e1b4d1e3",
-      "source_id": "90f79adf815ea1d7144bf3bef82a60b3e786c9f7d85b5c57c8b98bd8a0aed864"
+      "rights_verification_status": "VERIFIED",
+      "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+      "provenance": {
+        "creator": "Owner",
+        "license": "OWNER_CONFIRMED_PERMISSION",
+        "license_url": "",
+        "source_page_url": "",
+        "original_image_url": "",
+        "source_reference": "data/review-references/owner-upload-2026-11-22/copilot_image_1795309965106.png",
+        "rights_status": "OWNER_CONFIRMED_PERMISSION",
+        "photographic_origin_evidence": "Owner-uploaded photograph from the displayed produce grid.",
+        "visual_approval_evidence": "Owner selected this shown exact image and identity in the uploaded grid.",
+        "attribution": "Owner-provided produce image grid",
+        "changes": "Cropped from the owner grid and resized/padded to a 500x500 JPEG with a white background.",
+        "rights_evidence": "Owner uploaded the 5x4 produce grid and selected this exact image for the displayed PLU and product."
+      },
+      "reuse_from_source_id": ""
     },
     {
       "book": "Vegetable",
@@ -2233,20 +2284,37 @@
       "source_id": "53547e4fe3b6b8ff97aa2e1d10f271aafc499f3109926b3d83d6adb152020d8a"
     },
     {
+      "source_id": "97026b6d09dd1866312a5d0b3e9e6a9b66d52c87b3d7adceacbb8d8883f171d8",
       "book": "Fruit",
       "section": "Tropical Fruit",
-      "image": "data/images/Fruit/0149_4299.jpg",
+      "image": "data/images/approved/06aab9b95f6512f6213a128802cb9fb8fff659061cd33fe6d5d23e7998da1d34.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "4299",
       "reviewed_product": "Guava",
+      "working_source_ids": [
+        "97026b6d09dd1866312a5d0b3e9e6a9b66d52c87b3d7adceacbb8d8883f171d8"
+      ],
+      "working_decision_id": "",
+      "image_sha256": "06aab9b95f6512f6213a128802cb9fb8fff659061cd33fe6d5d23e7998da1d34",
+      "photographic_origin": "VERIFIED_PHOTO",
       "visual_approval_status": "APPROVED",
-      "photographic_origin": "NOT_VERIFIED",
-      "rights_verification_status": "NOT_VERIFIED",
-      "provenance": {},
-      "legacy_entry_idx": "149",
-      "migration_note": "Existing visual verdict preserved; original source/rights not verified.",
-      "image_sha256": "ef7481c676d7800e7dfc2f109633361d005e02253f488547beb95aa7826c70cc",
-      "source_id": "97026b6d09dd1866312a5d0b3e9e6a9b66d52c87b3d7adceacbb8d8883f171d8"
+      "rights_verification_status": "VERIFIED",
+      "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+      "provenance": {
+        "creator": "Owner",
+        "license": "OWNER_CONFIRMED_PERMISSION",
+        "license_url": "",
+        "source_page_url": "",
+        "original_image_url": "",
+        "source_reference": "data/review-references/owner-upload-2026-11-22/copilot_image_1795309965106.png",
+        "rights_status": "OWNER_CONFIRMED_PERMISSION",
+        "photographic_origin_evidence": "Owner-uploaded photograph from the displayed produce grid.",
+        "visual_approval_evidence": "Owner selected this shown exact image and identity in the uploaded grid.",
+        "attribution": "Owner-provided produce image grid",
+        "changes": "Cropped from the owner grid and resized/padded to a 500x500 JPEG with a white background.",
+        "rights_evidence": "Owner uploaded the 5x4 produce grid and selected this exact image for the displayed PLU and product."
+      },
+      "reuse_from_source_id": ""
     },
     {
       "book": "Vegetable",
@@ -3129,36 +3197,70 @@
       "source_id": "d72eb481cf5effab97d13d67fa2848163e584f160a006479175567e8bc66381d"
     },
     {
+      "source_id": "121988248a6f64518a66f69256b0558a0a6616db74cbf4d0b68152957ce589a2",
       "book": "Vegetable",
       "section": "Peppers",
-      "image": "data/images/Vegetable/0391_4677.jpg",
+      "image": "data/images/approved/380e3afba8b41d858851c02e4b98aeae20b439a0c3353a5413097e2d55614d3a.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "4677",
       "reviewed_product": "Pepper Anaheim",
-      "visual_approval_status": "NOT_APPROVED",
-      "photographic_origin": "NOT_VERIFIED",
-      "rights_verification_status": "NOT_VERIFIED",
-      "provenance": {},
-      "legacy_entry_idx": "391",
-      "migration_note": "Existing visual verdict preserved; original source/rights not verified.",
-      "image_sha256": "c3193e00e33b816272566052b8e098f6a396196c033788da24c0c6a7d714054a",
-      "source_id": "121988248a6f64518a66f69256b0558a0a6616db74cbf4d0b68152957ce589a2"
+      "working_source_ids": [
+        "121988248a6f64518a66f69256b0558a0a6616db74cbf4d0b68152957ce589a2"
+      ],
+      "working_decision_id": "",
+      "image_sha256": "380e3afba8b41d858851c02e4b98aeae20b439a0c3353a5413097e2d55614d3a",
+      "photographic_origin": "VERIFIED_PHOTO",
+      "visual_approval_status": "APPROVED",
+      "rights_verification_status": "VERIFIED",
+      "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+      "provenance": {
+        "creator": "Owner",
+        "license": "OWNER_CONFIRMED_PERMISSION",
+        "license_url": "",
+        "source_page_url": "",
+        "original_image_url": "",
+        "source_reference": "data/review-references/owner-upload-2026-11-22/copilot_image_1795309965106.png",
+        "rights_status": "OWNER_CONFIRMED_PERMISSION",
+        "photographic_origin_evidence": "Owner-uploaded photograph from the displayed produce grid.",
+        "visual_approval_evidence": "Owner selected this shown exact image and identity in the uploaded grid.",
+        "attribution": "Owner-provided produce image grid",
+        "changes": "Cropped from the owner grid and resized/padded to a 500x500 JPEG with a white background.",
+        "rights_evidence": "Owner uploaded the 5x4 produce grid and selected this exact image for the displayed PLU and product."
+      },
+      "reuse_from_source_id": ""
     },
     {
+      "source_id": "29b9cc3580900999b240d0a767181dc8796cea5c561101e8f0dc1f75a4a93419",
       "book": "Vegetable",
       "section": "Peppers",
-      "image": "data/images/Vegetable/0395_4686.jpg",
+      "image": "data/images/approved/32c4e20798f94f4cde61124fb687afd832b388322344d4d640c4d05f312e1c2d.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "4686",
       "reviewed_product": "Pepper Green Chili",
+      "working_source_ids": [
+        "29b9cc3580900999b240d0a767181dc8796cea5c561101e8f0dc1f75a4a93419"
+      ],
+      "working_decision_id": "",
+      "image_sha256": "32c4e20798f94f4cde61124fb687afd832b388322344d4d640c4d05f312e1c2d",
+      "photographic_origin": "VERIFIED_PHOTO",
       "visual_approval_status": "APPROVED",
-      "photographic_origin": "NOT_VERIFIED",
-      "rights_verification_status": "NOT_VERIFIED",
-      "provenance": {},
-      "legacy_entry_idx": "395",
-      "migration_note": "Existing visual verdict preserved; original source/rights not verified.",
-      "image_sha256": "00138cce9f42c8ff7d688b6a2a9772834a0a67465c9c596682e0aa0ba42c0084",
-      "source_id": "29b9cc3580900999b240d0a767181dc8796cea5c561101e8f0dc1f75a4a93419"
+      "rights_verification_status": "VERIFIED",
+      "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+      "provenance": {
+        "creator": "Owner",
+        "license": "OWNER_CONFIRMED_PERMISSION",
+        "license_url": "",
+        "source_page_url": "",
+        "original_image_url": "",
+        "source_reference": "data/review-references/owner-upload-2026-11-22/copilot_image_1795309965106.png",
+        "rights_status": "OWNER_CONFIRMED_PERMISSION",
+        "photographic_origin_evidence": "Owner-uploaded photograph from the displayed produce grid.",
+        "visual_approval_evidence": "Owner selected this shown exact image and identity in the uploaded grid.",
+        "attribution": "Owner-provided produce image grid",
+        "changes": "Cropped from the owner grid and resized/padded to a 500x500 JPEG with a white background.",
+        "rights_evidence": "Owner uploaded the 5x4 produce grid and selected this exact image for the displayed PLU and product."
+      },
+      "reuse_from_source_id": ""
     },
     {
       "book": "Vegetable",
@@ -7531,26 +7633,37 @@
       "source_id": "d998adb88309a304c6425e75e22dfafa0bf4a7e6fcabf992a33db20987a2f5fc"
     },
     {
+      "source_id": "811c28b9451b55f047a421cc17fa461e129f46318377b242b000110d148d5fac",
       "book": "Vegetable",
       "section": "Organic Vegetables",
-      "image": "data/images/Vegetable/0578_94773.png",
+      "image": "data/images/approved/02ac81516f985fef4acf383c1c8a240bc8b214c82c4d7732cd5d51bfe67b74e1.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "94773",
       "reviewed_product": "Organic Squash Patty Pan",
+      "working_source_ids": [
+        "811c28b9451b55f047a421cc17fa461e129f46318377b242b000110d148d5fac"
+      ],
+      "working_decision_id": "",
+      "image_sha256": "02ac81516f985fef4acf383c1c8a240bc8b214c82c4d7732cd5d51bfe67b74e1",
+      "photographic_origin": "VERIFIED_PHOTO",
       "visual_approval_status": "APPROVED",
-      "photographic_origin": "NOT_VERIFIED",
-      "rights_verification_status": "NOT_VERIFIED",
-      "provenance": {},
-      "legacy_entry_idx": "578",
-      "migration_note": "Existing visual verdict preserved; original source/rights not verified.",
-      "legacy_organic_original": {
-        "source_document": "sources/visual/VEGETABLE_VISUAL_PLU_BOOKLET_CORRECTED.docx",
-        "source_member": "word/media/image114.jpg",
-        "original_sha256": "1ceee1ae5a8ba3629ee1cda7253ad0176ed798dd1dffbc6ea111d06db206e2b3"
+      "rights_verification_status": "VERIFIED",
+      "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+      "provenance": {
+        "creator": "Owner",
+        "license": "OWNER_CONFIRMED_PERMISSION",
+        "license_url": "",
+        "source_page_url": "",
+        "original_image_url": "",
+        "source_reference": "data/review-references/owner-upload-2026-11-22/copilot_image_1795309965106.png",
+        "rights_status": "OWNER_CONFIRMED_PERMISSION",
+        "photographic_origin_evidence": "Owner-uploaded photograph from the displayed produce grid.",
+        "visual_approval_evidence": "Owner selected this shown exact image and identity in the uploaded grid.",
+        "attribution": "Owner-provided produce image grid",
+        "changes": "Cropped from the owner grid and resized/padded to a 500x500 JPEG with a white background.",
+        "rights_evidence": "Owner uploaded the 5x4 produce grid and selected this exact image for the displayed PLU and product."
       },
-      "image_sha256": "1ceee1ae5a8ba3629ee1cda7253ad0176ed798dd1dffbc6ea111d06db206e2b3",
-      "source_id": "811c28b9451b55f047a421cc17fa461e129f46318377b242b000110d148d5fac",
-      "reuse_from_source_id": "fa99f7d31d1f9e5f251c432e6d97420b0911f9acd759698678f2940191bf5c26"
+      "reuse_from_source_id": ""
     },
     {
       "book": "Vegetable",
@@ -8688,20 +8801,37 @@
       "source_id": "bf9aa73ad1ef77987e6f722cb874454e162478c73f0d2dfa814114596fbec157"
     },
     {
+      "source_id": "1a4e6b60f54d1e5ef7f4fe1318067ab50134a3e66c190d55de8d2dcf77ad21cc",
       "book": "Vegetable",
       "section": "Peppers",
-      "image": "data/images/Vegetable/0412_4705.jpg",
+      "image": "data/images/approved/38105361329c2c3a5b2dbca78f2cd4c47be16b8dbe9c32916d98c5637d14cfe2.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "4705",
       "reviewed_product": "Peppers Poblano",
-      "visual_approval_status": "NOT_APPROVED",
-      "photographic_origin": "NOT_VERIFIED",
-      "rights_verification_status": "NOT_VERIFIED",
-      "provenance": {},
-      "legacy_entry_idx": "412",
-      "migration_note": "Existing visual verdict preserved; original source/rights not verified.",
-      "image_sha256": "75e44f2f2e1628a2d8462b4a8b3897f17a6e5c06f93b222e1d64b414299357c1",
-      "source_id": "1a4e6b60f54d1e5ef7f4fe1318067ab50134a3e66c190d55de8d2dcf77ad21cc"
+      "working_source_ids": [
+        "1a4e6b60f54d1e5ef7f4fe1318067ab50134a3e66c190d55de8d2dcf77ad21cc"
+      ],
+      "working_decision_id": "",
+      "image_sha256": "38105361329c2c3a5b2dbca78f2cd4c47be16b8dbe9c32916d98c5637d14cfe2",
+      "photographic_origin": "VERIFIED_PHOTO",
+      "visual_approval_status": "APPROVED",
+      "rights_verification_status": "VERIFIED",
+      "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+      "provenance": {
+        "creator": "Owner",
+        "license": "OWNER_CONFIRMED_PERMISSION",
+        "license_url": "",
+        "source_page_url": "",
+        "original_image_url": "",
+        "source_reference": "data/review-references/owner-upload-2026-11-22/copilot_image_1795309965106.png",
+        "rights_status": "OWNER_CONFIRMED_PERMISSION",
+        "photographic_origin_evidence": "Owner-uploaded photograph from the displayed produce grid.",
+        "visual_approval_evidence": "Owner selected this shown exact image and identity in the uploaded grid.",
+        "attribution": "Owner-provided produce image grid",
+        "changes": "Cropped from the owner grid and resized/padded to a 500x500 JPEG with a white background.",
+        "rights_evidence": "Owner uploaded the 5x4 produce grid and selected this exact image for the displayed PLU and product."
+      },
+      "reuse_from_source_id": ""
     },
     {
       "book": "Vegetable",
@@ -8768,20 +8898,37 @@
       "source_id": "0d080e5551a308fb358238c6405e3adb7d302f3a7c0803f20635bbb760b98da7"
     },
     {
+      "source_id": "b2d62bf76b90687da2c1965fe78ed4c932de23ed4dc1993c49c7828e29a34ee8",
       "book": "Vegetable",
       "section": "Peppers",
-      "image": "data/images/Vegetable/0403_4706.jpg",
+      "image": "data/images/approved/52bb117c2872477852f957dc0c10abebee1a1114b40a363e3f0a8bd5fcdd2d87.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "4706",
       "reviewed_product": "Pepper Poblano",
-      "visual_approval_status": "NOT_APPROVED",
-      "photographic_origin": "NOT_VERIFIED",
-      "rights_verification_status": "NOT_VERIFIED",
-      "provenance": {},
-      "legacy_entry_idx": "403",
-      "migration_note": "Existing visual verdict preserved; original source/rights not verified.",
-      "image_sha256": "75e44f2f2e1628a2d8462b4a8b3897f17a6e5c06f93b222e1d64b414299357c1",
-      "source_id": "b2d62bf76b90687da2c1965fe78ed4c932de23ed4dc1993c49c7828e29a34ee8"
+      "working_source_ids": [
+        "b2d62bf76b90687da2c1965fe78ed4c932de23ed4dc1993c49c7828e29a34ee8"
+      ],
+      "working_decision_id": "",
+      "image_sha256": "52bb117c2872477852f957dc0c10abebee1a1114b40a363e3f0a8bd5fcdd2d87",
+      "photographic_origin": "VERIFIED_PHOTO",
+      "visual_approval_status": "APPROVED",
+      "rights_verification_status": "VERIFIED",
+      "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+      "provenance": {
+        "creator": "Owner",
+        "license": "OWNER_CONFIRMED_PERMISSION",
+        "license_url": "",
+        "source_page_url": "",
+        "original_image_url": "",
+        "source_reference": "data/review-references/owner-upload-2026-11-22/copilot_image_1795309965106.png",
+        "rights_status": "OWNER_CONFIRMED_PERMISSION",
+        "photographic_origin_evidence": "Owner-uploaded photograph from the displayed produce grid.",
+        "visual_approval_evidence": "Owner selected this shown exact image and identity in the uploaded grid.",
+        "attribution": "Owner-provided produce image grid",
+        "changes": "Cropped from the owner grid and resized/padded to a 500x500 JPEG with a white background.",
+        "rights_evidence": "Owner uploaded the 5x4 produce grid and selected this exact image for the displayed PLU and product."
+      },
+      "reuse_from_source_id": ""
     },
     {
       "book": "Vegetable",
@@ -8800,36 +8947,70 @@
       "source_id": "55e75becec5f7d8eb15d8e17e1958e767f336ff5e8542d30341944ae92762128"
     },
     {
+      "source_id": "110fce48bd96b0dba995ae672063e47e4f42362115e0e9960d2e557629d892a5",
       "book": "Vegetable",
       "section": "Peppers",
-      "image": "data/images/Vegetable/0399_4692.jpg",
+      "image": "data/images/approved/e1481326d589b2bd59a0391d5c78d80142ded79d330b49a87268ffa7a6a56dba.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "4692",
       "reviewed_product": "Pepper Hungarian",
-      "visual_approval_status": "NOT_APPROVED",
-      "photographic_origin": "NOT_VERIFIED",
-      "rights_verification_status": "NOT_VERIFIED",
-      "provenance": {},
-      "legacy_entry_idx": "399",
-      "migration_note": "Existing visual verdict preserved; original source/rights not verified.",
-      "image_sha256": "e3e788e8aa89974921f668a39b2e533374d3e13e380e22e1d250f3753fbb11cf",
-      "source_id": "110fce48bd96b0dba995ae672063e47e4f42362115e0e9960d2e557629d892a5"
+      "working_source_ids": [
+        "110fce48bd96b0dba995ae672063e47e4f42362115e0e9960d2e557629d892a5"
+      ],
+      "working_decision_id": "",
+      "image_sha256": "e1481326d589b2bd59a0391d5c78d80142ded79d330b49a87268ffa7a6a56dba",
+      "photographic_origin": "VERIFIED_PHOTO",
+      "visual_approval_status": "APPROVED",
+      "rights_verification_status": "VERIFIED",
+      "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+      "provenance": {
+        "creator": "Owner",
+        "license": "OWNER_CONFIRMED_PERMISSION",
+        "license_url": "",
+        "source_page_url": "",
+        "original_image_url": "",
+        "source_reference": "data/review-references/owner-upload-2026-11-22/copilot_image_1795309965106.png",
+        "rights_status": "OWNER_CONFIRMED_PERMISSION",
+        "photographic_origin_evidence": "Owner-uploaded photograph from the displayed produce grid.",
+        "visual_approval_evidence": "Owner selected this shown exact image and identity in the uploaded grid.",
+        "attribution": "Owner-provided produce image grid",
+        "changes": "Cropped from the owner grid and resized/padded to a 500x500 JPEG with a white background.",
+        "rights_evidence": "Owner uploaded the 5x4 produce grid and selected this exact image for the displayed PLU and product."
+      },
+      "reuse_from_source_id": ""
     },
     {
+      "source_id": "d12c88f490db50467a12a4310fdd974e34cc26e3d59882c1599f0a74d6519ce4",
       "book": "Vegetable",
       "section": "Peppers",
-      "image": "data/images/Vegetable/0398_4691.jpg",
+      "image": "data/images/approved/3e03d9529fcc6d61303327f9df398915aaeb498b77709edaf3a9a329316ce154.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "4691",
       "reviewed_product": "Pepper Hot Mix",
-      "visual_approval_status": "NOT_APPROVED",
-      "photographic_origin": "NOT_VERIFIED",
-      "rights_verification_status": "NOT_VERIFIED",
-      "provenance": {},
-      "legacy_entry_idx": "398",
-      "migration_note": "Existing visual verdict preserved; original source/rights not verified.",
-      "image_sha256": "4be4d1b2a937ba42a368d73484028c9181671778e1e0227515d93300d879b2be",
-      "source_id": "d12c88f490db50467a12a4310fdd974e34cc26e3d59882c1599f0a74d6519ce4"
+      "working_source_ids": [
+        "d12c88f490db50467a12a4310fdd974e34cc26e3d59882c1599f0a74d6519ce4"
+      ],
+      "working_decision_id": "",
+      "image_sha256": "3e03d9529fcc6d61303327f9df398915aaeb498b77709edaf3a9a329316ce154",
+      "photographic_origin": "VERIFIED_PHOTO",
+      "visual_approval_status": "APPROVED",
+      "rights_verification_status": "VERIFIED",
+      "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+      "provenance": {
+        "creator": "Owner",
+        "license": "OWNER_CONFIRMED_PERMISSION",
+        "license_url": "",
+        "source_page_url": "",
+        "original_image_url": "",
+        "source_reference": "data/review-references/owner-upload-2026-11-22/copilot_image_1795309965106.png",
+        "rights_status": "OWNER_CONFIRMED_PERMISSION",
+        "photographic_origin_evidence": "Owner-uploaded photograph from the displayed produce grid.",
+        "visual_approval_evidence": "Owner selected this shown exact image and identity in the uploaded grid.",
+        "attribution": "Owner-provided produce image grid",
+        "changes": "Cropped from the owner grid and resized/padded to a 500x500 JPEG with a white background.",
+        "rights_evidence": "Owner uploaded the 5x4 produce grid and selected this exact image for the displayed PLU and product."
+      },
+      "reuse_from_source_id": ""
     },
     {
       "book": "Vegetable",
@@ -9072,20 +9253,37 @@
       "source_id": "218e15d46c240bf85cb1a2ee9af7e8cc65a615d1aa418bee906df39392c853cc"
     },
     {
+      "source_id": "3ec661f770f72f532d8177a3a355f5645ee67a9a107ae43608a1b09a74d34dfc",
       "book": "Fruit",
       "section": "Tropical Fruit",
-      "image": "data/images/Fruit/0154_4313.jpg",
+      "image": "data/images/approved/a91dd0cbb3a34f52527f1510966fb38c84addd794f2d308487a0285892f14311.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "4313",
       "reviewed_product": "Mango Julie",
-      "visual_approval_status": "NOT_APPROVED",
-      "photographic_origin": "NOT_VERIFIED",
-      "rights_verification_status": "NOT_VERIFIED",
-      "provenance": {},
-      "legacy_entry_idx": "154",
-      "migration_note": "Existing visual verdict preserved; original source/rights not verified.",
-      "image_sha256": "c6f9f3f52de4996719ff67b3f3fecc062ad6c80fc5dc4a712c26c6181f57ff11",
-      "source_id": "3ec661f770f72f532d8177a3a355f5645ee67a9a107ae43608a1b09a74d34dfc"
+      "working_source_ids": [
+        "3ec661f770f72f532d8177a3a355f5645ee67a9a107ae43608a1b09a74d34dfc"
+      ],
+      "working_decision_id": "",
+      "image_sha256": "a91dd0cbb3a34f52527f1510966fb38c84addd794f2d308487a0285892f14311",
+      "photographic_origin": "VERIFIED_PHOTO",
+      "visual_approval_status": "APPROVED",
+      "rights_verification_status": "VERIFIED",
+      "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+      "provenance": {
+        "creator": "Owner",
+        "license": "OWNER_CONFIRMED_PERMISSION",
+        "license_url": "",
+        "source_page_url": "",
+        "original_image_url": "",
+        "source_reference": "data/review-references/owner-upload-2026-11-22/copilot_image_1795309965106.png",
+        "rights_status": "OWNER_CONFIRMED_PERMISSION",
+        "photographic_origin_evidence": "Owner-uploaded photograph from the displayed produce grid.",
+        "visual_approval_evidence": "Owner selected this shown exact image and identity in the uploaded grid.",
+        "attribution": "Owner-provided produce image grid",
+        "changes": "Cropped from the owner grid and resized/padded to a 500x500 JPEG with a white background.",
+        "rights_evidence": "Owner uploaded the 5x4 produce grid and selected this exact image for the displayed PLU and product."
+      },
+      "reuse_from_source_id": ""
     },
     {
       "book": "Fruit",
@@ -9824,20 +10022,37 @@
       "source_id": "cdd6f554db5d0a4868640fa2d8cc618965876cc01bd2998aba3a6edb9ed983e6"
     },
     {
+      "source_id": "f54bcd075f5246eef4be8234d21c13de1512903efa91f4c607847c950fcd6e0b",
       "book": "Vegetable",
       "section": "Potatoes",
-      "image": "data/images/Vegetable/0370_4730.jpg",
+      "image": "data/images/approved/b6367c499cca241deaca83aaef8aea17b77d440e3c48b220686d8e9a05f0602e.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "4730",
       "reviewed_product": "Potato Yellow Creamer",
-      "visual_approval_status": "NOT_APPROVED",
-      "photographic_origin": "NOT_VERIFIED",
-      "rights_verification_status": "NOT_VERIFIED",
-      "provenance": {},
-      "legacy_entry_idx": "370",
-      "migration_note": "Existing visual verdict preserved; original source/rights not verified.",
-      "image_sha256": "dfb9bed7b554687862067161274640252a91c8c14621793dd80e9252bde0e681",
-      "source_id": "f54bcd075f5246eef4be8234d21c13de1512903efa91f4c607847c950fcd6e0b"
+      "working_source_ids": [
+        "f54bcd075f5246eef4be8234d21c13de1512903efa91f4c607847c950fcd6e0b"
+      ],
+      "working_decision_id": "",
+      "image_sha256": "b6367c499cca241deaca83aaef8aea17b77d440e3c48b220686d8e9a05f0602e",
+      "photographic_origin": "VERIFIED_PHOTO",
+      "visual_approval_status": "APPROVED",
+      "rights_verification_status": "VERIFIED",
+      "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+      "provenance": {
+        "creator": "Owner",
+        "license": "OWNER_CONFIRMED_PERMISSION",
+        "license_url": "",
+        "source_page_url": "",
+        "original_image_url": "",
+        "source_reference": "data/review-references/owner-upload-2026-11-22/copilot_image_1795309965106.png",
+        "rights_status": "OWNER_CONFIRMED_PERMISSION",
+        "photographic_origin_evidence": "Owner-uploaded photograph from the displayed produce grid.",
+        "visual_approval_evidence": "Owner selected this shown exact image and identity in the uploaded grid.",
+        "attribution": "Owner-provided produce image grid",
+        "changes": "Cropped from the owner grid and resized/padded to a 500x500 JPEG with a white background.",
+        "rights_evidence": "Owner uploaded the 5x4 produce grid and selected this exact image for the displayed PLU and product."
+      },
+      "reuse_from_source_id": ""
     },
     {
       "book": "Vegetable",
@@ -10426,20 +10641,37 @@
       "source_id": "41086b7e77d9779e769a62df8d42e78b6a2fa6b3dc2703fd8b995378a2818e50"
     },
     {
+      "source_id": "6d342c8b2e6243776cfaccdc337622951d531dd8dab8f35acef3865be6311e53",
       "book": "Vegetable",
       "section": "Onions",
-      "image": "data/images/Vegetable/0382_3339.jpg",
+      "image": "data/images/approved/b58b3e020033d5b66e25b50160f3ffbdab5696033bdf9dde8297e7f74188a960.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "3339",
       "reviewed_product": "Leeks",
+      "working_source_ids": [
+        "6d342c8b2e6243776cfaccdc337622951d531dd8dab8f35acef3865be6311e53"
+      ],
+      "working_decision_id": "",
+      "image_sha256": "b58b3e020033d5b66e25b50160f3ffbdab5696033bdf9dde8297e7f74188a960",
+      "photographic_origin": "VERIFIED_PHOTO",
       "visual_approval_status": "APPROVED",
-      "photographic_origin": "NOT_VERIFIED",
-      "rights_verification_status": "NOT_VERIFIED",
-      "provenance": {},
-      "legacy_entry_idx": "382",
-      "migration_note": "Existing visual verdict preserved; original source/rights not verified.",
-      "image_sha256": "4ff7c228e22161c6ba645747bb509026dd736777ee8f44851c7e83a081f871b0",
-      "source_id": "6d342c8b2e6243776cfaccdc337622951d531dd8dab8f35acef3865be6311e53"
+      "rights_verification_status": "VERIFIED",
+      "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+      "provenance": {
+        "creator": "Owner",
+        "license": "OWNER_CONFIRMED_PERMISSION",
+        "license_url": "",
+        "source_page_url": "",
+        "original_image_url": "",
+        "source_reference": "data/review-references/owner-upload-2026-11-22/copilot_image_1795309965106.png",
+        "rights_status": "OWNER_CONFIRMED_PERMISSION",
+        "photographic_origin_evidence": "Owner-uploaded photograph from the displayed produce grid.",
+        "visual_approval_evidence": "Owner selected this shown exact image and identity in the uploaded grid.",
+        "attribution": "Owner-provided produce image grid",
+        "changes": "Cropped from the owner grid and resized/padded to a 500x500 JPEG with a white background.",
+        "rights_evidence": "Owner uploaded the 5x4 produce grid and selected this exact image for the displayed PLU and product."
+      },
+      "reuse_from_source_id": ""
     },
     {
       "book": "Fruit",
@@ -11018,20 +11250,37 @@
       "source_id": "a4ca2e065052b367bb2c2bfe278b2c1cef24a93d2f1c15592bc21bb213aa9c90"
     },
     {
+      "source_id": "edb2233532995a58f19b267c2469dfffbc9b447ef927ddee6bd4a3b926cdf5f1",
       "book": "Vegetable",
       "section": "Potatoes",
-      "image": "data/images/Vegetable/0373_4818.jpg",
+      "image": "data/images/approved/1c2a3bb5e66333d2913a722c94fc04a06de60b7bb98e52659688164b304f5a89.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "4818",
       "reviewed_product": "Sweet Potato japanese",
-      "visual_approval_status": "NOT_APPROVED",
-      "photographic_origin": "NOT_VERIFIED",
-      "rights_verification_status": "NOT_VERIFIED",
-      "provenance": {},
-      "legacy_entry_idx": "373",
-      "migration_note": "Existing visual verdict preserved; original source/rights not verified.",
-      "image_sha256": "ed7092dfb29fe0618f69a550ba12954f1b408bc8450d9a3fa0d0438aa04a2389",
-      "source_id": "edb2233532995a58f19b267c2469dfffbc9b447ef927ddee6bd4a3b926cdf5f1"
+      "working_source_ids": [
+        "edb2233532995a58f19b267c2469dfffbc9b447ef927ddee6bd4a3b926cdf5f1"
+      ],
+      "working_decision_id": "",
+      "image_sha256": "1c2a3bb5e66333d2913a722c94fc04a06de60b7bb98e52659688164b304f5a89",
+      "photographic_origin": "VERIFIED_PHOTO",
+      "visual_approval_status": "APPROVED",
+      "rights_verification_status": "VERIFIED",
+      "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+      "provenance": {
+        "creator": "Owner",
+        "license": "OWNER_CONFIRMED_PERMISSION",
+        "license_url": "",
+        "source_page_url": "",
+        "original_image_url": "",
+        "source_reference": "data/review-references/owner-upload-2026-11-22/copilot_image_1795309965106.png",
+        "rights_status": "OWNER_CONFIRMED_PERMISSION",
+        "photographic_origin_evidence": "Owner-uploaded photograph from the displayed produce grid.",
+        "visual_approval_evidence": "Owner selected this shown exact image and identity in the uploaded grid.",
+        "attribution": "Owner-provided produce image grid",
+        "changes": "Cropped from the owner grid and resized/padded to a 500x500 JPEG with a white background.",
+        "rights_evidence": "Owner uploaded the 5x4 produce grid and selected this exact image for the displayed PLU and product."
+      },
+      "reuse_from_source_id": ""
     },
     {
       "book": "Vegetable",
@@ -11136,20 +11385,37 @@
       "source_id": "6e1cf6de51206b02d48dac554988aeef26796518cac690d40231a52d90862407"
     },
     {
+      "source_id": "cfb98abbd12223007b65e6d453be7c2ee18bede0c91622e6b02c311143ab84d1",
       "book": "Vegetable",
       "section": "Root Vegetables",
-      "image": "data/images/Vegetable/0344_4565.jpg",
+      "image": "data/images/approved/5af374ec696dd8412176e0810d73c03f0a14d4b17a9d619a47c969e4bdb89ce1.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "4565",
       "reviewed_product": "Carrot - Red",
-      "visual_approval_status": "NOT_APPROVED",
-      "photographic_origin": "NOT_VERIFIED",
-      "rights_verification_status": "NOT_VERIFIED",
-      "provenance": {},
-      "legacy_entry_idx": "344",
-      "migration_note": "Existing visual verdict preserved; original source/rights not verified.",
-      "image_sha256": "7188666c9e3530b9e6dcc8aa1f3a8767c808b5194dee52b2b53ea60113c36bf0",
-      "source_id": "cfb98abbd12223007b65e6d453be7c2ee18bede0c91622e6b02c311143ab84d1"
+      "working_source_ids": [
+        "cfb98abbd12223007b65e6d453be7c2ee18bede0c91622e6b02c311143ab84d1"
+      ],
+      "working_decision_id": "",
+      "image_sha256": "5af374ec696dd8412176e0810d73c03f0a14d4b17a9d619a47c969e4bdb89ce1",
+      "photographic_origin": "VERIFIED_PHOTO",
+      "visual_approval_status": "APPROVED",
+      "rights_verification_status": "VERIFIED",
+      "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+      "provenance": {
+        "creator": "Owner",
+        "license": "OWNER_CONFIRMED_PERMISSION",
+        "license_url": "",
+        "source_page_url": "",
+        "original_image_url": "",
+        "source_reference": "data/review-references/owner-upload-2026-11-22/copilot_image_1795309965106.png",
+        "rights_status": "OWNER_CONFIRMED_PERMISSION",
+        "photographic_origin_evidence": "Owner-uploaded photograph from the displayed produce grid.",
+        "visual_approval_evidence": "Owner selected this shown exact image and identity in the uploaded grid.",
+        "attribution": "Owner-provided produce image grid",
+        "changes": "Cropped from the owner grid and resized/padded to a 500x500 JPEG with a white background.",
+        "rights_evidence": "Owner uploaded the 5x4 produce grid and selected this exact image for the displayed PLU and product."
+      },
+      "reuse_from_source_id": ""
     },
     {
       "book": "Non-produce",
@@ -11243,20 +11509,37 @@
       "source_id": "9615bd768133561cc6cc9e49c20fb4681cc82d51b51236ea64626f8d431360b5"
     },
     {
+      "source_id": "d6af8a897f6395093e638e11c2f6877c587bfc7295858a4dda3398df217e2253",
       "book": "Vegetable",
       "section": "Herbs",
-      "image": "data/images/Vegetable/0323_4894.jpg",
+      "image": "data/images/approved/93feb30c465a5389c3bd281db0096ad2c7e6592bd0a2fa0afbdf603d327c5aa6.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "4894",
       "reviewed_product": "Lemon Grass",
-      "visual_approval_status": "NOT_APPROVED",
-      "photographic_origin": "NOT_VERIFIED",
-      "rights_verification_status": "NOT_VERIFIED",
-      "provenance": {},
-      "legacy_entry_idx": "323",
-      "migration_note": "Existing visual verdict preserved; original source/rights not verified.",
-      "image_sha256": "5251f42d99e82098d793790d03f617aa99b2923ffe0775746131a964745e791f",
-      "source_id": "d6af8a897f6395093e638e11c2f6877c587bfc7295858a4dda3398df217e2253"
+      "working_source_ids": [
+        "d6af8a897f6395093e638e11c2f6877c587bfc7295858a4dda3398df217e2253"
+      ],
+      "working_decision_id": "",
+      "image_sha256": "93feb30c465a5389c3bd281db0096ad2c7e6592bd0a2fa0afbdf603d327c5aa6",
+      "photographic_origin": "VERIFIED_PHOTO",
+      "visual_approval_status": "APPROVED",
+      "rights_verification_status": "VERIFIED",
+      "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
+      "provenance": {
+        "creator": "Owner",
+        "license": "OWNER_CONFIRMED_PERMISSION",
+        "license_url": "",
+        "source_page_url": "",
+        "original_image_url": "",
+        "source_reference": "data/review-references/owner-upload-2026-11-22/copilot_image_1795309965106.png",
+        "rights_status": "OWNER_CONFIRMED_PERMISSION",
+        "photographic_origin_evidence": "Owner-uploaded photograph from the displayed produce grid.",
+        "visual_approval_evidence": "Owner selected this shown exact image and identity in the uploaded grid.",
+        "attribution": "Owner-provided produce image grid",
+        "changes": "Cropped from the owner grid and resized/padded to a 500x500 JPEG with a white background.",
+        "rights_evidence": "Owner uploaded the 5x4 produce grid and selected this exact image for the displayed PLU and product."
+      },
+      "reuse_from_source_id": ""
     },
     {
       "source_id": "074b0d50fb0eb911404fbe4dc12ab58c6b40d3b7a135ef9a1a8c7f967819a740",
@@ -12279,7 +12562,7 @@
       "source_id": "94f87bb8c8d960ab0b40853787eba8e16d26e53ad4946452e2daf2811323ae5e",
       "book": "Vegetable",
       "section": "Herbs",
-      "image": "data/images/approved/506eedd614ba5a1d487e2e46720c7e1ad5295096e36903980c3e034a112d9681.jpg",
+      "image": "data/images/approved/369f2c5cd99429cb81cefc93643b99e440cf839f5926be22295754d226f9ab66.jpg",
       "image_mode": "PHOTO",
       "reviewed_plu": "4901",
       "reviewed_product": "Italian Parsley",
@@ -12288,24 +12571,24 @@
         "403327f3eb6700da3be1695a2d698ef7b3f23c805f35ea2182ca103e69b7744f"
       ],
       "working_decision_id": "4901",
-      "image_sha256": "506eedd614ba5a1d487e2e46720c7e1ad5295096e36903980c3e034a112d9681",
+      "image_sha256": "369f2c5cd99429cb81cefc93643b99e440cf839f5926be22295754d226f9ab66",
       "photographic_origin": "VERIFIED_PHOTO",
       "visual_approval_status": "APPROVED",
       "rights_verification_status": "VERIFIED",
       "production_status": "APPROVED_FOR_EXACT_WORKINGLIST_ASSIGNMENT",
       "provenance": {
-        "creator": "Owner-provided; original creator not separately identified",
+        "creator": "Owner",
         "license": "OWNER_CONFIRMED_PERMISSION",
         "license_url": "",
         "source_page_url": "",
         "original_image_url": "",
-        "source_reference": "Owner-uploaded chat attachment Italian_Parsley.jpg (2026-11-15)",
+        "source_reference": "data/review-references/owner-upload-2026-11-22/copilot_image_1795309965106.png",
         "rights_status": "OWNER_CONFIRMED_PERMISSION",
-        "photographic_origin_evidence": "Owner identified the uploaded image as a photo (2026-11-15).",
-        "visual_approval_evidence": "Owner's standing instruction treats ownership of an uploaded product photo as full approval; the selected identity is Italian Parsley, PLU 4901.",
-        "attribution": "Owner-provided photograph; owner-confirmed permission. No public reuse licence is asserted.",
-        "changes": "Original image unchanged",
-        "rights_evidence": "Owner stated \"I own this photo\" and has directed that ownership statements count as full approval for image-library use (2026-11-15)."
+        "photographic_origin_evidence": "Owner-uploaded photograph from the displayed produce grid.",
+        "visual_approval_evidence": "Owner selected this shown exact image and identity in the uploaded grid.",
+        "attribution": "Owner-provided produce image grid",
+        "changes": "Cropped from the owner grid and resized/padded to a 500x500 JPEG with a white background.",
+        "rights_evidence": "Owner uploaded the 5x4 produce grid and selected this exact image for the displayed PLU and product."
       },
       "reuse_from_source_id": ""
     },

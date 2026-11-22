@@ -34,7 +34,9 @@
     "3027e0999534f703f29894e2b9ac6ebd786582941c63184f3517cd9343c7a6ee",
     "3025c82cb325ba0383cde20cc32724ad6a1784041c8736f686d77c221cf0c05a"
   ],
-  "production_status": "IMAGE_CHECKS_PASSED",
+  "production_status": "NO_RELEASE_BLOCKERS_NOT_AUTHORIZED",
+  "production_authorization": "NOT_AUTHORIZED",
   "production_blockers": [],
+  "review_findings": [],
   "transformation": "Aspect-ratio-preserving resize and centered solid white padding to 500x500 JPEG (quality 90, optimized, progressive)"
 }
