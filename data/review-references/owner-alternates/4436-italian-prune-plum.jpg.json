@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "plu": "4436",
+  "product": "Italian Prune Plum",
+  "working_list_id": "df07cba84598645e44427aadde161e4b3b1a8252ff9dcc227aeced9bbfe58b28",
+  "source_identity_ids": [
+    "c007883c370d9091a564d02403396505b38052114bb7c5944cf7a61da7748587",
+    "f8e5cc78008a26c3709dc6d1f32f2a6a799104652f8131c0974bcf85e20625b6"
+  ],
+  "source_reference": "Owner-uploaded chat attachment Italian_Prune_Plum-01.jpg (2026-11-22)",
+  "creator": "Not identified",
+  "source_page_url": "",
+  "original_image_url": "",
+  "width": 600,
+  "height": 600,
+  "sha256": "f92795c9612351fb6b62f965a29a3e05b7ed3e2eebb1ea56d32656512f3ac3d4",
+  "license": "NOT_VERIFIED",
+  "rights_status": "NOT_VERIFIED",
+  "attribution": "Owner-provided candidate; creator and rights are not yet established. No public reuse licence is asserted.",
+  "changes": "Original upload unchanged",
+  "approval_status": "CANDIDATE",
+  "visual_approval_status": "NOT_APPROVED",
+  "photographic_origin": "NOT_VERIFIED",
+  "rights_verification_status": "NOT_VERIFIED",
+  "rights_evidence": "No rights or ownership statement accompanied this upload.",
+  "photographic_origin_evidence": "Photographic origin not verified.",
+  "visual_approval_evidence": "Pending owner image review for this exact PLU and product identity.",
+  "production_status": "NOT_APPROVED",
+  "note": "Candidate for visual review only. Rights, provenance and production approval remain unverified."
+}
