@@ -18,13 +18,13 @@
   "rights_status": "NOT_VERIFIED",
   "attribution": "Owner-provided candidate; creator and rights are not yet established. No public reuse licence is asserted.",
   "changes": "Original upload unchanged",
-  "approval_status": "CANDIDATE",
-  "visual_approval_status": "NOT_APPROVED",
+  "approval_status": "OWNER_APPROVED_EXACT_IMAGE",
+  "visual_approval_status": "APPROVED",
   "photographic_origin": "NOT_VERIFIED",
   "rights_verification_status": "NOT_VERIFIED",
   "rights_evidence": "No rights or ownership statement accompanied this upload.",
   "photographic_origin_evidence": "Photographic origin not verified.",
-  "visual_approval_evidence": "Pending owner image review for this exact PLU and product identity.",
-  "production_status": "NOT_APPROVED",
-  "note": "Candidate for visual review only. Rights, provenance and production approval remain unverified."
+  "visual_approval_evidence": "Checked by owner in data/review-references/Produce_Image_Review_Checked_2026-11-22.pdf (SHA-256 181fe5df56c42492566d48ba56c8446b5ff07a482a6bc81dbf346920773859d0); approval applies only to this image and exact product identity.",
+  "production_status": "OWNER_APPROVED_EXACT_IMAGE_PUBLICATION_GATES_UNCHANGED",
+  "note": "Owner approved this exact image for production; source, photographic origin and rights remain unverified, and publication gates still apply."
 }
