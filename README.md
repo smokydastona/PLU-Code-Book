@@ -80,6 +80,18 @@ last approved production release intact.
 
 The owner-supplied sheets are retained for review; suitable crops are references, not production image approvals. Newer suitable crops take precedence over older sheet references only for the same exact WorkingList identity; superseded and unselected panels remain in the reference audit. Invalid approved assignments may fall back to a review reference without clearing their validation errors or production gates.
 
+Run `python tools/build_temporary_produce_review.py` to refresh the single
+`outputs/review-booklets/Produce_Image_Review_Temporary.pdf` from the recorded
+image screening decisions. It excludes verified prior exact-image approvals,
+uses the original screened candidate checksums even when library paths have
+changed, and blocks regeneration if those bytes or product identities are
+unavailable. Replacement-required images have no approval checkbox. The
+adjacent `TEMPORARY_PRODUCE_IMAGE_REVIEW.csv` and JSON record the current pages,
+candidate paths, checksums and prior approval exclusions. Only older
+`Produce_Image_Review_Temporary*.pdf` copies in that output directory are
+removed; checked owner uploads, other review booklets and published binders
+remain unchanged.
+
 `data/review-references/lettuce_image_exact.pdf` is a lettuce-identification guide only. Its sidecar records the source checksum and reference-only authorization; the labelled chart is not assigned to cashier entries and grants no image approvals.
 
 The individual `santaclaus-1.jpg` and `Romaine.jpg` references supersede their earlier sheet crops for PLUs 4336 and 4640. Their manifests record owner-confirmed permission; native sizes of 480 x 352 and 488 x 488 remain below the production resolution requirement.
