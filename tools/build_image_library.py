@@ -10,6 +10,7 @@ from pathlib import Path
 from PIL import Image
 
 from image_display import DISPLAY_SIZE
+from library_assets import ALIASES, check_aliases, image_aliases, physical_names, resolve_image
 from release_policy import LIBRARY_EXCLUSION_BLOCKERS
 from sync_picklist import booklet_image, csv_output, reconcile
 
@@ -129,7 +130,7 @@ def library_records(path):
             raise ValueError(f"invalid or repeated library image name: {name}")
         seen.add(name)
         for filename, key in ((name, "image_sha256"), (name + ".json", "metadata_sha256")):
-            asset = path / filename
+            asset = resolve_image(path / filename) if filename == name else path / filename
             if asset.is_symlink() or not asset.is_file() or hashlib.sha256(asset.read_bytes()).hexdigest() != row[key]:
                 raise ValueError(f"library asset changed or missing: {asset}")
     return rows
@@ -166,8 +167,17 @@ def refresh_library(root):
         for name in sorted(new_names):
             (staged / name).replace(library / name)
         for name in sorted(old_names - new_names):
-            (library / name).unlink()
+            (library / name).unlink(missing_ok=True)
         (staged / "IMAGE_LIBRARY.csv").replace(index)
+        if (library / ALIASES).exists():
+            from consolidate_image_library import consolidate
+            from used_image_library import save_if_changed
+
+            aliases = {name: row for name, row in image_aliases(library).items()
+                       if not (library / name).exists() and (library / (name + ".json")).exists()}
+            save_if_changed(library / ALIASES,
+                            (json.dumps(aliases, indent=2, sort_keys=True) + "\n").encode())
+            consolidate(root)
         result["source_ids"] = [row["source_id"] for row in new_rows]
         return result
 
@@ -188,11 +198,14 @@ def check_library(root):
             row["image"] + suffix for row in current for suffix in ("", ".json")}
         expected_names = {"IMAGE_LIBRARY.csv"} | {
             row["image"] + suffix for row in expected for suffix in ("", ".json")}
+        aliases = check_aliases(library)
         if (current_names != expected_names or
-                {path.name for path in library.iterdir()} != current_names | managed_cache_names(root)):
+                {path.name for path in library.iterdir()} !=
+                physical_names(current_names, aliases) | managed_cache_names(root)):
             raise ValueError("image library inventory is stale or contains unmanaged files")
         for name in sorted(current_names):
-            if (library / name).read_bytes() != (staged / name).read_bytes():
+            path = resolve_image(library / name, aliases) if name.endswith(".jpg") else library / name
+            if path.read_bytes() != (staged / name).read_bytes():
                 raise ValueError(f"image library is stale: {name}")
     return result
 

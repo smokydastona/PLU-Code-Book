@@ -131,9 +131,30 @@ and legacy associations without changing source images or granting approval.
 Explicitly rejected or superseded images remain in the audit history, are not
 offered as approved choices, and are left blank in newly built binders.
 
+Run `python tools/consolidate_image_library.py` to store identical JPEG bytes
+once. `IMAGE_ALIASES.json` resolves logical filenames to their stored images;
+each original `.jpg.json` sidecar and approval index remains separate and
+unchanged. A logical filename in an index may therefore have no standalone
+JPEG: use `tools.library_assets.resolve_image` to find its physical asset.
+Binder builds and local image lookup resolve aliases automatically. Refreshes
+retain consolidation; images with different bytes (including organic badges)
+are never merged, and sharing storage does not approve product-image reuse.
+`outputs/reports/IMAGE_LIBRARY_ALIASES.csv` and
+`IMAGE_LIBRARY_CONSOLIDATION.json` record the storage savings and metadata
+preservation.
+
 The owner-uploaded `data/review-references/2011-PLU-Listing1.pdf` is a historical
 reference for future image-library coverage. Its checksummed sidecar records
-reference-only status; future-PLU coverage review is still pending. It does not
-update PickList or WorkingList, assign images, or grant image approvals.
+reference-only status. Run `python tools/build_future_plu_coverage.py` to generate
+`outputs/reports/FUTURE_PLU_IMAGE_COVERAGE.csv` and its JSON summary.
+`PLU_REFERENCE_SOURCE_TEXT.json` preserves the extracted page text for audit;
+each coverage row retains its original text, page and code group. Superscript
+footnotes are excluded from codes, not mistaken for extra PLU digits. Retailer
+assignments, unspecified commodities and unlisted ranges are retained as
+review placeholders, never expanded into invented product identities.
+Same-code library images are only search leads: every future product identity
+and image needs owner review. This 2011 document is not an exhaustive current
+PLU catalogue. Coverage generation does not update PickList or WorkingList,
+assign images, or grant image approvals.
 
 The `Fetch unreviewed produce candidates` Action has an `external-leads` mode for the identity-pinned URLs in `data/review-references/external-image-source-leads.json`. It reads page metadata only; it does not download image previews or PDF bodies, verify license claims, approve images, or change assignments. Search-result URLs are recorded without querying them. Fetchers retry DNS lookup failures up to three times with bounded backoff and report persistent failures as `DNS_ERROR`; HTTP errors such as 403 are not retried or bypassed. The Action runs on a GitHub-hosted runner, so it does not depend on the local machine's DNS configuration.

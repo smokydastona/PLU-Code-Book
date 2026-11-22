@@ -1,0 +1,36 @@
+{
+  "reference": "data/review-references/2011-PLU-Listing1.pdf",
+  "reference_sha256": "561dbfdd875449f6fc6f1096c691a88b6190af6641488663d2276d2c37ff5847",
+  "pages": 24,
+  "source_entries": 694,
+  "code_mentions": 1035,
+  "distinct_named_plu_codes": 951,
+  "code_ranges": 43,
+  "statuses": {
+    "MISSING_IMAGE": 671,
+    "POTENTIAL_IMAGES_REQUIRE_IDENTITY_REVIEW": 280,
+    "CODE_RANGE_OR_PLACEHOLDER_REVIEW": 84
+  },
+  "reference_kinds": {
+    "NAMED_PRODUCT": 951,
+    "RETAILER_ASSIGNED": 75,
+    "UNSPECIFIED_COMMODITY": 2,
+    "UNLISTED": 7
+  },
+  "superscript_policy": "Excluded using PDF span superscript flags; retained in source evidence.",
+  "range_policy": "Ranges are preserved, never expanded into invented products.",
+  "approval_policy": "Same PLU is a search lead only; each future identity and image requires owner review.",
+  "scope": "Historical listing only, not an exhaustive current list of possible produce PLUs.",
+  "picklist_sha256": "38732869b0e7b1c8ccb0b6189a8685a1125595ebcc9ded4e9cc48d18d6ea8727",
+  "working_list_sha256": "cfcbf54bb3b03a41cb9799ee7f6496eeeb634dca4a35bd691798b7180a06d375",
+  "image_library_indexes_sha256": {
+    "IMAGE_LIBRARY.csv": "6c40f80774d3d47c7fae6a79d9d357b446184a082aec807b766f632c89037a38",
+    "WORKING_LIST_IMAGES.json": "90f4de8d1b7dd2a67e66dfed910a5af1d1e71d1e53c7819083fa01e69157a144",
+    "LEGACY_BOOKLET_IMAGES.json": "3ce9115e54345eb417da6c19a48d74c7941fee70ec54e59e768b49e9d7aa861b",
+    "OWNER_CANDIDATES.json": "10339844b74061e630f30007056f2e97cd027b732df26cfc0d2d06ec82881109",
+    "IMAGE_ALIASES.json": "4d7de3aefde999355d0200deca4f9f6cc0a0b58dd0a7036255cb0021e3052709"
+  },
+  "picklist_status": "UNCHANGED",
+  "working_list_status": "UNCHANGED",
+  "publication_authorization": "NOT_GRANTED"
+}

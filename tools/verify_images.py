@@ -308,12 +308,13 @@ def approved_library_pair(group, root):
     if len(group) != 2 or len(copies) != 1:
         return False
     from build_image_library import check_library, library_records
+    from library_assets import resolve_image
 
     check_library(root)
-    records = {row["image"]: row for row in library_records(library)}
-    record = records.get(copies[0].name)
     other = next(path for path in group if path != copies[0])
-    return bool(record and (root / record["assigned_image"]).resolve() == other)
+    return any(resolve_image(library / row["image"]).resolve() == copies[0]
+               and (root / row["assigned_image"]).resolve() == other
+               for row in library_records(library))
 
 
 def main():

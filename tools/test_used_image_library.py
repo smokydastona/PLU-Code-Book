@@ -193,6 +193,7 @@ class UsedImageLibraryChecks(unittest.TestCase):
         index = previous / "WORKING_LIST_IMAGES.json"
         records = json.loads(index.read_text())
         records[0]["library_image"] = "sources/used-image-library/" + Path(records[0]["library_image"]).name
+        records[0]["library_metadata"] = "sources/used-image-library/" + Path(records[0]["library_metadata"]).name
         index.write_text(json.dumps(records))
         return previous, records[0]
 

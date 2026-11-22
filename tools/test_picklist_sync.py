@@ -588,6 +588,27 @@ class PickListSyncChecks(unittest.TestCase):
             self.assertEqual((image.size, image.format, image.mode), ((500, 500), "JPEG", "RGB"))
         self.assertEqual(self.image.read_bytes(), original_before)
 
+    def test_consolidated_library_refresh_preserves_storage_and_revokes_only_the_identity(self):
+        from consolidate_image_library import consolidate
+        from library_assets import resolve_image
+
+        refresh_library(self.root)
+        result = consolidate(self.root)
+        self.assertEqual(result["removed_files"], 1)
+        logical = self.root / "sources/image-library" / (self.items[0]["source_id"] + ".jpg")
+        stored = resolve_image(logical)
+        self.assertNotEqual(logical, stored)
+        self.assertTrue(approved_library_pair({stored.resolve(), self.image.resolve()}, self.root))
+        refresh_library(self.root)
+        check_library(self.root)
+        self.assertFalse(logical.exists())
+        self.assertEqual(resolve_image(logical), stored)
+        self.assignment["visual_approval_status"] = "REJECTED"
+        self.write_assignments([self.assignment])
+        self.assertEqual(refresh_library(self.root)["images"], 0)
+        check_library(self.root)
+        self.assertTrue(stored.is_file())
+
     def test_exact_library_copy_does_not_count_as_unapproved_image_reuse(self):
         Image.new("RGB", (500, 500), "white").save(self.image)
         self.assignment["image_sha256"] = hashlib.sha256(self.image.read_bytes()).hexdigest()

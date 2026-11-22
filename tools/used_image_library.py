@@ -12,6 +12,7 @@ from PIL import Image
 
 import image_display
 from image_display import DISPLAY_SIZE, display_image
+from library_assets import ALIASES, check_aliases, resolve_image
 import organic_watermarks
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -37,11 +38,7 @@ def save_if_changed(path, content):
             staged.unlink(missing_ok=True)
 
 
-def jpeg_copy(root, content, organic=False):
-    library = Path(root) / "sources/image-library"
-    if library.is_symlink():
-        raise ValueError("used image library must not be a symlink")
-    library.mkdir(parents=True, exist_ok=True)
+def rendering_metadata(root, content, organic=False):
     rendering = dict(
         source_sha256=digest(content), organic=organic, pillow=PIL.__version__,
         renderer_sha256=digest(Path(image_display.__file__).read_bytes()),
@@ -52,8 +49,18 @@ def jpeg_copy(root, content, organic=False):
             badge_sha256=digest((organic_watermarks.ROOT / organic_watermarks.BADGE_SOURCE).read_bytes()),
         )
     key = digest(json.dumps(rendering, sort_keys=True).encode())
+    return rendering, Path(root) / "sources/image-library" / (key + ".jpg.json")
+
+
+def jpeg_copy(root, content, organic=False):
+    library = Path(root) / "sources/image-library"
+    if library.is_symlink():
+        raise ValueError("used image library must not be a symlink")
+    library.mkdir(parents=True, exist_ok=True)
+    rendering, metadata_path = rendering_metadata(root, content, organic)
+    key = metadata_path.name.removesuffix(".jpg.json")
     path = library / (key + ".jpg")
-    metadata_path = library / (key + ".jpg.json")
+    path = resolve_image(path)
     if path.is_symlink() or metadata_path.is_symlink():
         raise ValueError(f"library asset must not be a symlink: {path}")
     if path.exists() or metadata_path.exists():
@@ -93,12 +100,17 @@ def record_images(root, name, images, records):
             record, library_image=str(path.relative_to(root)),
             library_sha256=digest(content),
             library_source_sha256=digest(images[identity]),
+            library_metadata=str(rendering_metadata(root, images[identity])[1].relative_to(root)),
             library_approval_status=record.get("library_approval_status", "NOT_APPROVED"),
         ))
     library = Path(root) / "sources/image-library"
     library.mkdir(parents=True, exist_ok=True)
     save_if_changed(library / name, (json.dumps(
         associations, ensure_ascii=False, indent=2) + "\n").encode())
+    if (library / ALIASES).exists():
+        from consolidate_image_library import consolidate
+
+        consolidate(root)
     return dict(images=len(associations), reused=reused)
 
 
@@ -109,24 +121,31 @@ def check_used_library(root, directory=None):
     paths = set()
     if not library.exists():
         return paths
+    aliases = check_aliases(library)
     approved_names = set()
     if (library / "IMAGE_LIBRARY.csv").exists():
         from build_image_library import library_records
 
         approved_names = {row["image"] + suffix for row in library_records(library)
                           for suffix in ("", ".json")}
-    for path in library.iterdir():
+    for asset in library.iterdir():
+        if asset.is_symlink() or not asset.is_file():
+            raise ValueError(f"invalid used image library asset: {asset}")
+    logical_names = {path.name for path in library.glob("*.jpg")} | set(aliases)
+    for name in sorted(logical_names):
+        logical = library / name
+        path = resolve_image(logical, aliases)
         if path.is_symlink() or not path.is_file():
             raise ValueError(f"invalid used image library asset: {path}")
-        if path.name in approved_names or path.suffix != ".jpg":
+        if name in approved_names:
             continue
-        metadata_path = path.with_suffix(".jpg.json")
+        metadata_path = logical.with_suffix(".jpg.json")
         if metadata_path.is_symlink():
             raise ValueError(f"library asset must not be a symlink: {metadata_path}")
         metadata = json.loads(metadata_path.read_text())
         key = digest(json.dumps(metadata["rendering"], sort_keys=True).encode())
         content = path.read_bytes()
-        if path.stem != key or metadata["sha256"] != digest(content):
+        if logical.stem != key or metadata["sha256"] != digest(content):
             raise ValueError(f"JPEG library checksum mismatch: {path}")
         with Image.open(io.BytesIO(content)) as image:
             image.load()
@@ -134,17 +153,22 @@ def check_used_library(root, directory=None):
                 raise ValueError(f"invalid JPEG library display copy: {path}")
         paths.add(path.resolve())
     for path in library.glob("*.jpg.json"):
-        if not path.with_suffix("").is_file():
+        if not resolve_image(path.with_suffix(""), aliases).is_file():
             raise ValueError(f"orphan JPEG library metadata: {path}")
     for name in ("WORKING_LIST_IMAGES.json", "LEGACY_BOOKLET_IMAGES.json", OWNER_CANDIDATES):
         index = library / name
         if not index.exists():
             continue
         for row in json.loads(index.read_text()):
-            path = Path(root) / row["library_image"]
+            logical = Path(root) / row["library_image"]
+            path = resolve_image(logical, aliases)
             if path.resolve() not in paths or digest(path.read_bytes()) != row["library_sha256"]:
                 raise ValueError(f"used image association checksum mismatch: {path}")
-            metadata = json.loads(path.with_suffix(".jpg.json").read_text())
+            metadata_path = Path(root) / row.get(
+                "library_metadata", str(logical.with_suffix(".jpg.json").relative_to(root)))
+            if metadata_path.parent.resolve() != library.resolve() or metadata_path.is_symlink():
+                raise ValueError(f"invalid library association metadata: {metadata_path}")
+            metadata = json.loads(metadata_path.read_text())
             if metadata["rendering"]["source_sha256"] != row["library_source_sha256"]:
                 raise ValueError(f"used image source association mismatch: {path}")
             if name == OWNER_CANDIDATES:
@@ -192,7 +216,11 @@ def check_used_library(root, directory=None):
 def managed_cache_names(root):
     library = Path(root) / "sources/image-library"
     paths = check_used_library(root)
-    names = {path.name + suffix for path in paths for suffix in ("", ".json")}
+    names = {path.name for path in paths}
+    names.update(path.name for path in library.glob("*.jpg.json")
+                 if "rendering" in json.loads(path.read_text()))
+    if (library / ALIASES).exists():
+        names.add(ALIASES)
     names.update(name for name in ("WORKING_LIST_IMAGES.json", "LEGACY_BOOKLET_IMAGES.json")
                  if (library / name).exists())
     if (library / OWNER_CANDIDATES).exists():
@@ -221,7 +249,7 @@ def local_inventory(root):
 
         for row in library_records(library):
             tier = "LEGACY" if row.get("image_approval_status") == "APPROVED_LEGACY" else "APPROVED"
-            options.append(dict(row, tier=tier, path=library / row["image"],
+            options.append(dict(row, tier=tier, path=resolve_image(library / row["image"]),
                                 provenance=json.loads((library / (row["image"] + ".json")).read_text())))
     working_index = library / "WORKING_LIST_IMAGES.json"
     owner_index = library / OWNER_CANDIDATES
@@ -264,7 +292,7 @@ def local_inventory(root):
             tier = {"APPROVED": "APPROVED", "APPROVED_LEGACY": "LEGACY"}.get(status, "REVIEWED")
             if row.get("image_status") in {"REJECTED", "WORKING_IDENTITY_REVIEW_REQUIRED"}:
                 continue
-            options.append(dict(row, tier=tier, path=root / row["library_image"], provenance=row))
+            options.append(dict(row, tier=tier, path=resolve_image(root / row["library_image"]), provenance=row))
     legacy_index = library / "LEGACY_BOOKLET_IMAGES.json"
     if legacy_index.exists():
         for row in json.loads(legacy_index.read_text()):
@@ -275,7 +303,7 @@ def local_inventory(root):
             if row.get("image_status") == "REJECTED" or (
                     row.get("legacy_review", {}).get("verdict", "").strip().casefold() == "rejected"):
                 continue
-            options.append(dict(row, tier="LEGACY", path=root / row["library_image"], provenance=row))
+            options.append(dict(row, tier="LEGACY", path=resolve_image(root / row["library_image"]), provenance=row))
     if owner_index.exists() and current is not None:
         for row in json.loads(owner_index.read_text()):
             matches = [
@@ -286,8 +314,10 @@ def local_inventory(root):
             ]
             if len(matches) != 1:
                 continue
-            path = root / row["library_image"]
-            metadata = json.loads(path.with_suffix(".jpg.json").read_text())
+            logical = root / row["library_image"]
+            path = resolve_image(logical)
+            metadata = json.loads((root / row.get(
+                "library_metadata", str(logical.with_suffix(".jpg.json").relative_to(root)))).read_text())
             preapproved = (
                 row.get("preapproval_status") == "APPROVED_FOR_EXACT_PLU_PRODUCT"
                 and row.get("visual_approval_status") == "APPROVED"
@@ -356,6 +386,9 @@ def absorb_used_library(root):
             for row in records:
                 row["library_image"] = str(
                     (library / Path(row["library_image"]).name).relative_to(root))
+                if row.get("library_metadata"):
+                    row["library_metadata"] = str(
+                        (library / Path(row["library_metadata"]).name).relative_to(root))
             content = (json.dumps(records, ensure_ascii=False, indent=2) + "\n").encode()
         destination = library / path.name
         if destination.is_symlink() or (destination.exists() and destination.read_bytes() != content):
